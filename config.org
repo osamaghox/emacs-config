@@ -945,10 +945,12 @@ EndIf
 (setq warning-minimum-level :error)
 #+end_src
 
-*** Configuring Emacs Fonts: Default, Fixed-Pitch, and Variable-Pitch
+*** Configuring Emacs Fonts
 
-أنا أستخدم خطوط [[https://github.com/tonsky/FiraCode][Fira Code]] و[[https://fonts.google.com/specimen/Cantarell][Cantarell]] في هذا الإعداد.
-من المحتمل أنك تحتاج تثبيت هذه الخطوط على جهازك لتظهر بشكل صحيح.
+في هذا القسم نقوم بتخصيص الخطوط المستخدمة في Emacs.  
+أستخدم خطوط [[https://github.com/tonsky/FiraCode][Fira Code]] للبرمجة و[[https://fonts.google.com/specimen/Cantarell][Cantarell]] للنصوص العامة.  
+من المهم تثبيت هذه الخطوط على جهازك لتظهر بشكل صحيح.  
+كما نقوم بإنشاء مجلد `fonts` داخل مجلد `emacs-data` لاستخدامه عبر الأجهزة (مثل الحاسوب والهاتف)، بدون إعادة إنشائه إذا كان موجودًا.
 
 #+begin_src emacs-lisp
 (defvar osama/preferred-font "Fira Code"
@@ -962,13 +964,8 @@ EndIf
 
   ;; خط مختلف للعربية
   (set-fontset-font t 'arabic (font-spec :name "STC Forward")))
-#+end_src
 
-**** Create Fonts Folder for Other Devices like Android
-
-لإنشاء مجلد `fonts` داخل مجلد البيانات المحمول `emacs-data` لاستخدامه على أجهزة متعددة مثل أندرويد، دون إعادة إنشائه إذا كان موجودًا بالفعل.
-
-#+begin_src emacs-lisp
+;; إنشاء مجلد fonts إذا لم يكن موجودًا
 (let ((fonts-dir (expand-file-name "fonts" "~/sync-thing/online-sync/emacs/emacs-data/")))
   (unless (file-directory-p fonts-dir)
     (make-directory fonts-dir t)))
@@ -1025,50 +1022,29 @@ EndIf
 
 *** Window and Buffer Management
 
-**** Moving Buffers Windows
-
 #+begin_src emacs-lisp
+;; Moving Buffers Between Windows
 (use-package buffer-move
   :ensure t)
-#+end_src
 
-
-**** Kill Other Buffers
-
-#+begin_src emacs-lisp
+;; Kill All Other Buffers Except Current One
 (defun kill-other-buffers ()
   "Kill all other buffers except the current one."
   (interactive)
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+end_src
 
-*** Theme & Appearance
-
-**** Theme
-
-[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] هي مجموعة ممتازة من السمات، توفّر تنوعًا كبيرًا وتدعم الكثير من أوضاع Emacs المختلفة.
-يمكنك الاطلاع على [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][الصور التوضيحية]] لمساعدتك في اختيار السمة التي تفضلها.
-كما يمكنك تشغيل الأمر التالي لاختيار السمة بسهولة من داخل Emacs:
-
-=M-x consult-theme=
+*** Theme and Modeline
 
 #+begin_src emacs-lisp
+;; Doom Themes
+;; https://github.com/hlissner/emacs-doom-themes
 (use-package doom-themes
   :init
   (load-theme 'doom-dracula t))
-#+end_src
 
-**** Better Modeline
-
-[[https://github.com/seagle0128/doom-modeline][doom-modeline]] هو إعداد حديث وأنيق لشريط الحالة (mode line) في Emacs،
-يعرض معلومات كثيرة مثل اسم المشروع، حالة Git، أوامر التفعيل، الوقت، وغيرها بطريقة منظمة وجذابة.
-
-الإعداد الافتراضي ممتاز، لكن يمكنك تخصيصه بسهولة حسب رغبتك، من خلال المتغيرات المتاحة مثل:
-- `doom-modeline-height` لتغيير الارتفاع
-- `doom-modeline-icon` لتفعيل/إيقاف الأيقونات
-- `doom-modeline-buffer-file-name-style` لتحديد طريقة عرض اسم الملف
-
-#+begin_src emacs-lisp
+;; Doom Modeline
+;; https://github.com/seagle0128/doom-modeline
 (use-package doom-modeline
   :ensure t
   :init
@@ -1119,20 +1095,10 @@ EndIf
                           :height (cdr face)))))
 #+end_src
 
-
-*** Basic Config
-
-هذا القسم يحتوي على الإعدادات الأساسية لـ Org Mode، بما في ذلك:
-- إعدادات العرض والتنسيق.
-- ملفات الأجندة اليومية.
-- قوائم المهام (TODO).
-- تصنيفات مخصصة (tags).
-- طرق إعادة ترتيب المهام (refile).
-- قوالب الالتقاط (capture templates).
-
-يوصى بمشاهدة [[https://youtu.be/VcgjTEa0kU4][الجزء 5]] و[[https://youtu.be/PNE-mgkZ6HM][الجزء 6]] لفهم شامل للإعدادات.
+*** Org Mode Configuration
 
 #+begin_src emacs-lisp
+;; الإعدادات الأساسية
 (defun osama/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
@@ -1146,35 +1112,26 @@ EndIf
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
 
-(setq org-directory "~/sync-thing/online-sync/emacs/osama-org/org/agenda")
+  ;; مجلد ملفات الأجندة
+  (setq org-directory "~/sync-thing/online-sync/emacs/osama-org/org/agenda")
+  (unless (file-directory-p org-directory)
+    (make-directory org-directory t))
+  (setq org-agenda-files (directory-files-recursively org-directory "\\.org$"))
 
-(unless (file-directory-p org-directory)
-  (make-directory org-directory t)) ;; إنشاء مجلد agenda فقط إذا ما كان موجود
-
-(setq org-agenda-files (directory-files-recursively org-directory "\\.org$"))
-
-  ;; عادات Org
+  ;; دعم العادات (habits)
   (require 'org-habit)
   (add-to-list 'org-modules 'org-habit)
   (setq org-habit-graph-column 60)
 
   ;; حالات TODO مخصصة
   (setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+          (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-  ;; أهداف إعادة الترتيب
-  (setq org-refile-targets
-    '(("Archive.org" :maxlevel . 1)
-      ("Tasks.org" :maxlevel . 1)))
-
-  ;; الحفظ التلقائي بعد refile
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-  ;; التصنيفات
+  ;; التصنيفات (tags)
   (setq org-tag-alist
         '((:startgroup)
-          ;; تصنيفات حصرية
+          ;; exclusive tags group
           (:endgroup)
           ("@errand" . ?E)
           ("@home" . ?H)
@@ -1186,7 +1143,13 @@ EndIf
           ("note" . ?n)
           ("idea" . ?i)))
 
-  ;; الأجندة المخصصة
+  ;; إعادة ترتيب المهام (refile)
+  (setq org-refile-targets
+        '(("Archive.org" :maxlevel . 1)
+          ("Tasks.org" :maxlevel . 1)))
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+  ;; أوامر الأجندة المخصصة
   (setq org-agenda-custom-commands
         '(("d" "Dashboard"
            ((agenda "" ((org-deadline-warning-days 7)))
@@ -1214,54 +1177,21 @@ EndIf
             (todo "COMPLETED" ((org-agenda-overriding-header "Completed Projects")))
             (todo "CANC" ((org-agenda-overriding-header "Cancelled Projects")))))))
 
-;; ;; قوالب الالتقاط
-;; (setq org-capture-templates
-;;       `(("t" "Tasks / Projects")
-;;         ("tt" "Task" entry (file+olp "~/emacs-sync/osama/org/Tasks.org" "Inbox")
-;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-;;
-;;         ("j" "Journal Entries")
-;;         ("jj" "Journal" entry (file+olp+datetree "~/emacs-sync/osama/org/Journal.org")
-;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n" :clock-in :clock-resume :empty-lines 1)
-;;
-;;         ("jm" "Meeting" entry (file+olp+datetree "~/emacs-sync/osama/org/Journal.org")
-;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n" :clock-in :clock-resume :empty-lines 1)
-;;
-;;         ("w" "Workflows")
-;;         ("we" "Checking Email" entry (file+olp+datetree "~/emacs-sync/osama/org/Journal.org")
-;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
-;;
-;;         ("m" "Metrics Capture")
-;;         ("mw" "Weight" table-line (file+headline "~/emacs-sync/osama/org/Metrics.org" "Weight")
-;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
-
-  ;; مفتاح اختصار مباشر لالتقاط الملاحظات
+  ;; اختصار سريع للالتقاط
   (define-key global-map (kbd "C-c j")
     (lambda () (interactive) (org-capture nil "jj")))
 
-  ;; إعداد الخطوط المخصصة
+  ;; إعداد الخطوط (موجودة كدالة مفترضة)
   (osama/org-font-setup))
-#+end_src
 
-*** رموز أجمل للعناوين (Nicer Heading Bullets)
-
-[[https://github.com/sabof/org-bullets][org-bullets]] هي حزمة تقوم باستبدال رموز النجوم `*` التي تُستخدم للعناوين في org-mode برموز أكثر جمالية يمكنك تخصيصها كما تشاء.
-يوجد أيضًا بديل آخر وهو [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]]، وقد نغطيه لاحقًا.
-
-#+begin_src emacs-lisp
+;; org-bullets لجمالية العناوين
 (use-package org-bullets
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
 
-*** توسيط محتوى org-mode (Center Org Buffers)
-
-نستخدم الحزمة [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] لتوسيط محتوى ملفات org-mode أفقيًا، مما يمنح تجربة كتابة أكثر راحة وجمالية، وكأنك تكتب في مستند منسق.
-هذه الميزة اختيارية وتعتمد على تفضيلك الشخصي، لذا يمكنك حذف الكود التالي إن لم يعجبك السلوك.
-
-#+begin_src emacs-lisp
+;; توسيط محتوى org-mode
 (defun osama/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
@@ -1269,14 +1199,8 @@ EndIf
 
 (use-package visual-fill-column
   :hook (org-mode . osama/org-mode-visual-fill))
-#+end_src
 
-*** تفعيل لغات Babel (Configure Babel Languages)
-
-لتتمكن من تنفيذ أو تصدير الشيفرات البرمجية المكتوبة داخل كتل org-mode، تحتاج إلى تفعيل كل لغة ترغب في استخدامها ضمن المتغير `org-babel-load-languages`.
-[[https://orgmode.org/worg/org-contrib/babel/languages.html][هذه الصفحة]] توضح جميع اللغات المدعومة في org-babel.
-
-#+begin_src emacs-lisp
+;; تفعيل لغات babel
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
@@ -1343,155 +1267,89 @@ EndIf
 
 *** سكربت القرآن الكريم
 
-** Completion & Selection
-
-النص هنا
-
-*** Which Key
-
-[[https://github.com/justbur/emacs-which-key][which-key]] هي لوحة واجهة مستخدم مفيدة تظهر عند بدء الضغط على أي اختصار في Emacs لتعرض لك كل الإكمالات الممكنة لذلك البادئة (prefix).
-على سبيل المثال، إذا ضغطت =C-c= (اضغط Ctrl مع حرف c)، ستظهر لوحة في أسفل النافذة تعرض جميع الاختصارات تحت هذا البادئة والأوامر التي تنفذها.
-هذا مفيد جدًا لتعلم الاختصارات الممكنة في الوضع الحالي للبفر الذي تعمل عليه.
+** Completion and Selection Packages
 
 #+begin_src emacs-lisp
+;; which-key: عرض الاختصارات الممكنة لأي بادئة
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 1))
-#+end_src
 
-*** Vertico
-
-واجهة خفيفة لإكمال الأوامر تظهر النتائج بشكل عمودي، بديل بسيط وأنيق لـ ivy أو helm.
-
-#+begin_src emacs-lisp
+;; vertico: واجهة إكمال خفيفة وعامودية
 (use-package vertico
   :ensure t
   :config
-  (setq vertico-cycle t)
-  (setq vertico-resize nil)
+  (setq vertico-cycle t
+        vertico-resize nil)
   (vertico-mode 1))
-#+end_src
 
-*** Marginalia
-
-تضيف معلومات توضيحية بجانب كل نتيجة إكمال، مثل وصف الملفات أو الوظائف، لتسهيل التمييز بين الخيارات.
-
-#+begin_src emacs-lisp
+;; marginalia: عرض معلومات إضافية بجانب نتائج الإكمال
 (use-package marginalia
   :after vertico
   :init
   (marginalia-mode))
-#+end_src
 
-*** Consult
-
-مجموعة أوامر قوية للبحث والتنقل داخل Emacs، مثل البحث في الملفات أو الأسطر أو السجلات، وتتكامل بشكل ممتاز مع vertico.
-
-#+begin_src emacs-lisp
+;; consult: أوامر بحث وتنقل قوية تتكامل مع vertico
 (use-package consult
   :bind (("C-s" . consult-line)
          ("C-x b" . consult-buffer)
          ("C-M-j" . consult-switch-buffer)
          ("M-y" . consult-yank-pop)))
-#+end_src
 
-*** Overless
-
-نظام إكمال مرن يسمح بكتابة أجزاء غير مرتبة من الكلمات للعثور على النتائج، مما يجعل الإكمال أكثر ذكاءً وسرعة.
-
-#+begin_src emacs-lisp
+;; orderless: نظام إكمال ذكي وغير مرتب
 (use-package orderless
   :custom
   (completion-styles '(orderless))
   (completion-category-defaults nil))
-#+end_src
 
-*** Embark
-
-يعرض قائمة بالإجراءات الممكنة على العناصر المحددة في minibuffer أو داخل النص، مثل نسخ، فتح، أو تنفيذ أوامر أخرى بدون مغادرة السياق.
-
-#+begin_src emacs-lisp
+;; embark: إجراءات سياقية للعناصر المحددة
 (use-package embark
-  :bind (("C-." . embark-act)         ; افتراضياً على C-.
+  :bind (("C-." . embark-act)
          ("C-;" . embark-dwim))
   :init
   (setq embark-prompter 'embark-completing-read-prompter))
-#+end_src
 
-*** Auto-completion popup
-
-تفعيل نافذة الاقتراح التلقائي للكلمات أثناء الكتابة في جميع الأوضاع، مما يساعد على تسريع التدوين وتوحيد المصطلحات.
-
-#+begin_src emacs-lisp
+;; company: نافذة الإكمال التلقائي في كل الأوضاع
 (use-package company
-  :hook (after-init . global-company-mode)  ;; تفعيل company-mode بشكل عام بعد بدء الإيمكس
+  :hook (after-init . global-company-mode)
   :custom
-  (company-idle-delay 0.2)                  ;; كم ثانية بعد الكتابة قبل ظهور الاقتراح
-  (company-minimum-prefix-length 2)         ;; كم حرف تكتب قبل الاقتراح
-  (company-selection-wrap-around t))        ;; تنقّل دائري في القائمة
-#+end_src
+  (company-idle-delay 0.2)
+  (company-minimum-prefix-length 2)
+  (company-selection-wrap-around t))
 
-*** Helpful Help Commands
-
-[[https://github.com/Wilfred/helpful][Helpful]] تضيف الكثير من المعلومات المفيدة جدًا إلى Buffers أوامر =describe= في Emacs.
-فعلى سبيل المثال، إذا استخدمت =describe-function=، لن تحصل فقط على توثيق الدالة، بل سترى أيضًا كود المصدر الخاص بها وأماكن استخدامها في إعداد Emacs.
-هذا مفيد جدًا لفهم كيفية عمل الأشياء في Emacs.
-
-#+begin_src emacs-lisp
+;; helpful: وصف أوامر Emacs بشكل أعمق وأكثر فائدة
 (use-package helpful
   :bind
   ([remap describe-function] . helpful-function)
   ([remap describe-command]  . helpful-command)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key]      . helpful-key))
-#+end_src
 
-*** Evil Mode & Evil Collection
-
-هذا الإعداد يستخدم حزمة *evil-mode* لتوفير تجربة تحرير شبيهة بـ Vi (نمط التحرير المتعدد الأوضاع).
-تُستخدم حزمة *general.el* لتسهيل ضبط اختصارات لوحة المفاتيح بشكل منظم ومتوافق مع *which-key*،
-في حين تقوم *evil-collection* بضبط أوضاع Emacs المختلفة تلقائيًا لتعمل مع اختصارات Vi الخاصة بـ evil-mode.
-
-#+begin_src emacs-lisp
+;; evil-mode: تجربة تحرير على نمط Vim
 (use-package evil
   :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-want-C-u-scroll t
+        evil-want-C-i-jump nil)
   :config
   (evil-mode 1))
-#+end_src
 
-#+begin_src emacs-lisp
-;; تحميل evil-collection لضبط أوضاع Emacs المختلفة للعمل مع evil-mode
+;; evil-collection: دعم أوضاع Emacs المختلفة ضمن evil-mode
 (use-package evil-collection
   :after evil
   :config
   (evil-collection-init))
-#+end_src
 
-*** Hydra Package
-
-Hydra هي مكتبة تسهل إنشاء اختصارات مؤقتة في Emacs تستمر فعاليتها حتى تنهيها، لتسريع تنفيذ أوامر متتالية بدون الحاجة لإعادة الضغط على مفتاح prefix.
-
-- يمكنك ضبط مجموعة مفاتيح ضمن hydra، وتحديد مهلة انتهاء تلقائية (:timeout).
-- كما تتيح تعيين مفتاح للخروج من وضع الاختصارات (:exit t).
-- توفر تلميحات قصيرة لتوضيح وظيفة كل مفتاح أثناء التفعيل.
-
-#+begin_src emacs-lisp
+;; hydra: إنشاء اختصارات مؤقتة قابلة للتنقل
 (use-package hydra
   :ensure t)
-#+end_src
 
-*** General Package
-
-#+begin_src emacs-lisp
+;; general: تسهيل تعريف اختصارات عالمية ومرتبطة بـ which-key
 (use-package general
   :config
-  ;; Setup leader key definer
   (general-create-definer osama/leader-keys
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
@@ -1936,6 +1794,3 @@ Emacs يمكنه الاستفادة من أدوات خارجية لتحسين ا
 #+begin_src emacs-lisp
 (setq touch-screen-display-keyboard t)
 #+end_src
-
-
-
