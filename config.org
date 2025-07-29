@@ -1595,12 +1595,11 @@ EndIf
 
 ** مثال إعدادات Linux
 
-   #+begin_src emacs-lisp
+   #+begin_example
    (setq user-full-name "أسامة")
    (setq user-mail-address "you@example.com")
-   #+end_src
-
-
+   #+end_example
+   
 ** ملاحظات إضافية
 
 - `:mkdirp yes`: تضمن إنشاء المجلدات تلقائيًا إذا لم تكن موجودة عند التصدير.
