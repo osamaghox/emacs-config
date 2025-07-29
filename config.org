@@ -1433,22 +1433,17 @@ EndIf
 ** General - Leader Key Menu
 
 #+begin_src emacs-lisp
+;; Command Palette
 (osama/leader-keys
   ":"  '(execute-extended-command :which-key "Command Palette"))
-#+end_src
 
-*** Dired Menu
-
-#+begin_src emacs-lisp
+;; Dired Menu
 (osama/leader-keys
   "d"  '(:ignore t :which-key "dired")
   "dd" '(dired-jump :which-key "open dired here")
   "dp" '(project-dired :which-key "project dired"))
-#+end_src
 
-*** Buffers Menu
-
-#+begin_src emacs-lisp
+;; Buffers Menu
 (osama/leader-keys
   "b"  '(:ignore t :which-key "buffers")
   "bb" '(consult-buffer :which-key "switch buffer")
@@ -1456,11 +1451,8 @@ EndIf
   "bm" '(kill-other-buffers :which-key "kill other buffers")
   "bn" '(next-buffer :which-key "next buffer")
   "bp" '(previous-buffer :which-key "prev buffer"))
-#+end_src
 
-*** Files Menu
-
-#+begin_src emacs-lisp
+;; Files Menu
 (osama/leader-keys
   "f"  '(:ignore t :which-key "files")
   "fd" '(delete-file :which-key "delete file")
@@ -1469,67 +1461,47 @@ EndIf
   "fR" '(rename-file :which-key "rename file")
   "fs" '(save-buffer :which-key "save file")
   "fS" '(osama/save-all-buffers :which-key "save some buffers"))
-#+end_src
 
-*** Org Menu
-
-#+begin_src emacs-lisp
+;; Org Menu
 (osama/leader-keys
   "o"  '(:ignore t :which-key "org")
   "oa" '(org-agenda :which-key "agenda")
   "oc" '(org-capture :which-key "capture")
   "ot" '(org-todo-list :which-key "todo list"))
-#+end_src
 
-*** Notes Menu
-
-#+begin_src emacs-lisp
+;; Notes Menu
 (osama/leader-keys
   "n"  '(:ignore t :which-key "notes")
   "nn" '(org-roam-node-find :which-key "find note")
   "ni" '(org-roam-node-insert :which-key "insert note"))
-#+end_src
 
-*** Emacs Config Menu
-
-#+begin_src emacs-lisp
+;; Emacs Config Menu
 (osama/leader-keys
   "e"  '(:ignore t :which-key "emacs/config")
   "er" '(reload-init-file :which-key "reload config")
   "eR" '(restart-emacs :which-key "restart emacs")
   "eQ" '(save-buffers-kill-emacs :which-key "quit emacs")
   "ee" '(eval-expression :which-key "eval expression"))
-#+end_src
 
-*** Windows Menu
-
-#+begin_src emacs-lisp
+;; Windows Menu
 (osama/leader-keys
   "w"  '(:ignore t :which-key "windows")
-  ;; التنقل بين النوافذ
   "wh" '(windmove-left :which-key "move left")
   "wl" '(windmove-right :which-key "move right")
   "wj" '(windmove-down :which-key "move down")
   "wk" '(windmove-up :which-key "move up")
-
-  ;; نقل الـ buffer بين النوافذ
   "wH" '(buf-move-left :which-key "move buffer left")
   "wL" '(buf-move-right :which-key "move buffer right")
   "wJ" '(buf-move-down :which-key "move buffer down")
   "wK" '(buf-move-up :which-key "move buffer up")
-
-  ;; أوامر تقسيم وحذف النوافذ
   "wv" '(split-window-right :which-key "vertical split")
   "ws" '(split-window-below :which-key "horizontal split")
   "wd" '(delete-window :which-key "delete this window")
   "wD" '(delete-other-windows :which-key "delete other windows")
   "w." '(hydra-windows/body :which-key "window management hydra")
   "w=" '(balance-windows :which-key "balance"))
-#+end_src
 
-*** Search Menu
-
-#+begin_src emacs-lisp
+;; Search Menu
 (osama/leader-keys
   "s"  '(:ignore t :which-key "search")
   "ss" '(consult-line :which-key "search in buffer")
@@ -1539,33 +1511,23 @@ EndIf
   "sm" '(consult-mark :which-key "jump to mark")
   "sl" '(consult-goto-line :which-key "jump to line"))
 
-#+end_src
-
-*** Toggles Menu
-
-#+begin_src emacs-lisp
+;; Toggles Menu
 (osama/leader-keys
   "t"  '(:ignore t :which-key "toggles")
   "ts" '(hydra-text-scale/body :which-key "text scale")
   "tt" '(consult-theme :which-key "choose theme")
   "tl" '(display-line-numbers-mode :which-key "line numbers")
   "tw" '(visual-line-mode :which-key "word wrap"))
-#+end_src
 
-*** Text Menu
-
-#+begin_src emacs-lisp
+;; Text Menu
 (osama/leader-keys
   "x"  '(:ignore t :which-key "text/editing")
   "xu" '(upcase-word :which-key "uppercase word")
   "xl" '(downcase-word :which-key "lowercase word")
   "xc" '(capitalize-word :which-key "capitalize word")
   "xj" '(join-line :which-key "join lines"))
-#+end_src
 
-*** Help Menu
-
-#+begin_src emacs-lisp
+;; Help Menu
 (osama/leader-keys
   "h"  '(:ignore t :which-key "helpful/documentation")
   "hf" '(helpful-function :which-key "describe function")
@@ -1575,14 +1537,8 @@ EndIf
   "ho" '(org-info :which-key "org info")
   "<f1>" '(helpful-at-point :which-key "help at point")
   "SPC" '(execute-extended-command :which-key "M-x"))
-#+end_src
 
-*** Insert Mode Menu
-
-
-*** Perspective Menu
-
-#+begin_src emacs-lisp
+;; Perspective Menu
 (osama/leader-keys
   "p"  '(:ignore t :which-key "perspectives")
   "ps" '(persp-switch :which-key "switch perspective")
@@ -1794,3 +1750,6 @@ Emacs يمكنه الاستفادة من أدوات خارجية لتحسين ا
 #+begin_src emacs-lisp
 (setq touch-screen-display-keyboard t)
 #+end_src
+
+
+
