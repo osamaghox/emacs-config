@@ -1550,10 +1550,10 @@ EndIf
   "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp"))
 #+end_src
 
-* تغيير النظام System Selector
+* اختيار إعدادات النظام System Selector
 
-هذا القسم يسمح لك بتحميل إعدادات مختلفة حسب النظام الذي تستخدمه (مثل: Android، Linux، Windows...).  
-الفكرة أن يكون لديك ملف إعدادات منفصل لكل نظام داخل مجلد `~/.emacs.d/` باسم يبدأ بـ `init-`، ويتم الاختيار تلقائيًا عند تشغيل Emacs.
+هذا القسم يتيح لك تحميل إعدادات خاصة حسب النظام الذي تستخدمه (مثل: Android، Linux، Windows...).  
+الفكرة أن يكون لديك ملف إعدادات مستقل لكل نظام داخل مجلد `~/.emacs.d/`، يبدأ اسمه بـ `init-`، ويتم اختياره تلقائيًا عند تشغيل Emacs.
 
 #+begin_src emacs-lisp
 (let* ((init-dir "~/.emacs.d/")
@@ -1561,54 +1561,71 @@ EndIf
        (options (mapcar (lambda (f)
                           (string-remove-suffix ".el" (string-remove-prefix "init-" f)))
                         init-files))
-       (choice (completing-read "أي نظام تريد تحميل إعداداته؟ " options nil t))
+       (choice (completing-read "أي إعداد تريد تحميله؟ " options nil t))
        (settings-file (expand-file-name (concat "init-" choice ".el") init-dir)))
   (when (file-exists-p settings-file)
     (load-file settings-file)))
 #+end_src
 
-** ✅ ملاحظات مهمة:
+** ✅ ملاحظات هامة
 
-- كل نظام (مثل "Android" أو "Linux") يجب أن يكون في عنوان من المستوى الأول `*`.
-- مباشرة **تحت عنوان النظام**، يجب كتابة خصائص التانجل داخل `:PROPERTIES:`، ولا يجوز وجود سطر فارغ أو نص بين العنوان وبلوك الخصائص.
-- كل كود داخل هذا القسم يجب أن يكون تحت عنوان فرعي `**`.
+- لكل نظام (مثل "Linux" أو "Android") يجب أن يكون عنوان من المستوى الأول `*`.
+- مباشرة **بعد العنوان**، يجب وضع خصائص التانجل داخل `:PROPERTIES:` دون فواصل أو أسطر فارغة.
+- كل كود داخل القسم يجب أن يكون تحت عنوان فرعي `**`.
 
 ---
 
-** إضافة نظام جديد (مثال: Linux)
+* إضافة إعدادات نظام جديد (مثال: Linux)
 
-لإضافة إعدادات جديدة لأي نظام، اتبع الخطوات التالية:
+لإضافة إعدادات لنظام جديد، اتبع الخطوات التالية:
 
-1. أنشئ عنوانًا من المستوى الأول باسم النظام، مثل:
+1. أضف عنوانًا من المستوى الأول باسم النظام، مثل:
 
    `* إعدادات Linux`
 
-2. **مباشرة بعد العنوان**، أضف الخصائص بدون فاصل:
+2. مباشرة بعد العنوان، أضف خصائص التانجل:
 
-   #+begin_example
-   :PROPERTIES:
-   :header-args:emacs-lisp: :tangle ~/.emacs.d/init-linux.el :mkdirp yes
-   :END:
-   #+end_example
+#+begin_example
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle ~/.emacs.d/init-linux.el :mkdirp yes
+:END:
+#+end_example
 
-3. أضف الكود داخل عناوين فرعية من المستوى الثاني `**` أو أكثر:
+3. تأكد أن ملف الإعداد يبدأ بالسطر التالي لتفعيل `lexical-binding`:
 
-** مثال إعدادات Linux
+#+begin_example
+;;; init-linux.el --- Linux configuration -*- lexical-binding: t; -*-
+#+end_example
 
-   #+begin_example
-   (setq user-full-name "أسامة")
-   (setq user-mail-address "you@example.com")
-   #+end_example
+   هذا السطر ضروري لتفعيل الربط المعجمي، مما يجعل الكود أكثر كفاءة وأمانًا، ومدعوم من معظم الحزم الحديثة.
+
+4. أضف إعداداتك داخل عناوين فرعية من المستوى الثاني `**` أو أكثر. مثال:
+
+** إعدادات Linux
+
+#+begin_example
+(setq user-full-name "أسامة")
+(setq user-mail-address "you@example.com")
+#+end_example
    
 ** ملاحظات إضافية
 
-- `:mkdirp yes`: تضمن إنشاء المجلدات تلقائيًا إذا لم تكن موجودة عند التصدير.
-- كل ملفات الإعدادات (`init-*.el`) يجب أن تكون داخل `~/.emacs.d/` ليتم اكتشافها من الكود الرئيسي.
+- `:mkdirp yes`: يضمن إنشاء المجلدات تلقائيًا عند تصدير الكود إذا لم تكن موجودة.
+- تأكد أن كل ملفات الإعداد (`init-*.el`) موجودة في `~/.emacs.d/` ليتم التعرف عليها.
+- سطر `lexical-binding` يجب أن يكون أول سطر فعلي في كل ملف إعداد.
 
-* Windows Settings 
+---
+
+* Windows Settings  
 :PROPERTIES:  
 :header-args:emacs-lisp: :tangle ~/.emacs.d/init-windows.el :mkdirp yes  
-:END:  
+:END:
+
+** lexical-binding
+
+#+begin_src emacs-lisp
+;;; init-windows.el --- Windows configuration -*- lexical-binding: t; -*-
+#+end_src
 
 ** Ui Settings
 
@@ -1727,6 +1744,12 @@ Emacs يمكنه الاستفادة من أدوات خارجية لتحسين ا
 :PROPERTIES:  
 :header-args:emacs-lisp: :tangle ~/.emacs.d/init-android.el :mkdirp yes  
 :END:  
+
+** lexical-binding
+
+#+begin_src emacs-lisp
+;;; init-android.el --- Android Emacs init -*- lexical-binding: t; -*-
+#+end_src
 
 ** UI Configuration
 
