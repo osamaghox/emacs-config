@@ -812,43 +812,35 @@ EndIf
 
 *** Basic UI Setup
 
-**** تفعيل ميزات العرض المفيدة
+إعدادات واجهة المستخدم الأساسية في Emacs.
 
 - تفعيل الجرس المرئي (visible bell) بدلاً من الصوتي.
 - عرض رقم العمود الحالي في الشريط السفلي.
-- تفعيل أرقام الأسطر بشكل عام.
+- تفعيل أرقام الأسطر بشكل عام، وتعطيلها في أوضاع معينة مثل `org-mode` و `term-mode`.
+- جعل مؤشر الكتابة خط عمودي.
+- تفعيل تمييز السطر الحالي.
 
 #+begin_src emacs-lisp
+;; الجرس المرئي بدلاً من الصوتي
 (setq visible-bell t)
 
+;; عرض رقم العمود الحالي
 (column-number-mode)
+
+;; تفعيل أرقام الأسطر
 (global-display-line-numbers-mode t)
-#+end_src
 
-**** تعطيل أرقام الأسطر في أوضاع معينة
-
-- تعطيل أرقام الأسطر في أوضاع مثل org-mode، الطرفية (term-mode)، shell، و eshell، حيث قد تسبب مشاكل في العرض أو تكون غير ضرورية.
-
-#+begin_src emacs-lisp
+;; تعطيل أرقام الأسطر في أوضاع محددة
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
 
-**** جعل مؤشر الكتابة خط عمودي
-
-#+begin_src emacs-lisp
+;; جعل مؤشر الكتابة خط عمودي
 (setq-default cursor-type 'bar)
-#+end_src
 
-**** Highlight current line
-
-هذا الخيار يبرز السطر الحالي في كل buffer.
-يساعدني على تتبع مكان المؤشر.
-
-#+begin_src emacs-lisp
+;; تمييز السطر الحالي
 (global-hl-line-mode 1)
 #+end_src
 
@@ -924,41 +916,32 @@ EndIf
 
 *** General Fixes
 
-**** Fix Arabic Keybindings
+إصلاحات وتحسينات عامة في Emacs تشمل:
+
+- دعم مفاتيح الاختصار عند استخدام لوحة مفاتيح عربية.
+- تحسين أداء بدء التشغيل عبر تعديل إعدادات Garbage Collector.
+- التأكد من دعم أسماء الملفات بالعربية باستخدام ترميز UTF-8.
+- تقليل عدد التحذيرات المزعجة المعروضة في Emacs.
 
 #+begin_src emacs-lisp
+;; دعم اختصارات لوحة المفاتيح عند استخدام لغة الإدخال العربية
 (use-package reverse-im
   :ensure t
   :custom
   (reverse-im-input-methods '("arabic"))
   :config
   (reverse-im-mode t))
-#+end_src
 
-**** Improve Startup Performance
-
-#+begin_src emacs-lisp
-;; رفع حد جمع القمامة أثناء الإقلاع لتحسين سرعة بدء تشغيل Emacs
+;; تحسين أداء بدء التشغيل
 (setq gc-cons-threshold (* 50 1000 1000))
-
-;; إعادة تعيين الحد إلى قيمة أقل بعد الإقلاع للحفاظ على الأداء
 (add-hook 'emacs-startup-hook
           (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
-#+end_src
 
-هذا الكود يقوم برفع حد الذاكرة التي يُسمح باستخدامها قبل تشغيل جامع القمامة (Garbage Collector) إلى 50 ميجابايت أثناء إقلاع Emacs، مما يقلل من تكرار عمليات التنظيف ويجعل الإقلاع أسرع.
-بعد الانتهاء من الإقلاع، يتم إعادة الحد إلى 2 ميجابايت للحفاظ على أداء مستقر خلال الاستخدام اليومي.
-
-**** Fix Arabic File Names
-
-#+begin_src emacs-lisp
+;; دعم أسماء الملفات باللغة العربية باستخدام UTF-8
 (prefer-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
-#+end_src
 
-**** Show Less Warnings
-
-#+begin_src emacs-lisp
+;; تقليل عدد التحذيرات المعروضة
 (setq warning-minimum-level :error)
 #+end_src
 
@@ -1845,11 +1828,7 @@ Hydra هي مكتبة تسهل إنشاء اختصارات مؤقتة في Emacs
 (defun move-frame-down ()  (interactive) (set-frame-position nil (car (frame-position)) (+ (cdr (frame-position)) 20)))
 (defun move-frame-left ()  (interactive) (set-frame-position nil (- (car (frame-position)) 20) (cdr (frame-position))))
 (defun move-frame-right () (interactive) (set-frame-position nil (+ (car (frame-position)) 20) (cdr (frame-position))))
-#+end_src
 
-**** Frame Hydra
-
-#+begin_src emacs-lisp
 ;; Hydra لتكبير وتحريك الإطار
 (defhydra hydra-frame-control (:hint nil)
   "
@@ -1866,12 +1845,11 @@ _q_: Quit
   ("k" move-frame-up)
   ("j" move-frame-down)
   ("q" nil :exit t))
-#+end_src
 
-**** Frame Leader Key Binding
-
+;; ربط التحكم في الإطار بمفتاح القائد
 (osama/leader-keys
   "wF" '(hydra-frame-control/body :which-key "frame control"))
+#+end_src
 
 ** Setting up Third-party Tools for Emacs
 
