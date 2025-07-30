@@ -196,37 +196,14 @@ mkdir -p /data/data/org.gnu.emacs/files/fonts
 
 # رابط مجلد الخطوط
 rm -rf /data/data/org.gnu.emacs/files/fonts
-ln -s /sdcard/syncthing/online-emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
 
 # إنشاء مجلد icons-install داخل fonts
 mkdir -p /data/data/org.gnu.emacs/files/fonts
 
 # رابط icons-install
 rm -rf /data/data/org.gnu.emacs/files/fonts/icons-install
-ln -s /sdcard/syncthing/online-emacs/emacs-data/icons-install /data/data/org.gnu.emacs/files/fonts/icons-install
-#+END_EXAMPLE
-
-*** Your Personal Settings in an org File
-- أنشئ ملف باسم =~/org/config.org= يحتوي على إعدادات Emacs الخاصة بك لجميع أجهزتك.
-- اجعل Emacs يقرأ الملف من خلال إضافة هذا السطر في =init.el=: 
-
-#+BEGIN_EXAMPLE
-(org-babel-load-file "~/org/config.org")
-#+END_EXAMPLE
-
-*** Custom Settings for Phone Only
-في الملف =~/.emacs.d/init.el= على الهاتف، أضف التالي:
-
-#+BEGIN_EXAMPLE
-;; تعطيل ido لتجنب مشاكل مع لوحة المفاتيح
-(setq ido-everywhere nil)
-(ido-mode 0)
-
-;; إعدادات الواجهة للمس
-(custom-set-variables
- '(tool-bar-mode t)
- '(tool-bar-position 'bottom)
- '(touch-screen-display-keyboard t))
+ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/icons-install /data/data/org.gnu.emacs/files/fonts/icons-install
 #+END_EXAMPLE
 
 *** Speeding Up Setup with SyncThing
