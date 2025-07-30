@@ -261,8 +261,30 @@ pkg install git
 من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
 
 #+BEGIN_EXAMPLE
-ln -s /sdcard/Downloads ~/Downloads
-ln -s /sdcard/org ~/org
+# إنشاء مجلد الوجهة إذا لم يكن موجودًا
+mkdir -p /data/data/org.gnu.emacs/files
+
+# رابط sdcard/emacs.d
+rm -rf /data/data/org.gnu.emacs/files/emacs.d
+ln -s /sdcard/emacs.d /data/data/org.gnu.emacs/files/emacs.d
+
+# رابط sdcard/sync-thing
+rm -rf /data/data/org.gnu.emacs/files/sync-thing
+ln -s /sdcard/sync-thing /data/data/org.gnu.emacs/files/sync-thing
+
+# إنشاء مجلد fonts قبل الربط
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# رابط مجلد الخطوط
+rm -rf /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/syncthing/online-emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
+
+# إنشاء مجلد icons-install داخل fonts
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# رابط icons-install
+rm -rf /data/data/org.gnu.emacs/files/fonts/icons-install
+ln -s /sdcard/syncthing/online-emacs/emacs-data/icons-install /data/data/org.gnu.emacs/files/fonts/icons-install
 #+END_EXAMPLE
 
 *** Your Personal Settings in an org File
