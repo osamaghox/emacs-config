@@ -184,7 +184,7 @@ pkg install git
 mkdir -p /data/data/org.gnu.emacs/files
 
 # رابط sdcard/.emacs.d
-rm -rf /data/data/org.gnu.emacs/files/emacs.d
+rm -rf /data/data/org.gnu.emacs/files/.emacs.d
 ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
 
 # رابط sdcard/sync-thing
