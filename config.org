@@ -140,64 +140,6 @@ Run('"' & $CurrentDir & '\runemacs.exe"', $CurrentDir)
 ثم نحفظ ملف السكربت ووضعه بجوار
 runemacs.exe الي يوجد في مجلد bin
 
-*** Getting Started
-
-- نقوم بفتح السكربت `EmacsPortableLauncher.au3` لأول مرة لكي يتم إنشاء مجلد `.emacs`. وإن لم يُنشأ، نقوم بإنشائه يدويًا.
-- نضع ملف `config.org` داخل مجلد:
-`~/sync-thing/online-sync/emacs/config.org`
-- نقوم بفتح Emacs ثم نفتح ملف `config.org` من خلال الضغط على `C-x C-f` ثم اختيار المسار التالي:
-  `~/sync-thing/online-sync/emacs/config.org`
-
-**** Local Variables Warning Message
-
-سيظهر لنا Buffer باسم `*Local Variables*` يحتوي على الرسالة التالية:
-
-#+begin_example
-The local variables list in config.org
-contains variables that are risky (**)
-
-Do you want to apply it?  You can type
-y  -- to apply the local variables list.
-n  -- to ignore the local variables list
-#+end_example
-
-- اكتب الحرف `y` ثم اضغط `Enter` للموافقة.
-
-***** What Does This Message Mean?
-
-هذه الرسالة تعني أن الملف يحتوي على متغيرات محلية (Local Variables) قد تُعتبر "غير آمنة" لأن بعضها ينفذ أوامر تلقائيًا، مثل:
-
-- `org-babel-tangle` (لتصدير الأكواد)
-- `delete-trailing-whitespace` (لحذف الفراغات الزائدة)
-
-Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالسماح بتنفيذ هذه الأوامر (`y`) أو تجاهلها (`n`).
-
-***** How to Automatically Bypass This Message?
-
-يمكننا تجاوز هذه الرسالة وعدم ظهورها مرة أخرى عن طريق إضافة الكود التالي داخل ملف الإعدادات `init.el` أو أي ملف Emacs Lisp يتم تحميله مع Emacs:
-
-#+begin_src emacs-lisp
-(setq safe-local-variable-values
-      '((after-save-hook . (org-babel-tangle))
-        (before-save-hook . (delete-trailing-whitespace))))
-#+end_src
-
-هذا الكود يقوم بإخبار Emacs أن هذه القيم المحلية (Local Variables) آمنة، وبالتالي لن يسألك مرة أخرى عند فتح ملفات تحتوي عليها.
-
-
-
-***** How to Add Code to init.el Using Org-mode?
-
-لإضافة كود إلى ملف `init.el` من داخل ملف `config.org`، نقوم بكتابة **كتلة كود (src block)** من نوع `emacs-lisp`، مثل المثال التالي:
-
-#+begin_src emacs-lisp
-;; هنا نكتب الكود الذي نريده
-#+end_src
-
-أي كود نضعه داخل هذه الكتلة سيتم تصديره (tangle) تلقائيًا إلى ملف `init.el` عند الحفظ من خلال `C-x C-s`، إذا كنا قد فعلنا خاصية التانغل التلقائي.
-
-تسمى هذه "كتلة كود" أو بالإنجليزية: **code block** أو **src block**، وليست "كود" بحد ذاتها.
-
 ** Android Port
 
 *** Objective
@@ -887,6 +829,60 @@ EndIf
 - عند الاتصال بنفس الشبكة، لا يتم استخدام الإنترنت.
 - الهاتف هو الجهاز الرئيسي لحفظ البيانات، تأكد من إتمام المزامنة عبره.
 - قم بعمل نسخة احتياطية شهرية على الكلاود أو فلاشة، بما في ذلك المجلد المشترك على الهاتف.
+
+* Getting Started
+
+- نضع ملف `config.org` داخل مجلد:
+`~/sync-thing/online-sync/emacs/config.org`
+- نقوم بفتح Emacs ثم نفتح ملف `config.org` من خلال الضغط على `C-x C-f` ثم اختيار المسار التالي:
+  `~/sync-thing/online-sync/emacs/config.org`
+
+** Local Variables Warning Message
+
+سيظهر لنا Buffer باسم `*Local Variables*` يحتوي على الرسالة التالية:
+
+#+begin_example
+The local variables list in config.org
+contains variables that are risky (**)
+
+Do you want to apply it?  You can type
+y  -- to apply the local variables list.
+n  -- to ignore the local variables list
+#+end_example
+
+- اكتب الحرف `y` ثم اضغط `Enter` للموافقة.
+
+*** What Does This Message Mean?
+
+هذه الرسالة تعني أن الملف يحتوي على متغيرات محلية (Local Variables) قد تُعتبر "غير آمنة" لأن بعضها ينفذ أوامر تلقائيًا، مثل:
+
+- `org-babel-tangle` (لتصدير الأكواد)
+- `delete-trailing-whitespace` (لحذف الفراغات الزائدة)
+
+Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالسماح بتنفيذ هذه الأوامر (`y`) أو تجاهلها (`n`).
+
+*** How to Automatically Bypass This Message?
+
+يمكننا تجاوز هذه الرسالة وعدم ظهورها مرة أخرى عن طريق إضافة الكود التالي داخل ملف الإعدادات `init.el` أو أي ملف Emacs Lisp يتم تحميله مع Emacs:
+
+#+begin_src emacs-lisp
+(setq safe-local-variable-values
+      '((after-save-hook . (org-babel-tangle))
+        (before-save-hook . (delete-trailing-whitespace))))
+#+end_src
+
+هذا الكود يقوم بإخبار Emacs أن هذه القيم المحلية (Local Variables) آمنة، وبالتالي لن يسألك مرة أخرى عند فتح ملفات تحتوي عليها.
+
+** How to Add Code to init.el Using Org-mode?
+
+لإضافة كود إلى ملف `init.el` من داخل ملف `config.org`، نقوم بكتابة **كتلة كود (src block)** من نوع `emacs-lisp`، مثل المثال التالي:
+
+#+begin_src emacs-lisp
+;; هنا نكتب الكود الذي نريده
+#+end_src
+
+أي كود نضعه داخل هذه الكتلة سيتم تصديره (tangle) تلقائيًا إلى ملف `init.el` عند الحفظ من خلال `C-x C-s`، إذا كنا قد فعلنا خاصية التانغل التلقائي.
+تسمى هذه "كتلة كود" أو بالإنجليزية: **code block** أو **src block**، وليست "كود" بحد ذاتها.
 
 * General Configuration
 
