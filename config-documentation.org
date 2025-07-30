@@ -187,7 +187,6 @@ mkdir -p /data/data/org.gnu.emacs/files
 mkdir -p /sdcard/.emacs.d
 mkdir -p /sdcard/sync-thing
 mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts
-mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/icons-install
 
 # رابط sdcard/.emacs.d
 rm -rf /data/data/org.gnu.emacs/files/.emacs.d
@@ -203,13 +202,6 @@ mkdir -p /data/data/org.gnu.emacs/files/fonts
 # رابط مجلد الخطوط
 rm -rf /data/data/org.gnu.emacs/files/fonts
 ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
-
-# إنشاء مجلد icons-install داخل fonts
-mkdir -p /data/data/org.gnu.emacs/files/fonts
-
-# رابط icons-install
-rm -rf /data/data/org.gnu.emacs/files/fonts/icons-install
-ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/icons-install /data/data/org.gnu.emacs/files/fonts/icons-install
 #+END_EXAMPLE
 
 *** Speeding Up Setup with SyncThing
