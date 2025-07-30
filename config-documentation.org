@@ -176,6 +176,22 @@ M-x shell
 pkg install git
 #+END_EXAMPLE
 
+*** Clean Symbolic Links from The Home Directory Before Creating New Ones
+
+قبل تنفيذ أوامر `mkdir` و `ln -s`، من الأفضل التأكد من أن مجلد `~` لا يحتوي على روابط رمزية غير ضرورية قد تسبب تعارضًا لاحقًا.
+
+1. عرض جميع الروابط الرمزية فقط داخل مجلد Home (~):
+
+#+BEGIN_EXAMPLE
+find ~ -maxdepth 1 -type l
+#+END_EXAMPLE
+
+2. حذف جميع الروابط الرمزية داخل ~ فقط (وليس محتوى المجلدات الأصلية):
+
+#+BEGIN_EXAMPLE
+find ~ -maxdepth 1 -type l -exec rm -v {} \;
+#+END_EXAMPLE
+
 *** Linking Android Folders Inside Emacs
 من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
 
