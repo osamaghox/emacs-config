@@ -183,6 +183,12 @@ pkg install git
 # إنشاء مجلد الوجهة إذا لم يكن موجودًا
 mkdir -p /data/data/org.gnu.emacs/files
 
+# إنشاء مجلدات المصدر على sdcard إذا مش موجودة
+mkdir -p /sdcard/.emacs.d
+mkdir -p /sdcard/sync-thing
+mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts
+mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/icons-install
+
 # رابط sdcard/.emacs.d
 rm -rf /data/data/org.gnu.emacs/files/.emacs.d
 ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
