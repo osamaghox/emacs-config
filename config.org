@@ -1610,6 +1610,22 @@ EndIf
 ;;; init-windows.el --- Windows configuration -*- lexical-binding: t; -*-
 #+end_src
 
+** Setting up Third-party Tools for Emacs
+
+Emacs يمكنه الاستفادة من أدوات خارجية لتحسين الأداء وزيادة الخصائص، مثل البحث السريع، إدارة المستودعات، أو التعامل مع الملفات. هذه الأدوات تُعرف بـ "Third-party Tools"، ويُنصح بإعدادها يدويًا عند استخدام نسخة محمولة (portable) من Emacs.
+
+إذا أردت إضافة أداة جديدة في المستقبل، فقط قم بوضع مسار مجلدها داخل مجلد
+`~/sync-thing/online-sync/emacs/emacs-data/` ثم أضف المسار الكامل للمجلد إلى متغير `exec-path` تحت:
+
+#+begin_src emacs-lisp
+;; إضافة أدوات خارجية إلى exec-path
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd")        ;; Git
+(setenv "PATH" (concat (expand-file-name "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd/") ";" (getenv "PATH")))
+
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/fd/")            ;; fd.exe
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")       ;; rg.exe
+#+end_src
+
 ** Straight Package Management
 
 #+begin_src emacs-lisp
@@ -1679,22 +1695,6 @@ _q_: Quit
 ;; ربط التحكم في الإطار بمفتاح القائد
 (osama/leader-keys
   "wF" '(hydra-frame-control/body :which-key "frame control"))
-#+end_src
-
-** Setting up Third-party Tools for Emacs
-
-Emacs يمكنه الاستفادة من أدوات خارجية لتحسين الأداء وزيادة الخصائص، مثل البحث السريع، إدارة المستودعات، أو التعامل مع الملفات. هذه الأدوات تُعرف بـ "Third-party Tools"، ويُنصح بإعدادها يدويًا عند استخدام نسخة محمولة (portable) من Emacs.
-
-إذا أردت إضافة أداة جديدة في المستقبل، فقط قم بوضع مسار مجلدها داخل مجلد
-`~/sync-thing/online-sync/emacs/emacs-data/` ثم أضف المسار الكامل للمجلد إلى متغير `exec-path` تحت:
-
-#+begin_src emacs-lisp
-;; إضافة أدوات خارجية إلى exec-path
-(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd")        ;; Git
-(setenv "PATH" (concat (expand-file-name "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd/") ";" (getenv "PATH")))
-
-(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/fd/")            ;; fd.exe
-(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")       ;; rg.exe
 #+end_src
 
 ** Media Handling in org-mode
