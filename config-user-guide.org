@@ -1,0 +1,808 @@
+#+TITLE: دليل إعداد Emacs باستخدام Org-mode وAutoIt
+#+AUTHOR: أسامة غراب
+#+DATE: 2025-07-30
+
+
+* Introduction
+
+
+
+
+** Explanation of Export and Automatic Execution Settings
+
+هذا القسم يشرح سطرين مهمين في أعلى الملف يقومان بتفعيل بعض السلوكيات المفيدة تلقائيًا عند فتح أو حفظ الملف.
+
+*** Local Variables for the File
+
+#+begin_example
+# -*- after-save-hook: (org-babel-tangle); before-save-hook: (delete-trailing-whitespace)-*-
+#+end_example
+
+- هذا السطر يُخبر Emacs بأن ينفّذ بعض الأوامر عند حفظ الملف أو قبل حفظه.
+- `after-save-hook: (org-babel-tangle)`
+  ⇒ بعد حفظ الملف، يقوم Emacs تلقائيًا بتشغيل `org-babel-tangle`، أي يتم استخراج كود Emacs Lisp من الملف إلى ملف `.el`.
+- `before-save-hook: (delete-trailing-whitespace)`
+  ⇒ قبل الحفظ، يتم حذف الفراغات الزائدة في نهاية الأسطر تلقائيًا.
+
+*** Header Arguments for Code Blocks
+
+#+begin_example
+#+PROPERTY: header-args:emacs-lisp :exports code :results none :tangle ~/.emacs.d/init.el :mkdirp yes
+#+end_example
+
+- هذا السطر يحدد الخصائص الافتراضية لجميع كتل الكود من نوع `emacs-lisp` في الملف.
+- `:exports code` ⇒ عند تصدير الملف (مثل PDF أو HTML)، سيتم تصدير الكود فقط بدون النتائج.
+- `:results none` ⇒ لا يتم عرض نتائج تنفيذ الكود داخل الملف.
+- :tangle ~/.emacs.d/init.el ⇒ سيتم تصدير الكود إلى الملف init.el في مجلد .emacs.d
+- `:mkdirp yes` ⇒ إذا لم يكن المجلد موجودًا، سيتم إنشاؤه تلقائيًا.
+
+*** Result
+
+عند حفظ الملف `config.org`:
+1. يتم تنظيفه من الفراغات الزائدة.
+2. يتم تحديث ملف `init.el` تلقائيًا بالكود المكتوب داخل كتل `#+begin_src emacs-lisp`.
+
+* Emacs Installation Guide
+
+** Windows
+
+نقوم بتنزيل Emacs نسخة Windows بصيغة ZIP من الموقع الرسمي:
+https://ftp.gnu.org/gnu/emacs/windows/
+
+بعد فك الضغط، يجب أن تبدو بنية المجلد كالتالي:
+
+#+begin_example
+PortableEmacs/               ;; ← المجلد الرئيسي، يظهر اسمه في اختصار Emacs في قائمة Start Menu
+├── bin/                     ;; ← مجلد العمل الأساسي (`~`) ويحتوي على جميع الملفات التنفيذية والإعدادات
+│   ├── runemacs.exe         ;; ← الملف التنفيذي لتشغيل Emacs
+│   ├── EmacsPortableLauncher.au3  ;; ← السكربت المسؤول عن تشغيل النسخة المحمولة من Emacs
+│   ├── .emacs.d/            ;; ← مجلد إعدادات Emacs الرئيسي (يشمل ملفات التهيئة والامتدادات والبيانات)
+│   │   └── init.el          ;; ← ملف الإعدادات الأساسي، يتم توليده تلقائيًا من config.org (Org-mode)
+│   └── sync-thing/          ;; ← مجلد مخصص لمزامنة الملفات باستخدام Syncthing
+│       ├── online-sync/     ;; ← مزامنة عبر الإنترنت باستخدام Syncthing (تتطلب اتصالاً خارجيًا)
+│       │   ├── emacs/       ;; ← ملفات Emacs القابلة للمزامنة (Org، إعدادات إضافية، بيانات مساعدة)
+│       │   │   ├── osama-org/    ;; ← ملفات Org الشخصية (ملاحظات، يوميات، أرشيف المعرفة)
+│       │   │   └── emacs-data/   ;; ← ملفات داعمة لـ Emacs: Auto Save، Backups، بيانات إضافات خارجية
+│       └── lan-sync/        ;; ← مزامنة محلية ضمن الشبكة الداخلية (LAN)
+│           ├── islamic/     ;; ← ملفات إسلامية: مصاحف صوتية، كتب، محتوى ديني مشترك
+│           ├── music/       ;; ← ملفات صوتية عامة (موسيقى، صوتيات) للمشاركة داخل الشبكة
+│           └── random/      ;; ← ملفات متنوعة وغير مصنفة ضمن مشاركة LAN
+#+end_example
+
+*** Installing AutoIt
+
+AutoIt هي أداة مجانية على نظام Windows تُستخدم لإنشاء سكربتات بسيطة لأتمتة المهام، مثل تشغيل البرامج، إنشاء اختصارات، التعامل مع الملفات، وتعيين متغيرات بيئة النظام.
+
+سنستخدم AutoIt لإنشاء سكربت يقوم بما يلي:
+- تشغيل Emacs من مسار محدد.
+- تعيين متغير البيئة `HOME` إلى المجلد الحالي، لجعل Emacs يعمل كنسخة محمولة (Portable).
+- إنشاء اختصار تلقائي في قائمة Start Menu باسم يحتوي على اسم المجلد الأب (لتمييز النسخة).
+
+**** Creating the Script File
+
+بعد تثبيت AutoIt، نقوم بإنشاء ملف جديد بالامتداد `.au3`، وليكن اسمه مثلًا:
+EmacsPortableLauncher.au3
+
+#+begin_example
+
+#include <File.au3>
+
+Global $CurrentDir = @ScriptDir
+Global $ParentDir = StringLeft($CurrentDir, StringInStr($CurrentDir, "\", 0, -1) - 1)
+Global $FolderName = StringTrimLeft($ParentDir, StringInStr($ParentDir, "\", 0, -1))
+
+; اختصار السكربت نفسه
+Global $ScriptPath = @ScriptFullPath
+Global $ShortcutName = "Emacs (" & $FolderName & ").lnk"
+Global $ShortcutPath = @ProgramsDir & "\" & $ShortcutName
+
+; إنشاء أو تحديث الاختصار للسكربت
+If FileExists($ShortcutPath) Then
+    Local $sc = FileGetShortcut($ShortcutPath)
+    If @error _
+       Or StringLower($sc[0]) <> StringLower($ScriptPath) _
+       Or StringLower($sc[1]) <> StringLower($CurrentDir) Then
+        FileCreateShortcut($ScriptPath, $ShortcutPath, $CurrentDir, "", "Emacs Portable - " & $FolderName)
+    EndIf
+Else
+    FileCreateShortcut($ScriptPath, $ShortcutPath, $CurrentDir, "", "Emacs Portable - " & $FolderName)
+EndIf
+
+; تعيين HOME وتشغيل Emacs
+EnvSet("HOME", $CurrentDir)
+Run('"' & $CurrentDir & '\runemacs.exe"', $CurrentDir)
+
+#+end_example
+
+ثم نحفظ ملف السكربت ووضعه بجوار
+runemacs.exe الي يوجد في مجلد bin
+
+** Android Port
+
+*** Objective
+تشغيل Emacs كواجهة رسومية على نظام أندرويد (دون الاعتماد على Termux فقط)، مع إمكانية استخدام بيئة GNU/Linux من خلال Termux، ومزامنة الإعدادات بين الهاتف والكمبيوتر باستخدام أداة SyncThing.
+
+*** Removing Old Apps
+- احذف أي نسخة سابقة من =Emacs=.
+- احذف تطبيق =Termux= العادي إذا كنت قد ثبّته من F-Droid أو GitHub.
+
+*** Installing Correct Versions in Order
+1. ثبّت أولاً نسخة =Termux= المعدلة من:
+   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/termux/][Termux SourceForge]]
+2. افتح تطبيق =Termux= مرة واحدة (مهم جدًا).
+3. ثبّت بعدها =Emacs الرسومي= من:
+   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/][Emacs GUI SourceForge]]
+4. بعد التثبيت، افتح تطبيق =Emacs=.
+
+*** Granting Full Permissions
+ادخل إلى إعدادات نظام أندرويد ثم:
+- إعدادات > التطبيقات > Emacs وTermux > فعّل جميع الصلاحيات التالية:
+  - صلاحية الوصول الكامل إلى جميع الملفات (لإصدارات Android 11 فأعلى): =Special app access > All files access=
+  - صلاحية الوصول إلى التطبيقات المثبّتة.
+  - صلاحيات الخلفية والإشعارات، وغيرها حسب الحاجة.
+
+*** Stop VPN Before Updating Termux
+قبل تنفيذ الأمر التالي، تأكد من إيقاف تشغيل =VPN= بشكل كامل:
+
+#+BEGIN_EXAMPLE
+pkg update
+#+END_EXAMPLE
+
+*** Configuring Emacs to Recognize Termux Tools
+في الملف =~/.emacs.d/early-init.el= أضف ما يلي:
+
+#+BEGIN_EXAMPLE
+(setenv "PATH" (format "%s:%s"
+  "/data/data/com.termux/files/usr/bin"
+  (getenv "PATH")))
+
+(setenv "LD_LIBRARY_PATH" (format "%s:%s"
+  "/data/data/com.termux/files/usr/lib"
+  (getenv "LD_LIBRARY_PATH")))
+
+(push "/data/data/com.termux/files/usr/bin" exec-path)
+#+END_EXAMPLE
+
+*** Opening Terminal Inside Emacs
+بعد فتح Emacs، نفّذ الأمر التالي:
+
+#+BEGIN_EXAMPLE
+M-x shell
+#+END_EXAMPLE
+
+الطرفية الآن مرتبطة ببيئة Termux ويمكنك تنفيذ أوامر مثل:
+
+#+BEGIN_EXAMPLE
+pkg install git
+#+END_EXAMPLE
+
+*** Linking Android Folders Inside Emacs
+من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
+
+#+BEGIN_EXAMPLE
+# إنشاء مجلد الوجهة إذا لم يكن موجودًا
+mkdir -p /data/data/org.gnu.emacs/files
+
+# رابط sdcard/emacs.d
+rm -rf /data/data/org.gnu.emacs/files/emacs.d
+ln -s /sdcard/emacs.d /data/data/org.gnu.emacs/files/emacs.d
+
+# رابط sdcard/sync-thing
+rm -rf /data/data/org.gnu.emacs/files/sync-thing
+ln -s /sdcard/sync-thing /data/data/org.gnu.emacs/files/sync-thing
+
+# إنشاء مجلد fonts قبل الربط
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# رابط مجلد الخطوط
+rm -rf /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/syncthing/online-emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
+
+# إنشاء مجلد icons-install داخل fonts
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# رابط icons-install
+rm -rf /data/data/org.gnu.emacs/files/fonts/icons-install
+ln -s /sdcard/syncthing/online-emacs/emacs-data/icons-install /data/data/org.gnu.emacs/files/fonts/icons-install
+#+END_EXAMPLE
+
+*** Your Personal Settings in an org File
+- أنشئ ملف باسم =~/org/config.org= يحتوي على إعدادات Emacs الخاصة بك لجميع أجهزتك.
+- اجعل Emacs يقرأ الملف من خلال إضافة هذا السطر في =init.el=: 
+
+#+BEGIN_EXAMPLE
+(org-babel-load-file "~/org/config.org")
+#+END_EXAMPLE
+
+*** Custom Settings for Phone Only
+في الملف =~/.emacs.d/init.el= على الهاتف، أضف التالي:
+
+#+BEGIN_EXAMPLE
+;; تعطيل ido لتجنب مشاكل مع لوحة المفاتيح
+(setq ido-everywhere nil)
+(ido-mode 0)
+
+;; إعدادات الواجهة للمس
+(custom-set-variables
+ '(tool-bar-mode t)
+ '(tool-bar-position 'bottom)
+ '(touch-screen-display-keyboard t))
+#+END_EXAMPLE
+
+*** Speeding Up Setup with SyncThing
+اجعل مجلد إعدادات Emacs داخل مجلد تتم مزامنته مثل =/sdcard/emacs-config=، ثم اربطه بـ =~/.emacs.d=: 
+
+#+BEGIN_EXAMPLE
+rm -rf ~/.emacs.d/
+ln -s /sdcard/emacs-config ~/.emacs.d/
+#+END_EXAMPLE
+
+بهذا الشكل، عند تغيير الجهاز أو عمل فورمات، لن تحتاج إلى إعادة إعداد Emacs من البداية.
+
+يمكنك إنشاء ملف باسم =config-android.org= داخل:
+=/sdcard/emacs-config=
+وسيتم نقله تلقائيًا إلى:
+=~/.emacs.d/=
+
+ثم افتحه من داخل تطبيق Emacs، ووافق على رسالة التحذير (عند سؤالك)، ثم أضف تعديلًا بسيطًا واحفظه باستخدام:
+
+#+BEGIN_EXAMPLE
+C-x C-s
+#+END_EXAMPLE
+
+*** Summary
+
+| Step | Description                           |
+|-------+------------------------------------|
+|     1 | حذف النسخ القديمة من Emacs وTermux    |
+|     2 | تثبيت Termux أولًا، ثم Emacs            |
+|     3 | منح جميع الصلاحيات من إعدادات النظام      |
+|     4 | إيقاف VPN قبل تنفيذ أمر التحديث          |
+|     5 | تحديث Termux                       |
+|     6 | إعداد early-init.el لربط Emacs بـ Termux |
+|     7 | استخدام الطرفية داخل Emacs عبر M-x shell|
+|     8 | ربط مجلدات /sdcard/ داخل Emacs       |
+|     9 | حفظ إعداداتك في ملف config.org       |
+|    10 | إعداد init.el خاص بالهاتف             |
+|    11 | ربط مجلد الإعدادات بـ ~/.emacs.d        |
+
+*** Additional Notes
+- يمكنك استخدام [[https://syncthing.net][SyncThing]] لمزامنة الملف =org/config.org= عبر جميع أجهزتك.
+- يُستحسن دائمًا أخذ نسخة احتياطية من إعداداتك قبل أي تعديلات كبيرة أو تجارب جديدة.
+
+* Syncthing Installation & Configuration Guide
+
+هو برنامج *مزامنة ملفات مفتوح المصدر* يعمل بطريقة *نظير إلى نظير (P2P)*، مما يسمح لك بمزامنة الملفات والمجلدات بين أجهزتك المختلفة *مباشرة دون الحاجة إلى خوادم سحابية* مثل Google Drive أو Dropbox.
+
+** How Syncthing Works
+
+سنستخدم برنامج *Syncthing* لمزامنة ملفات Emacs بين جهازين حاسوب وهاتف محمول، بطريقة لا تتطلب اتصالًا مباشرًا بين الجهازين.
+
+*** Phone as a "Central Hub"
+
+لن يتم ربط الجهازين مباشرة، بل سيتم الربط على النحو التالي:
+
+  - *PC1 (حاسوب العمل)* → *الهاتف*
+  - *PC2 (حاسوب المنزل)* → *الهاتف*
+
+ولا يوجد اتصال مباشر بين:
+
+  - *PC1* ↔ *PC2*
+
+هذه الطريقة تفيد في الحالات التالية:
+
+  - عند عدم توفر اتصال دائم بين الحاسوبين.
+  - أو عند استخدام شبكات مختلفة (مثلاً العمل والبيت).
+  - أو إذا كنت تريد استخدام الهاتف كنقطة تحكم ومزامنة أساسية.
+
+*** General Idea
+
+  1. الهاتف يكون دائمًا قيد التشغيل ومتصلاً بالإنترنت.
+  2. عند تشغيل أي من الحواسيب، يتم المزامنة مع الهاتف فقط.
+  3. الهاتف بدوره يقوم بنقل التغييرات إلى الحاسوب الآخر عند اتصاله لاحقًا.
+
+** Windows
+
+تأكد من تطبيق هذه الخطوات على جميع أجهزة Windows التي ترغب في مزامنتها لضمان عمل Syncthing بشكل صحيح وفعّال.
+
+1. نقوم بتنزيل البرنامج للحاسوب من الرابط التالي
+   https://github.com/syncthing/syncthing/releases
+   syncthing-windows-amd64-x.x.x-rc.1.zip
+
+*** Creating Two Folders for Syncthing
+
+1. نقوم بإنشاء مجلدين باسمين مختلفين **ويجب أن تكون الأسماء كما هي بالضبط**، ثم نضع ملفات البرنامج داخل كل مجلد على حدة.
+الأسماء الضرورية للمجلدين هي:
+
+- *SyncthingPortableLan*
+
+هذه النسخة تقتصر على المزامنة داخل الشبكة المحلية فقط (LAN)، ولا تستخدم الإنترنت.
+
+- *SyncthingPortable*
+
+هذه نسخة تقوم بالمزامنة عبر الإنترنت وأيضًا عبر نفس الشبكة المحلية.
+مزامنة الملفات الكبيرة عبر الإنترنت قد تستهلك كمية كبيرة من البيانات، فانتبه لذلك.
+
+هذا الإجراء مهم حتى لا يتكرر اختصار التشغيل عند بدء النظام ولا يتكرر الاختصار في قائمة التشغيل.
+
+2. نسخ الملف [[file:Syncthing Portable Launcher.exe]] إلى كلا المجلدين.
+
+*** AutoIt Script (For Backup Only)
+
+#+begin_src autoit
+#include <File.au3>
+#include <MsgBoxConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
+#include <Array.au3>
+
+; —————— وسيط جديد لفتح المتصفح يدوياً ——————
+Global $openBrowser = False
+If $CmdLine[0] > 0 And StringLower($CmdLine[1]) = "-open" Then
+    $openBrowser = True
+EndIf
+
+; —————— المتغيرات الأساسية ——————
+Global $launcherPath     = @ScriptFullPath
+Global $currentDir       = @ScriptDir
+Global $folderName       = StringTrimLeft($currentDir, StringInStr($currentDir, "\", 0, -1))
+Global $startupPath      = @StartupDir
+Global $shortcutName     = "Syncthing Portable Launcher_" & $folderName & ".lnk"
+Global $shortcutFullPath = $startupPath & "\" & $shortcutName
+Global $syncthingExe     = $currentDir & "\syncthing.exe"
+Global $userDataDir      = $currentDir & "\user data"
+Global $configFile       = $userDataDir & "\config.xml"
+Global $firstRunFlag     = $userDataDir & "\firstrun.flag"
+; مسار قائمة Start Menu للمستخدم الحالي
+Global $programsPath     = @ProgramsDir
+Global $smShortcutName   = $folderName & ".lnk"
+Global $smShortcutPath   = $programsPath & "\" & $smShortcutName
+
+; —————— أنشئ مجلّد البيانات إذا لم يكن موجوداً ——————
+If Not FileExists($userDataDir) Then DirCreate($userDataDir)
+
+; —————— إنشاء/تحديث الاختصار في Startup بدون وسائط ——————
+If FileExists($shortcutFullPath) Then
+    Local $sc = FileGetShortcut($shortcutFullPath)
+    If @error _
+       Or StringLower($sc[0]) <> StringLower($launcherPath) _
+       Or StringLower($sc[1]) <> StringLower($currentDir) Then
+        FileCreateShortcut($launcherPath, $shortcutFullPath, $currentDir)
+    EndIf
+Else
+    FileCreateShortcut($launcherPath, $shortcutFullPath, $currentDir)
+EndIf
+
+; —————— إنشاء/تحديث الاختصار في قائمة Start Menu مع الوسيطة -open ——————
+If FileExists($smShortcutPath) Then
+    Local $sm = FileGetShortcut($smShortcutPath)
+    ; $sm[0]=target, [1]=working dir, [2]=args
+    If @error _
+       Or StringLower($sm[0]) <> StringLower($launcherPath) _
+       Or StringLower($sm[1]) <> StringLower($currentDir) _
+       Or StringLower($sm[2]) <> "-open" Then
+        FileCreateShortcut($launcherPath, $smShortcutPath, $currentDir, "-open", "", "", $folderName)
+    EndIf
+Else
+    FileCreateShortcut($launcherPath, $smShortcutPath, $currentDir, "-open", "", "", $folderName)
+EndIf
+
+; —————— دوال مساعدة ——————
+Func PortInUse($port)
+    Return RunWait(@ComSpec & " /c netstat -aon | findstr :" & $port, "", @SW_HIDE) = 0
+EndFunc
+
+Func _ProcessCloseByName($procName)
+    Local $pList = ProcessList($procName)
+    For $i = 1 To $pList[0][0]
+        ProcessClose($pList[$i][1])
+    Next
+    Sleep(1000)
+    $pList = ProcessList($procName)
+    For $i = 1 To $pList[0][0]
+        ProcessKill($pList[$i][1])
+    Next
+EndFunc
+
+Func GetGuiPortFromConfig()
+    If Not FileExists($configFile) Then Return 0
+    Local $lines = FileReadToArray($configFile)
+    If @error Then Return 0
+    For $i = 0 To UBound($lines)-1
+        If StringRegExp($lines[$i], '<address>127\.0\.0\.1:(\d+)</address>') Then
+            Local $m = StringRegExp($lines[$i], '<address>127\.0\.0\.1:(\d+)</address>', 1)
+            If IsArray($m) Then Return (Number($m[0]) = 8384) ? 0 : Number($m[0])
+        EndIf
+    Next
+    Return 0
+EndFunc
+
+Func FixConfigPorts()
+    Local $guiPort    = 0, $listenPort = "", $lines = [], $changed = False
+    Local $isFirstRun = Not FileExists($firstRunFlag)
+
+    If FileExists($configFile) Then
+        $lines = FileReadToArray($configFile)
+        If @error Then $lines = []
+    EndIf
+
+    If $isFirstRun Then
+        Local $res = ShowPortInputGUI()
+        $guiPort    = $res[0]
+        $listenPort = $res[1]
+        Local $hFlag = FileOpen($firstRunFlag, 2)
+        FileWrite($hFlag, "initialized")
+        FileClose($hFlag)
+    Else
+        $guiPort = GetGuiPortFromConfig()
+        If $guiPort = 0 Then $guiPort = 8385
+        For $i = 0 To UBound($lines)-1
+            If StringRegExp($lines[$i], '<listenAddress>tcp://.*:(\d+)</listenAddress>') Then
+                Local $m = StringRegExp($lines[$i], '<listenAddress>tcp://.*:(\d+)</listenAddress>', 1)
+                If IsArray($m) Then
+                    $listenPort = $m[0]
+                    ExitLoop
+                EndIf
+            EndIf
+        Next
+    EndIf
+
+    If UBound($lines) = 0 Then
+        Local $cfg = '<?xml version="1.0" encoding="utf-8"?>' & @CRLF & _
+                    '<configuration>' & @CRLF & _
+                    '  <gui enabled="true" tls="false">' & @CRLF & _
+                    '    <address>127.0.0.1:' & $guiPort & '</address>' & @CRLF & _
+                    '    <browser>never</browser>' & @CRLF & _
+                    '  </gui>' & @CRLF & _
+                    '  <options>' & @CRLF & _
+                    '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>' & @CRLF & _
+                    '  </options>' & @CRLF & _
+                    '</configuration>'
+        Local $f = FileOpen($configFile, 2)
+        FileWrite($f, $cfg)
+        FileClose($f)
+        Return
+    EndIf
+
+    For $i = 0 To UBound($lines)-1
+        If StringRegExp($lines[$i], '<address>127\.0\.0\.1:\d+</address>') Then
+            $lines[$i] = StringRegExpReplace($lines[$i], '<address>127\.0\.0\.1:\d+</address>', '<address>127.0.0.1:' & $guiPort & '</address>')
+            $changed = True
+        EndIf
+        If StringRegExp($lines[$i], '<browser>.*</browser>') Then
+            $lines[$i] = '    <browser>never</browser>'
+            $changed = True
+        EndIf
+        If StringRegExp($lines[$i], '<listenAddress>.*</listenAddress>') Then
+            $lines[$i] = '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>'
+            $changed = True
+        EndIf
+    Next
+
+    Local $idxGui = _ArraySearch($lines, '<gui.*>', 0, 0, 2)
+    If $idxGui <> -1 And Not StringRegExp($lines[$idxGui+1], '<browser>') Then
+        _ArrayInsert($lines, $idxGui + 1, '    <browser>never</browser>')
+        $changed = True
+    EndIf
+
+    Local $idxOpt = _ArraySearch($lines, '<options>', 0, 0, 2)
+    If $idxOpt <> -1 And Not StringRegExp($lines[$idxOpt+1], '<listenAddress>') Then
+        _ArrayInsert($lines, $idxOpt + 1, '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>')
+        $changed = True
+    EndIf
+
+    If $changed Then
+        Local $f = FileOpen($configFile, 2)
+        For $i = 0 To UBound($lines)-1
+            FileWriteLine($f, $lines[$i])
+        Next
+        FileClose($f)
+    EndIf
+EndFunc
+
+Func ShowPortInputGUI()
+    Local $gui = GUICreate("إعداد المنافذ", 400, 200)
+    GUICtrlCreateLabel("GUI Port:",     20,  30, 120)
+    Local $iGui = GUICtrlCreateInput("8385", 150, 25, 200, 25)
+    GUICtrlCreateLabel("Listen Port:",  20,  80, 120)
+    Local $iLis = GUICtrlCreateInput("22001",150, 75, 200, 25)
+    Local $ok   = GUICtrlCreateButton("موافق", 150,130,100)
+    GUISetState()
+    While 1
+        Switch GUIGetMsg()
+            Case $GUI_EVENT_CLOSE
+                ExitLoop
+            Case $ok
+                Local $g = GUICtrlRead($iGui), $l = GUICtrlRead($iLis)
+                If Not StringIsDigit($g) Or Number($g) = 8384 Or Number($g) < 1024 Or Number($g) > 65535 Then
+                    MsgBox($MB_ICONERROR, "خطأ", "GUI Port غير صالح.")
+                    ContinueLoop
+                EndIf
+                If $l <> "" Then
+                    If Not StringIsDigit($l) Or Number($l) = 22000 Or Number($l) < 1024 Or Number($l) > 65535 Then
+                        MsgBox($MB_ICONERROR, "خطأ", "Listen Port غير صالح.")
+                        ContinueLoop
+                    EndIf
+                EndIf
+                GUIDelete($gui)
+                Local $result[2] = [Number($g), $l]
+                Return $result
+        EndSwitch
+    WEnd
+    GUIDelete($gui)
+    Local $default[2] = [8385, ""]
+    Return $default
+EndFunc
+
+; —————— نقطة الانطلاق: تشغيل Syncthing ——————
+If FileExists($syncthingExe) Then
+    If Not FileExists($configFile) Then
+        Run('"' & $syncthingExe & '" --no-browser --no-console -home "' & $userDataDir & '"', "", @SW_HIDE)
+        Sleep(3000)
+        _ProcessCloseByName("syncthing.exe")
+    EndIf
+    FixConfigPorts()
+    Run('"' & $syncthingExe & '" --no-browser --no-console -home "' & $userDataDir & '"', "", @SW_HIDE)
+    If $openBrowser Then
+        Sleep(1000)
+        Local $port = GetGuiPortFromConfig()
+        If $port <> 0 Then ShellExecute("http://127.0.0.1:" & $port)
+    EndIf
+Else
+    MsgBox($MB_ICONERROR, "خطأ", "ملف syncthing.exe غير موجود.")
+EndIf
+#+end_src
+
+*** How to Run It
+
+1. إذا كان لديك نسخ مثبتة أخرى من Syncthing، يُفضّل تشغيلها جميعًا مرة واحدة قبل تشغيل النسخة الجديدة لأول مرة، حتى يتمكن البرنامج من اكتشاف المنافذ المفتوحة ويتجنب التعارض بينها.
+2. فتح البرنامج عبر =Syncthing Portable Launcher.exe= وليس =syncthing.exe=
+3. بعد تشغيل السكربت، ستظهر لك واجهة **GUI** تطلب منك إدخال قيم *GUI Port* و *Listen Port*.
+
+4. قم بإدخال القيم التالية (اختياري، ولكن يُفضل لتجنب الالتباس):
+
+- *GUI Port:*
+  هذا هو المنفذ الذي تُفتح عليه واجهة التحكم في المتصفح.
+  - SyncthingPortable (المزامنة عبر الإنترنت): 8000 (كمثال)
+  - SyncthingPortableLan (المزامنة داخل الشبكة المحلية فقط): 9000 (كمثال)
+
+- *Listen Port:*
+  هذا هو المنفذ الذي يستخدمه Syncthing للتواصل مع الأجهزة الأخرى.
+  - SyncthingPortable: 28000 (كمثال)
+  - SyncthingPortableLan: 29000 (كمثال)
+
+#+BEGIN_QUOTE
+ملاحظة: يمكنك اختيار أرقام منافذ أخرى حسب حاجتك، مع التأكد من عدم تعارضها مع برامج أخرى.
+#+END_QUOTE
+
+5. بعد فتح الواجهة، قم بالخطوات التالية:
+
+- ستظهر لك واجهة Syncthing مثل هذه [[file:Pasted image 20250216231255.png]]
+- لإضافة جهاز آخر، يمكنك إظهار *QR Code* وتصويره من هاتفك إذا أردت.
+- إذا كنت تستخدم حاسوبًا آخر، اضغط أسفل الواجهة على *Add Remote Device*.
+- أدخل *Device ID* للجهاز الآخر، والذي يمكنك الحصول عليه من ذلك الجهاز عن طريق:
+
+  - الضغط فوق على *Actions*
+  - ثم اختيار *Show ID*
+
+- بعد إدخال الـ Device ID، اضغط على *Save*.
+
+6. إعدادات خاصة بمجلد SyncthingPortableLan فقط
+
+بعد ربط الجهازين معًا لأول مرة، نحتاج إلى ضبط إعدادات *SyncthingPortableLan* ليعمل فقط على الشبكة المحلية دون الاتصال بالإنترنت. لتنفيذ ذلك:
+
+  - افتح البرنامج وانتقل إلى:
+  `Actions` → `Settings` → `Connections`
+  - قم بإيقاف تشغيل الخيارين التاليين:
+    - *Global Discovery*
+    - *Enable Relaying*
+
+يكفي منع الاتصال بالإنترنت من طرف واحد (مثل الحاسوب)، لأن الطرف الآخر (الهاتف) لن يتمكن من الاتصال إذا لم يتمكن من الوصول إلى الجهاز الآخر عبر الإنترنت.
+
+*** Adding sync-thing Folder
+
+يُعد مجلد `sync-thing` المجلد الرئيسي لإعدادات المزامنة، ويجب وضعه داخل مجلد `bin` الخاص بـ Emacs، في المسار التالي:
+`~/sync-thing`
+
+يجب أن يحتوي هذا المجلد على مجلدين فرعيين:
+
+- `online-sync`
+- `lan-sync`
+
+وجود هذين المجلدين ضروري لعمل نظام المزامنة بشكل صحيح.
+
+  - في نسخة *SyncthingPortable*
+  سنحتاج إلى مجلدين داخل Emacs عند استخدام SyncthingPortable:
+
+  - online-sync
+
+  1. *General*
+
+     - قم بتحديد اسم داخل *Folder Label* يكون **OnlineSync**.
+     - قم بتحديد مسار المجلد (*online-sync*) داخل مجلد `sync-thing` الذي تريد مشاركته مع هاتفك.
+
+  2. *Sharing*
+
+     - اختر الأجهزة التي تريد مزامنتها معك.
+
+  3. *File Versioning*
+
+     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
+     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
+
+  5. *عمل Save*
+
+  - .emacs.d Only `init.el` File
+
+    1. *General*
+
+     - قم بتحديد اسم داخل *Folder Label* يكون **EmacsInitFile**.
+     - قم بتحديد مسار المجلد (*.emacs.d*) الذي تريد مشاركته مع هاتفك.
+	 - `.emacs.d/init.el → هذا الملف المطلوب مزامنته
+
+  2. *Sharing*
+
+     - اختر الأجهزة التي تريد مزامنتها معك.
+
+  3. *File Versioning*
+
+     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
+     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
+
+  4. *Ignore Patterns*
+
+     *لا يمكن تعديلها إلا بعد إنشاء المجلد لأول مرة، وبعدها يمكنك تعديلها بالضغط على "Edit".*
+
+- ضف الملف init.el فقط ليتم مزامنته عند العمل بوضع الاتصال بالإنترنت (Online)، وتجاهل باقي الملفات والمجلدات.
+
+       #+begin_example
+       !/init.el
+       *
+       #+end_example
+
+- في نسخة *SyncthingPortableLan*
+
+  - lan-sync
+
+  1. *General*
+
+     - قم بتحديد اسم داخل *Folder Label* يكون **LanSync**.
+     - قم بتحديد مسار المجلد (*lan-sync*) داخل مجلد `sync-thing` الذي تريد مشاركته مع هاتفك.
+
+  2. *Sharing*
+
+     - اختر الأجهزة التي تريد مزامنتها معك.
+
+  3. *File Versioning*
+
+     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
+     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
+
+  5. *عمل Save*
+
+** Android
+
+1. نقوم بتنزيل تطبيق *Syncthing-Fork* من Github
+   https://github.com/Catfriend1/syncthing-android
+
+2. نقوم بفتحه وأعطاءه الصلاحيات المطلوبة
+
+3. ثم نخرج من التطبيق ونفتح اعدادت التطبيق من *Settings* الخاصة بالهاتف
+   - ثم نضغط على *Battery* ونخليه *No restrictions*
+   - ثم *Autostart* نفعل ☑️
+   - ثم *Allow restricted settings* نفعل ☑️
+
+4. نقوم بالضغط على كلمة Devices، ثم نقوم بإضافة الأجهزة المطلوبة إما عن طريق إدخال الكود الذي ظهر في كل حاسوب، أو عن طريق الضغط على أيقونة QR Code في التطبيق وتصوير الرمز من كل جهاز حاسوب على حدة.
+
+*** Adding sync-thing and .emacs.d Folders
+
+مجلد `sync-thing` هو المجلد الرئيسي لإعدادات المزامنة، ويُوضع في المسار:
+`/storage/emulated/0/sync-thing`
+وهو مرتبط برابط رمزي (symlink) بجانب مجلد `.emacs.d` الموجود في:
+`/storage/emulated/0/.emacs.d`
+
+مجلد `.emacs.d` يحتوي على ملفات إعدادات Emacs، وتم وضعه في هذا المسار لتجاوز قيود الوصول على أندرويد.
+
+يحتوي مجلد `sync-thing` على مجلدين فرعيين أساسيين وهما:
+
+- `online-sync`
+- `lan-sync`
+
+*** Add Folders
+
+- online-sync (Online)
+
+  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
+
+  - نكتب *Folder Label*، وهو الاسم الظاهر في تطبيق Syncthing فقط، ولنجعله: **Online-Sync**.
+
+  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته.
+    في هذه الحالة، سنستخدم رابطًا رمزيًا (symlink) يشير إلى المجلد الفعلي، ويكون المسار كما يلي:
+    `/storage/emulated/0/sync-thing/online-sync`
+
+    **ملاحظة:**
+    تطبيق Emacs (Android port) لا يمكنه الوصول مباشرة إلى المجلدات المحمية داخل المسار `/data`، بسبب نظام تشفير الملفات في أندرويد.
+    لذلك نقوم بإنشاء رابط رمزي (symlink) في مساحة التخزين الخارجية يشير إلى مجلد الإعدادات داخل التطبيق، حتى يتمكن Syncthing من مزامنته بشكل طبيعي.
+
+  - نضغط على *Devices*:
+    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
+    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
+      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
+    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
+
+  - نضغط على المجلد ثم على *File Versioning*:
+    - نختار: *TrashCan*
+    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
+
+  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
+
+  بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
+  وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
+
+- init.el (Online)
+
+  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
+
+  - نكتب *Folder Label*، وهو الاسم الظاهر في تطبيق Syncthing فقط، ولنجعله: **EmacsInitFile**.
+
+  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته.
+    في هذه الحالة، سنستخدم رابطًا رمزيًا (symlink) يشير إلى المجلد الفعلي، ويكون المسار كما يلي:
+    `/storage/emulated/0/.emacs.d/`
+
+    **ملاحظة:**
+    تطبيق Emacs (Android port) لا يمكنه الوصول مباشرة إلى المجلدات المحمية داخل المسار `/data`، بسبب نظام تشفير الملفات في أندرويد.
+    لذلك نقوم بإنشاء رابط رمزي (symlink) في مساحة التخزين الخارجية يشير إلى مجلد الإعدادات داخل التطبيق، حتى يتمكن Syncthing من مزامنته بشكل طبيعي.
+
+  - نضغط على *Devices*:
+    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
+    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
+      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
+    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
+
+  - نضغط على المجلد ثم على *File Versioning*:
+    - نختار: *TrashCan*
+    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
+
+  - لا تحتاج إلى إعداد قواعد التجاهل (ignore patterns) على الهاتف،
+    لأن هذه القواعد تم إعدادها مسبقًا في الحاسوب وتم مزامنتها تلقائيًا.
+
+  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
+
+  بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
+  وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
+
+- lan-sync (Offline)
+
+  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
+
+  - نكتب *Folder Label*، وهو الاسم الظاهر في التطبيق فقط، ولنجعله: **LanShare**.
+  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته، على النحو التالي:
+    `/storage/emulated/0/sync-thing/lan-sync`
+
+  - نضغط على *Devices*:
+    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
+    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
+      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
+    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
+
+  - نضغط على المجلد ثم على *File Versioning*:
+    - نختار: *TrashCan*
+    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
+
+  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
+
+بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
+وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
+
+** Important Notes About Syncthing
+
+- **لا تحذف ملف `.stignore`** من مجلد `.emacs.d`، لأنه يحتوي على إعدادات حيوية لتجاهل ملفات معينة.
+- Syncthing يعمل بالمزامنة ثنائية الاتجاه، لذا أي تغيير في جهاز ينعكس على الآخر.
+- إذا كان مجلد `sync-thing` فارغًا على الحاسوب ومليئًا على الهاتف، قد يتم حذف الملفات من الهاتف.
+- عند تشغيل ملف من الهاتف على الحاسوب، قد تظهر رسالة Out of Sync لأن الملف قيد الاستخدام. يجب إغلاق البرنامج المشغّل لإتمام المزامنة.
+- حافظ على اتصال الأجهزة أثناء التعديل كلما أمكن.
+- استخدم ميزة "نسخ الإصدار" (Versioning) لحفظ النسخ القديمة وعدم حذفها.
+- تجنب تعديل نفس الملفات على أجهزة غير متصلة لفترات طويلة أو في آن واحد.
+- عند الاتصال بنفس الشبكة، لا يتم استخدام الإنترنت.
+- الهاتف هو الجهاز الرئيسي لحفظ البيانات، تأكد من إتمام المزامنة عبره.
+- قم بعمل نسخة احتياطية شهرية على الكلاود أو فلاشة، بما في ذلك المجلد المشترك على الهاتف.
