@@ -196,7 +196,6 @@ find ~ -maxdepth 1 -type l -exec rm -v {} \;
 من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
 
 #+BEGIN_EXAMPLE
-# أنشئ مجلد الوجهة في HOME
 # إنشاء مجلد الوجهة إذا لم يكن موجودًا
 mkdir -p /data/data/org.gnu.emacs/files
 
