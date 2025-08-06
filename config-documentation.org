@@ -193,6 +193,7 @@ find ~ -maxdepth 1 -type l -exec rm -v {} \;
 #+END_EXAMPLE
 
 *** Linking Android Folders Inside Emacs
+
 من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
 
 #+BEGIN_EXAMPLE
@@ -220,27 +221,23 @@ rm -rf /data/data/org.gnu.emacs/files/fonts
 ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
 #+END_EXAMPLE
 
-*** Speeding Up Setup with SyncThing
-اجعل مجلد إعدادات Emacs داخل مجلد تتم مزامنته مثل =/sdcard/emacs-config=، ثم اربطه بـ =~/.emacs.d=: 
+*** After completing all steps, verify early-init.el exists
 
-#+BEGIN_EXAMPLE
-rm -rf ~/.emacs.d/
-ln -s /sdcard/emacs-config ~/.emacs.d/
-#+END_EXAMPLE
+بعد أن أتممنا جميع الخطوات، تأكد أن ملف early-init.el لا يزال موجودًا.  
+إذا لم تجده، قم بإنشائه مرة أخرى في المسار:
+~/.emacs.d
 
-بهذا الشكل، عند تغيير الجهاز أو عمل فورمات، لن تحتاج إلى إعادة إعداد Emacs من البداية.
+#+BEGIN_SRC emacs-lisp
+(setenv "PATH" (format "%s:%s"
+  "/data/data/com.termux/files/usr/bin"
+  (getenv "PATH")))
 
-يمكنك إنشاء ملف باسم =config-android.org= داخل:
-=/sdcard/emacs-config=
-وسيتم نقله تلقائيًا إلى:
-=~/.emacs.d/=
+(setenv "LD_LIBRARY_PATH" (format "%s:%s"
+  "/data/data/com.termux/files/usr/lib"
+  (getenv "LD_LIBRARY_PATH")))
 
-ثم افتحه من داخل تطبيق Emacs، ووافق على رسالة التحذير (عند سؤالك)، ثم أضف تعديلًا بسيطًا واحفظه باستخدام:
-
-#+BEGIN_EXAMPLE
-C-x C-s
-#+END_EXAMPLE
-
+(push "/data/data/com.termux/files/usr/bin" exec-path)
+#+END_SRC
 *** Summary
 
 | Step | Description                           |
@@ -258,6 +255,7 @@ C-x C-s
 |    11 | ربط مجلد الإعدادات بـ ~/.emacs.d        |
 
 *** Additional Notes
+
 - يمكنك استخدام [[https://syncthing.net][SyncThing]] لمزامنة الملف =org/config.org= عبر جميع أجهزتك.
 - يُستحسن دائمًا أخذ نسخة احتياطية من إعداداتك قبل أي تعديلات كبيرة أو تجارب جديدة.
 
