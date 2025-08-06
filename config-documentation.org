@@ -197,24 +197,28 @@ find ~ -maxdepth 1 -type l -exec rm -v {} \;
 
 #+BEGIN_EXAMPLE
 # أنشئ مجلد الوجهة في HOME
-mkdir -p $HOME
+# إنشاء مجلد الوجهة إذا لم يكن موجودًا
+mkdir -p /data/data/org.gnu.emacs/files
 
-# تأكد من وجود المصدر على sdcard
+# إنشاء مجلدات المصدر على sdcard إذا مش موجودة
 mkdir -p /sdcard/.emacs.d
 mkdir -p /sdcard/sync-thing
 mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts
 
-# رابط لـ .emacs.d
-rm -rf $HOME/.emacs.d
-ln -s /sdcard/.emacs.d $HOME/.emacs.d
+# رابط sdcard/.emacs.d
+rm -rf /data/data/org.gnu.emacs/files/.emacs.d
+ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
 
-# رابط لمجلد sync-thing
-rm -rf $HOME/sync-thing
-ln -s /sdcard/sync-thing $HOME/sync-thing
+# رابط sdcard/sync-thing
+rm -rf /data/data/org.gnu.emacs/files/sync-thing
+ln -s /sdcard/sync-thing /data/data/org.gnu.emacs/files/sync-thing
 
-# رابط لمجلد الخطوط
-rm -rf $HOME/fonts
-ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts $HOME/fonts
+# إنشاء مجلد fonts قبل الربط
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# رابط مجلد الخطوط
+rm -rf /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
 #+END_EXAMPLE
 
 *** Speeding Up Setup with SyncThing
