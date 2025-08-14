@@ -1933,10 +1933,10 @@ _q_: Quit
 ** Early Init File for Configuring Emacs to Recognize Termux Tools
 
 #+begin_src emacs-lisp
-(let* ((target-file (expand-file-name "early-init.el" user-emacs-directory))
-       ;; هنا تحط النص حقك بالضبط، لا تزيد ولا تنقص
-       (desired-content
-"(setenv "PATH" (format "%s:%s"
+(let ((target-file (expand-file-name "early-init.el" user-emacs-directory)))
+  (with-temp-file target-file
+    (insert
+     "(setenv "PATH" (format "%s:%s"
   "/data/data/com.termux/files/usr/bin"
   (getenv "PATH")))
 
@@ -1945,19 +1945,8 @@ _q_: Quit
   (getenv "LD_LIBRARY_PATH")))
 
 (push "/data/data/com.termux/files/usr/bin" exec-path)
-"))
-  (if (file-exists-p target-file)
-      (with-temp-buffer
-        (insert-file-contents target-file)
-        (let ((current-content (buffer-string)))
-          (unless (string= current-content desired-content)
-            (with-temp-file target-file
-              (insert desired-content)))))
-    ;; إذا الملف مش موجود
-    (with-temp-file target-file
-      (insert desired-content))))
+")))
 #+end_src
-
 
 ** UI Configuration
 
