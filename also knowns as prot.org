@@ -1929,34 +1929,23 @@ _q_: Quit
 #+end_src
 
 
-** Early Init File for Configuring Emacs to Recognize Termux Tools
+** The =early-init= Configuring Emacs to Recognize Termux Tools
 
-#+begin_src emacs-lisp
-(let ((target-file (expand-file-name "early-init.el" user-emacs-directory)))
-  (with-temp-file target-file
-    (pp
-     '(progn
-        (setenv "PATH" (format "%s:%s"
-  "/data/data/com.termux/files/usr/bin"
-  (getenv "PATH")))
-
-(setenv "LD_LIBRARY_PATH" (format "%s:%s"
-  "/data/data/com.termux/files/usr/lib"
-  (getenv "LD_LIBRARY_PATH")))
-
-(push "/data/data/com.termux/files/usr/bin" exec-path))
-     (current-buffer))))
+*** Git Path
+#+begin_src emacs-lisp :tangle ~/.emacs.d/early-init.el :mkdirp yes
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd")
+(setenv "PATH" (concat (expand-file-name "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd/") ";" (getenv "PATH")))
 #+end_src
 
+*** fd Path
+#+begin_src emacs-lisp :tangle ~/.emacs.d/early-init.el :mkdirp yes
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/fd/")
+#+end_src
 
-
-
-
-
-
-
-
-
+*** Ripgrep Path
+#+begin_src emacs-lisp :tangle ~/.emacs.d/early-init.el :mkdirp yes
+(add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")
+#+end_src
 
 ** UI Configuration
 
