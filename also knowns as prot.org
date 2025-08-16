@@ -64,8 +64,48 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-essentials.el=
+This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-essentials.el= Ui Setup
+*** The =osama-emacs-core.el= section for UI basics
+
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+**** Visible bell
+#+begin_src emacs-lisp
+(setq visible-bell t)
+#+end_src
+
+**** Column number
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+(column-number-mode)
+#+end_src
+
+**** Line numbers
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+(global-display-line-numbers-mode t)
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
+**** Cursor type
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+(setq-default cursor-type 'bar)
+#+end_src
+
+**** Highlight current line
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+(global-hl-line-mode 1)
+#+end_src
+
+
+
+
+
+
+
+
 
 ** The =osama-emacs-packages.el= section for package management
 
