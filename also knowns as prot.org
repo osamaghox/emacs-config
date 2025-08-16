@@ -66,7 +66,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 ** The =osama-emacs-essentials.el=
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-core.el= section for UI basics
+*** The =osama-emacs-essentials.el= section for UI basics
 
 #+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
 **** Visible bell
