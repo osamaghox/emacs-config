@@ -65,6 +65,8 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-essentials.el=
 
+*** The =osama-emacs-essentials.el= Ui Setup
+
 ** The =osama-emacs-packages.el= section for package management
 
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
