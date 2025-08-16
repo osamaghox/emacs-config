@@ -63,13 +63,11 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-** The =osama-emacs-core.el=
+** The =osama-emacs-essentials.el=
 
-*** The =osama-emacs-packages.el= section for package management
+** The =osama-emacs-packages.el= section for package management
 
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
-;;; osama-emacs-packages.el --- Package management -*- lexical-binding: t; -*-
-
 ;; Prevent Emacs from loading packages before init
 (setq package-enable-at-startup nil)
 
@@ -95,7 +93,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 (setq use-package-always-ensure t)
 
 (provide 'osama-emacs-packages)
-;;; osama-emacs-packages.el ends here
 #+end_src
 
 
