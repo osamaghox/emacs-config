@@ -69,35 +69,112 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-essentials.el= section for UI basics
 
 #+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
-**** Visible bell
-#+begin_src emacs-lisp
+;; Visible bell
 (setq visible-bell t)
-#+end_src
 
-**** Column number
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+;; Show current column number
 (column-number-mode)
-#+end_src
 
-**** Line numbers
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+;; Enable line numbers globally and disable in specific modes
 (global-display-line-numbers-mode t)
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
 
-**** Cursor type
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+;; Make cursor a vertical bar
 (setq-default cursor-type 'bar)
-#+end_src
 
-**** Highlight current line
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+;; Highlight current line
 (global-hl-line-mode 1)
 #+end_src
+
+*** The =osama-emacs-essentials.el= section for Session, Auto-Save & Backup Management
+
+#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+;; Define cache directory
+(defvar osama-emacs-cache-dir
+  (expand-file-name "~/osama-emacs/emacs-cache/")
+  "Portable directory for saving Emacs session cache across devices.")
+
+;; Ensure directory exists
+(defun osama-ensure-directory (dir)
+  (unless (file-directory-p dir)
+    (make-directory dir t)))
+
+;; Prepare subdirectories
+(let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
+  (dolist (sub dirs)
+    (osama-ensure-directory (expand-file-name sub osama-emacs-cache-dir))))
+
+;; Savehist: command history
+(setq savehist-file (expand-file-name "savehist/savehist" osama-emacs-cache-dir))
+(savehist-mode 1)
+
+;; Recentf: recent files list
+(setq recentf-save-file (expand-file-name "recentf/recentf" osama-emacs-cache-dir))
+(recentf-mode 1)
+
+;; Desktop: full session restore
+(setq desktop-path           (list (expand-file-name "desktop" osama-emacs-cache-dir))
+      desktop-dirname        (expand-file-name "desktop" osama-emacs-cache-dir)
+      desktop-base-file-name "emacs-desktop")
+(desktop-save-mode 1)
+
+;; Backups: store ~ files in backups/
+(setq backup-directory-alist
+      `((".*" . ,(expand-file-name "backups/" osama-emacs-cache-dir)))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 5
+      kept-old-versions 2)
+
+;; Auto-saves: store #files# in autosaves/
+(setq auto-save-file-name-transforms
+      `((".*" ,(concat (expand-file-name "autosaves/" osama-emacs-cache-dir) "\\1") t))
+      auto-save-default t
+      auto-save-timeout 20
+      auto-save-interval 200)
+
+;; Optional: disable lockfiles
+(setq create-lockfiles nil)
+#+end_src
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
