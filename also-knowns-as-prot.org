@@ -107,7 +107,9 @@ This module load basic configurations that apply to most facets of Emacs.
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-** The =prot-emacs-essentials.el= module
+** The =osama-emacs-theme.el= module
+
+** The =osama-emacs-essentials.el= module
 
 This module load basic configurations that apply to most facets of Emacs. Many of my own custom libraries are loaded here 
 
@@ -248,7 +250,20 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 
 
 
-** The =prot-emacs-completion.el= module
+** The =osama-emacs-completion.el= module
+
+** The =osama-emacs-dired.el= module
+
+** The =osama-emacs-windows.el= module
+
+** The =osama-emacs-org.el= module
+
+** The =osama-emacs-system-custom= module
+
+*** The =osama-emacs-android-custom= module
+
+*** The =osama-emacs-windows-custom= module
+
 
 * Android Section For Personal Settings
 
