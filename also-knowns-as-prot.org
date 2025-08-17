@@ -53,9 +53,6 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 (defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
   "The root dir of the Osama Emacs distribution.")
 
-(defvar osama-emacs-core-dir (expand-file-name "core" osama-emacs-dir)
-  "The home of Osama Emacs's core functionality.")
-
 (defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
   "This directory houses all of the built-in Osama Emacs modules.")
 #+end_src
@@ -111,7 +108,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-theme.el= section for nerd-icons fonts
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside fonts
 (defvar osama-emacs-icons-dir
   (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
@@ -152,6 +149,29 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 #+end_src
 
 
+
+*** =osama-emacs-theme.el=: Section for Font Customization
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(defvar osama-emacs-preferred-font "Fira Code"
+  "Preferred font in Emacs.")
+
+(when (find-font (font-spec :name osama-emacs-preferred-font))
+  ;; Main font
+  (set-face-attribute 'default nil :font osama-emacs-preferred-font :height 120)
+  (set-face-attribute 'fixed-pitch nil :font osama-emacs-preferred-font) ;; For code and tables
+  (set-face-attribute 'variable-pitch nil :font osama-emacs-preferred-font :height 100)
+
+  ;; Different font for Arabic
+  (set-fontset-font t 'arabic (font-spec :name "STC Forward")))
+
+;; Create fonts directory if it doesn't exist
+(defvar osama-emacs-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+  "Directory to store fonts for Emacs.")
+
+(unless (file-directory-p osama-emacs-fonts-dir)
+  (make-directory osama-emacs-fonts-dir t))
+#+end_src
 
 
 ** The =osama-emacs-essentials.el= module
