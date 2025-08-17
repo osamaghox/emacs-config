@@ -109,6 +109,51 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-theme.el= module
 
+*** The =osama-emacs-theme.el= section for nerd-icons fonts
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Define the folder to save fonts directly inside fonts
+(defvar osama-emacs-icons-dir
+  (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
+                    (getenv "HOME"))
+  "Custom directory to store icon fonts.")
+
+;; Create the folder if it doesn't exist
+(unless (file-directory-p osama-emacs-icons-dir)
+  (make-directory osama-emacs-icons-dir t))
+
+;; Helper function to download a font if missing
+(defun osama/download-font-if-missing (font-name url)
+  "Download FONT-NAME from URL to `osama-emacs-icons-dir` if missing."
+  (let ((target (expand-file-name font-name osama-emacs-icons-dir)))
+    (unless (file-exists-p target)
+      (url-copy-file url target t)
+      (message "Downloaded: %s" font-name))))
+
+;; Download all-the-icons fonts
+(use-package all-the-icons
+  :config
+  (dolist (font
+           '(("all-the-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/all-the-icons.ttf")
+             ("file-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/file-icons.ttf")
+             ("material-design-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/material-design-icons.ttf")
+             ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
+             ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
+             ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf"))))
+    (osama/download-font-if-missing (car font) (cdr font))))
+
+;; Download nerd-icons fonts (including NFM.ttf)
+(use-package nerd-icons
+  :config
+  (dolist (font
+           '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
+             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf"))))
+    (osama/download-font-if-missing (car font) (cdr font))))
+#+end_src
+
+
+
+
 ** The =osama-emacs-essentials.el= module
 
 This module load basic configurations that apply to most facets of Emacs. Many of my own custom libraries are loaded here 
@@ -244,10 +289,7 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 (global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for
-
-
-
+*** The =osama-emacs-essentials.el= Section for 
 
 
 ** The =osama-emacs-completion.el= module
