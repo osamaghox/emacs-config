@@ -106,7 +106,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-theme.el= module
 
-*** The =osama-emacs-theme.el= section for =theme=
+*** The =osama-emacs-theme.el= section for ~theme~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 (use-package doom-themes
@@ -114,7 +114,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (load-theme 'doom-dracula t))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for =modeline=
+*** The =osama-emacs-theme.el= section for ~modeline~
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 (use-package doom-modeline
   :ensure t
@@ -131,7 +131,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (doom-modeline-indent-info t))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for =nerd-icons= fonts
+*** The =osama-emacs-theme.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside fonts
@@ -173,22 +173,27 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (osama/download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-
-
 *** The =osama-emacs-theme.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
-(defvar osama-emacs-preferred-font "Fira Code"
-  "Preferred font in Emacs.")
-
-(when (find-font (font-spec :name osama-emacs-preferred-font))
-  ;; Main font
-  (set-face-attribute 'default nil :font osama-emacs-preferred-font :height 120)
-  (set-face-attribute 'fixed-pitch nil :font osama-emacs-preferred-font) ;; For code and tables
-  (set-face-attribute 'variable-pitch nil :font osama-emacs-preferred-font :height 100)
-
-  ;; Different font for Arabic
-  (set-fontset-font t 'arabic (font-spec :name "STC Forward")))
+(use-package fontaine
+  :ensure t
+  :hook (after-init . (lambda ()
+                        (fontaine-mode 1)
+                        (fontaine-set-preset 'osama-emacs-fonts)))
+  :config
+  ;; Define your custom preset
+  (setq fontaine-presets
+        '((osama-emacs-fonts
+           :default-family "Montserrat"
+           :default-weight regular
+           :default-height 120
+           :variable-pitch-family "Montserrat"
+           :variable-pitch-height 1.2
+           :fixed-pitch-family "Fira Code"
+           :fixed-pitch-height 120
+           :unicode-family "STC Forward"
+           :unicode-height 120))))
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-emacs-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
@@ -336,6 +341,90 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 *** The =osama-emacs-essentials.el= Section for 
 
 ** The =osama-emacs-completion.el= module
+
+The term “completion” describes a process where user input is assisted by pattern matching algorithms to type out incomplete terms. The most basic way of this model of interaction is what we get in a command-line prompt, where we can hit TAB to expand the word before point to something the program already knows about (e.g ema followed by TAB may complete to emacs).
+
+In Emacs, completion encompasses user interfaces that show the available candidates (the likely options) right away, as well as provide more advanced capabilities for storing the history of previous inputs, displaying helpful annotations next to each candidate, and “completion styles” to control how user input is matched to candidates. Because we use the minibuffer for most common interactions, completion is an integral part of any setup.
+
+*** The =osama-emacs-completion.el= section for ~which-key~
+
+The which-key package provides hints for keys that complete the currently incomplete sequence.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~vertico~
+
+The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface (and thus mct) will suffer from a noticeable performance penalty.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package vertico
+  :ensure t
+  :config
+  (setq vertico-cycle t
+        vertico-resize nil)
+  (vertico-mode 1))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~marginalia~
+
+The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful annotations to the side of completion candidates. We see its effect, for example, when we call M-x: each command has a brief description next to it (taken from its doc string) as well as a key binding, if it has one.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package marginalia
+  :after vertico
+  :init
+  (marginalia-mode))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~consult~
+
+~consult~ is another wonderful package by Daniel Mendler. It provides a number of commands that turbocharge the minibuffer with advanced capabilities for filtering, asynchronous input, and previewing of the current candidate’s context.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package consult
+  :bind (("C-s" . consult-line)
+         ("C-x b" . consult-buffer)
+         ("C-M-j" . consult-switch-buffer)
+         ("M-y" . consult-yank-pop)))
+#+end_src
+
+
+
+
+
+*** The =osama-emacs-completion.el= section for ~orderless~
+
+~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package orderless
+  :custom
+  (completion-styles '(orderless))
+  (completion-category-defaults nil))
+#+end_src
+
+
+
+*** The =osama-emacs-completion.el= section for ~embark~
+
+~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package embark
+  :bind (("C-." . embark-act)
+         ("C-;" . embark-dwim))
+#+end_src
+
+
+
+
+
 
 ** The =osama-emacs-dired.el= module
 
