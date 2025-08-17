@@ -31,16 +31,17 @@ This is the first file that Emacs reads when starting up. It should contain code
   ;; Windows settings
   (when (eq system-type 'windows-nt)
     ;; Git
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd")
-    (setenv "PATH" (concat (expand-file-name "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd/")
-                           path-sep
-                           (getenv "PATH")))
+    (let ((tools-dir (expand-file-name "~/osama-emacs/emacs-data/tools/")))
+      (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+      (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
+                             path-sep
+                             (getenv "PATH")))
 
-    ;; fd (file search tool)
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/fd/")
+      ;; fd (file search tool)
+      (add-to-list 'exec-path (concat tools-dir "fd/"))
 
-    ;; ripgrep
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")))
+      ;; ripgrep
+      (add-to-list 'exec-path (concat tools-dir "ripgrep/")))))
 #+end_src
 
 * The main initialisation of Emacs (=init.el=)
