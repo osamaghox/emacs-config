@@ -47,7 +47,6 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
-
 ** The =init.el= entry point
 
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
@@ -60,7 +59,6 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 (defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
   "This directory houses all of the built-in Osama Emacs modules.")
 #+end_src
-
 
 * The Core Settings of My Emacs Configuration
 
@@ -158,7 +156,34 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-buffer-file-coding-system 'utf-8)
 #+end_src
 
-** The =osama-emacs-core.el= 
+** The =osama-emacs-core.el= Section for Paragraph Text Direction
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-core.el" :mkdirp yes
+;; Enable text reordering for right-to-left (RTL) languages
+(setq-default bidi-display-reordering t)
+
+;; Default mode for all files (paragraph direction is automatic)
+(setq-default bidi-paragraph-direction nil)
+
+(defun osama-emacs-toggle-bidi-paragraph-direction ()
+  "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
+  (interactive)
+  (setq bidi-paragraph-direction
+        (cond
+         ((eq bidi-paragraph-direction nil) 'left-to-right)
+         ((eq bidi-paragraph-direction 'left-to-right) 'right-to-left)
+         ((eq bidi-paragraph-direction 'right-to-left) nil)))
+  (message "Paragraph direction now: %s"
+           (pcase bidi-paragraph-direction
+             ('left-to-right "LTR")
+             ('right-to-left "RTL")
+             (_ "Auto")))
+
+  (recenter))
+
+;; Set a global shortcut to toggle paragraph direction in all Emacs modes
+(global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
+#+end_src
 
 * The modules of my Emacs configuration
 
