@@ -66,9 +66,9 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 
 This module load basic configurations that apply to most facets of Emacs.
 
-** The =osama-emacs-core.el= section for UI basics
+** The =osama-emacs-core.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-core.el" :mkdirp yes
 ;; Visible bell
 (setq visible-bell t)
 
@@ -90,99 +90,75 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-hl-line-mode 1)
 #+end_src
 
-** The =osama-emacs-core.el= section for Session, Auto-Save & Backup Management
+** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
-;; Define cache directory
-(defvar osama-emacs-cache-dir
-  (expand-file-name "~/osama-emacs/emacs-cache/")
-  "Portable directory for saving Emacs session cache across devices.")
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-core.el" :mkdirp yes
+  ;; Define cache directory
+  (defvar osama-emacs-cache-dir
+    (expand-file-name "~/osama-emacs/emacs-cache/")
+    "Portable directory for saving Emacs session cache across devices.")
 
-;; Ensure directory exists
-(defun osama-ensure-directory (dir)
-  (unless (file-directory-p dir)
-    (make-directory dir t)))
+  ;; Ensure directory exists
+  (defun osama-ensure-directory (dir)
+    (unless (file-directory-p dir)
+      (make-directory dir t)))
 
-;; Prepare subdirectories
-(let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
-  (dolist (sub dirs)
-    (osama-ensure-directory (expand-file-name sub osama-emacs-cache-dir))))
+  ;; Prepare subdirectories
+  (let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
+    (dolist (sub dirs)
+      (osama-ensure-directory (expand-file-name sub osama-emacs-cache-dir))))
 
-;; Savehist: command history
-(setq savehist-file (expand-file-name "savehist/savehist" osama-emacs-cache-dir))
-(savehist-mode 1)
+  ;; Savehist: command history
+  (setq savehist-file (expand-file-name "savehist/savehist" osama-emacs-cache-dir))
+  (savehist-mode 1)
+  
+  ;; Recentf: recent files list
+  (setq recentf-save-file (expand-file-name "recentf/recentf" osama-emacs-cache-dir))
+  (recentf-mode 1)
 
-;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "recentf/recentf" osama-emacs-cache-dir))
-(recentf-mode 1)
+  ;; Desktop: full session restore
+  (setq desktop-path           (list (expand-file-name "desktop" osama-emacs-cache-dir))
+        desktop-dirname        (expand-file-name "desktop" osama-emacs-cache-dir)
+        desktop-base-file-name "emacs-desktop")
+  (desktop-save-mode 1)
 
-;; Desktop: full session restore
-(setq desktop-path           (list (expand-file-name "desktop" osama-emacs-cache-dir))
-      desktop-dirname        (expand-file-name "desktop" osama-emacs-cache-dir)
-      desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
+  ;; Backups: store ~ files in backups/
+  (setq backup-directory-alist
+        `((".*" . ,(expand-file-name "backups/" osama-emacs-cache-dir)))
+        backup-by-copying t
+        version-control t
+        delete-old-versions t
+        kept-new-versions 5
+        kept-old-versions 2)
 
-;; Backups: store ~ files in backups/
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "backups/" osama-emacs-cache-dir)))
-      backup-by-copying t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 5
-      kept-old-versions 2)
+  ;; Auto-saves: store #files# in autosaves/
+  (setq auto-save-file-name-transforms
+        `((".*" ,(concat (expand-file-name "autosaves/" osama-emacs-cache-dir) "\\1") t))
+        auto-save-default t
+        auto-save-timeout 20
+        auto-save-interval 200)
 
-;; Auto-saves: store #files# in autosaves/
-(setq auto-save-file-name-transforms
-      `((".*" ,(concat (expand-file-name "autosaves/" osama-emacs-cache-dir) "\\1") t))
-      auto-save-default t
-      auto-save-timeout 20
-      auto-save-interval 200)
-
-;; Optional: disable lockfiles
-(setq create-lockfiles nil)
+  ;; Optional: disable lockfiles
+  (setq create-lockfiles nil)
 #+end_src
 
+** The =osama-emacs-core.el= Settings for Better Performance
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-core.el" :mkdirp yes
+;; Increase GC threshold during startup to speed up launch
+  (setq gc-cons-threshold (* 50 1000 1000))
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
+#+end_src
 
+** The =osama-emacs-core.el= Section for Support Arabic Filenames
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-core.el" :mkdirp yes
+  (prefer-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8)
+#+end_src
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+** The =osama-emacs-core.el= 
 
 * The modules of my Emacs configuration
 
@@ -190,7 +166,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-packages.el= section for package management
 
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-packages.el" :mkdirp yes
 ;; Prevent Emacs from loading packages before init
 (setq package-enable-at-startup nil)
 
