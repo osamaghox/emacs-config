@@ -100,7 +100,6 @@ by ~use-package~ when it needs it
 
 This module load basic configurations that apply to most facets of Emacs.
 
-
 * The modules of my Emacs configuration
 
 In this module I define everything broadly related to the aesthetics of Emacs.
@@ -173,7 +172,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 (unless (file-directory-p osama-emacs-fonts-dir)
   (make-directory osama-emacs-fonts-dir t))
 #+end_src
-
 
 ** The =osama-emacs-essentials.el= module
 
@@ -312,7 +310,6 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 
 *** The =osama-emacs-essentials.el= Section for 
 
-
 ** The =osama-emacs-completion.el= module
 
 ** The =osama-emacs-dired.el= module
@@ -327,9 +324,6 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 
 *** The =osama-emacs-windows-custom= module
 
-
 * Android Section For Personal Settings
-
-
 
 * The Personal Functions
