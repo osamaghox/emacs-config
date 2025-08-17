@@ -409,8 +409,6 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
   (completion-category-defaults nil))
 #+end_src
 
-
-
 *** The =osama-emacs-completion.el= section for ~embark~
 
 ~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
@@ -419,10 +417,33 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 (use-package embark
   :bind (("C-." . embark-act)
          ("C-;" . embark-dwim))
+  :init
+  (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
 
+*** The =osama-emacs-completion.el= section for ~corfu~
 
+Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~corfu~
+
+Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package helpful
+  :bind
+  ([remap describe-function] . helpful-function)
+  ([remap describe-command]  . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key]      . helpful-key))
+#+end_src
 
 
 
