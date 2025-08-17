@@ -64,7 +64,7 @@ The =package.el= is built into Emacs and is perfectly fine for my
 use-case. We do not need to load it explicitly, as it will be called
 by ~use-package~ when it needs it
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-packages.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
 ;; Prevent Emacs from loading packages before init
 (setq package-enable-at-startup nil)
 
