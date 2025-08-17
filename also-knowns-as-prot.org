@@ -7,7 +7,7 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
-* The early initialisation of Emacs (early-init.el)
+* The early initialisation of Emacs (=early-init.el=)
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
 
@@ -43,7 +43,7 @@ This is the first file that Emacs reads when starting up. It should contain code
     (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")))
 #+end_src
 
-* The main initialisation of Emacs (init.el)
+* The main initialisation of Emacs (=init.el=)
 
 This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
@@ -60,11 +60,58 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
   "This directory houses all of the built-in Osama Emacs modules.")
 #+end_src
 
-* The Core Settings of My Emacs Configuration
+** The =init.el= settings for packages (=package.el=)
+
+The =package.el= is built into Emacs and is perfectly fine for my
+use-case. We do not need to load it explicitly, as it will be called
+by ~use-package~ when it needs it
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-packages.el" :mkdirp yes
+;; Prevent Emacs from loading packages before init
+(setq package-enable-at-startup nil)
+
+(require 'package)
+
+;; Package repositories
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("org"   . "https://orgmode.org/elpa/")
+        ("elpa"  . "https://elpa.gnu.org/packages/")))
+
+(package-initialize)
+
+;; Install use-package if not installed
+(unless (package-installed-p 'use-package)
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (package-install 'use-package))
+
+(require 'use-package)
+
+;; Automatically install declared packages
+(setq use-package-always-ensure t)
+
+(provide 'osama-emacs-packages)
+#+end_src
+
+
+
+
+
+
 
 This module load basic configurations that apply to most facets of Emacs.
 
-** The =osama-emacs-essentials.el= Section for Hide Tool bar
+
+* The modules of my Emacs configuration
+
+In this module I define everything broadly related to the aesthetics of Emacs.
+
+** The =prot-emacs-essentials.el= module
+
+This module load basic configurations that apply to most facets of Emacs. Many of my own custom libraries are loaded here 
+
+*** The =osama-emacs-essentials.el= Section for Hide Tool bar
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 (scroll-bar-mode -1)        ; Disable visible scrollbar
@@ -74,7 +121,7 @@ This module load basic configurations that apply to most facets of Emacs.
 (menu-bar-mode -1)          ; Disable the menu bar
 #+end_src
 
-** The =osama-emacs-essentials.el= Section for UI Basics
+*** The =osama-emacs-essentials.el= Section for UI Basics
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Visible bell
@@ -98,7 +145,7 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-hl-line-mode 1)
 #+end_src
 
-** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
+*** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
   ;; Define cache directory
@@ -150,7 +197,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq create-lockfiles nil)
 #+end_src
 
-** The =osama-emacs-essentials.el= Settings for Better Performance
+*** The =osama-emacs-essentials.el= Settings for Better Performance
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Increase GC threshold during startup to speed up launch
@@ -159,14 +206,14 @@ This module load basic configurations that apply to most facets of Emacs.
             (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
 #+end_src
 
-** The =osama-emacs-essentials.el= Section for Support Arabic Filenames
+*** The =osama-emacs-essentials.el= Section for Support Arabic Filenames
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
   (prefer-coding-system 'utf-8)
   (setq default-buffer-file-coding-system 'utf-8)
 #+end_src
 
-** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
+*** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Enable text reordering for right-to-left (RTL) languages
@@ -195,46 +242,13 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
 #+end_src
 
-** The =osama-emacs-essentials.el= Section for
-* The modules of my Emacs configuration
-
-In this module I define everything broadly related to the aesthetics of Emacs.
-
-** The =osama-emacs-packages.el= section for package management
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-packages.el" :mkdirp yes
-;; Prevent Emacs from loading packages before init
-(setq package-enable-at-startup nil)
-
-(require 'package)
-
-;; Package repositories
-(setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("org"   . "https://orgmode.org/elpa/")
-        ("elpa"  . "https://elpa.gnu.org/packages/")))
-
-(package-initialize)
-
-;; Install use-package if not installed
-(unless (package-installed-p 'use-package)
-  (unless package-archive-contents
-    (package-refresh-contents))
-  (package-install 'use-package))
-
-(require 'use-package)
-
-;; Automatically install declared packages
-(setq use-package-always-ensure t)
-
-(provide 'osama-emacs-packages)
-#+end_src
+*** The =osama-emacs-essentials.el= Section for
 
 
 
 
 
-
+** The =prot-emacs-completion.el= module
 
 * Android Section For Personal Settings
 
