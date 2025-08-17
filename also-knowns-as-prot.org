@@ -62,14 +62,11 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 #+end_src
 
 
-* The modules of my Emacs configuration
+* The Core Settings of My Emacs Configuration
 
-In this module I define everything broadly related to the aesthetics of Emacs.
-
-** The =osama-emacs-core.el=
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-core.el= section for UI basics
+** The =osama-emacs-core.el= section for UI basics
 
 #+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
 ;; Visible bell
@@ -93,7 +90,7 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-hl-line-mode 1)
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Session, Auto-Save & Backup Management
+** The =osama-emacs-core.el= section for Session, Auto-Save & Backup Management
 
 #+begin_src emacs-lisp :tangle "osama-emacs-essentials.el" :mkdirp yes
 ;; Define cache directory
@@ -187,6 +184,10 @@ This module load basic configurations that apply to most facets of Emacs.
 
 
 
+* The modules of my Emacs configuration
+
+In this module I define everything broadly related to the aesthetics of Emacs.
+
 ** The =osama-emacs-packages.el= section for package management
 
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
@@ -221,3 +222,5 @@ This module load basic configurations that apply to most facets of Emacs.
 
 
 
+
+* The Personal Functions
