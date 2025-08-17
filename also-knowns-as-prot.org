@@ -106,7 +106,32 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-theme.el= module
 
-*** The =osama-emacs-theme.el= section for nerd-icons fonts
+*** The =osama-emacs-theme.el= section for =theme=
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package doom-themes
+  :init
+  (load-theme 'doom-dracula t))
+#+end_src
+
+*** The =osama-emacs-theme.el= section for =modeline=
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package doom-modeline
+  :ensure t
+  :init
+  (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-height 40)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count t)
+  (doom-modeline-indent-info t))
+#+end_src
+
+*** The =osama-emacs-theme.el= section for =nerd-icons= fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside fonts
@@ -150,7 +175,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 
 
-*** =osama-emacs-theme.el=: Section for Font Customization
+*** The =osama-emacs-theme.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 (defvar osama-emacs-preferred-font "Fira Code"
