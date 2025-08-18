@@ -88,8 +88,6 @@ by ~use-package~ when it needs it
 
 ;; Automatically install declared packages
 (setq use-package-always-ensure t)
-
-(provide 'osama-emacs-packages)
 #+end_src
 
 
@@ -135,18 +133,18 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside fonts
-(defvar osama-emacs-icons-dir
+(defvar osama-icons-dir
   (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
                     (getenv "HOME"))
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
-(unless (file-directory-p osama-emacs-icons-dir)
-  (make-directory osama-emacs-icons-dir t))
+(unless (file-directory-p osama-icons-dir)
+  (make-directory osama-icons-dir t))
 
 ;; Helper function to download a font if missing
-(defun osama/download-font-if-missing (font-name url)
-  "Download FONT-NAME from URL to `osama-emacs-icons-dir` if missing."
+(defun osama-download-font-if-missing (font-name url)
+  "Download FONT-NAME from URL to `osama-icons-dir` if missing."
   (let ((target (expand-file-name font-name osama-emacs-icons-dir)))
     (unless (file-exists-p target)
       (url-copy-file url target t)
@@ -162,7 +160,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
              ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
              ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
              ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf"))))
-    (osama/download-font-if-missing (car font) (cdr font))))
+    (osama-download-font-if-missing (car font) (cdr font))))
 
 ;; Download nerd-icons fonts (including NFM.ttf)
 (use-package nerd-icons
@@ -170,7 +168,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (dolist (font
            '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
              ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf"))))
-    (osama/download-font-if-missing (car font) (cdr font))))
+    (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
 *** The =osama-emacs-theme.el=: Section for Font Customization
@@ -180,11 +178,11 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   :ensure t
   :hook (after-init . (lambda ()
                         (fontaine-mode 1)
-                        (fontaine-set-preset 'osama-emacs-fonts)))
+                        (fontaine-set-preset 'osama-fonts)))
   :config
   ;; Define your custom preset
   (setq fontaine-presets
-        '((osama-emacs-fonts
+        '((osama-fonts
            :default-family "Montserrat"
            :default-weight regular
            :default-height 120
@@ -196,11 +194,11 @@ In this module I define everything broadly related to the aesthetics of Emacs.
            :unicode-height 120))))
 
 ;; Create fonts directory if it doesn't exist
-(defvar osama-emacs-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+(defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
   "Directory to store fonts for Emacs.")
 
-(unless (file-directory-p osama-emacs-fonts-dir)
-  (make-directory osama-emacs-fonts-dir t))
+(unless (file-directory-p osama-fonts-dir)
+  (make-directory osama-fonts-dir t))
 #+end_src
 
 ** The =osama-emacs-essentials.el= module
@@ -245,7 +243,7 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
   ;; Define cache directory
-  (defvar osama-emacs-cache-dir
+  (defvar osama-cache-dir
     (expand-file-name "~/osama-emacs/emacs-cache/")
     "Portable directory for saving Emacs session cache across devices.")
 
@@ -257,25 +255,25 @@ This module load basic configurations that apply to most facets of Emacs. Many o
   ;; Prepare subdirectories
   (let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
     (dolist (sub dirs)
-      (osama-ensure-directory (expand-file-name sub osama-emacs-cache-dir))))
+      (osama-ensure-directory (expand-file-name sub osama-cache-dir))))
 
   ;; Savehist: command history
-  (setq savehist-file (expand-file-name "savehist/savehist" osama-emacs-cache-dir))
+  (setq savehist-file (expand-file-name "savehist/savehist" osama-cache-dir))
   (savehist-mode 1)
   
   ;; Recentf: recent files list
-  (setq recentf-save-file (expand-file-name "recentf/recentf" osama-emacs-cache-dir))
+  (setq recentf-save-file (expand-file-name "recentf/recentf" osama-cache-dir))
   (recentf-mode 1)
 
   ;; Desktop: full session restore
-  (setq desktop-path           (list (expand-file-name "desktop" osama-emacs-cache-dir))
-        desktop-dirname        (expand-file-name "desktop" osama-emacs-cache-dir)
+  (setq desktop-path           (list (expand-file-name "desktop" osama-cache-dir))
+        desktop-dirname        (expand-file-name "desktop" osama-cache-dir)
         desktop-base-file-name "emacs-desktop")
   (desktop-save-mode 1)
 
   ;; Backups: store ~ files in backups/
   (setq backup-directory-alist
-        `((".*" . ,(expand-file-name "backups/" osama-emacs-cache-dir)))
+        `((".*" . ,(expand-file-name "backups/" osama-cache-dir)))
         backup-by-copying t
         version-control t
         delete-old-versions t
@@ -284,7 +282,7 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 
   ;; Auto-saves: store #files# in autosaves/
   (setq auto-save-file-name-transforms
-        `((".*" ,(concat (expand-file-name "autosaves/" osama-emacs-cache-dir) "\\1") t))
+        `((".*" ,(concat (expand-file-name "autosaves/" osama-cache-dir) "\\1") t))
         auto-save-default t
         auto-save-timeout 20
         auto-save-interval 200)
