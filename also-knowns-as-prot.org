@@ -360,7 +360,7 @@ The which-key package provides hints for keys that complete the currently incomp
 
 *** The =osama-emacs-completion.el= section for ~vertico~
 
-The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface (and thus mct) will suffer from a noticeable performance penalty.
+The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package vertico
@@ -445,13 +445,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ([remap describe-key]      . helpful-key))
 #+end_src
 
-
-
 ** The =osama-emacs-dired.el= module
 
 ** The =osama-emacs-windows.el= module
 
 ** The =osama-emacs-org.el= module
+
+org modern + org appear
+
+
 
 ** The =osama-emacs-system-custom= module
 
