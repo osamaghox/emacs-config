@@ -449,6 +449,177 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 org modern + org appear
 
+At its core, Org is a plain text markup language. By "markup
+language", we refer to the use of common characters to apply styling,
+such as how a word wrapped in asterisks acquires strong emphasis.
+Check the video I link to above on the basics of Org mode.
+
+Though what makes Org powerful is not the markup per se, but the fact
+that it has a rich corpus of Emacs Lisp code that does a lot with this
+otherwise plain text notation. Some of the headline features:
+
+- Cycle the visibility of any heading and its subheadings. This lets
+  you quickly fold a section you do not need to see (or reveal the one
+  you care about).
+- Mix prose with code in a single document to either make the whole
+  thing an actual program or to evaluate/demonstrate some snippets.
+- Convert ("export") an Org file to a variety of formats, including
+  HTML and PDF.
+- Use LaTeX inside of Org files to produce a scientific paper without
+  all the markup of LaTeX.
+- Manage TODO lists and implement a concomitant methodology of
+  labelling task states.
+- Quickly shift a "thing" (heading, list item, paragraph, ...) further
+  up or down in the file.
+- Use tables with formulas as a lightweight alternative to spreadsheet
+  software.
+- Capture data or fleeting thoughts efficiently using templates.
+- Maintain an agenda for all your date-bound activities.
+- Clock in and out of tasks, to eventually track how you are spending
+  your time.
+- Link to files regardless of file type. This includes special links
+  such as to an Info manual or an email.
+
+In other words, Org is highly capable and widely considered one of the
+killer apps of Emacs.
+
+This section covers the relevant configurations. You will notice that
+it is not limited to Org, as some other built-in features are also
+relevant here.
+
+*** The =osama-emacs-org.el= section for the ~calendar~
+
+The calendar is technically independent of Org, though it tightly integrates with it.
+We can see this when setting timestamps, such as when defining a SCHEDULED or DEADLINE entry for a given heading.
+Here, I am simply setting some stylistic preferences.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+;;; Calendar setup
+(use-package calendar
+  :ensure nil ;; calendar is built into Emacs
+  :commands (calendar)
+  :config
+  ;; Do not highlight diary entries in the calendar
+  (setq calendar-mark-diary-entries-flag nil)
+
+  ;; Show holidays
+  (setq calendar-mark-holidays-flag t)
+
+  ;; Do not display a dedicated calendar mode line
+  (setq calendar-mode-line-format nil)
+
+  ;; Time format (24-hour)
+  (setq calendar-time-display-form
+        '(24-hours ":" minutes
+          (when time-zone (format "(%s)" time-zone))))
+
+  ;; Start the week on Monday instead of Sunday
+  (setq calendar-week-start-day 1)
+
+  ;; Display dates in ISO format (example: 2025-08-18)
+  (setq calendar-date-style 'iso)
+
+  ;; Show numeric time zone
+  (setq calendar-time-zone-style 'numeric)
+
+  ;; Coordinates (for sunrise/sunset calculation)
+  ;; Change them according to your city
+  (setq calendar-latitude 15.3694    ; Sana'a (example)
+        calendar-longitude 44.1910)
+
+  ;; Time zone
+  (setq calendar-standard-time-zone-name "+0300") ; GMT+3
+  (setq calendar-daylight-time-zone-name "+0300"))
+#+end_src
+
+*** The =osama-emacs-org.el= section about appointment reminders (=appt.el=)
+
+The built-in appt.el handles appointment notifications. It was originally designed for the diary but also integrates well with the Org agenda. I extend this integration so that whenever I add or change a task, the appointments are refreshed through hooks and advice.
+Here I only keep minimal settings: I don’t need full agenda details, just a mode line notice showing how many minutes remain until the event.
+In Org files, each heading can have an APPT_WARNTIME property (minutes before the event). I use this with org-capture for time-sensitive tasks like coaching sessions.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package appt
+  :ensure nil ;; built-in in Emacs, no need to install
+  :commands (appt-activate) ;; main command to activate the system
+  :config
+  (setq appt-display-diary nil          ;; do not use the old diary
+        appt-display-format nil         ;; default display format
+        appt-display-mode-line t        ;; show reminder in the mode line
+        appt-display-interval 3         ;; repeat reminder every 3 minutes
+        appt-audible nil                ;; sound disabled (set to t for sound)
+        appt-warning-time-regexp "appt \\([0-9]+\\)" ;; regex for diary
+        appt-message-warning-time 6)    ;; warn 6 minutes before
+
+  (with-eval-after-load 'org-agenda
+    (appt-activate 1) ;; enable appt with org-agenda
+
+    ;; convert Org tasks with time info into appt reminders
+    (org-agenda-to-appt)))
+#+end_src
+
+
+*** The =osama-emacs-org.el= section with basic Org settings
+
+Org, also known as "Org mode", is one of the potentially most useful
+feature sets available to every Emacs user. At its core, Org is a
+lightweight markup language: you can have headings and paragraphs,
+mark a portion of text with emphasis, produce bullet lists, include
+code blocks, and the like. Though what really sets Org apart from
+other markup languages is the rich corpus of Emacs Lisp written around
+it to do all sorts of tasks with this otherwise plain text format.
+
+With Org you can write technical documents (e.g. the manuals of all my
+Emacs packages), maintain a simple or highly sophisticated system for
+task management, organise your life using the agenda, write tables
+that can evaluate formulas to have spreadsheet functionality, have
+embedded LaTeX, evaluate code blocks in a wide range of programming
+languages and reuse their results for literate programming, include
+the contents of other files into a singular file, use one file to
+generate other files/directories with all their contents, and export
+the Org document to a variety of formats like =.pdf= and =.odt=.
+Furthermore, Org can be used as a lightweight, plain text database, as
+each heading can have its own metadata. This has practical
+applications in most of the aforementioned.
+
+In short, if something can be done with plain text, Org probably does
+it already or has all the elements for piecing it together.
+
+This being Emacs, everything is customisable and Org is a good example
+of this. There are a lot of user options for us to tweak things to our
+liking. I do as much, though know that Org is perfectly usable without
+any configuration. The following sections contain further commentary
+on how I use Org.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+;;; Org-mode (basic personal setup)
+(use-package org
+  :ensure nil ;; org is built-in
+  :init
+  ;; Org files directory
+  (setq org-directory (expand-file-name "~/Documents/org/"))
+  ;; Depth for imenu
+  (setq org-imenu-depth 5)
+  :bind
+  ( :map global-map
+    ("C-c l" . org-store-link)
+    ("C-c o" . org-open-at-point-global))
+  :config
+  ;; Fold indicator
+  (setq org-ellipsis "⮧")
+  ;; Basic appearance options
+  (setq org-hide-emphasis-markers t) ; hide *bold* / /italic/ markers
+  (setq org-hide-leading-stars t)    ; hide extra stars in headings
+  (setq org-return-follows-link t)   ; RET follows links
+  (setq org-cycle-separator-lines 0) ; no empty line between folds
+  (setq org-insert-heading-respect-content t) ; respect content when inserting heading
+  (setq org-fontify-quote-and-verse-blocks t) ; highlight quote/verse
+  (setq org-fontify-whole-block-delimiter-line t)) ; color entire block delimiter line
+#+end_src
+
+
+
+
 
 
 ** The =osama-emacs-system-custom= module
