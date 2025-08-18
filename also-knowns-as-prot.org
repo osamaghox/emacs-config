@@ -90,12 +90,6 @@ by ~use-package~ when it needs it
 (setq use-package-always-ensure t)
 #+end_src
 
-
-
-
-
-
-
 This module load basic configurations that apply to most facets of Emacs.
 
 * The modules of my Emacs configuration
@@ -129,9 +123,12 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (doom-modeline-indent-info t))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~nerd-icons~ fonts
+** The =osama-emacs-fonts.el= module
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+
+*** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside fonts
 (defvar osama-icons-dir
   (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
@@ -171,9 +168,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-*** The =osama-emacs-theme.el=: Section for Font Customization
+*** The =osama-emacs-fonts.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
 (use-package fontaine
   :ensure t
   :hook (after-init . (lambda ()
