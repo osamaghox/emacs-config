@@ -103,12 +103,34 @@ source ~/.bashrc
 doom sync
 #+END_SRC
 
-
 ** Step 9 - check Doom Emacs setup for issues
 
 #+BEGIN_SRC bash
 doom doctor
 #+END_SRC
+
+** Step 10 - Create Symbolic Lin For Doom Config
+
+We need to Sync Doom Emacs Config Files for other devices
+
+- so first we need to move =~/.config/doom= to Windows Drive C
+
+#+BEGIN_SRC bash
+mv ~/.config/doom /mnt/c/Syncthing/emacs/DoomConfig
+#+END_SRC
+
+- Then we Remove The =~/.config/doom= folder 
+
+#+BEGIN_SRC bash
+rm -rf ~/.config/doom
+#+END_SRC
+
+- Last We Create Symbolic Link
+
+#+BEGIN_SRC bash
+ln -s /mnt/c/Syncthing/emacs/DoomConfig ~/.config/doom
+#+END_SRC
+
 
 * Installting vcxsrv XLaunch Server
 
@@ -143,9 +165,23 @@ doomemacs
 #+END_SRC
 
 
+
+
 * Installing Syncthing To Sync Doom Config to Other Devices
 
-** Step 1 - 
+** Step 1 - Installing Syncthing in Ubuntu
+
+#+BEGIN_SRC bash
+sudo apt install syncthing -y
+#+END_SRC
+
+** Step 2 - Open Syncthing
+
+#+BEGIN_SRC bash
+syncthing
+#+END_SRC
+
+** Step 3 - Add Doom Folder
 
 
 
