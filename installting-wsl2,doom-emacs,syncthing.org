@@ -1,1 +1,22 @@
 
+* Manual installation steps for older versions of WSL
+
+** Step 1 - Enable the Windows Subsystem for Linux
+
+You must first enable the "Windows Subsystem for Linux" optional feature before installing any Linux distributions on Windows.
+
+Open PowerShell as Administrator (Start menu > PowerShell > right-click > Run as Administrator) and enter this command:
+
+#+beign_src example
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+#+end_src
+
+** Step 2 - Enable Virtual Machine feature
+Before installing WSL 2, you must enable the Virtual Machine Platform optional feature.
+Your machine will require virtualization capabilities to use this feature.
+
+Open PowerShell as Administrator and run
+
+#+beign_src example
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+#+end_src
