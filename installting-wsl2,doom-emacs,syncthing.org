@@ -109,28 +109,33 @@ doom sync
 doom doctor
 #+END_SRC
 
-** Step 10 - Create Symbolic Lin For Doom Config
+** Step 10 - Create Symbolic Link For Doom Config
 
-We need to Sync Doom Emacs Config Files for other devices
+We need to sync Doom Emacs config files for other devices.
 
-- so first we need to move =~/.config/doom= to Windows Drive C
+- First, we need to create the folder on our device if it doesn't exist yet.
+
+#+BEGIN_SRC bash
+mkdir -p /mnt/c/Syncthing/emacs/DoomConfig
+#+END_SRC
+
+- Then, we need to move `~/.config/doom` to Windows Drive C.
 
 #+BEGIN_SRC bash
 mv ~/.config/doom /mnt/c/Syncthing/emacs/DoomConfig
 #+END_SRC
 
-- Then we Remove The =~/.config/doom= folder 
+- Then, we remove the old `~/.config/doom` folder.
 
 #+BEGIN_SRC bash
 rm -rf ~/.config/doom
 #+END_SRC
 
-- Last We Create Symbolic Link
+- Finally, we create the symbolic link.
 
 #+BEGIN_SRC bash
 ln -s /mnt/c/Syncthing/emacs/DoomConfig ~/.config/doom
 #+END_SRC
-
 
 * Installting vcxsrv XLaunch Server
 
