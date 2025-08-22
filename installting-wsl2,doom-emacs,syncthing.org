@@ -1,4 +1,4 @@
-* Manual installation steps for older versions of WSL
+* Installing WSL2 in Windows 11
 
 ** Step 1 - Enable the Windows Subsystem for Linux
 
@@ -37,4 +37,112 @@ then you can skip "Step 4"
 wsl --set-default-version 2
 #+END_SRC
 
-** Step 5
+** Step 5 - Update wsl
+
+#+BEGIN_SRC powershell
+wsl --update
+#+END_SRC
+
+
+** Step 6 - Installing Ubuntu 
+
+Open Microsoft Store and search for ~Ubuntu~
+
+
+* Installing Doom emacs
+
+
+** Step 1 - Update Ubuntu and download other tools
+
+
+#+BEGIN_SRC bash
+sudo apt update && sudo apt upgrade --fix-missing
+#+END_SRC
+
+
+** Step 2 - Downloading tools.
+
+#+BEGIN_SRC bash
+sudo apt install emacs fd-find ripgrep markdown --fix-missing
+#+END_SRC
+
+** Step 3 - Clone Doom Emacs Files.
+
+#+BEGIN_SRC bash
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+#+END_SRC
+
+** Step 4 - Install Doom.
+
+#+BEGIN_SRC bash
+~/.config/emacs/bin/doom install
+#+END_SRC
+
+** Step 5 - Install Doom.
+
+#+BEGIN_SRC bash
+~/.config/emacs/bin/doom install
+#+END_SRC
+
+** Step 6 - Add Doom Emacs to PATH Make Doom commands like `doom sync` available from any directory.
+
+#+BEGIN_SRC bash
+echo 'export PATH="$HOME/.config/emacs/bin:$PATH"' >> ~/.bashrc
+#+END_SRC
+
+
+** Step 7 - Apply bashrc changes
+
+#+BEGIN_SRC bash
+source ~/.bashrc
+#+END_SRC
+
+** Step 8 - apply Doom config and update packages
+
+#+BEGIN_SRC bash
+doom sync
+#+END_SRC
+
+
+** Step 9 - check Doom Emacs setup for issues
+
+#+BEGIN_SRC bash
+doom doctor
+#+END_SRC
+
+* Installting vcxsrv XLaunch Server
+
+In Wsl2 wslg display server is built in but for doom emacs we need ~vcxsrv~ because its supports pasting long texts
+
+** Step 1 - Download The App From GitHub
+
+https://github.com/marchaesen/vcxsrv/releases
+
+=vcxsrv-64.installer.exe=
+
+** Step 2 - Installing it to Program Files
+
+** Step 3 - Make it Launch With Doom emacss auto
+
+Open Wsl Ubuntu and Paste this:
+
+#+BEGIN_SRC bash
+echo 'alias doomeamcs='\''pgrep -f vcxsrv.exe >/dev/null || "/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -multiwindow -clipboard -wgl -ac & export DISPLAY=$(ip route | awk "/^default/{print \$3}"):0.0 && setxkbmap -option ctrl:swapcaps && emacs & exit'\''' >> ~/.bashrc
+#+END_SRC
+
+** Step 7 - Apply bashrc changes
+
+#+BEGIN_SRC bash
+source ~/.bashrc
+#+END_SRC
+
+** Step 8 - Launching Doom Emacs + XLaunch with single command
+
+#+BEGIN_SRC bash
+doomemacs
+#+END_SRC
+
+
+
+
+
