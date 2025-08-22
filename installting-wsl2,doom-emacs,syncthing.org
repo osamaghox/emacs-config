@@ -136,6 +136,22 @@ rm -rf ~/.config/doom
 ln -s /mnt/c/Syncthing/doom-emacs/doom ~/.config/doom
 #+END_SRC
 
+** Step 11 - Create Symbolic Link For My Vault
+
+We need to sync my Vault files for other devices.
+
+- First, we need to create the Vault folder on our device if it doesn't exist yet.
+
+#+BEGIN_SRC bash
+mkdir -p /mnt/c/Syncthing/doom-emacs/osama-vault
+#+END_SRC
+
+- Then, we create the symbolic link in WSL.
+
+#+BEGIN_SRC bash
+ln -s /mnt/c/Syncthing/doom-emacs/osama-vault ~/osama-vault
+#+END_SRC
+
 * Installting vcxsrv XLaunch Server
 
 In Wsl2 wslg display server is built in but for doom emacs we need ~vcxsrv~ because its supports pasting long texts
@@ -167,23 +183,3 @@ source ~/.bashrc
 #+BEGIN_SRC bash
 doomemacs
 #+END_SRC
-
-* Installing Syncthing To Sync Doom Config to Other Devices
-
-** Step 1 - Installing Syncthing in Ubuntu
-
-#+BEGIN_SRC bash
-sudo apt install syncthing -y
-#+END_SRC
-
-** Step 2 - Open Syncthing
-
-#+BEGIN_SRC bash
-syncthing
-#+END_SRC
-
-** Step 3 - Add Doom Folder
-
-
-
-
