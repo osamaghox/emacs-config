@@ -90,7 +90,6 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 echo 'export PATH="$HOME/.config/emacs/bin:$PATH"' >> ~/.bashrc
 #+END_SRC
 
-
 ** Step 7 - Apply bashrc changes
 
 #+BEGIN_SRC bash
@@ -116,13 +115,13 @@ We need to sync Doom Emacs config files for other devices.
 - First, we need to create the folder on our device if it doesn't exist yet.
 
 #+BEGIN_SRC bash
-mkdir -p /mnt/c/Syncthing/emacs/DoomConfig
+mkdir -p /mnt/c/Syncthing/doom-emacs/
 #+END_SRC
 
 - Then, we need to move `~/.config/doom` to Windows Drive C.
 
 #+BEGIN_SRC bash
-mv ~/.config/doom /mnt/c/Syncthing/emacs/DoomConfig
+mv ~/.config/doom /mnt/c/Syncthing/doom-emacs/
 #+END_SRC
 
 - Then, we remove the old `~/.config/doom` folder.
@@ -134,7 +133,7 @@ rm -rf ~/.config/doom
 - Finally, we create the symbolic link.
 
 #+BEGIN_SRC bash
-ln -s /mnt/c/Syncthing/emacs/DoomConfig ~/.config/doom
+ln -s /mnt/c/Syncthing/doom-emacs/doom ~/.config/doom
 #+END_SRC
 
 * Installting vcxsrv XLaunch Server
@@ -168,9 +167,6 @@ source ~/.bashrc
 #+BEGIN_SRC bash
 doomemacs
 #+END_SRC
-
-
-
 
 * Installing Syncthing To Sync Doom Config to Other Devices
 
