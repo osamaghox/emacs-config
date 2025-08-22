@@ -60,7 +60,7 @@ sudo apt update && sudo apt upgrade --fix-missing
 #+END_SRC
 
 
-** Step 2 - Downloading tools.
+** Step 2 - Downloading Emacs and other tools.
 
 #+BEGIN_SRC bash
 sudo apt install emacs fd-find ripgrep markdown --fix-missing
@@ -142,6 +142,10 @@ source ~/.bashrc
 doomemacs
 #+END_SRC
 
+
+* Installing Syncthing To Sync Doom Config to Other Devices
+
+** Step 1 - 
 
 
 
