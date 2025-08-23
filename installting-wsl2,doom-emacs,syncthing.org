@@ -233,6 +233,12 @@ make -j$(nproc)
 sudo make -j$(nproc) install
 
 
+بتقول كيف بيعرف البرنامج اذا فيه library ناقصة او اي حاجة لهذا استخدمنا هذا الي تحت
+اذا فشل هذا يعني ناقص library تأكد ايش هن من الرسالة وثبتهن بسهولة
+./configure --with-json --with-modules --with-native-compilation --with-pgtk
+
+
+
 
 * windows native Compile Emacs
 
