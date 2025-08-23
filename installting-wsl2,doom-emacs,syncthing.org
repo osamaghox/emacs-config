@@ -78,37 +78,31 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 ~/.config/emacs/bin/doom install
 #+END_SRC
 
-** Step 5 - Install Doom.
-
-#+BEGIN_SRC bash
-~/.config/emacs/bin/doom install
-#+END_SRC
-
-** Step 6 - Add Doom Emacs to PATH Make Doom commands like `doom sync` available from any directory.
+** Step 5 - Add Doom Emacs to PATH Make Doom commands like `doom sync` available from any directory.
 
 #+BEGIN_SRC bash
 echo 'export PATH="$HOME/.config/emacs/bin:$PATH"' >> ~/.bashrc
 #+END_SRC
 
-** Step 7 - Apply bashrc changes
+** Step 6 - Apply bashrc changes
 
 #+BEGIN_SRC bash
 source ~/.bashrc
 #+END_SRC
 
-** Step 8 - apply Doom config and update packages
+** Step 7 - apply Doom config and update packages
 
 #+BEGIN_SRC bash
 doom sync
 #+END_SRC
 
-** Step 9 - check Doom Emacs setup for issues
+** Step 8 - check Doom Emacs setup for issues
 
 #+BEGIN_SRC bash
 doom doctor
 #+END_SRC
 
-** Step 10 - Create Symbolic Link For Doom Config
+** Step 9 - Create Symbolic Link For Doom Config
 
 We need to sync Doom Emacs config files for other devices.
 
@@ -136,7 +130,7 @@ rm -rf ~/.config/doom
 ln -s /mnt/c/Syncthing/doom-emacs/doom ~/.config/doom
 #+END_SRC
 
-** Step 11 - Create Symbolic Link For My Vault
+** Step 10 - Create Symbolic Link For My Vault
 
 We need to sync my Vault files for other devices.
 
