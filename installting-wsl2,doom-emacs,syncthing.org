@@ -184,7 +184,7 @@ doomemacs
 
 
 
-
+* wsl2 Compile Emacs
 
 
 
@@ -234,11 +234,9 @@ sudo make -j$(nproc) install
 
 
 
+* windows native Compile Emacs
 
-
-
-
-
+https://readingworldmagazine.com/emacs/2022-02-24-compiling-emacs-29-from-source-on-windows/
 
 
 
