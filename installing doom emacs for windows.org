@@ -198,3 +198,20 @@ cd ~/.emacs.d/bin
 ./doom sync
 #+END_SRC
 
+** Step 6 - Sync Your Custom Config Between Other Devices
+
+To keep your Doom Emacs setup consistent across multiple devices, you can synchronize your custom configuration folder.
+
+- The folder to sync is: ~C:\Users\USERNAME\.doom.d~
+  - This contains your personal configuration files such as:
+    - ~config.el~
+    - ~init.el~
+    - ~packages.el~
+  - It does NOT include Doom’s core files or installed packages.
+
+- Recommended workflow:
+  1. Sync only the ~.doom.d~ folder using a tool like Syncthing, Dropbox, or Git.
+  2. On the other device, make sure Doom Emacs is installed (~.emacs.d~).
+  3. Run `doom sync` after syncing to apply your custom settings and packages.
+
+- Avoid syncing ~.emacs.d~ unless you want to replicate the entire Doom installation, which may cause conflicts between devices.
