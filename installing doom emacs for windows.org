@@ -63,10 +63,10 @@ By adding their installation folders to the system environment variables (PATH),
 
 Go to Control Panel -> User Accounts -> Change my environment variables.
 
-New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.  
+New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.
 Select =Path=, =Edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
-Select =Path=, =Edit= and add your ~C:\Tools\ripgrep~ folder and OK.  
-Select =Path=, =Edit= and add your ~C:\Tools\fd~ folder and OK.  
+Select =Path=, =Edit= and add your ~C:\Tools\fd~ folder and OK.
+Select =Path=, =Edit= and add your ~C:\Tools\ripgrep~ folder and OK.
 Click OK.
 
 ** Step 3 - Clone Doom repo
