@@ -125,7 +125,7 @@ cd ~/.emacs.d/bin
 
 *Now you can start Emacs, and you should see the Doom dashboard!*
 
-* Step 4 - Install Nerd Icons & All The Icons Fonts
+** Step 4 - Install Nerd Icons & All The Icons Fonts
 
 To make sure all icons in Emacs display correctly, you need to install additional fonts. These fonts provide the symbols used in themes, modelines, and various packages. Without them, some icons may appear as empty boxes or incorrect characters.
 
@@ -185,16 +185,6 @@ cd ~/.emacs.d/bin
 #+BEGIN_SRC bash
 ./doom doctor
 #+END_SRC
-
-
-
-
-
-
-
-
-
-
 
 *** Doom Emacs Update Your Custom Config
 
