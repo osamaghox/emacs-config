@@ -137,50 +137,64 @@ Download and install the fonts from the links below, then restart Emacs to see t
 [[https://github.com/rainstormstudio/nerd-icons.el/tree/main/fonts][Nerd Fonts on GitHub]]
 [[https://github.com/domtronn/all-the-icons.el/tree/master/fonts][All The Icons Fonts on GitHub]]
 
-** Step 5 - How to Update (Emacs, Doom Emacs, Update Your Custom Config)
+** Step 5 - How to Update (Emacs, Doom Emacs, Your Custom Config)
 
-*** Emacs
+** Emacs
+- Uninstall the old Emacs, example ~Uninstall-30.2.exe~.
+- Download and install the latest Emacs version.
+- Update your =Path= in Control Panel -> User Accounts -> Change my environment variables:
+  - Select =Path=, =Edit=, and update to the new folder, e.g., ~C:\Program Files\Emacs\(new-version)\bin~.
 
-- Uninstall the old Emacs, example ~Uninstall-30.2.exe~
-- Then download the latest app
-- Go to Control Panel -> User Accounts -> Change my environment variables.
-  - Select =Path=, =Edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
+** Doom Emacs Upgrade and Rebuild
+After installing a new Emacs version, you should update Doom Emacs and rebuild it so that all packages are properly compiled.
 
-*** Doom Emacs Upgrade
-
-Upgrading Doom Emacs updates the core Doom system, including its built-in packages and configuration framework. Running `doom upgrade` will:
-
-- Pull the latest changes from Doom’s Git repository.
-- Update all bundled packages to their newest versions.
-- Fix any potential issues caused by outdated core files.
-
-After upgrading, running `doom sync` ensures that all packages and your custom configurations are correctly applied. Restart Emacs to use the latest version.
-
-- Open =git-bash.exe=
-
-- Go to the Doom folder:
+- Open =git-bash.exe=.
+- Go to the Doom bin folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- Run the upgrade command:
+- Run the upgrade command to update Doom and all its packages:
 
 #+BEGIN_SRC bash
 ./doom upgrade
 #+END_SRC
 
-- Navigate again to the Doom bin folder:
+- After upgrading, rebuild Doom so that all packages are compiled for the new Emacs version:
 
 #+BEGIN_SRC bash
-cd ~/.emacs.d/bin
+./doom build
 #+END_SRC
 
-- Run `doom sync` just in case:
+- Optionally, run =doom sync= to ensure all custom configurations are applied:
 
 #+BEGIN_SRC bash
 ./doom sync
 #+END_SRC
+
+- Restart Emacs to complete the update and rebuild process.
+
+** Verify Your Setup
+- Run =doom doctor= to check your setup for any issues.  
+  This command will:
+  - Verify that all required tools are installed.
+  - Detect missing fonts, packages, or dependencies.
+  - Provide warnings or suggestions to fix potential problems.
+
+#+BEGIN_SRC bash
+./doom doctor
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
 
 *** Doom Emacs Update Your Custom Config
 
