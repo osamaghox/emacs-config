@@ -73,7 +73,7 @@ Click OK.
 
 This step will guide you through downloading and installing Doom Emacs on your PC.
 
-*** Open =git-bash.exe=
+Open =git-bash.exe=
 
 - Go to your home folder:
 
