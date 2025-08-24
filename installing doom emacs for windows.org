@@ -108,6 +108,17 @@ cd ~/.emacs.d/bin
 ./doom sync
 #+END_SRC
 
+- Then run `doom doctor` to check your setup for any issues.  
+  This command will:
+  - Verify that all required tools are installed.
+  - Detect missing fonts, packages, or dependencies.
+  - Provide warnings or recommendations to fix potential problems.
+
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+./doom doctor
+#+END_SRC
+
 - Finally, add Doom’s bin folder to your system Path:
   1. Go to Control Panel -> User Accounts -> Change my environment variables.
   2. Select =Path=, click =Edit=, and add:
