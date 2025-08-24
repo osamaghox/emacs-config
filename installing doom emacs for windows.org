@@ -56,12 +56,11 @@ By adding their installation folders to the system environment variables (PATH),
 Go to Control panel -> User Accounts -> Change my environment variables.
 
 New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.  
-Select =Path=, =edit= and add your ~C:\path\to\the\emacs\bin~ folder and OK.  
-Select =Path=, =edit= and add your ~C:\path\to\the\ripgrep~ folder and OK.  
-Select =Path=, =edit= and add your ~C:\path\to\the\fd~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\Program Files\Emacs\emacs-30.2\bin~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\Tools\ripgrep~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.  
 Click OK.
 
-[[https://www.example.com][اضغط هنا للذهاب للموقع]]
 
 
 
