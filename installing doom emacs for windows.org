@@ -71,6 +71,14 @@ Click OK.
 
 
 
+** Step 3 - Clone Doom repo
+
+*** Open =git-bash.exe=
+
+go to home folder by typing
+
+
+
 
 how to update
 
