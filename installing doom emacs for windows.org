@@ -24,11 +24,12 @@ We need git to download doom repo to our pc and we will use it for other emacs t
 
 Download it from here:
 
-[[https://git-scm.com/downloads/win][Download for Windows]]
+[[https://git-scm.com/downloads/win][Git Offical Site]]
 
 Standalone Installer:
 ~Git for Windows/x64 Setup.~
 
+install it to ~C:\Tools~ and name it =Git=
 
 *** fd Tool
 
@@ -37,12 +38,9 @@ we need ~fd~ because it can search by file name and its so fast
 Download it from here:
 [[https://github.com/sharkdp/fd/releases][fd releases on GitHub]]
 
-
-
 make sure you download ~windows-gnu~
 
 Extract Folder to ~C:\Tools~ and name it =fd=
-
 
 *** ripgrep Tool
 
