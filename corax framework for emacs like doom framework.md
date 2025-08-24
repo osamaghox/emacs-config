@@ -1,4 +1,5 @@
 
+# https://chatgpt.com/share/68ab84ab-4880-8004-8bd4-ab8ff70812b2
 يا غالي اذا اردت ان ابني config خاص بي زي doom emacs من حيث
 
 - modules
@@ -297,6 +298,14 @@ Doom Emacs مبني على **Emacs Vanilla** لكنه يضيف طبقة تنظي
 
 * Lazy loading حقيقي لكل module عند event معين (مثل org عند فتح ملف `.org`).
 * Leader key shortcuts لكل module تلقائيًا.
+
+
+
+
+
+
+
+
 * نظام **CoraX Doctor** بسيط يتحقق من تحميل modules.
 
 هل تريد أن أجهزها لك؟
