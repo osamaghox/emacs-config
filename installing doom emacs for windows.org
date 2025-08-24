@@ -71,11 +71,11 @@ Click OK.
 
 ** Step 3 - Clone Doom repo
 
-This step guides you through downloading and installing Doom Emacs on your PC.
+This step will guide you through downloading and installing Doom Emacs on your PC.
 
 *** Open =git-bash.exe=
 
-- Go to your home folder by typing:
+- Go to your home folder:
 
 #+BEGIN_SRC bash
 cd ~
@@ -93,7 +93,7 @@ git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- Install Doom by typing:
+- Install Doom by running:
 
 #+BEGIN_SRC bash
 ./doom install
@@ -101,31 +101,29 @@ cd ~/.emacs.d/bin
 
 - If everything runs without errors, Doom Emacs is now installed.
 
-- To make sure all packages and configurations are applied, run again:
+- To make sure all packages and configurations are applied, run:
 
 #+BEGIN_SRC bash
-cd ~/.emacs.d/bin
 ./doom sync
 #+END_SRC
 
-- Then run `doom doctor` to check your setup for any issues.  
+- Run `doom doctor` to check your setup for any issues.  
   This command will:
   - Verify that all required tools are installed.
   - Detect missing fonts, packages, or dependencies.
-  - Provide warnings or recommendations to fix potential problems.
+  - Provide warnings or suggestions to fix potential problems.
 
 #+BEGIN_SRC bash
-cd ~/.emacs.d/bin
 ./doom doctor
 #+END_SRC
 
 - Finally, add Doom’s bin folder to your system Path:
-  1. Go to Control Panel -> User Accounts -> Change my environment variables.
+  1. Go to: Control Panel -> User Accounts -> Change my environment variables.
   2. Select =Path=, click =Edit=, and add:
      ~C:\Users\USERNAME\.emacs.d\bin~
   3. Click OK to save changes.
 
-*Now you can start Emacs and you should see the Doom dashboard!*
+*Now you can start Emacs, and you should see the Doom dashboard!*
 
 * Step 4 - Install Nerd Icons & All The Icons Fonts
 
