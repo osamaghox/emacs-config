@@ -122,7 +122,7 @@ cd ~/.emacs.d/bin
 - then download the lastest app for windows
 
 - Go to Control Panel -> User Accounts -> Change my environment variables.
-  - Select =Path=, =edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
+  - Select =Path=, =edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
 *** doom emacs update custom config
 
