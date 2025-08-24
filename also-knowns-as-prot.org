@@ -7,6 +7,66 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
+
+
+
+النصائح الأهم لي:
+
+** الشرح بيكون حسب الاحتياجات زي اللعبة
+
+-------------
+مثلًا
+if we need to write araibc in emacs we cant use emacs keymaps while in arabic layout so we need to make input mthod arabic with `C-\`
+(setq default-input-method "arabic")
+
+بعد ما كملنا اللغة بنشوف اننا محتاجين خط عربي لذلك سنتخدم ..... الخ
+-------------
+
+
+
+
+** اي وظيفة جديدة داخل emacs
+
+ما نكتب اسمها
+
+osama-emacs-test.el
+
+نكتبها بدون emacs لاننا بالفعل داخل البرنامج
+
+** maybe dont use vim keys instead we will use caps lock as ctrl key and leader keys like vim does
+
+** ربما با نخلي اول شيء تثبيت البكجات
+
+جميع البكجات يعمل لهن load قبل اعداداتهن علشان ما يصير زي 
+غلط بترتيب البكجات لان بعض البكجات ملكملات لبعض وايضًا جميع البكجات بنركز نخليه
+ dever and config and init in use package
+
+
+** this is the best for refernce https://github.com/bbatsov/prelude
+
+or https://github.com/larstvei/dot-emacs/blob/main/init.org
+
+or read this to know basics `https://github.com/ashton314/emacs-bedrock/blob/main/`
+
+** make more links in `org config` with uuid
+
+
+** this best modeline like neovim
+
+https://github.com/konrad1977/punch-line
+
+
+** add to every defun or devar a explain text to be showing in which key
+
+** set themes like ef or prot theme and prot modeline
+
+** تعلم من ترتيب prot تبعه ال org config
+
+** watch video again `advanced org litrate config in emacs` by prot
+
+** add more web links to the packages or sources or tutorials
+
+
 * The early initialisation of Emacs (=early-init.el=)
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
