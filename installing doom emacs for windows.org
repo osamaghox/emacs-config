@@ -113,7 +113,7 @@ cd ~/.emacs.d/bin
 *Now you can start emacs and will see the Doom dashboard!*
 
 
-** Step 3 - How to Update (emacs, doomemacs, update you custom config)
+** Step 3 - How to Update (Emacs, Doom Emacs, Update Your Custom Config)
 
 *** Emacs
 
@@ -124,23 +124,7 @@ cd ~/.emacs.d/bin
 - Go to Control Panel -> User Accounts -> Change my environment variables.
   - Select =Path=, =edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
-*** doom emacs update custom config
-
-- Open =git-bash.exe=
-
-- type to go the doom folder:
-
-#+BEGIN_SRC bash
-cd ~/.emacs.d/bin
-#+END_SRC
-
-- and run:
-
-#+BEGIN_SRC bash
-./doom sync
-#+END_SRC
-
-*** Doom emacs upgrade
+*** Doom Emacs Upgrade
 
 - Open =git-bash.exe=
 
@@ -163,6 +147,22 @@ cd ~/.emacs.d/bin
 #+END_SRC
 
 - Just in case, run:
+
+#+BEGIN_SRC bash
+./doom sync
+#+END_SRC
+
+*** Doom Emacs Update Your Custom Config
+
+- Open =git-bash.exe=
+
+- type to go the doom folder:
+
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+- and run:
 
 #+BEGIN_SRC bash
 ./doom sync
