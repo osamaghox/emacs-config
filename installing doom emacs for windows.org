@@ -134,6 +134,14 @@ Download and install the fonts from the links below, then restart Emacs to see t
 
 *** Doom Emacs Upgrade
 
+Upgrading Doom Emacs updates the core Doom system, including its built-in packages and configuration framework. Running `doom upgrade` will:
+
+- Pull the latest changes from Doom’s Git repository.
+- Update all bundled packages to their newest versions.
+- Fix any potential issues caused by outdated core files.
+
+After upgrading, running `doom sync` ensures that all packages and your custom configurations are correctly applied. Restart Emacs to use the latest version.
+
 - Open =git-bash.exe=
 
 - Go to the Doom folder:
@@ -161,6 +169,15 @@ cd ~/.emacs.d/bin
 #+END_SRC
 
 *** Doom Emacs Update Your Custom Config
+
+Updating Doom Emacs ensures that all your custom configurations, packages, and core files are synchronized with the latest changes. Running `doom sync` will:
+
+- Install any new packages you added in your config.
+- Remove packages you no longer use.
+- Rebuild the autoloads to make your changes effective.
+- Apply updates to Doom’s core files safely.
+
+After running this command, restart Emacs to see your updated configuration in effect.
 
 - Open =git-bash.exe=
 
