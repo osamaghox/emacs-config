@@ -125,7 +125,7 @@ cd ~/.emacs.d/bin
   - Select =Path=, =edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
 *** Doom emacs upgrade
-
+                      
 
 *** doom emacs update custom config updat
 
