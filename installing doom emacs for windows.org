@@ -71,6 +71,8 @@ Click OK.
 
 ** Step 3 - Clone Doom repo
 
+This step guides you through downloading and installing Doom Emacs on your PC.
+
 *** Open =git-bash.exe=
 
 - Go to your home folder by typing:
@@ -79,42 +81,40 @@ Click OK.
 cd ~
 #+END_SRC
 
-- Then clone the Doom repo:
+- Clone the Doom Emacs repository:
 
 #+BEGIN_SRC bash
 git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
 #+END_SRC
 
-- After the download is complete, type:
+- After the download is complete, navigate to the Doom bin folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- Then install Doom by typing:
+- Install Doom by typing:
 
 #+BEGIN_SRC bash
 ./doom install
 #+END_SRC
 
-- If everything is fine, Doom is now installed.
+- If everything runs without errors, Doom Emacs is now installed.
 
-- Go again to:
+- To make sure all packages and configurations are applied, run again:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
-#+END_SRC
-
-- Just in case, run:
-
-#+BEGIN_SRC bash
 ./doom sync
 #+END_SRC
 
-- Go to Control Panel -> User Accounts -> Change my environment variables.
-  - Select =Path=, then =Edit= and add: ~C:\Users\USERNAME\.emacs.d\bin~, click OK -> OK.
+- Finally, add Doom’s bin folder to your system Path:
+  1. Go to Control Panel -> User Accounts -> Change my environment variables.
+  2. Select =Path=, click =Edit=, and add:
+     ~C:\Users\USERNAME\.emacs.d\bin~
+  3. Click OK to save changes.
 
-*Now you can start Emacs and will see the Doom dashboard!*
+*Now you can start Emacs and you should see the Doom dashboard!*
 
 * Step 4 - Install Nerd Icons & All The Icons Fonts
 
@@ -155,19 +155,19 @@ After upgrading, running `doom sync` ensures that all packages and your custom c
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- And run:
+- Run the upgrade command:
 
 #+BEGIN_SRC bash
 ./doom upgrade
 #+END_SRC
 
-- Go again to:
+- Navigate again to the Doom bin folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- Just in case, run:
+- Run `doom sync` just in case:
 
 #+BEGIN_SRC bash
 ./doom sync
@@ -186,14 +186,15 @@ After running this command, restart Emacs to see your updated configuration in e
 
 - Open =git-bash.exe=
 
-- Type to go to the Doom folder:
+- Navigate to the Doom bin folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- And run:
+- Run the synchronization command:
 
 #+BEGIN_SRC bash
 ./doom sync
 #+END_SRC
+
