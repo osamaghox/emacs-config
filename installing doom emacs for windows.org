@@ -1,0 +1,71 @@
+git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
+
+
+
+* Doom Emacs Native in Windows
+
+** Step 1 - Installing Important tools
+
+*** Git Tool
+
+We need git to download doom repo to our pc and we will use it for other emacs tools like magit
+
+Download it from here:
+
+[[https://git-scm.com/downloads/win][Download for Windows]]
+
+Standalone Installer:
+~Git for Windows/x64 Setup.~
+
+
+*** fd Tool
+
+we need ~fd~ because it can search by file name and its so fast
+
+Download it from here:
+[[https://github.com/sharkdp/fd/releases][fd releases on GitHub]]
+
+
+
+make sure you download ~windows-gnu~
+
+Extract Folder to ~C:\Tools~ and name it =fd=
+
+
+*** ripgrep Tool
+
+we need ~ripgrep~ because it can search texts in files which is pretty useful in somecases
+
+Download it from here:
+
+[[https://github.com/BurntSushi/ripgrep/releases][ripgrep releases on GitHub]]
+
+
+
+make sure you download ~windows-gnu~
+
+Extract Folder to ~C:\Tools~ and name it =ripgrep=
+
+
+** Step 2 - Edit system environment variables
+
+When we install tools like fd or ripgrep, Emacs (and Doom) needs to find them no matter where they are on the system.
+By adding their installation folders to the system environment variables (PATH), we make these tools accessible from any terminal or program without typing the full path every time.
+
+
+Go to Control panel -> User Accounts -> Change my environment variables.
+
+New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.  
+Select =Path=, =edit= and add your ~C:\path\to\the\emacs\bin~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\path\to\the\ripgrep~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\path\to\the\fd~ folder and OK.  
+Click OK.
+
+[[https://www.example.com][اضغط هنا للذهاب للموقع]]
+
+
+
+
+
+
+
