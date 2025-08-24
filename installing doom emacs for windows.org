@@ -4,51 +4,51 @@
 
 *** Emacs App
 
-doom emacs cant be used without emacs app so we need to download the installer from the website
+Doom Emacs can't be used without Emacs app, so we need to download the installer from the website
 
-[[https://www.gnu.org/software/emacs/download.html][GNU Emacs Offical Site]]
+[[https://www.gnu.org/software/emacs/download.html][GNU Emacs Official Site]]
 
-download it from ~nearby GNU mirror~
-example: ~emacs-30.2-installer.exe ~
+Download it from ~nearby GNU mirror~
+Example: ~emacs-30.2-installer.exe~
 
-after that install it noramlly and make sure the installtion path is program files
-example: ~C:\Program Files\Emacs~
+After that, install it normally and make sure the installation path is Program Files
+Example: ~C:\Program Files\Emacs~
 
 *** Git Tool
 
-We need git to download doom repo to our pc and we will use it for other emacs tools like magit
+We need Git to download Doom repo to our PC, and we will use it for other Emacs tools like Magit
 
 Download it from here:
 
-[[https://git-scm.com/downloads/win][Git Offical Site]]
+[[https://git-scm.com/downloads/win][Git Official Site]]
 
 Standalone Installer:
 ~Git for Windows/x64 Setup.~
 
-install it to ~C:\Tools~ and name it =Git=
+Install it to ~C:\Tools~ and name it =Git=
 
 *** fd Tool
 
-we need ~fd~ because it can search by file name and its so fast
+We need ~fd~ because it can search by file name and it's very fast
 
 Download it from here:
 [[https://github.com/sharkdp/fd/releases][fd releases on GitHub]]
 
-make sure you download ~windows-gnu~
+Make sure you download ~windows-gnu~
 
-Extract Folder to ~C:\Tools~ and name it =fd=
+Extract folder to ~C:\Tools~ and name it =fd=
 
 *** ripgrep Tool
 
-we need ~ripgrep~ because it can search texts in files which is pretty useful in somecases
+We need ~ripgrep~ because it can search texts in files, which is pretty useful in some cases
 
 Download it from here:
 
 [[https://github.com/BurntSushi/ripgrep/releases][ripgrep releases on GitHub]]
 
-make sure you download ~windows-gnu~
+Make sure you download ~windows-gnu~
 
-Extract Folder to ~C:\Tools~ and name it =ripgrep=
+Extract folder to ~C:\Tools~ and name it =ripgrep=
 
 
 ** Step 2 - Edit system environment variables
@@ -56,13 +56,12 @@ Extract Folder to ~C:\Tools~ and name it =ripgrep=
 When we install tools like fd or ripgrep, Emacs (and Doom) needs to find them no matter where they are on the system.
 By adding their installation folders to the system environment variables (PATH), we make these tools accessible from any terminal or program without typing the full path every time.
 
-
-Go to Control panel -> User Accounts -> Change my environment variables.
+Go to Control Panel -> User Accounts -> Change my environment variables.
 
 New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.  
-Select =Path=, =edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
-Select =Path=, =edit= and add your ~C:\Tools\ripgrep~ folder and OK.  
-Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.  
+Select =Path=, =Edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
+Select =Path=, =Edit= and add your ~C:\Tools\ripgrep~ folder and OK.  
+Select =Path=, =Edit= and add your ~C:\Tools\fd~ folder and OK.  
 Click OK.
 
 ** Step 3 - Clone Doom repo
@@ -110,29 +109,29 @@ cd ~/.emacs.d/bin
 - Go to Control Panel -> User Accounts -> Change my environment variables.
   - Select =Path=, then =Edit= and add: ~C:\Users\USERNAME\.emacs.d\bin~, click OK -> OK.
 
-*Now you can start emacs and will see the Doom dashboard!*
+*Now you can start Emacs and will see the Doom dashboard!*
 
 
 ** Step 3 - How to Update (Emacs, Doom Emacs, Update Your Custom Config)
 
 *** Emacs
 
-- Uninstall the Old Emacs Example ~Uninstall-30.2.exe~
-- Then Download The Lastest App
+- Uninstall the old Emacs, example ~Uninstall-30.2.exe~
+- Then download the latest app
 - Go to Control Panel -> User Accounts -> Change my environment variables.
-  - Select =Path=, =edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
+  - Select =Path=, =Edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
 *** Doom Emacs Upgrade
 
 - Open =git-bash.exe=
 
-- go to the doom folder:
+- Go to the Doom folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- and run:
+- And run:
 
 #+BEGIN_SRC bash
 ./doom upgrade
@@ -154,18 +153,14 @@ cd ~/.emacs.d/bin
 
 - Open =git-bash.exe=
 
-- type to go the doom folder:
+- Type to go to the Doom folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- and run:
+- And run:
 
 #+BEGIN_SRC bash
 ./doom sync
 #+END_SRC
-
-
-
-
