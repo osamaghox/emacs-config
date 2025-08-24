@@ -12,6 +12,8 @@
 
 * النصائح الأهم لي:
 
+** lazy loading use-packages
+
 ** use package for melpa
 واذا ما حصلت البكج تستخدم
 package-vc المدمج في emacs 
