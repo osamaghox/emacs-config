@@ -125,12 +125,36 @@ cd ~/.emacs.d/bin
   - Select =Path=, =edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
 *** Doom emacs upgrade
-                      
+
+- Open =git-bash.exe=
+
+- type to go the doom folder:
+
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+- and run:
+
+#+BEGIN_SRC bash
+./doom upgrade
+#+END_SRC
 
 *** doom emacs update custom config updat
 
+- Open =git-bash.exe=
 
+- type to go the doom folder:
 
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+- and run:
+
+#+BEGIN_SRC bash
+./doom sync
+#+END_SRC
 
 
 
