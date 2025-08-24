@@ -10,8 +10,13 @@ git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
 
 doom emacs cant be used without emacs app so we need to download the installer from the website
 
-[[https://www.gnu.org/software/emacs/download.html][GNU Emacs Offical Site ]]
+[[https://www.gnu.org/software/emacs/download.html][GNU Emacs Offical Site]]
 
+download it from ~nearby GNU mirror~
+example: ~emacs-30.2-installer.exe ~
+
+after that install it noramlly and make sure the installtion path is program files
+example: ~C:\Program Files\Emacs~
 
 *** Git Tool
 
@@ -61,10 +66,12 @@ By adding their installation folders to the system environment variables (PATH),
 Go to Control panel -> User Accounts -> Change my environment variables.
 
 New, type =HOME= and set your ~C:\Users\USERNAME~ and OK.  
-Select =Path=, =edit= and add your ~C:\Program Files\Emacs\emacs-30.2\bin~ folder and OK.  
+Select =Path=, =edit= and add your ~C:\Program Files\Emacs\your-emacs-version\bin~ folder and OK.
 Select =Path=, =edit= and add your ~C:\Tools\ripgrep~ folder and OK.  
 Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.  
 Click OK.
+
+
 
 
 how to update
