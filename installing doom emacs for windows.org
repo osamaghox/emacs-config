@@ -144,7 +144,7 @@ cd ~/.emacs.d/bin
 
 - Open =git-bash.exe=
 
-- type to go the doom folder:
+- go to the doom folder:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
