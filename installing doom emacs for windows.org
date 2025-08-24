@@ -65,8 +65,6 @@ Select =Path=, =edit= and add your ~C:\Tools\ripgrep~ folder and OK.
 Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.  
 Click OK.
 
-
-
 ** Step 3 - Clone Doom repo
 
 *** Open =git-bash.exe=
