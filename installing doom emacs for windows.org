@@ -6,6 +6,13 @@ git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
 
 ** Step 1 - Installing Important tools
 
+*** Emacs App
+
+doom emacs cant be used without emacs app so we need to download the installer from the website
+
+[[https://www.gnu.org/software/emacs/download.html][GNU Emacs Offical Site ]]
+
+
 *** Git Tool
 
 We need git to download doom repo to our pc and we will use it for other emacs tools like magit
@@ -40,8 +47,6 @@ Download it from here:
 
 [[https://github.com/BurntSushi/ripgrep/releases][ripgrep releases on GitHub]]
 
-
-
 make sure you download ~windows-gnu~
 
 Extract Folder to ~C:\Tools~ and name it =ripgrep=
@@ -62,7 +67,7 @@ Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.
 Click OK.
 
 
-
+how to update
 
 
 
