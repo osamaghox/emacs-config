@@ -29,33 +29,32 @@ Git is required to download the Doom Emacs repository to your PC and is also use
 - Use the Standalone Installer:
   Example: ~Git for Windows/x64 Setup.exe~
 
-- During installation, choose a simple path for easier access.
-  Recommended: ~C:\Tools~
+- During installation, choose a simple path for easier access, Recommended: ~C:\Tools~
 - rename the folder to =Git= for consistency.
 
 *** fd Tool
 
-We need ~fd~ because it can search by file name and it's very fast
+The ~fd~ tool is used for fast file name searches, which makes it very useful in Emacs for quickly finding files.
 
-Download it from here:
+- Download it from the official releases page:
+
 [[https://github.com/sharkdp/fd/releases][fd releases on GitHub]]
 
-Make sure you download ~windows-gnu~
-
-Extract folder to ~C:\Tools~ and name it =fd=
+- Make sure to download the ~windows-gnu~ version.
+- Extract the folder to a convenient location, Recommended: ~C:\Tools~
+- rename the folder to =fd= for consistency.
 
 *** ripgrep Tool
 
-We need ~ripgrep~ because it can search texts in files, which is pretty useful in some cases
+The ~ripgrep~ tool allows you to search for text inside files very efficiently. It is especially useful for searching code, configurations, or large documents within Emacs.
 
-Download it from here:
+- Download it from the official releases page:
 
 [[https://github.com/BurntSushi/ripgrep/releases][ripgrep releases on GitHub]]
 
-Make sure you download ~windows-gnu~
-
-Extract folder to ~C:\Tools~ and name it =ripgrep=
-
+- Make sure to download the ~windows-gnu~ version.
+- Extract the folder to a convenient location, Recommended: ~C:\Tools~
+- rename the folder to =ripgrep= for consistency.
 
 ** Step 2 - Edit system environment variables
 
