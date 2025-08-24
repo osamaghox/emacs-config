@@ -111,8 +111,11 @@ cd ~/.emacs.d/bin
 
 *Now you can start Emacs and will see the Doom dashboard!*
 
+** Step 4 - Install Nerd icons
 
-** Step 3 - How to Update (Emacs, Doom Emacs, Update Your Custom Config)
+
+
+** Step 5 - How to Update (Emacs, Doom Emacs, Update Your Custom Config)
 
 *** Emacs
 
