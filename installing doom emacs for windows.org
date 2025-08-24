@@ -124,6 +124,22 @@ cd ~/.emacs.d/bin
 - Go to Control Panel -> User Accounts -> Change my environment variables.
   - Select =Path=, =edit= and add your ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
+*** doom emacs update custom config
+
+- Open =git-bash.exe=
+
+- type to go the doom folder:
+
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+- and run:
+
+#+BEGIN_SRC bash
+./doom sync
+#+END_SRC
+
 *** Doom emacs upgrade
 
 - Open =git-bash.exe=
@@ -140,21 +156,18 @@ cd ~/.emacs.d/bin
 ./doom upgrade
 #+END_SRC
 
-*** doom emacs update custom config updat
-
-- Open =git-bash.exe=
-
-- type to go the doom folder:
+- Go again to:
 
 #+BEGIN_SRC bash
 cd ~/.emacs.d/bin
 #+END_SRC
 
-- and run:
+- Just in case, run:
 
 #+BEGIN_SRC bash
 ./doom sync
 #+END_SRC
+
 
 
 
