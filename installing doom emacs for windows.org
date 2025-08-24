@@ -139,13 +139,13 @@ Download and install the fonts from the links below, then restart Emacs to see t
 
 ** Step 5 - How to Update (Emacs, Doom Emacs, Your Custom Config)
 
-** Emacs
+*** Emacs
 - Uninstall the old Emacs, example ~Uninstall-30.2.exe~.
 - Download and install the latest Emacs version.
 - Update your =Path= in Control Panel -> User Accounts -> Change my environment variables:
   - Select =Path=, =Edit=, and update to the new folder, e.g., ~C:\Program Files\Emacs\(new-version)\bin~.
 
-** Doom Emacs Upgrade and Rebuild
+*** Doom Emacs Upgrade and Rebuild
 After installing a new Emacs version, you should update Doom Emacs and rebuild it so that all packages are properly compiled.
 
 - Open =git-bash.exe=.
@@ -175,7 +175,7 @@ cd ~/.emacs.d/bin
 
 - Restart Emacs to complete the update and rebuild process.
 
-** Verify Your Setup
+*** Verify Your Setup
 - Run =doom doctor= to check your setup for any issues.  
   This command will:
   - Verify that all required tools are installed.
