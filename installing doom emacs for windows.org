@@ -4,28 +4,34 @@
 
 *** Emacs App
 
-Doom Emacs can't be used without Emacs app, so we need to download the installer from the website
+Doom Emacs requires the Emacs application to run, so you need to download and install it first.
+
+- Visit the official GNU Emacs download page:
 
 [[https://www.gnu.org/software/emacs/download.html][GNU Emacs Official Site]]
 
-Download it from ~nearby GNU mirror~
-Example: ~emacs-30.2-installer.exe~
+- Choose a nearby GNU mirror and download the installer.
+  Example: ~emacs-30.2-installer.exe~
 
-After that, install it normally and make sure the installation path is Program Files
-Example: ~C:\Program Files\Emacs~
+- Install Emacs normally and choose a path that is easy to locate.
+  Recommended: ~C:\Program Files\Emacs~
+
+- After installation, make sure the folder contains the Emacs binaries (~bin~), as Doom will use them to run Emacs.
 
 *** Git Tool
 
-We need Git to download Doom repo to our PC, and we will use it for other Emacs tools like Magit
+Git is required to download the Doom Emacs repository to your PC and is also used by many Emacs tools, such as Magit.
 
-Download it from here:
+- Download Git from the official site:
 
 [[https://git-scm.com/downloads/win][Git Official Site]]
 
-Standalone Installer:
-~Git for Windows/x64 Setup.~
+- Use the Standalone Installer:
+  Example: ~Git for Windows/x64 Setup.exe~
 
-Install it to ~C:\Tools~ and name it =Git=
+- During installation, choose a simple path for easier access.
+  Recommended: ~C:\Tools~
+- rename the folder to =Git= for consistency.
 
 *** fd Tool
 
