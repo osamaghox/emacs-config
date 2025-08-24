@@ -117,10 +117,8 @@ cd ~/.emacs.d/bin
 
 *** Emacs
 
-- uninstall the old emacs example ~Uninstall-30.2.exe~
-
-- then download the lastest app for windows
-
+- Uninstall the Old Emacs Example ~Uninstall-30.2.exe~
+- Then download the lastest app for windows
 - Go to Control Panel -> User Accounts -> Change my environment variables.
   - Select =Path=, =edit= and update your old path ~C:\Program Files\Emacs\(your-emacs-version)\bin~ folder and OK.
 
