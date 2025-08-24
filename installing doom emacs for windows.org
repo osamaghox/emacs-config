@@ -75,14 +75,51 @@ Click OK.
 
 *** Open =git-bash.exe=
 
-go to home folder by typing
+- go to home folder by typing:
 
+#+BEGIN_SRC bash
+cd ~
+#+END_SRC
 
+- then clone doom repo
 
+#+BEGIN_SRC bash
+git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
+#+END_SRC
+
+- After the download is completed, type:
+
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+- then install doom by typing
+
+#+BEGIN_SRC bash
+./doom install
+#+END_SRC
+
+If everything is fine, Doom is now installed
+
+go again to
+#+BEGIN_SRC bash
+cd ~/.emacs.d/bin
+#+END_SRC
+
+and Just in case run
+
+#+BEGIN_SRC bash
+./doom sync
+#+END_SRC
 
 how to update
 
+- Go to Control panel -> User Accounts -> Change my environment variables
 
+Select =Path=, =edit= and add ~C:\Users\USERNAME\.emacs.d\bin~, click OK -> OK.
+
+
+Select =Path=, =edit= and add your ~C:\Tools\fd~ folder and OK.  
 
 
 
