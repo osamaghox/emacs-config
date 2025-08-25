@@ -191,7 +191,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-fonts.el= module
 
-
 *** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
@@ -208,7 +207,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 ;; Helper function to download a font if missing
 (defun osama-download-font-if-missing (font-name url)
   "Download FONT-NAME from URL to `osama-icons-dir` if missing."
-  (let ((target (expand-file-name font-name osama-emacs-icons-dir)))
+  (let ((target (expand-file-name font-name osama-icons-dir)))
     (unless (file-exists-p target)
       (url-copy-file url target t)
       (message "Downloaded: %s" font-name))))
