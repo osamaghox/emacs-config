@@ -662,7 +662,7 @@ on how I use Org.
   :ensure nil ;; org is built-in
   :init
   ;; Org files directory
-  (setq org-directory (expand-file-name "~/Documents/org/"))
+  (setq org-directory (expand-file-name "~/osama-vault/org/"))
   ;; Depth for imenu
   (setq org-imenu-depth 5)
   :bind
