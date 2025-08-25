@@ -730,23 +730,23 @@ on how I use Org.
   :ensure t
   :config
   ;; Define leader key
-  (general-create-definer osama/leader-keys
+  (general-create-definer leader
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
     :global-prefix "C-SPC")
 
   ;; Command Palette
-  (osama/leader-keys
+  (leader
     ":"  '(execute-extended-command :which-key "Command Palette"))
 
   ;; Dired Menu
-  (osama/leader-keys
+  (leader
     "d"  '(:ignore t :which-key "dired")
     "dd" '(dired-jump :which-key "open dired here")
     "dp" '(project-dired :which-key "project dired"))
 
   ;; Buffers Menu
-  (osama/leader-keys
+  (leader
     "b"  '(:ignore t :which-key "buffers")
     "bb" '(consult-buffer :which-key "switch buffer")
     "bk" '(osama/kill-this-buffer :which-key "kill buffer")
@@ -755,7 +755,7 @@ on how I use Org.
     "bp" '(previous-buffer :which-key "prev buffer"))
 
   ;; Files Menu
-  (osama/leader-keys
+  (leader
     "f"  '(:ignore t :which-key "files")
     "fd" '(delete-file :which-key "delete file")
     "ff" '(find-file :which-key "find file")
@@ -765,20 +765,20 @@ on how I use Org.
     "fS" '(osama/save-all-buffers :which-key "save some buffers"))
 
   ;; Org Menu
-  (osama/leader-keys
+  (leader
     "o"  '(:ignore t :which-key "org")
     "oa" '(org-agenda :which-key "agenda")
     "oc" '(org-capture :which-key "capture")
     "ot" '(org-todo-list :which-key "todo list"))
 
   ;; Notes Menu
-  (osama/leader-keys
+  (leader
     "n"  '(:ignore t :which-key "notes")
     "nn" '(org-roam-node-find :which-key "find note")
     "ni" '(org-roam-node-insert :which-key "insert note"))
 
   ;; Emacs Config Menu
-  (osama/leader-keys
+  (leader
     "e"  '(:ignore t :which-key "emacs/config")
     "er" '(reload-init-file :which-key "reload config")
     "eR" '(restart-emacs :which-key "restart emacs")
@@ -786,7 +786,7 @@ on how I use Org.
     "ee" '(eval-expression :which-key "eval expression"))
 
   ;; Windows Menu
-  (osama/leader-keys
+  (leader
     "w"  '(:ignore t :which-key "windows")
     "wh" '(windmove-left :which-key "move left")
     "wl" '(windmove-right :which-key "move right")
@@ -804,7 +804,7 @@ on how I use Org.
     "w=" '(balance-windows :which-key "balance"))
 
   ;; Search Menu
-  (osama/leader-keys
+  (leader
     "s"  '(:ignore t :which-key "search")
     "ss" '(consult-line :which-key "search in buffer")
     "sp" '(consult-ripgrep :which-key "search in project")
@@ -814,7 +814,7 @@ on how I use Org.
     "sl" '(consult-goto-line :which-key "jump to line"))
 
   ;; Toggles Menu
-  (osama/leader-keys
+  (leader
     "t"  '(:ignore t :which-key "toggles")
     "ts" '(hydra-text-scale/body :which-key "text scale")
     "tt" '(consult-theme :which-key "choose theme")
@@ -822,7 +822,7 @@ on how I use Org.
     "tw" '(visual-line-mode :which-key "word wrap"))
 
   ;; Text Menu
-  (osama/leader-keys
+  (leader
     "x"  '(:ignore t :which-key "text/editing")
     "xu" '(upcase-word :which-key "uppercase word")
     "xl" '(downcase-word :which-key "lowercase word")
@@ -830,7 +830,7 @@ on how I use Org.
     "xj" '(join-line :which-key "join lines"))
 
   ;; Help Menu
-  (osama/leader-keys
+  (leader
     "h"  '(:ignore t :which-key "helpful/documentation")
     "hf" '(helpful-function :which-key "describe function")
     "hk" '(helpful-key :which-key "describe key")
@@ -841,7 +841,7 @@ on how I use Org.
     "SPC" '(execute-extended-command :which-key "M-x"))
 
   ;; Perspective Menu
-  (osama/leader-keys
+  (leader
     "p"  '(:ignore t :which-key "perspectives")
     "ps" '(persp-switch :which-key "switch perspective")
     "pn" '(persp-next :which-key "next perspective")
@@ -850,6 +850,7 @@ on how I use Org.
     "pk" '(persp-kill :which-key "kill perspective")
     "pa" '(persp-add-buffer :which-key "add buffer to persp")
     "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
+
 #+end_src
 
 
