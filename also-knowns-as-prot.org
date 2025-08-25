@@ -671,7 +671,7 @@ on how I use Org.
     ("C-c o" . org-open-at-point-global))
   :config
   ;; Fold indicator
-  (setq org-ellipsis "⮧")
+  (setq org-ellipsis "[...]")
   ;; Basic appearance options
   (setq org-hide-emphasis-markers t) ; hide *bold* / /italic/ markers
   (setq org-hide-leading-stars t)    ; hide extra stars in headings
