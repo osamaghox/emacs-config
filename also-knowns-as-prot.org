@@ -122,6 +122,10 @@ This is where I define the Lisp macros used in my setup and load all the invidiu
 
 (defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
   "This directory houses all of the built-in Osama Emacs modules.")
+
+;; Load all .el files from modules directory
+(dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
+  (load file nil 'nomessage))
 #+end_src
 
 ** The =init.el= settings for packages (=package.el=)
