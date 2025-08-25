@@ -1,0 +1,212 @@
+
+# Doom Emacs Native in Windows
+
+## Step 1 - Installing Important tools
+
+
+### GNU Emacs
+
+Doom Emacs requires the Emacs application to run, so you need to download and install it first.
+
+-   Visit the official GNU Emacs download page:
+
+[GNU Emacs Official Site](https://www.gnu.org/software/emacs/download.html)
+
+-   Choose a nearby GNU mirror and download the installer.
+    Example: `emacs-30.2-installer.exe`
+
+-   Install Emacs normally and choose a path that is easy to locate.
+    Recommended: `C:\Program Files\Emacs`
+
+-   After installation, make sure the folder contains the Emacs binaries (`bin`), as Doom will use them to run Emacs.
+
+### Git Tool
+
+Git is required to download the Doom Emacs repository to your PC and is also used by many Emacs tools, such as Magit.
+
+-   Download Git from the official site:
+
+[Git Official Site](https://git-scm.com/downloads/win)
+
+-   Use the Standalone Installer:
+    Example: `Git for Windows/x64 Setup.exe`
+
+-   During installation, choose a simple path for easier access, Recommended: `C:\Tools`
+-   rename the folder to `Git` for consistency.
+
+### fd Tool
+
+The `fd` tool is used for fast file name searches, which makes it very useful in Emacs for quickly finding files.
+
+-   Download it from the official releases page:
+
+[fd releases on GitHub](https://github.com/sharkdp/fd/releases)
+
+-   Make sure to download the `windows-gnu` version.
+-   Extract the folder to a convenient location, Recommended: `C:\Tools`
+-   rename the folder to `fd` for consistency.
+
+### ripgrep Tool
+
+The `ripgrep` tool allows you to search for text inside files very efficiently. It is especially useful for searching code, configurations, or large documents within Emacs.
+
+-   Download it from the official releases page:
+
+[ripgrep releases on GitHub](https://github.com/BurntSushi/ripgrep/releases)
+
+-   Make sure to download the `windows-gnu` version.
+-   Extract the folder to a convenient location, Recommended: `C:\Tools`
+-   rename the folder to `ripgrep` for consistency.
+
+## Step 2 - Edit system environment variables
+
+When we install tools like fd or ripgrep, Emacs (and Doom) needs to find them no matter where they are on the system.
+By adding their installation folders to the system environment variables (PATH), we make these tools accessible from any terminal or program without typing the full path every time.
+
+Go to Control Panel -> User Accounts -> Change my environment variables.
+
+New, type `HOME` and set your `C:\Users\USERNAME` and OK.
+Select `Path`, `Edit` and add your `C:\Program Files\Emacs\(your-emacs-version)\bin` folder and OK.
+Select `Path`, `Edit` and add your `C:\Tools\fd` folder and OK.
+Select `Path`, `Edit` and add your `C:\Tools\ripgrep` folder and OK.
+Click OK.
+
+## Step 3 - Clone Doom repo
+
+This step will guide you through downloading and installing Doom Emacs on your PC.
+
+Open `git-bash.exe`
+
+-   Go to your home folder:
+
+    cd ~
+
+-   Clone the Doom Emacs repository:
+
+    git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
+
+-   After the download is complete, navigate to the Doom bin folder:
+
+    cd ~/.emacs.d/bin
+
+-   Install Doom by running:
+
+    ./doom install
+
+-   If everything runs without errors, Doom Emacs is now installed.
+
+-   To make sure all packages and configurations are applied, run:
+
+    ./doom sync
+
+-   Run \`doom doctor\` to check your setup for any issues.  
+    This command will:
+    -   Verify that all required tools are installed.
+    -   Detect missing fonts, packages, or dependencies.
+    -   Provide warnings or suggestions to fix potential problems.
+
+    ./doom doctor
+
+-   Finally, add Doom’s bin folder to your system Path:
+    1.  Go to: Control Panel -> User Accounts -> Change my environment variables.
+    2.  Select `Path`, click `Edit`, and add:
+        `C:\Users\USERNAME\.emacs.d\bin`
+    3.  Click OK to save changes.
+
+**Now you can start Emacs, and you should see the Doom dashboard!**
+
+## Step 4 - Install Nerd Icons & All The Icons Fonts
+
+To make sure all icons in Emacs display correctly, you need to install additional fonts. These fonts provide the symbols used in themes, modelines, and various packages. Without them, some icons may appear as empty boxes or incorrect characters.
+
+-   ****Nerd Fonts:**** A collection of patched fonts including popular icon sets.
+-   ****All The Icons Fonts:**** Provides extra icons used by packages like \`all-the-icons.el\`.
+
+Download and install the fonts from the links below, then restart Emacs to see the icons properly.
+
+[Nerd Fonts on GitHub](https://github.com/rainstormstudio/nerd-icons.el/tree/main/fonts)
+[All The Icons Fonts on GitHub](https://github.com/domtronn/all-the-icons.el/tree/master/fonts)
+
+## Step 5 - How to Update (Emacs, Doom Emacs, Your Custom Config)
+
+### Emacs
+
+-   Uninstall the old Emacs, example `Uninstall-30.2.exe`.
+-   Download and install the latest Emacs version.
+-   Update your `Path` in Control Panel -> User Accounts -> Change my environment variables:
+    -   Select `Path`, `Edit`, and update to the new folder, e.g., `C:\Program Files\Emacs\(new-version)\bin`.
+
+### Doom Emacs Upgrade and Rebuild
+
+After installing a new Emacs version, you should update Doom Emacs and rebuild it so that all packages are properly compiled.
+
+-   Open `git-bash.exe`.
+-   Go to the Doom bin folder:
+
+    cd ~/.emacs.d/bin
+
+-   Run the upgrade command to update Doom and all its packages:
+
+    ./doom upgrade
+
+-   After upgrading, rebuild Doom so that all packages are compiled for the new Emacs version:
+
+    ./doom build
+
+-   Optionally, run `doom sync` to ensure all custom configurations are applied:
+
+    ./doom sync
+
+-   Restart Emacs to complete the update and rebuild process.
+
+
+### Verify Your Setup
+
+-   Run `doom doctor` to check your setup for any issues.  
+    This command will:
+    -   Verify that all required tools are installed.
+    -   Detect missing fonts, packages, or dependencies.
+    -   Provide warnings or suggestions to fix potential problems.
+
+    ./doom doctor
+
+
+### Doom Emacs Update Your Custom Config
+
+Updating Doom Emacs ensures that all your custom configurations, packages, and core files are synchronized with the latest changes. Running \`doom sync\` will:
+
+-   Install any new packages you added in your config.
+-   Remove packages you no longer use.
+-   Rebuild the autoloads to make your changes effective.
+-   Apply updates to Doom’s core files safely.
+
+After running this command, restart Emacs to see your updated configuration in effect.
+
+-   Open `git-bash.exe`
+
+-   Navigate to the Doom bin folder:
+
+    cd ~/.emacs.d/bin
+
+-   Run the synchronization command:
+
+    ./doom sync
+
+## Step 6 - Sync Your Custom Config Between Other Devices
+
+To keep your Doom Emacs setup consistent across multiple devices, you can synchronize your custom configuration folder.
+
+-   The folder to sync is: `C:\Users\USERNAME\.doom.d`
+    -   This contains your personal configuration files such as:
+        -   `config.el`
+        -   `init.el`
+        -   `packages.el`
+    -   It does NOT include Doom’s core files or installed packages.
+
+-   Recommended workflow:
+    1.  Sync only the `.doom.d` folder using a tool like Syncthing, Dropbox, or Git.
+    2.  On the other device, make sure Doom Emacs is installed (`.emacs.d`).
+    3.  Run \`doom sync\` after syncing to apply your custom settings and packages.
+
+-   Avoid syncing `.emacs.d` unless you want to replicate the entire Doom installation, which may cause conflicts between devices.
+
