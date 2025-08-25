@@ -693,7 +693,164 @@ on how I use Org.
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+;;; Evil-mode setup
+(use-package evil
+  :init
+  (setq evil-want-integration t          ;; integrate with other packages
+        evil-want-keybinding nil         ;; don't load default keybindings
+        evil-want-C-u-scroll t           ;; C-u scroll up
+        evil-want-C-i-jump nil)          ;; disable C-i jump
+  :config
+  (evil-mode 1)
+
+  ;; Global keybindings
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+
+  ;; Motion keys: move by visual lines
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  ;; Set initial state for specific modes
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;;; Evil-collection setup (integrates evil with other Emacs modes)
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+#+end_src
+
 *** The =osama-emacs-evil.el= section for general leader key
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+(use-package general
+  :ensure t
+  :config
+  ;; Define leader key
+  (general-create-definer osama/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  ;; Command Palette
+  (osama/leader-keys
+    ":"  '(execute-extended-command :which-key "Command Palette"))
+
+  ;; Dired Menu
+  (osama/leader-keys
+    "d"  '(:ignore t :which-key "dired")
+    "dd" '(dired-jump :which-key "open dired here")
+    "dp" '(project-dired :which-key "project dired"))
+
+  ;; Buffers Menu
+  (osama/leader-keys
+    "b"  '(:ignore t :which-key "buffers")
+    "bb" '(consult-buffer :which-key "switch buffer")
+    "bk" '(osama/kill-this-buffer :which-key "kill buffer")
+    "bm" '(kill-other-buffers :which-key "kill other buffers")
+    "bn" '(next-buffer :which-key "next buffer")
+    "bp" '(previous-buffer :which-key "prev buffer"))
+
+  ;; Files Menu
+  (osama/leader-keys
+    "f"  '(:ignore t :which-key "files")
+    "fd" '(delete-file :which-key "delete file")
+    "ff" '(find-file :which-key "find file")
+    "fr" '(consult-recent-file :which-key "recent files")
+    "fR" '(rename-file :which-key "rename file")
+    "fs" '(save-buffer :which-key "save file")
+    "fS" '(osama/save-all-buffers :which-key "save some buffers"))
+
+  ;; Org Menu
+  (osama/leader-keys
+    "o"  '(:ignore t :which-key "org")
+    "oa" '(org-agenda :which-key "agenda")
+    "oc" '(org-capture :which-key "capture")
+    "ot" '(org-todo-list :which-key "todo list"))
+
+  ;; Notes Menu
+  (osama/leader-keys
+    "n"  '(:ignore t :which-key "notes")
+    "nn" '(org-roam-node-find :which-key "find note")
+    "ni" '(org-roam-node-insert :which-key "insert note"))
+
+  ;; Emacs Config Menu
+  (osama/leader-keys
+    "e"  '(:ignore t :which-key "emacs/config")
+    "er" '(reload-init-file :which-key "reload config")
+    "eR" '(restart-emacs :which-key "restart emacs")
+    "eQ" '(save-buffers-kill-emacs :which-key "quit emacs")
+    "ee" '(eval-expression :which-key "eval expression"))
+
+  ;; Windows Menu
+  (osama/leader-keys
+    "w"  '(:ignore t :which-key "windows")
+    "wh" '(windmove-left :which-key "move left")
+    "wl" '(windmove-right :which-key "move right")
+    "wj" '(windmove-down :which-key "move down")
+    "wk" '(windmove-up :which-key "move up")
+    "wH" '(buf-move-left :which-key "move buffer left")
+    "wL" '(buf-move-right :which-key "move buffer right")
+    "wJ" '(buf-move-down :which-key "move buffer down")
+    "wK" '(buf-move-up :which-key "move buffer up")
+    "wv" '(split-window-right :which-key "vertical split")
+    "ws" '(split-window-below :which-key "horizontal split")
+    "wd" '(delete-window :which-key "delete this window")
+    "wD" '(delete-other-windows :which-key "delete other windows")
+    "w." '(hydra-windows/body :which-key "window management hydra")
+    "w=" '(balance-windows :which-key "balance"))
+
+  ;; Search Menu
+  (osama/leader-keys
+    "s"  '(:ignore t :which-key "search")
+    "ss" '(consult-line :which-key "search in buffer")
+    "sp" '(consult-ripgrep :which-key "search in project")
+    "sf" '(consult-fd :which-key "search with fd")
+    "sb" '(consult-buffer :which-key "search buffer")
+    "sm" '(consult-mark :which-key "jump to mark")
+    "sl" '(consult-goto-line :which-key "jump to line"))
+
+  ;; Toggles Menu
+  (osama/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "ts" '(hydra-text-scale/body :which-key "text scale")
+    "tt" '(consult-theme :which-key "choose theme")
+    "tl" '(display-line-numbers-mode :which-key "line numbers")
+    "tw" '(visual-line-mode :which-key "word wrap"))
+
+  ;; Text Menu
+  (osama/leader-keys
+    "x"  '(:ignore t :which-key "text/editing")
+    "xu" '(upcase-word :which-key "uppercase word")
+    "xl" '(downcase-word :which-key "lowercase word")
+    "xc" '(capitalize-word :which-key "capitalize word")
+    "xj" '(join-line :which-key "join lines"))
+
+  ;; Help Menu
+  (osama/leader-keys
+    "h"  '(:ignore t :which-key "helpful/documentation")
+    "hf" '(helpful-function :which-key "describe function")
+    "hk" '(helpful-key :which-key "describe key")
+    "hv" '(helpful-variable :which-key "describe variable")
+    "hi" '(info :which-key "info documentation")
+    "ho" '(org-info :which-key "org info")
+    "<f1>" '(helpful-at-point :which-key "help at point")
+    "SPC" '(execute-extended-command :which-key "M-x"))
+
+  ;; Perspective Menu
+  (osama/leader-keys
+    "p"  '(:ignore t :which-key "perspectives")
+    "ps" '(persp-switch :which-key "switch perspective")
+    "pn" '(persp-next :which-key "next perspective")
+    "pp" '(persp-prev :which-key "previous perspective")
+    "pr" '(persp-rename :which-key "rename perspective")
+    "pk" '(persp-kill :which-key "kill perspective")
+    "pa" '(persp-add-buffer :which-key "add buffer to persp")
+    "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
+#+end_src
 
 
 ** The =osama-emacs-dired.el= module
