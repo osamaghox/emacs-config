@@ -251,13 +251,13 @@ In this module I define everything broadly related to the aesthetics of Emacs.
         '((osama-fonts
            :default-family "Montserrat"
            :default-weight regular
-           :default-height 120
+           :default-height 100
            :variable-pitch-family "Montserrat"
-           :variable-pitch-height 1.2
+           :variable-pitch-height 1.0
            :fixed-pitch-family "Fira Code"
-           :fixed-pitch-height 120
+           :fixed-pitch-height 100
            :unicode-family "STC Forward"
-           :unicode-height 120))))
+           :unicode-height 100))))
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
