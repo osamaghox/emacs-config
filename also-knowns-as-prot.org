@@ -682,9 +682,10 @@ on how I use Org.
   (setq org-fontify-whole-block-delimiter-line t)) ; color entire block delimiter line
 
 (use-package org-superstar
+  :ensure t
   :hook (org-mode . org-superstar-mode)
   :config
-  ;; تغيير رمز النجمة إلى دائرة صغيرة
+  ;; Replace default heading stars with small circles
   (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
 
 #+end_src
