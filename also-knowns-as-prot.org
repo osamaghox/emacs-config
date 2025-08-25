@@ -459,10 +459,6 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
          ("M-y" . consult-yank-pop)))
 #+end_src
 
-
-
-
-
 *** The =osama-emacs-completion.el= section for ~orderless~
 
 ~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
@@ -686,10 +682,7 @@ on how I use Org.
   (setq org-fontify-whole-block-delimiter-line t)) ; color entire block delimiter line
 #+end_src
 
-
-
-
-
+** The =osama-emacs-system-custom= module
 
 ** The =osama-emacs-system-custom= module
 
