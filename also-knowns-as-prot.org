@@ -687,16 +687,29 @@ on how I use Org.
   :config
   ;; Replace default heading stars with small circles
   (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
-
 #+end_src
 
-** The =osama-emacs-system-custom= module
+** The =osama-emacs-evil.el= module
 
-** The =osama-emacs-system-custom= module
+*** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
 
-*** The =osama-emacs-android-custom= module
+*** The =osama-emacs-evil.el= section for general leader key
 
-*** The =osama-emacs-windows-custom= module
+
+** The =osama-emacs-dired.el= module
+
+** The =osama-emacs-windows.el= module
+
+
+
+
+** The =osama-emacs-system-custom.el= module
+
+** The =osama-emacs-system-custom.el= module
+
+*** The =osama-emacs-system-custom.el= module section for android
+
+*** The =osama-emacs-system-custom.el= module section for windows
 
 * Android Section For Personal Settings
 
