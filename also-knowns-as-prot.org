@@ -680,6 +680,13 @@ on how I use Org.
   (setq org-insert-heading-respect-content t) ; respect content when inserting heading
   (setq org-fontify-quote-and-verse-blocks t) ; highlight quote/verse
   (setq org-fontify-whole-block-delimiter-line t)) ; color entire block delimiter line
+
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :config
+  ;; تغيير رمز النجمة إلى دائرة صغيرة
+  (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
+
 #+end_src
 
 ** The =osama-emacs-system-custom= module
