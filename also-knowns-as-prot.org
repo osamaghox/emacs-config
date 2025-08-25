@@ -233,7 +233,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   :config
   (dolist (font
            '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
-             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf"))))
+             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf")))
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
