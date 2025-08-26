@@ -441,7 +441,32 @@ This module load basic configurations that apply to most facets of Emacs. Many o
 (global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for 
+*** The =osama-emacs-essentials.el= Section for ~Spacious padding~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package spacious-padding
+  :custom
+  (line-spacing 3)
+  (spacious-padding-mode 1))
+#+end_src
+
+
+
+*** The =osama-emacs-essentials.el= settings for ~text-mode~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package text-mode
+  :ensure
+  nil
+  :hook
+  (text-mode . visual-line-mode)
+  :init
+  (delete-selection-mode t)
+  :custom
+  (sentence-end-double-space nil)
+  (scroll-error-top-bottom t)
+  (save-interprogram-paste-before-kill t))
+#+end_src
 
 ** The =osama-emacs-completion.el= module
 
