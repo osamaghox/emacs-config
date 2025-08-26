@@ -171,9 +171,10 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-theme.el= section for ~theme~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
-(use-package doom-themes
-  :init
-  (load-theme 'doom-one t))
+(use-package ef-themes
+  :ensure t
+  :config
+  (load-theme 'ef-deuteranopia-light t))
 #+end_src
 
 *** The =osama-emacs-theme.el= section for ~modeline~
