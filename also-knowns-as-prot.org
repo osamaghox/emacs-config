@@ -712,7 +712,7 @@ on how I use Org.
       (set-face-attribute (car face) nil
                           :family family
                           :weight 'bold
-                          :height (cdr face))))))
+                          :height (cdr face)))))
 
 ;; 3. Hook it into org
 (add-hook 'org-mode-hook #'org-font-setup)
