@@ -714,6 +714,10 @@ on how I use Org.
                           :weight 'bold
                           :height (cdr face)))))
 
+  ;; Change Title Size
+   (custom-set-faces
+      '(org-document-title ((t (:height 2.0 :underline nil))))
+
 ;; 3. Hook it into org
 (add-hook 'org-mode-hook #'org-font-setup)
 
