@@ -249,15 +249,18 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   ;; Define your custom preset
   (setq fontaine-presets
         '((osama-fonts
-           :default-family "Montserrat"
+           :default-family "Fira Code"
            :default-weight regular
            :default-height 100
-           :variable-pitch-family "Montserrat"
+           :variable-pitch-family "Fira Code"
            :variable-pitch-height 1.0
            :fixed-pitch-family "Fira Code"
-           :fixed-pitch-height 100
-           :unicode-family "STC Forward"
-           :unicode-height 100))))
+           :fixed-pitch-height 100))))
+
+;; Arabic Font
+(when (member "STC Forward" (font-family-list))
+  (set-fontset-font t 'arabic (font-spec :family "STC Forward")))
+
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
