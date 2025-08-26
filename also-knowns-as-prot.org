@@ -13,7 +13,6 @@
 | M-x                                  | Description                                | Keybinding |
 |--------------------------------------+-------------------------------------------+------------|
 | describe-personal-keybindings        | Show all personal keybindings             |         |
-| org-store-link                        | Store a link in Org mode                   | C-c l      |
 |describe-keybindings                   |Show all current keybindings | C-h b
 
 
