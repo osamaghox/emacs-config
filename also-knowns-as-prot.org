@@ -509,10 +509,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ([remap describe-key]      . helpful-key))
 #+end_src
 
-** The =osama-emacs-dired.el= module
-
-** The =osama-emacs-windows.el= module
-
 ** The =osama-emacs-org.el= module
 
 org modern + org appear
@@ -723,6 +719,12 @@ on how I use Org.
 
 #+end_src
 
+*** The =osama-emacs-org.el= section for ~denote~ package
+
+*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
+
+
+
 ** The =osama-emacs-evil.el= module
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
@@ -888,10 +890,10 @@ on how I use Org.
 #+end_src
 
 
+
 ** The =osama-emacs-dired.el= module
 
 ** The =osama-emacs-windows.el= module
-
 
 
 
