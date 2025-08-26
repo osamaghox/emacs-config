@@ -14,7 +14,7 @@
 |--------------------------------------+-------------------------------------------+------------|
 | describe-personal-keybindings        | Show all personal keybindings             |         |
 |describe-keybindings                   |Show all current keybindings | C-h b
-
+|global-unset-key    | Unbind a global keybinding| |
 
 
 
