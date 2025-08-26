@@ -81,10 +81,10 @@ osama-emacs-test.el
  dever and config and init in use package
 
 
-** this is the best for refernce https://github.com/bbatsov/prelude
+** this is the best for refernce
 
 https://github.com/ianyepan/yay-evil-emacs/blob/master/config.org
-or https://github.com/larstvei/dot-emacs/blob/main/init.org
+https://github.com/pprevos/emacs-writing-studio/blob/master/init.el
 
 or read this to know basics `https://github.com/ashton314/emacs-bedrock/blob/main/`
 
