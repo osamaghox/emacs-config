@@ -8,8 +8,18 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* Basic Keybindings
+
+| M-x                                  | Description                                | Keybinding |
+|--------------------------------------+-------------------------------------------+------------|
+| describe-personal-keybindings        | Show all personal keybindings             |         |
+| org-store-link                        | Store a link in Org mode                   | C-c l      |
+|describe-keybindings                   |Show all current keybindings | C-h b
 
 
+
+
+* Random things
 -------------------------------- straight.el package manager ------------------------------
 ;; Bootstrap straight.el
 (defvar bootstrap-version)
@@ -39,16 +49,6 @@
   )
 -------------------------------- straight.el package manager ------------------------------
 
-
-
-
-
-
-
-
-
-* النصائح الأهم لي:
-
 ** lazy loading use-packages
 
 ** use package for melpa
@@ -64,9 +64,6 @@ if we need to write araibc in emacs we cant use emacs keymaps while in arabic la
 
 بعد ما كملنا اللغة بنشوف اننا محتاجين خط عربي لذلك سنتخدم ..... الخ
 -------------
-
-
-
 
 ** اي وظيفة جديدة داخل emacs
 
