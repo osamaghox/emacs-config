@@ -716,94 +716,96 @@ any configuration. The following sections contain further commentary
 on how I use Org.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-(use-package org
-  :ensure nil ;; org is built-in
-  :init
-  ;; Org files directory
-  (setq org-directory (expand-file-name "~/osama-vault/org/"))
-  ;; Depth for imenu
-  (setq org-imenu-depth 5)
-  ;; RET follows links
-  (setq org-return-follows-link t)
-  ;; Folding without empty line
-  (setq org-cycle-separator-lines 0)
-  ;; Respect content when inserting heading
-  (setq org-insert-heading-respect-content t)
-  ;; Ellipsis for folded sections
-  (setq org-ellipsis "[...]")
-  ;; Hide emphasis markers globally
-  (setq org-hide-emphasis-markers t)
-  ;; Hide extra stars in headings
-  (setq org-hide-leading-stars t)
-  ;; Highlight quote and verse blocks
-  (setq org-fontify-quote-and-verse-blocks t)
-  ;; Color the entire block delimiter line
-  (setq org-fontify-whole-block-delimiter-line t))
-  
-;; Useful keybindings
-(use-package org
-  :bind
-  (:map global-map
-        ("C-c l" . org-store-link)
-        ("C-c o" . org-open-at-point-global)))
+  (use-package org
+    :ensure nil ;; org is built-in
+    :init
+    ;; Org files directory
+    (setq org-directory (expand-file-name "~/osama-vault/org/"))
+    ;; Depth for imenu
+    (setq org-imenu-depth 5)
+    ;; RET follows links
+    (setq org-return-follows-link t)
+    ;; Folding without empty line
+    (setq org-cycle-separator-lines 0)
+    ;; Respect content when inserting heading
+    (setq org-insert-heading-respect-content t)
+    ;; Ellipsis for folded sections
+    (setq org-ellipsis "[...]")
+    ;; Hide emphasis markers globally
+    (setq org-hide-emphasis-markers t)
+    ;; Hide extra stars in headings
+    (setq org-hide-leading-stars t)
+    ;; Highlight quote and verse blocks
+    (setq org-fontify-quote-and-verse-blocks t)
+    ;; Color the entire block delimiter line
+    (setq org-fontify-whole-block-delimiter-line t))
+    
+  ;; Useful keybindings
+  (use-package org
+    :bind
+    (:map global-map
+          ("C-c l" . org-store-link)
+          ("C-c o" . org-open-at-point-global)))
 
-;; Show emphasis markers only while editing
-(use-package org-appear
-  :hook (org-mode . org-appear-mode))
+  ;; Show emphasis markers only while editing
+  (use-package org-appear
+    :ensure t
+    :hook (org-mode . org-appear-mode))
 
-;; Modern appearance
-(use-package org-modern
-  :hook (org-mode . org-modern-mode)
-  :custom
-  (org-modern-table nil)
-  (org-modern-keyword nil)
-  (org-modern-timestamp nil)
-  (org-modern-priority nil)
-  (org-modern-checkbox nil)
-  (org-modern-tag nil)
-  (org-modern-block-name nil)
-  (org-modern-footnote nil)
-  (org-modern-internal-target nil)
-  (org-modern-radio-target nil)
-  (org-modern-statistics nil)
-  (org-modern-progress nil))
+  ;; Modern appearance
+  (use-package org-modern
+    :ensure t
+    :hook (org-mode . org-modern-mode)
+    :custom
+    (org-modern-table nil)
+    (org-modern-keyword nil)
+    (org-modern-timestamp nil)
+    (org-modern-priority nil)
+    (org-modern-checkbox nil)
+    (org-modern-tag nil)
+    (org-modern-block-name nil)
+    (org-modern-footnote nil)
+    (org-modern-internal-target nil)
+    (org-modern-radio-target nil)
+    (org-modern-statistics nil)
+    (org-modern-progress nil))
 
-;; Superstar bullets
-(use-package org-superstar
-  :ensure t
-  :hook (org-mode . org-superstar-mode)
-  :config
-  ;; Replace default heading stars with custom bullets
-  (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
+  ;; Superstar bullets
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :config
+    ;; Replace default heading stars with custom bullets
+    (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
 
-;; Font setup for org headings and bullets
-(defun org-font-setup ()
-  ;; Replace dashes with bullets
-  (font-lock-add-keywords 'org-mode
-    '(("^ *\\([-]\\) "
-       (0 (prog1 ()
-            (compose-region (match-beginning 1)
-                            (match-end 1) "•"))))))
-  ;; Set heading sizes
-  (let ((family (face-attribute 'default :family)))
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.0)
-                    (org-level-6 . 1.0)
-                    (org-level-7 . 1.0)
-                    (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil
-                          :family family
-                          :weight 'bold
-                          :height (cdr face)))))
-;; Change document title size
-(custom-set-faces
- '(org-document-title ((t (:height 2.0 :underline nil)))))
+  ;; Font setup for org headings and bullets
+  (defun org-font-setup ()
+    ;; Replace dashes with bullets
+    (font-lock-add-keywords 'org-mode
+      '(("^ *\\([-]\\) "
+         (0 (prog1 ()
+              (compose-region (match-beginning 1)
+                              (match-end 1) "•"))))))
+    ;; Set heading sizes
+    (let ((family (face-attribute 'default :family)))
+      (dolist (face '((org-level-1 . 1.2)
+                      (org-level-2 . 1.1)
+                      (org-level-3 . 1.05)
+                      (org-level-4 . 1.0)
+                      (org-level-5 . 1.0)
+                      (org-level-6 . 1.0)
+                      (org-level-7 . 1.0)
+                      (org-level-8 . 1.0)))
+        (set-face-attribute (car face) nil
+                            :family family
+                            :weight 'bold
+                            :height (cdr face)))))
+  ;; Change document title size
+  (custom-set-faces
+   '(org-document-title ((t (:height 2.0 :underline nil)))))
 
-;; Hook font setup into org-mode
-(add-hook 'org-mode-hook #'org-font-setup)
+  ;; Hook font setup into org-mode
+  (add-hook 'org-mode-hook #'org-font-setup)
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~denote~ package
