@@ -10,6 +10,43 @@
 
 
 
+-------------------------------- straight.el package manager ------------------------------
+;; Bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/misc/bootstrap.el")
+      (goto-char (point-min))
+      (erase-buffer)
+      (insert-buffer-substring)
+      (write-file bootstrap-file)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Configure use-package to use straight.el
+(straight-use-package 'use-package)
+(setq use-package-always-ensure t)
+
+
+(use-package punch-line
+  :straight (punch-line :host github :repo "konrad1977/punch-line")
+  :config
+  ;; هنا تضع أي إعدادات خاصة بالحزمة
+  ;; (punch-line-mode 1)
+  )
+-------------------------------- straight.el package manager ------------------------------
+
+
+
+
+
+
+
+
+
 * النصائح الأهم لي:
 
 ** lazy loading use-packages
