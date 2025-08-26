@@ -687,6 +687,33 @@ on how I use Org.
   :config
   ;; Replace default heading stars with small circles
   (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
+
+;; 2. org fonts setup
+(defun org-font-setup ()
+  ;; Replace dashes with bullets
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 ()
+                                  (compose-region (match-beginning 1)
+                                                  (match-end 1) "•"))))))
+  ;; Headings
+  (let ((family (face-attribute 'default :family)))
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil
+                          :family family
+                          :weight 'bold
+                          :height (cdr face))))))
+
+;; 3. Hook it into org
+(add-hook 'org-mode-hook #'org-font-setup)
+
 #+end_src
 
 ** The =osama-emacs-evil.el= module
