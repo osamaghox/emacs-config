@@ -1038,6 +1038,8 @@ generate links in titlecase for attachments."
 
 ** The =osama-emacs-window.el= module
 
+*** The =osama-emacs-window.el= section for windows
+
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-window.el" :mkdirp yes
 (use-package emacs
   :bind
@@ -1063,6 +1065,31 @@ generate links in titlecase for attachments."
    ("C-c w k" . windmove-up)
    ("C-c w j" . windmove-down)))
 #+end_src
+
+*** The =osama-emacs-window.el= section for ~tabs~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-window.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Enable Tab Bar Mode globally
+  (tab-bar-mode 1)
+  
+  ;; Optional settings
+  (setq tab-bar-show t                ;; always show tab bar
+        tab-bar-new-tab-choice "*scratch*"  ;; default buffer for new tabs
+        tab-bar-tab-name-truncated-max 20   ;; max tab name length
+        tab-bar-close-button-show nil       ;; hide close button on tabs
+        tab-bar-back-button-show nil))      ;; hide back button
+
+  ;; Optional keybindings
+  :bind
+  (("C-c t n" . tab-new)         ;; Create new tab
+   ("C-c t c" . tab-close)       ;; Close current tab
+   ("C-c t o" . tab-next)        ;; Go to next tab
+   ("C-c t p" . tab-previous)))  ;; Go to previous tab
+#+end_src
+
 
 ** The =osama-emacs-system-custom.el= module
 
