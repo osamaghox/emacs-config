@@ -1198,7 +1198,7 @@ generate links in titlecase for attachments."
   (setq dashboard-shortcut-list
         '(("SPC f r" . recents)
           ("SPC f p" . projects)
-          ("SPC f b" . bookmarks)))))
+          ("SPC f b" . bookmarks))))
 #+end_src
 
 
