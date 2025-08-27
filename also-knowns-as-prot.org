@@ -1058,7 +1058,7 @@ generate links in titlecase for attachments."
 (use-package general
   :config
   (general-define-key
-   :keymaps '(normal insert visual emacs)
+   :keymaps 'normal
    "SPC"   (general-simulate-key "C-c")
    "C-SPC" (general-simulate-key "C-c")))
 #+end_src
