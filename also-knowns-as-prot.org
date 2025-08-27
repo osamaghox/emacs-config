@@ -18,6 +18,11 @@
 | emacs       | e   |
 | notes       | n   |
 | org         | o   |
+| org agenda      | o a |
+| org capture      | o a |
+| org clocking      | o a |
+| org export      | o a |
+| agenda      | o a |
 | agenda      | o a |
 | files       | f   |
 | buffers     | b   |
@@ -566,6 +571,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c b b" . consult-buffer)
    ("C-c b B" . consult-switch-buffer)
    ("C-c h o" . consult-outline)
+   ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
    ("C-c t t" . consult-theme)
