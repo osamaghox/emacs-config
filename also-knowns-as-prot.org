@@ -265,6 +265,34 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (spacious-padding-mode 1))
 #+end_src
 
+*** The =osama-emacs-theme.el= Section for ~Toggle Transparency~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Ensure initial frame is fully opaque
+  (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+
+  ;; Function to toggle transparency
+  (defun osama-toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (or (eql (cond ((numberp alpha) alpha)
+                          ((numberp (cdr alpha)) (cdr alpha))
+                          ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+               (null alpha))  ;; if alpha is not set previously
+           '(95 . 90)
+         '(100 . 100)))))
+
+  ;; Bind the function to a shortcut
+  :bind
+  (("C-c t o" . osama-toggle-transparency)))
+#+end_src
+
 *** The =osama-emacs-theme.el= section for ~theme~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
