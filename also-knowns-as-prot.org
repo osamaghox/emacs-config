@@ -1093,6 +1093,28 @@ generate links in titlecase for attachments."
 
 ** The =osama-emacs-dired.el= module
 
+(use-package dired
+  :ensure nil ;; built-in package
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-alh") ;; human-readable sizes
+  (dired-dwim-target t)           ;; smart target when copying/moving
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'top)
+  (dired-auto-revert-buffer t)    ;; auto refresh on changes
+  :bind
+  (("C-c d j" . dired-jump)
+   ("C-c d" . dired)))
+
+(use-package dired-x
+  :ensure nil
+  :after dired
+  :config
+  (setq dired-omit-files "^\\.?#\\|^\\.")) ;; hide clutter files like .#temp
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
 ** The =osama-emacs-windows.el= module
 
 
