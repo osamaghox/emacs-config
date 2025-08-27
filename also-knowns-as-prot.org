@@ -330,6 +330,9 @@ This module load basic configurations that apply to most facets of Emacs.
 ;; Visible bell
 (setq visible-bell t)
 
+;; Arabic Layout
+(setq default-input-method "arabic")
+
 ;; Show current column number
 (column-number-mode)
 
@@ -520,10 +523,19 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package consult
-  :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
-         ("C-M-j" . consult-switch-buffer)
-         ("M-y" . consult-yank-pop)))
+  :bind
+  (("C-c s s" . consult-line)
+   ("C-c s r" . consult-ripgrep)
+   ("C-c s l" . consult-line-multi)
+   ("C-c f f" . consult-find)
+   ("C-c f r" . consult-recent-file)
+   ("C-c f m" . consult-file-externally)
+   ("C-c b b" . consult-buffer)
+   ("C-c b B" . consult-switch-buffer)
+   ("C-c h o" . consult-outline)
+   ("C-c m m" . consult-mode-command)
+   ("C-c m l" . consult-minor-mode)
+   ("C-c y y" . consult-yank-pop)))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~orderless~
@@ -543,8 +555,8 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package embark
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim))
+  :bind (("C-c ." . embark-act)
+         ("C-c ;" . embark-dwim))
   :init
   (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
@@ -566,10 +578,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package helpful
   :bind
-  ([remap describe-function] . helpful-function)
-  ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key]      . helpful-key))
+  (("C-c h f" . helpful-function)   ;; Describe function
+   ("C-c h c" . helpful-command)    ;; Describe command
+   ("C-c h v" . helpful-variable)   ;; Describe variable
+   ("C-c h k" . helpful-key)))      ;; Describe key
 #+end_src
 
 ** The =osama-emacs-org.el= module
