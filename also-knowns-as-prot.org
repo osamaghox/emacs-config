@@ -1059,8 +1059,7 @@ generate links in titlecase for attachments."
   :config
   (general-define-key
    :keymaps 'normal
-   "SPC"   (general-simulate-key "C-c")
-   "C-SPC" (general-simulate-key "C-c")))
+   "SPC"   (general-simulate-key "C-c")))
 #+end_src
 
 ** The =osama-emacs-dired.el= module
