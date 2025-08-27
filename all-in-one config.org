@@ -1,855 +1,147 @@
-# -*- after-save-hook: (org-babel-tangle); before-save-hook: (delete-trailing-whitespace)-*-
+#+title: GNU Emacs configuration
+#+author: Osama Ghourab
+#+email: osamaghox@gmail.com
+#+language: en
+#+options: ':t toc:nil num:t author:t email:t
+#+startup: content indent
+#+macro: latest-export-date (eval (format-time-string "%F %T %z"))
+#+macro: word-count (eval (count-words (point-min) (point-max)))
+
+* Prefix Keys
+
+| Command     | Key |
+|-------------+-----|
+| help        | h   |
+| text        | x   |
+| search      | s   |
+| windows     | w   |
+| emacs       | e   |
+| notes       | n   |
+| org         | o   |
+| org agenda      | o a |
+| org capture      | o a |
+| org clocking      | o a |
+| org export      | o a |
+| agenda      | o a |
+| agenda      | o a |
+| files       | f   |
+| buffers     | b   |
+| dired       | d   |
+| toggles     | t   |
+| insert      | i   |
+| attachments | a   |
 
-#+AUTHOR: أسامة غراب
-#+DATE: 2025-07-12
 
-#+PROPERTY: header-args:emacs-lisp :exports code :results none :tangle ~/.emacs.d/init.el :mkdirp yes
+* Basic Keybindings
 
-*ملاحظة مهمة*
-لا تقم بكتابة اي مساحة او نص فوق السطر الأول الي فوق.
+| M-x                                  | Description                                | Keybinding |
+|--------------------------------------+-------------------------------------------+------------|
+| describe-personal-keybindings        | Show all personal keybindings             |         |
+|describe-keybindings                   |Show all current keybindings | C-h b
+|global-unset-key    | Unbind a global keybinding| |
 
-* Introduction
 
-هذا الملف يحتوي على إعداداتي الشخصية لـ Emacs باستخدام Org Mode،
-حيث كل كود بلغة Emacs Lisp (elisp) يتم تصديره تلقائيًا إلى ملف init.el عند حفظ ملف الـ config.org
 
-كما يتضمن شرحًا مفصلًا لإعداد نسخة محمولة من Emacs على نظام Windows،
-بالإضافة إلى تكامل Syncthing لمزامنة الإعدادات بين جميع الأجهزة.
+* Random things
+-------------------------------- straight.el package manager ------------------------------
+;; Bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/misc/bootstrap.el")
+      (goto-char (point-min))
+      (erase-buffer)
+      (insert-buffer-substring)
+      (write-file bootstrap-file)))
+  (load bootstrap-file nil 'nomessage))
 
-** Explanation of Export and Automatic Execution Settings
+;; Configure use-package to use straight.el
+(straight-use-package 'use-package)
+(setq use-package-always-ensure t)
 
-هذا القسم يشرح سطرين مهمين في أعلى الملف يقومان بتفعيل بعض السلوكيات المفيدة تلقائيًا عند فتح أو حفظ الملف.
 
-*** Local Variables for the File
+(use-package punch-line
+  :straight (punch-line :host github :repo "konrad1977/punch-line")
+  :config
+  ;; هنا تضع أي إعدادات خاصة بالحزمة
+  ;; (punch-line-mode 1)
+  )
+-------------------------------- straight.el package manager ------------------------------
 
-#+begin_example
-# -*- after-save-hook: (org-babel-tangle); before-save-hook: (delete-trailing-whitespace)-*-
-#+end_example
+** lazy loading use-packages
 
-- هذا السطر يُخبر Emacs بأن ينفّذ بعض الأوامر عند حفظ الملف أو قبل حفظه.
-- `after-save-hook: (org-babel-tangle)`
-  ⇒ بعد حفظ الملف، يقوم Emacs تلقائيًا بتشغيل `org-babel-tangle`، أي يتم استخراج كود Emacs Lisp من الملف إلى ملف `.el`.
-- `before-save-hook: (delete-trailing-whitespace)`
-  ⇒ قبل الحفظ، يتم حذف الفراغات الزائدة في نهاية الأسطر تلقائيًا.
+** use package for melpa
+واذا ما حصلت البكج تستخدم
+package-vc المدمج في emacs 
 
-*** Header Arguments for Code Blocks
+** الشرح بيكون حسب الاحتياجات زي اللعبة
 
-#+begin_example
-#+PROPERTY: header-args:emacs-lisp :exports code :results none :tangle ~/.emacs.d/init.el :mkdirp yes
-#+end_example
+-------------
+مثلًا
+if we need to write araibc in emacs we cant use emacs keymaps while in arabic layout so we need to make input mthod arabic with `C-\`
+(setq default-input-method "arabic")
 
-- هذا السطر يحدد الخصائص الافتراضية لجميع كتل الكود من نوع `emacs-lisp` في الملف.
-- `:exports code` ⇒ عند تصدير الملف (مثل PDF أو HTML)، سيتم تصدير الكود فقط بدون النتائج.
-- `:results none` ⇒ لا يتم عرض نتائج تنفيذ الكود داخل الملف.
-- :tangle ~/.emacs.d/init.el ⇒ سيتم تصدير الكود إلى الملف init.el في مجلد .emacs.d
-- `:mkdirp yes` ⇒ إذا لم يكن المجلد موجودًا، سيتم إنشاؤه تلقائيًا.
+بعد ما كملنا اللغة بنشوف اننا محتاجين خط عربي لذلك سنتخدم ..... الخ
+-------------
 
-*** Result
+** اي وظيفة جديدة داخل emacs
 
-عند حفظ الملف `config.org`:
-1. يتم تنظيفه من الفراغات الزائدة.
-2. يتم تحديث ملف `init.el` تلقائيًا بالكود المكتوب داخل كتل `#+begin_src emacs-lisp`.
+ما نكتب اسمها
 
-* Emacs Installation Guide
+osama-emacs-test.el
 
-** Windows
+نكتبها بدون emacs لاننا بالفعل داخل البرنامج
 
-نقوم بتنزيل Emacs نسخة Windows بصيغة ZIP من الموقع الرسمي:
-https://ftp.gnu.org/gnu/emacs/windows/
+** maybe dont use vim keys instead we will use caps lock as ctrl key and leader keys like vim does
 
-بعد فك الضغط، يجب أن تبدو بنية المجلد كالتالي:
+** ربما با نخلي اول شيء تثبيت البكجات
 
-#+begin_example
-PortableEmacs/               ;; ← المجلد الرئيسي، يظهر اسمه في اختصار Emacs في قائمة Start Menu
-├── bin/                     ;; ← مجلد العمل الأساسي (`~`) ويحتوي على جميع الملفات التنفيذية والإعدادات
-│   ├── runemacs.exe         ;; ← الملف التنفيذي لتشغيل Emacs
-│   ├── EmacsPortableLauncher.au3  ;; ← السكربت المسؤول عن تشغيل النسخة المحمولة من Emacs
-│   ├── .emacs.d/            ;; ← مجلد إعدادات Emacs الرئيسي (يشمل ملفات التهيئة والامتدادات والبيانات)
-│   │   └── init.el          ;; ← ملف الإعدادات الأساسي، يتم توليده تلقائيًا من config.org (Org-mode)
-│   └── sync-thing/          ;; ← مجلد مخصص لمزامنة الملفات باستخدام Syncthing
-│       ├── online-sync/     ;; ← مزامنة عبر الإنترنت باستخدام Syncthing (تتطلب اتصالاً خارجيًا)
-│       │   ├── emacs/       ;; ← ملفات Emacs القابلة للمزامنة (Org، إعدادات إضافية، بيانات مساعدة)
-│       │   │   ├── osama-org/    ;; ← ملفات Org الشخصية (ملاحظات، يوميات، أرشيف المعرفة)
-│       │   │   ├── emacs-data/   ;; ← بيانات Emacs الثابتة والمهمة مثل الخطوط (Fonts)، الأدوات (Tools)، الإعدادات الأساسية
-│       │   │   └── emacs-cache/  ;; ← ملفات مؤقتة وداعمة لـ Emacs: الحفظ التلقائي (Auto Save)، النسخ الاحتياطية (Backups)، بيانات الإضافات المؤقتة
-│       └── lan-sync/        ;; ← مزامنة محلية ضمن الشبكة الداخلية (LAN)
-│           ├── islamic/     ;; ← ملفات إسلامية: مصاحف صوتية، كتب، محتوى ديني مشترك
-│           ├── music/       ;; ← ملفات صوتية عامة (موسيقى، صوتيات) للمشاركة داخل الشبكة
-│           └── random/      ;; ← ملفات متنوعة وغير مصنفة ضمن مشاركة LAN
-#+end_example
+جميع البكجات يعمل لهن load قبل اعداداتهن علشان ما يصير زي 
+غلط بترتيب البكجات لان بعض البكجات ملكملات لبعض وايضًا جميع البكجات بنركز نخليه
+ dever and config and init in use package
 
-*** Installing AutoIt
 
-AutoIt هي أداة مجانية على نظام Windows تُستخدم لإنشاء سكربتات بسيطة لأتمتة المهام، مثل تشغيل البرامج، إنشاء اختصارات، التعامل مع الملفات، وتعيين متغيرات بيئة النظام.
+** this is the best for refernce
 
-سنستخدم AutoIt لإنشاء سكربت يقوم بما يلي:
-- تشغيل Emacs من مسار محدد.
-- تعيين متغير البيئة `HOME` إلى المجلد الحالي، لجعل Emacs يعمل كنسخة محمولة (Portable).
-- إنشاء اختصار تلقائي في قائمة Start Menu باسم يحتوي على اسم المجلد الأب (لتمييز النسخة).
+https://github.com/ianyepan/yay-evil-emacs/blob/master/config.org
+https://github.com/pprevos/emacs-writing-studio/blob/master/init.el
 
-**** Creating the Script File
+or read this to know basics `https://github.com/ashton314/emacs-bedrock/blob/main/`
 
-بعد تثبيت AutoIt، نقوم بإنشاء ملف جديد بالامتداد `.au3`، وليكن اسمه مثلًا:
-EmacsPortableLauncher.au3
+** make more links in `org config` with uuid
 
-#+begin_example
 
-#include <File.au3>
+** this best modeline like neovim
 
-Global $CurrentDir = @ScriptDir
-Global $ParentDir = StringLeft($CurrentDir, StringInStr($CurrentDir, "\", 0, -1) - 1)
-Global $FolderName = StringTrimLeft($ParentDir, StringInStr($ParentDir, "\", 0, -1))
+https://github.com/konrad1977/punch-line
 
-; اختصار السكربت نفسه
-Global $ScriptPath = @ScriptFullPath
-Global $ShortcutName = "Emacs (" & $FolderName & ").lnk"
-Global $ShortcutPath = @ProgramsDir & "\" & $ShortcutName
 
-; إنشاء أو تحديث الاختصار للسكربت
-If FileExists($ShortcutPath) Then
-    Local $sc = FileGetShortcut($ShortcutPath)
-    If @error _
-       Or StringLower($sc[0]) <> StringLower($ScriptPath) _
-       Or StringLower($sc[1]) <> StringLower($CurrentDir) Then
-        FileCreateShortcut($ScriptPath, $ShortcutPath, $CurrentDir, "", "Emacs Portable - " & $FolderName)
-    EndIf
-Else
-    FileCreateShortcut($ScriptPath, $ShortcutPath, $CurrentDir, "", "Emacs Portable - " & $FolderName)
-EndIf
+** add to every defun or devar a explain text to be showing in which key
 
-; تعيين HOME وتشغيل Emacs
-EnvSet("HOME", $CurrentDir)
-Run('"' & $CurrentDir & '\runemacs.exe"', $CurrentDir)
+** set themes like ef or prot theme and prot modeline
 
-#+end_example
+** تعلم من ترتيب prot تبعه ال org config
 
-ثم نحفظ ملف السكربت ووضعه بجوار
-runemacs.exe الي يوجد في مجلد bin
+** watch video again `advanced org litrate config in emacs` by prot
 
-** Android Port
-
-*** Objective
-تشغيل Emacs كواجهة رسومية على نظام أندرويد (دون الاعتماد على Termux فقط)، مع إمكانية استخدام بيئة GNU/Linux من خلال Termux، ومزامنة الإعدادات بين الهاتف والكمبيوتر باستخدام أداة SyncThing.
+** add more web links to the packages or sources or tutorials
 
-*** Removing Old Apps
-- احذف أي نسخة سابقة من =Emacs=.
-- احذف تطبيق =Termux= العادي إذا كنت قد ثبّته من F-Droid أو GitHub.
 
-*** Installing Correct Versions in Order
-1. ثبّت أولاً نسخة =Termux= المعدلة من:
-   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/termux/][Termux SourceForge]]
-2. افتح تطبيق =Termux= مرة واحدة (مهم جدًا).
-3. ثبّت بعدها =Emacs الرسومي= من:
-   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/][Emacs GUI SourceForge]]
-4. بعد التثبيت، افتح تطبيق =Emacs=.
+* The early initialisation of Emacs (=early-init.el=)
 
-*** Granting Full Permissions
-ادخل إلى إعدادات نظام أندرويد ثم:
-- إعدادات > التطبيقات > Emacs وTermux > فعّل جميع الصلاحيات التالية:
-  - صلاحية الوصول الكامل إلى جميع الملفات (لإصدارات Android 11 فأعلى): =Special app access > All files access=
-  - صلاحية الوصول إلى التطبيقات المثبّتة.
-  - صلاحيات الخلفية والإشعارات، وغيرها حسب الحاجة.
+This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
 
-*** Stop VPN Before Updating Termux
-قبل تنفيذ الأمر التالي، تأكد من إيقاف تشغيل =VPN= بشكل كامل:
+** The =early-init.el= section to set PATH and system tools
 
-#+BEGIN_EXAMPLE
-pkg update
-#+END_EXAMPLE
-
-*** Opening Terminal Inside Emacs
-بعد فتح Emacs، نفّذ الأمر التالي:
-
-#+BEGIN_EXAMPLE
-M-x shell
-#+END_EXAMPLE
-
-الطرفية الآن مرتبطة ببيئة Termux ويمكنك تنفيذ أوامر مثل:
-
-#+BEGIN_EXAMPLE
-pkg install git
-#+END_EXAMPLE
-
-*** Clean Symbolic Links from The Home Directory Before Creating New Ones
-
-قبل تنفيذ أوامر `mkdir` و `ln -s`، من الأفضل التأكد من أن مجلد `~` لا يحتوي على روابط رمزية غير ضرورية قد تسبب تعارضًا لاحقًا.
-
-1. عرض جميع الروابط الرمزية فقط داخل مجلد Home (~):
-
-#+BEGIN_EXAMPLE
-find ~ -maxdepth 1 -type l
-#+END_EXAMPLE
-
-2. حذف جميع الروابط الرمزية داخل ~ فقط (وليس محتوى المجلدات الأصلية):
-
-#+BEGIN_EXAMPLE
-find ~ -maxdepth 1 -type l -exec rm -v {} \;
-#+END_EXAMPLE
-
-*** Linking Android Folders Inside Emacs
-
-من داخل الطرفية في Emacs، نفّذ أوامر الربط الرمزي التالية:
-
-#+BEGIN_EXAMPLE
-# إنشاء مجلد الوجهة إذا لم يكن موجودًا
-mkdir -p /data/data/org.gnu.emacs/files
-
-# إنشاء مجلدات المصدر على sdcard إذا مش موجودة
-mkdir -p /sdcard/.emacs.d
-mkdir -p /sdcard/sync-thing
-mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts
-
-# رابط sdcard/.emacs.d
-rm -rf /data/data/org.gnu.emacs/files/.emacs.d
-ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
-
-# رابط sdcard/sync-thing
-rm -rf /data/data/org.gnu.emacs/files/sync-thing
-ln -s /sdcard/sync-thing /data/data/org.gnu.emacs/files/sync-thing
-
-# إنشاء مجلد fonts قبل الربط
-mkdir -p /data/data/org.gnu.emacs/files/fonts
-
-# رابط مجلد الخطوط
-rm -rf /data/data/org.gnu.emacs/files/fonts
-ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
-#+END_EXAMPLE
-
-*** Summary
-
-| Step | Description                           |
-|-------+------------------------------------|
-|     1 | حذف النسخ القديمة من Emacs وTermux    |
-|     2 | تثبيت Termux أولًا، ثم Emacs            |
-|     3 | منح جميع الصلاحيات من إعدادات النظام      |
-|     4 | إيقاف VPN قبل تنفيذ أمر التحديث          |
-|     5 | تحديث Termux                       |
-|     6 | استخدام الطرفية داخل Emacs عبر M-x shell|
-|     7 | ربط مجلدات /sdcard/ داخل Emacs       |
-|     8 | حفظ إعداداتك في ملف config.org       |
-|    9 | إعداد init.el خاص بالهاتف             |
-|    10 | ربط مجلد الإعدادات بـ ~/.emacs.d        |
-
-*** Additional Notes
-
-- يمكنك استخدام [[https://syncthing.net][SyncThing]] لمزامنة الملف =org/config.org= عبر جميع أجهزتك.
-- يُستحسن دائمًا أخذ نسخة احتياطية من إعداداتك قبل أي تعديلات كبيرة أو تجارب جديدة.
-
-* Syncthing Installation & Configuration Guide
-
-هو برنامج *مزامنة ملفات مفتوح المصدر* يعمل بطريقة *نظير إلى نظير (P2P)*، مما يسمح لك بمزامنة الملفات والمجلدات بين أجهزتك المختلفة *مباشرة دون الحاجة إلى خوادم سحابية* مثل Google Drive أو Dropbox.
-
-** How Syncthing Works
-
-سنستخدم برنامج *Syncthing* لمزامنة ملفات Emacs بين جهازين حاسوب وهاتف محمول، بطريقة لا تتطلب اتصالًا مباشرًا بين الجهازين.
-
-*** Phone as a "Central Hub"
-
-لن يتم ربط الجهازين مباشرة، بل سيتم الربط على النحو التالي:
-
-  - *PC1 (حاسوب العمل)* → *الهاتف*
-  - *PC2 (حاسوب المنزل)* → *الهاتف*
-
-ولا يوجد اتصال مباشر بين:
-
-  - *PC1* ↔ *PC2*
-
-هذه الطريقة تفيد في الحالات التالية:
-
-  - عند عدم توفر اتصال دائم بين الحاسوبين.
-  - أو عند استخدام شبكات مختلفة (مثلاً العمل والبيت).
-  - أو إذا كنت تريد استخدام الهاتف كنقطة تحكم ومزامنة أساسية.
-
-*** General Idea
-
-  1. الهاتف يكون دائمًا قيد التشغيل ومتصلاً بالإنترنت.
-  2. عند تشغيل أي من الحواسيب، يتم المزامنة مع الهاتف فقط.
-  3. الهاتف بدوره يقوم بنقل التغييرات إلى الحاسوب الآخر عند اتصاله لاحقًا.
-
-** Windows
-
-تأكد من تطبيق هذه الخطوات على جميع أجهزة Windows التي ترغب في مزامنتها لضمان عمل Syncthing بشكل صحيح وفعّال.
-
-1. نقوم بتنزيل البرنامج للحاسوب من الرابط التالي
-   https://github.com/syncthing/syncthing/releases
-   syncthing-windows-amd64-x.x.x-rc.1.zip
-
-*** Creating Two Folders for Syncthing
-
-1. نقوم بإنشاء مجلدين باسمين مختلفين **ويجب أن تكون الأسماء كما هي بالضبط**، ثم نضع ملفات البرنامج داخل كل مجلد على حدة.
-الأسماء الضرورية للمجلدين هي:
-
-- *SyncthingPortableLan*
-
-هذه النسخة تقتصر على المزامنة داخل الشبكة المحلية فقط (LAN)، ولا تستخدم الإنترنت.
-
-- *SyncthingPortable*
-
-هذه نسخة تقوم بالمزامنة عبر الإنترنت وأيضًا عبر نفس الشبكة المحلية.
-مزامنة الملفات الكبيرة عبر الإنترنت قد تستهلك كمية كبيرة من البيانات، فانتبه لذلك.
-
-هذا الإجراء مهم حتى لا يتكرر اختصار التشغيل عند بدء النظام ولا يتكرر الاختصار في قائمة التشغيل.
-
-2. نسخ الملف [[file:Syncthing Portable Launcher.exe]] إلى كلا المجلدين.
-
-*** AutoIt Script (For Backup Only)
-
-#+begin_src autoit
-#include <File.au3>
-#include <MsgBoxConstants.au3>
-#include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
-#include <Array.au3>
-
-; —————— وسيط جديد لفتح المتصفح يدوياً ——————
-Global $openBrowser = False
-If $CmdLine[0] > 0 And StringLower($CmdLine[1]) = "-open" Then
-    $openBrowser = True
-EndIf
-
-; —————— المتغيرات الأساسية ——————
-Global $launcherPath     = @ScriptFullPath
-Global $currentDir       = @ScriptDir
-Global $folderName       = StringTrimLeft($currentDir, StringInStr($currentDir, "\", 0, -1))
-Global $startupPath      = @StartupDir
-Global $shortcutName     = "Syncthing Portable Launcher_" & $folderName & ".lnk"
-Global $shortcutFullPath = $startupPath & "\" & $shortcutName
-Global $syncthingExe     = $currentDir & "\syncthing.exe"
-Global $userDataDir      = $currentDir & "\user data"
-Global $configFile       = $userDataDir & "\config.xml"
-Global $firstRunFlag     = $userDataDir & "\firstrun.flag"
-; مسار قائمة Start Menu للمستخدم الحالي
-Global $programsPath     = @ProgramsDir
-Global $smShortcutName   = $folderName & ".lnk"
-Global $smShortcutPath   = $programsPath & "\" & $smShortcutName
-
-; —————— أنشئ مجلّد البيانات إذا لم يكن موجوداً ——————
-If Not FileExists($userDataDir) Then DirCreate($userDataDir)
-
-; —————— إنشاء/تحديث الاختصار في Startup بدون وسائط ——————
-If FileExists($shortcutFullPath) Then
-    Local $sc = FileGetShortcut($shortcutFullPath)
-    If @error _
-       Or StringLower($sc[0]) <> StringLower($launcherPath) _
-       Or StringLower($sc[1]) <> StringLower($currentDir) Then
-        FileCreateShortcut($launcherPath, $shortcutFullPath, $currentDir)
-    EndIf
-Else
-    FileCreateShortcut($launcherPath, $shortcutFullPath, $currentDir)
-EndIf
-
-; —————— إنشاء/تحديث الاختصار في قائمة Start Menu مع الوسيطة -open ——————
-If FileExists($smShortcutPath) Then
-    Local $sm = FileGetShortcut($smShortcutPath)
-    ; $sm[0]=target, [1]=working dir, [2]=args
-    If @error _
-       Or StringLower($sm[0]) <> StringLower($launcherPath) _
-       Or StringLower($sm[1]) <> StringLower($currentDir) _
-       Or StringLower($sm[2]) <> "-open" Then
-        FileCreateShortcut($launcherPath, $smShortcutPath, $currentDir, "-open", "", "", $folderName)
-    EndIf
-Else
-    FileCreateShortcut($launcherPath, $smShortcutPath, $currentDir, "-open", "", "", $folderName)
-EndIf
-
-; —————— دوال مساعدة ——————
-Func PortInUse($port)
-    Return RunWait(@ComSpec & " /c netstat -aon | findstr :" & $port, "", @SW_HIDE) = 0
-EndFunc
-
-Func _ProcessCloseByName($procName)
-    Local $pList = ProcessList($procName)
-    For $i = 1 To $pList[0][0]
-        ProcessClose($pList[$i][1])
-    Next
-    Sleep(1000)
-    $pList = ProcessList($procName)
-    For $i = 1 To $pList[0][0]
-        ProcessKill($pList[$i][1])
-    Next
-EndFunc
-
-Func GetGuiPortFromConfig()
-    If Not FileExists($configFile) Then Return 0
-    Local $lines = FileReadToArray($configFile)
-    If @error Then Return 0
-    For $i = 0 To UBound($lines)-1
-        If StringRegExp($lines[$i], '<address>127\.0\.0\.1:(\d+)</address>') Then
-            Local $m = StringRegExp($lines[$i], '<address>127\.0\.0\.1:(\d+)</address>', 1)
-            If IsArray($m) Then Return (Number($m[0]) = 8384) ? 0 : Number($m[0])
-        EndIf
-    Next
-    Return 0
-EndFunc
-
-Func FixConfigPorts()
-    Local $guiPort    = 0, $listenPort = "", $lines = [], $changed = False
-    Local $isFirstRun = Not FileExists($firstRunFlag)
-
-    If FileExists($configFile) Then
-        $lines = FileReadToArray($configFile)
-        If @error Then $lines = []
-    EndIf
-
-    If $isFirstRun Then
-        Local $res = ShowPortInputGUI()
-        $guiPort    = $res[0]
-        $listenPort = $res[1]
-        Local $hFlag = FileOpen($firstRunFlag, 2)
-        FileWrite($hFlag, "initialized")
-        FileClose($hFlag)
-    Else
-        $guiPort = GetGuiPortFromConfig()
-        If $guiPort = 0 Then $guiPort = 8385
-        For $i = 0 To UBound($lines)-1
-            If StringRegExp($lines[$i], '<listenAddress>tcp://.*:(\d+)</listenAddress>') Then
-                Local $m = StringRegExp($lines[$i], '<listenAddress>tcp://.*:(\d+)</listenAddress>', 1)
-                If IsArray($m) Then
-                    $listenPort = $m[0]
-                    ExitLoop
-                EndIf
-            EndIf
-        Next
-    EndIf
-
-    If UBound($lines) = 0 Then
-        Local $cfg = '<?xml version="1.0" encoding="utf-8"?>' & @CRLF & _
-                    '<configuration>' & @CRLF & _
-                    '  <gui enabled="true" tls="false">' & @CRLF & _
-                    '    <address>127.0.0.1:' & $guiPort & '</address>' & @CRLF & _
-                    '    <browser>never</browser>' & @CRLF & _
-                    '  </gui>' & @CRLF & _
-                    '  <options>' & @CRLF & _
-                    '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>' & @CRLF & _
-                    '  </options>' & @CRLF & _
-                    '</configuration>'
-        Local $f = FileOpen($configFile, 2)
-        FileWrite($f, $cfg)
-        FileClose($f)
-        Return
-    EndIf
-
-    For $i = 0 To UBound($lines)-1
-        If StringRegExp($lines[$i], '<address>127\.0\.0\.1:\d+</address>') Then
-            $lines[$i] = StringRegExpReplace($lines[$i], '<address>127\.0\.0\.1:\d+</address>', '<address>127.0.0.1:' & $guiPort & '</address>')
-            $changed = True
-        EndIf
-        If StringRegExp($lines[$i], '<browser>.*</browser>') Then
-            $lines[$i] = '    <browser>never</browser>'
-            $changed = True
-        EndIf
-        If StringRegExp($lines[$i], '<listenAddress>.*</listenAddress>') Then
-            $lines[$i] = '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>'
-            $changed = True
-        EndIf
-    Next
-
-    Local $idxGui = _ArraySearch($lines, '<gui.*>', 0, 0, 2)
-    If $idxGui <> -1 And Not StringRegExp($lines[$idxGui+1], '<browser>') Then
-        _ArrayInsert($lines, $idxGui + 1, '    <browser>never</browser>')
-        $changed = True
-    EndIf
-
-    Local $idxOpt = _ArraySearch($lines, '<options>', 0, 0, 2)
-    If $idxOpt <> -1 And Not StringRegExp($lines[$idxOpt+1], '<listenAddress>') Then
-        _ArrayInsert($lines, $idxOpt + 1, '    <listenAddress>' & ($listenPort = "" ? "default" : "tcp://0.0.0.0:" & $listenPort) & '</listenAddress>')
-        $changed = True
-    EndIf
-
-    If $changed Then
-        Local $f = FileOpen($configFile, 2)
-        For $i = 0 To UBound($lines)-1
-            FileWriteLine($f, $lines[$i])
-        Next
-        FileClose($f)
-    EndIf
-EndFunc
-
-Func ShowPortInputGUI()
-    Local $gui = GUICreate("إعداد المنافذ", 400, 200)
-    GUICtrlCreateLabel("GUI Port:",     20,  30, 120)
-    Local $iGui = GUICtrlCreateInput("8385", 150, 25, 200, 25)
-    GUICtrlCreateLabel("Listen Port:",  20,  80, 120)
-    Local $iLis = GUICtrlCreateInput("22001",150, 75, 200, 25)
-    Local $ok   = GUICtrlCreateButton("موافق", 150,130,100)
-    GUISetState()
-    While 1
-        Switch GUIGetMsg()
-            Case $GUI_EVENT_CLOSE
-                ExitLoop
-            Case $ok
-                Local $g = GUICtrlRead($iGui), $l = GUICtrlRead($iLis)
-                If Not StringIsDigit($g) Or Number($g) = 8384 Or Number($g) < 1024 Or Number($g) > 65535 Then
-                    MsgBox($MB_ICONERROR, "خطأ", "GUI Port غير صالح.")
-                    ContinueLoop
-                EndIf
-                If $l <> "" Then
-                    If Not StringIsDigit($l) Or Number($l) = 22000 Or Number($l) < 1024 Or Number($l) > 65535 Then
-                        MsgBox($MB_ICONERROR, "خطأ", "Listen Port غير صالح.")
-                        ContinueLoop
-                    EndIf
-                EndIf
-                GUIDelete($gui)
-                Local $result[2] = [Number($g), $l]
-                Return $result
-        EndSwitch
-    WEnd
-    GUIDelete($gui)
-    Local $default[2] = [8385, ""]
-    Return $default
-EndFunc
-
-; —————— نقطة الانطلاق: تشغيل Syncthing ——————
-If FileExists($syncthingExe) Then
-    If Not FileExists($configFile) Then
-        Run('"' & $syncthingExe & '" --no-browser --no-console -home "' & $userDataDir & '"', "", @SW_HIDE)
-        Sleep(3000)
-        _ProcessCloseByName("syncthing.exe")
-    EndIf
-    FixConfigPorts()
-    Run('"' & $syncthingExe & '" --no-browser --no-console -home "' & $userDataDir & '"', "", @SW_HIDE)
-    If $openBrowser Then
-        Sleep(1000)
-        Local $port = GetGuiPortFromConfig()
-        If $port <> 0 Then ShellExecute("http://127.0.0.1:" & $port)
-    EndIf
-Else
-    MsgBox($MB_ICONERROR, "خطأ", "ملف syncthing.exe غير موجود.")
-EndIf
-#+end_src
-
-*** How to Run It
-
-1. إذا كان لديك نسخ مثبتة أخرى من Syncthing، يُفضّل تشغيلها جميعًا مرة واحدة قبل تشغيل النسخة الجديدة لأول مرة، حتى يتمكن البرنامج من اكتشاف المنافذ المفتوحة ويتجنب التعارض بينها.
-2. فتح البرنامج عبر =Syncthing Portable Launcher.exe= وليس =syncthing.exe=
-3. بعد تشغيل السكربت، ستظهر لك واجهة **GUI** تطلب منك إدخال قيم *GUI Port* و *Listen Port*.
-
-4. قم بإدخال القيم التالية (اختياري، ولكن يُفضل لتجنب الالتباس):
-
-- *GUI Port:*
-  هذا هو المنفذ الذي تُفتح عليه واجهة التحكم في المتصفح.
-  - SyncthingPortable (المزامنة عبر الإنترنت): 8000 (كمثال)
-  - SyncthingPortableLan (المزامنة داخل الشبكة المحلية فقط): 9000 (كمثال)
-
-- *Listen Port:*
-  هذا هو المنفذ الذي يستخدمه Syncthing للتواصل مع الأجهزة الأخرى.
-  - SyncthingPortable: 28000 (كمثال)
-  - SyncthingPortableLan: 29000 (كمثال)
-
-#+BEGIN_QUOTE
-ملاحظة: يمكنك اختيار أرقام منافذ أخرى حسب حاجتك، مع التأكد من عدم تعارضها مع برامج أخرى.
-#+END_QUOTE
-
-5. بعد فتح الواجهة، قم بالخطوات التالية:
-
-- ستظهر لك واجهة Syncthing مثل هذه [[file:Pasted image 20250216231255.png]]
-- لإضافة جهاز آخر، يمكنك إظهار *QR Code* وتصويره من هاتفك إذا أردت.
-- إذا كنت تستخدم حاسوبًا آخر، اضغط أسفل الواجهة على *Add Remote Device*.
-- أدخل *Device ID* للجهاز الآخر، والذي يمكنك الحصول عليه من ذلك الجهاز عن طريق:
-
-  - الضغط فوق على *Actions*
-  - ثم اختيار *Show ID*
-
-- بعد إدخال الـ Device ID، اضغط على *Save*.
-
-6. إعدادات خاصة بمجلد SyncthingPortableLan فقط
-
-بعد ربط الجهازين معًا لأول مرة، نحتاج إلى ضبط إعدادات *SyncthingPortableLan* ليعمل فقط على الشبكة المحلية دون الاتصال بالإنترنت. لتنفيذ ذلك:
-
-  - افتح البرنامج وانتقل إلى:
-  `Actions` → `Settings` → `Connections`
-  - قم بإيقاف تشغيل الخيارين التاليين:
-    - *Global Discovery*
-    - *Enable Relaying*
-
-يكفي منع الاتصال بالإنترنت من طرف واحد (مثل الحاسوب)، لأن الطرف الآخر (الهاتف) لن يتمكن من الاتصال إذا لم يتمكن من الوصول إلى الجهاز الآخر عبر الإنترنت.
-
-*** Adding sync-thing Folder
-
-يُعد مجلد `sync-thing` المجلد الرئيسي لإعدادات المزامنة، ويجب وضعه داخل مجلد `bin` الخاص بـ Emacs، في المسار التالي:
-`~/sync-thing`
-
-يجب أن يحتوي هذا المجلد على مجلدين فرعيين:
-
-- `online-sync`
-- `lan-sync`
-
-وجود هذين المجلدين ضروري لعمل نظام المزامنة بشكل صحيح.
-
-  - في نسخة *SyncthingPortable*
-  سنحتاج إلى مجلدين داخل Emacs عند استخدام SyncthingPortable:
-
-  - online-sync
-
-  1. *General*
-
-     - قم بتحديد اسم داخل *Folder Label* يكون **OnlineSync**.
-     - قم بتحديد مسار المجلد (*online-sync*) داخل مجلد `sync-thing` الذي تريد مشاركته مع هاتفك.
-
-  2. *Sharing*
-
-     - اختر الأجهزة التي تريد مزامنتها معك.
-
-  3. *File Versioning*
-
-     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
-     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
-
-  5. *عمل Save*
-
-  - .emacs.d Only `init.el` File
-
-    1. *General*
-
-     - قم بتحديد اسم داخل *Folder Label* يكون **EmacsInitFile**.
-     - قم بتحديد مسار المجلد (*.emacs.d*) الذي تريد مشاركته مع هاتفك.
-	 - `.emacs.d/init.el → هذا الملف المطلوب مزامنته
-
-  2. *Sharing*
-
-     - اختر الأجهزة التي تريد مزامنتها معك.
-
-  3. *File Versioning*
-
-     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
-     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
-
-  4. *Ignore Patterns*
-
-     *لا يمكن تعديلها إلا بعد إنشاء المجلد لأول مرة، وبعدها يمكنك تعديلها بالضغط على "Edit".*
-
-- ضف الملف init.el فقط ليتم مزامنته عند العمل بوضع الاتصال بالإنترنت (Online)، وتجاهل باقي الملفات والمجلدات.
-
-       #+begin_example
-       !/init.el
-       *
-       #+end_example
-
-- في نسخة *SyncthingPortableLan*
-
-  - lan-sync
-
-  1. *General*
-
-     - قم بتحديد اسم داخل *Folder Label* يكون **LanSync**.
-     - قم بتحديد مسار المجلد (*lan-sync*) داخل مجلد `sync-thing` الذي تريد مشاركته مع هاتفك.
-
-  2. *Sharing*
-
-     - اختر الأجهزة التي تريد مزامنتها معك.
-
-  3. *File Versioning*
-
-     - اترك الإعداد على *TrashCan*، ثم اختر فترة الحفظ، ويفضل اختيار **0 يوم** لكي تبقى سلة المحذوفات موجودة دائمًا.
-     - عند التفعيل، سيظهر داخل المجلد المشارك مجلد باسم `stversions`.
-
-  5. *عمل Save*
-
-** Android
-
-1. نقوم بتنزيل تطبيق *Syncthing-Fork* من Github
-   https://github.com/Catfriend1/syncthing-android
-
-2. نقوم بفتحه وأعطاءه الصلاحيات المطلوبة
-
-3. ثم نخرج من التطبيق ونفتح اعدادت التطبيق من *Settings* الخاصة بالهاتف
-   - ثم نضغط على *Battery* ونخليه *No restrictions*
-   - ثم *Autostart* نفعل ☑️
-   - ثم *Allow restricted settings* نفعل ☑️
-
-4. نقوم بالضغط على كلمة Devices، ثم نقوم بإضافة الأجهزة المطلوبة إما عن طريق إدخال الكود الذي ظهر في كل حاسوب، أو عن طريق الضغط على أيقونة QR Code في التطبيق وتصوير الرمز من كل جهاز حاسوب على حدة.
-
-*** Adding sync-thing and .emacs.d Folders
-
-مجلد `sync-thing` هو المجلد الرئيسي لإعدادات المزامنة، ويُوضع في المسار:
-`/storage/emulated/0/sync-thing`
-وهو مرتبط برابط رمزي (symlink) بجانب مجلد `.emacs.d` الموجود في:
-`/storage/emulated/0/.emacs.d`
-
-مجلد `.emacs.d` يحتوي على ملفات إعدادات Emacs، وتم وضعه في هذا المسار لتجاوز قيود الوصول على أندرويد.
-
-يحتوي مجلد `sync-thing` على مجلدين فرعيين أساسيين وهما:
-
-- `online-sync`
-- `lan-sync`
-
-*** Add Folders
-
-- online-sync (Online)
-
-  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
-
-  - نكتب *Folder Label*، وهو الاسم الظاهر في تطبيق Syncthing فقط، ولنجعله: **Online-Sync**.
-
-  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته.
-    في هذه الحالة، سنستخدم رابطًا رمزيًا (symlink) يشير إلى المجلد الفعلي، ويكون المسار كما يلي:
-    `/storage/emulated/0/sync-thing/online-sync`
-
-    **ملاحظة:**
-    تطبيق Emacs (Android port) لا يمكنه الوصول مباشرة إلى المجلدات المحمية داخل المسار `/data`، بسبب نظام تشفير الملفات في أندرويد.
-    لذلك نقوم بإنشاء رابط رمزي (symlink) في مساحة التخزين الخارجية يشير إلى مجلد الإعدادات داخل التطبيق، حتى يتمكن Syncthing من مزامنته بشكل طبيعي.
-
-  - نضغط على *Devices*:
-    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
-    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
-      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
-    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
-
-  - نضغط على المجلد ثم على *File Versioning*:
-    - نختار: *TrashCan*
-    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
-
-  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
-
-  بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
-  وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
-
-- init.el (Online)
-
-  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
-
-  - نكتب *Folder Label*، وهو الاسم الظاهر في تطبيق Syncthing فقط، ولنجعله: **EmacsInitFile**.
-
-  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته.
-    في هذه الحالة، سنستخدم رابطًا رمزيًا (symlink) يشير إلى المجلد الفعلي، ويكون المسار كما يلي:
-    `/storage/emulated/0/.emacs.d/`
-
-    **ملاحظة:**
-    تطبيق Emacs (Android port) لا يمكنه الوصول مباشرة إلى المجلدات المحمية داخل المسار `/data`، بسبب نظام تشفير الملفات في أندرويد.
-    لذلك نقوم بإنشاء رابط رمزي (symlink) في مساحة التخزين الخارجية يشير إلى مجلد الإعدادات داخل التطبيق، حتى يتمكن Syncthing من مزامنته بشكل طبيعي.
-
-  - نضغط على *Devices*:
-    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
-    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
-      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
-    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
-
-  - نضغط على المجلد ثم على *File Versioning*:
-    - نختار: *TrashCan*
-    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
-
-  - لا تحتاج إلى إعداد قواعد التجاهل (ignore patterns) على الهاتف،
-    لأن هذه القواعد تم إعدادها مسبقًا في الحاسوب وتم مزامنتها تلقائيًا.
-
-  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
-
-  بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
-  وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
-
-- lan-sync (Offline)
-
-  نفتح تطبيق Syncthing ونضغط على أيقونة *Create Folder*.
-
-  - نكتب *Folder Label*، وهو الاسم الظاهر في التطبيق فقط، ولنجعله: **LanShare**.
-  - نحدد *Folder Path* لمسار المجلد المطلوب مزامنته، على النحو التالي:
-    `/storage/emulated/0/sync-thing/lan-sync`
-
-  - نضغط على *Devices*:
-    - نضيف جميع الأجهزة التي نرغب بمزامنتها.
-    - يمكن ذلك إما بإدخال الكود الذي يظهر في كل حاسوب،
-      أو باستخدام أيقونة *QR Code* وتصوير الكود الظاهر في كل جهاز على حدة.
-    - بعد الإضافة، نفعّل خيار ☑️ بجانب كل جهاز.
-
-  - نضغط على المجلد ثم على *File Versioning*:
-    - نختار: *TrashCan*
-    - نحدد فترة الاحتفاظ بـ **0 يوم** حتى تبقى سلة المحذوفات دائمًا.
-
-  - بعد إتمام جميع الخطوات، نضغط على ☑️ لحفظ المجلد وتفعيله.
-
-بعد إتمام الخطوات، ستظهر رسالة على الحاسوب تطلب الموافقة،
-وإذا كانت الخطوات من الهاتف، فستصلك رسالة من واجهة الويب الخاصة بالهاتف (Phone Web GUI) تُفيد بأن الجهاز الآخر يرغب في مشاركة مجلد معك لتقوم بالموافقة.
-
-** Important Notes About Syncthing
-
-- **لا تحذف ملف `.stignore`** من مجلد `.emacs.d`، لأنه يحتوي على إعدادات حيوية لتجاهل ملفات معينة.
-- Syncthing يعمل بالمزامنة ثنائية الاتجاه، لذا أي تغيير في جهاز ينعكس على الآخر.
-- إذا كان مجلد `sync-thing` فارغًا على الحاسوب ومليئًا على الهاتف، قد يتم حذف الملفات من الهاتف.
-- عند تشغيل ملف من الهاتف على الحاسوب، قد تظهر رسالة Out of Sync لأن الملف قيد الاستخدام. يجب إغلاق البرنامج المشغّل لإتمام المزامنة.
-- حافظ على اتصال الأجهزة أثناء التعديل كلما أمكن.
-- استخدم ميزة "نسخ الإصدار" (Versioning) لحفظ النسخ القديمة وعدم حذفها.
-- تجنب تعديل نفس الملفات على أجهزة غير متصلة لفترات طويلة أو في آن واحد.
-- عند الاتصال بنفس الشبكة، لا يتم استخدام الإنترنت.
-- الهاتف هو الجهاز الرئيسي لحفظ البيانات، تأكد من إتمام المزامنة عبره.
-- قم بعمل نسخة احتياطية شهرية على الكلاود أو فلاشة، بما في ذلك المجلد المشترك على الهاتف.
-
-* Very Important: Configure init.el with lexical-binding
-
-في هذا الجزء نهيّئ ملف إعدادات Emacs الرئيسي (`init.el`) مع تفعيل *الربط المعجمي* (`lexical-binding`) لتحسين الأداء والتحكم الأفضل في المتغيرات.
-
-كذلك، نمنع ظهور رسالة الترحيب عند تشغيل Emacs لجعل الواجهة أنظف وأسرع.
-
-وأخيرًا، نفعّل `debug-on-error` مما يسمح بظهور نافذة التصحيح (debugger) تلقائيًا عند حدوث أي خطأ، وهو مفيد أثناء تطوير الإعدادات أو اختبار الكود.
-
-#+begin_src emacs-lisp
-;;; init.el --- Emacs config -*- lexical-binding: t; -*-
-(setq inhibit-startup-message t)  ;; إخفاء رسالة الترحيب
-(setq debug-on-error t)           ;; تفعيل المصحح عند حدوث خطأ
-#+end_src
-
-* Getting Started
-
-- نضع ملف `config.org` داخل مجلد:
-`~/sync-thing/online-sync/emacs/config.org`
-- نقوم بفتح Emacs ثم نفتح ملف `config.org` من خلال الضغط على `C-x C-f` ثم اختيار المسار التالي:
-  `~/sync-thing/online-sync/emacs/config.org`
-
-** Local Variables Warning Message
-
-سيظهر لنا Buffer باسم `*Local Variables*` يحتوي على الرسالة التالية:
-
-#+begin_example
-The local variables list in config.org
-contains variables that are risky (**)
-
-Do you want to apply it?  You can type
-y  -- to apply the local variables list.
-n  -- to ignore the local variables list
-#+end_example
-
-- اكتب الحرف `y` ثم اضغط `Enter` للموافقة.
-
-*** What Does This Message Mean?
-
-هذه الرسالة تعني أن الملف يحتوي على متغيرات محلية (Local Variables) قد تُعتبر "غير آمنة" لأن بعضها ينفذ أوامر تلقائيًا، مثل:
-
-- `org-babel-tangle` (لتصدير الأكواد)
-- `delete-trailing-whitespace` (لحذف الفراغات الزائدة)
-
-Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالسماح بتنفيذ هذه الأوامر (`y`) أو تجاهلها (`n`).
-
-*** How to Automatically Bypass This Message?
-
-يمكننا تجاوز هذه الرسالة وعدم ظهورها مرة أخرى عن طريق إضافة الكود التالي داخل ملف الإعدادات `init.el` أو أي ملف Emacs Lisp يتم تحميله مع Emacs:
-
-#+begin_src emacs-lisp
-(setq safe-local-variable-values
-      '((after-save-hook . (org-babel-tangle))
-        (before-save-hook . (delete-trailing-whitespace))))
-#+end_src
-
-هذا الكود يقوم بإخبار Emacs أن هذه القيم المحلية (Local Variables) آمنة، وبالتالي لن يسألك مرة أخرى عند فتح ملفات تحتوي عليها.
-
-** How to Add Code to init.el Using Org-mode?
-
-لإضافة كود إلى ملف `init.el` من داخل ملف `config.org`، نقوم بكتابة **كتلة كود (src block)** من نوع `emacs-lisp`، مثل المثال التالي:
-
-#+begin_src emacs-lisp
-;; هنا نكتب الكود الذي نريده
-#+end_src
-
-أي كود نضعه داخل هذه الكتلة سيتم تصديره (tangle) تلقائيًا إلى ملف `init.el` عند الحفظ من خلال `C-x C-s`، إذا كنا قد فعلنا خاصية التانغل التلقائي.
-تسمى هذه "كتلة كود" أو بالإنجليزية: **code block** أو **src block**، وليست "كود" بحد ذاتها.
-
-* Setup tool paths per system in =early-init.el=
-هذا القسم يضبط مسارات الأدوات الخارجية في Emacs حسب نوع الجهاز:
-- **Android (Termux)**: إضافة مسارات أدوات Termux الافتراضية.
-- **Windows**: إضافة أدوات محمولة مثل Git و fd و ripgrep.
-
-#+begin_src emacs-lisp :tangle ~/.emacs.d/early-init.el :mkdirp yes
-;; كشف نوع النظام وإضافة المسارات المناسبة
+#+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
+;; Detect system type and add appropriate paths
 (let ((path-sep (if (eq system-type 'windows-nt) ";" ":")))
 
-  ;; إعدادات Android (Termux)
+  ;; Android (Termux) settings
   (when (string-equal system-type "android")
     (setenv "PATH" (format "%s%s%s"
                            "/data/data/com.termux/files/usr/bin"
@@ -860,66 +152,33 @@ Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالس�
                                       (getenv "LD_LIBRARY_PATH")))
     (push "/data/data/com.termux/files/usr/bin" exec-path))
 
-  ;; إعدادات Windows
+  ;; Windows settings
   (when (eq system-type 'windows-nt)
     ;; Git
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd")
-    (setenv "PATH" (concat (expand-file-name "~/sync-thing/online-sync/emacs/emacs-data/tools/git/cmd/")
-                           path-sep
-                           (getenv "PATH")))
+    (let ((tools-dir (expand-file-name "~/osama-emacs/emacs-data/tools/")))
+      (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+      (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
+                             path-sep
+                             (getenv "PATH")))
 
-    ;; fd
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/fd/")
+      ;; fd (file search tool)
+      (add-to-list 'exec-path (concat tools-dir "fd/"))
 
-    ;; ripgrep
-    (add-to-list 'exec-path "~/sync-thing/online-sync/emacs/emacs-data/tools/ripgrep/")))
+      ;; ripgrep
+      (add-to-list 'exec-path (concat tools-dir "ripgrep/")))))
 #+end_src
 
-* General Configuration
+* The main initialisation of Emacs (=init.el=)
 
-* Interactive Safe Init
+This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
-#+begin_src emacs-lisp
-;; ===== دالة التفاعل عند الخطأ =====
-(defun osama/interactive-safe-run (func)
-  "نفّذ FUNC، عند الخطأ يسأل المستخدم إذا يريد تخطيه أو التوقف."
-  (condition-case err
-      (funcall func)
-    (error
-     (if (y-or-n-p (format "حدث خطأ: %S. هل تريد تخطيه؟ " err))
-         (message "تم تخطي الخطأ واستمرار Emacs.")
-       (signal (car err) (cdr err))))))
+** The =init.el= settings for packages (=package.el=)
 
-;; ===== إعادة تعريف require للتعامل مع الأخطاء =====
-(defalias 'osama/original-require (symbol-function 'require))
+The =package.el= is built into Emacs and is perfectly fine for my
+use-case. We do not need to load it explicitly, as it will be called
+by ~use-package~ when it needs it
 
-(defun osama/require (&rest args)
-  "نسخة من require تلتقط الأخطاء وتسمح بالتخطي."
-  (osama/interactive-safe-run
-   (lambda () (apply 'osama/original-require args))))
-
-;; استبدال require الأصلي بالنسخة الجديدة
-(fset 'require 'osama/require)
-
-;; ===== إعادة تعريف use-package للتعامل مع الأخطاء =====
-(eval-when-compile (require 'use-package))
-
-(advice-add 'use-package :around
-            (lambda (orig &rest args)
-              (osama/interactive-safe-run
-               (lambda () (apply orig args)))))
-#+end_src
-
-** Package Management
-
-*** Melpa, org, elpa Package Management
-
-يمتلك Emacs مدير حزم مدمج، لكنه لا يجعل من السهل تثبيت الحزم تلقائيًا على نظام جديد عند تشغيل إعداداتك لأول مرة.
-تُعد الحزمة use-package أداة مفيدة جدًا تُستخدم في هذا الإعداد لتسهيل عملية تثبيت وتهيئة جميع الحزم الأخرى التي نستخدمها بشكل آلي.
-
-#+begin_src emacs-lisp
-(setq package-enable-at-startup nil)
-
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
 (require 'package)
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
@@ -927,280 +186,46 @@ Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالس�
         ("elpa"  . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;; تثبيت use-package إذا غير موجود
+;; Install use-package if missing
 (unless (package-installed-p 'use-package)
-  ;; ما نعمل refresh إلا إذا ما فيه بيانات
-  (unless package-archive-contents
-    (package-refresh-contents))
+  (package-refresh-contents)
   (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 #+end_src
 
-** Global Packages
+** The =init.el= entry point
 
-#+begin_src emacs-lisp
-(use-package perspective
-  :ensure t  ; use `:straight t` if using straight.el!
-  :bind (("C-x k" . persp-kill-buffer*))
-  :init
-  (persp-mode))
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+(defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
+  "The root dir of the Osama Emacs distribution.")
+
+(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
+  "This directory houses all of the built-in Osama Emacs modules.")
+
+;; Load all .el files from modules directory
+(dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
+  (load file nil 'nomessage))
 #+end_src
 
-** Basic & UI Configuration
+* The modules of my Emacs configuration
 
-*** Basic UI Setup
+In this module I define everything broadly related to the aesthetics of Emacs.
 
-إعدادات واجهة المستخدم الأساسية في Emacs.
+** The =osama-emacs-theme.el= module
 
-- تفعيل الجرس المرئي (visible bell) بدلاً من الصوتي.
-- عرض رقم العمود الحالي في الشريط السفلي.
-- تفعيل أرقام الأسطر بشكل عام، وتعطيلها في أوضاع معينة مثل `org-mode` و `term-mode`.
-- جعل مؤشر الكتابة خط عمودي.
-- تفعيل تمييز السطر الحالي.
+*** The =osama-emacs-theme.el= section for ~theme~
 
-#+begin_src emacs-lisp
-;; الجرس المرئي بدلاً من الصوتي
-(setq visible-bell t)
-
-;; عرض رقم العمود الحالي
-(column-number-mode)
-
-;; تفعيل أرقام الأسطر
-(global-display-line-numbers-mode t)
-
-;; تعطيل أرقام الأسطر في أوضاع محددة
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; جعل مؤشر الكتابة خط عمودي
-(setq-default cursor-type 'bar)
-
-;; تمييز السطر الحالي
-(global-hl-line-mode 1)
-#+end_src
-
-** Treemacs Package
-
-#+begin_src emacs-lisp
-(use-package treemacs
-  :bind
-  (("<f8>" . treemacs))  ;; ربط F8 لتشغيل Treemacs
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package ef-themes
   :config
-  (setq treemacs-width 30))
+  (load-theme 'ef-deuteranopia-light t))
 #+end_src
 
-
-*** Session, Auto-Save & Backup Management
-
-في هذا القسم نقوم بإعداد Emacs لحفظ الجلسة الكاملة، بما في ذلك:
-
-- قائمة الملفات المفتوحة،
-- سجل الأوامر والبحث،
-- تخطيط النوافذ،
-- ملفات النسخ الاحتياطي (مثل file~)،
-- ملفات الحفظ التلقائي (مثل #file#).
-
-كل هذه الملفات يتم تخزينها في مجلد محمول موحّد `~/sync-thing/online-sync/emacs/emacs-cache/`، مما يسهل مزامنتها أو نقلها إلى أجهزة أخرى، ويحافظ على نظافة مجلدات المشاريع.
-
-#+begin_src emacs-lisp
-(defvar osama/emacs-cache-dir
-  (expand-file-name "~/sync-thing/online-sync/emacs/emacs-cache/")
-  "Portable directory for saving Emacs session cache across devices.")
-
-(defun osama/ensure-directory (dir)
-  (unless (file-directory-p dir)
-    (make-directory dir t)))
-
-;; Prepare subdirectories
-(let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
-  (dolist (sub dirs)
-    (osama/ensure-directory (expand-file-name sub osama/emacs-cache-dir))))
-
-;; savehist-mode: command history
-(setq savehist-file
-      (expand-file-name "savehist/savehist" osama/emacs-cache-dir))
-(savehist-mode 1)
-
-;; recentf-mode: recent files list
-(setq recentf-save-file
-      (expand-file-name "recentf/recentf" osama/emacs-cache-dir))
-(recentf-mode 1)
-
-;; desktop-mode: full session restore
-(setq desktop-path           (list (expand-file-name "desktop" osama/emacs-cache-dir))
-      desktop-dirname        (expand-file-name "desktop" osama/emacs-cache-dir)
-      desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
-
-;; Backup files (~/somefile~ stored in backups/)
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "backups/" osama/emacs-cache-dir)))
-      backup-by-copying t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 5
-      kept-old-versions 2)
-
-;; Auto-save files (#filename# stored in autosaves/)
-(setq auto-save-file-name-transforms
-      `((".*" ,(concat (expand-file-name "autosaves/" osama/emacs-cache-dir) "\\1") t))
-      auto-save-default t
-      auto-save-timeout 20      ;; adjust as needed
-      auto-save-interval 200)
-
-;; Optional: disable lockfiles
-(setq create-lockfiles nil)
-#+end_src
-
-**** Window Layout Undo/Redo - winner-mode
-
-مود بسيط يسمح لك بالتراجع والتقدم في تخطيط النوافذ، ولا يحتاج إعداد مجلد خاص.
-
-#+begin_src emacs-lisp
-(winner-mode 1)
-#+end_src
-
-*** General Fixes
-
-إصلاحات وتحسينات عامة في Emacs تشمل:
-
-- دعم مفاتيح الاختصار عند استخدام لوحة مفاتيح عربية.
-- تحسين أداء بدء التشغيل عبر تعديل إعدادات Garbage Collector.
-- التأكد من دعم أسماء الملفات بالعربية باستخدام ترميز UTF-8.
-- تقليل عدد التحذيرات المزعجة المعروضة في Emacs.
-
-#+begin_src emacs-lisp
-;; دعم اختصارات لوحة المفاتيح عند استخدام لغة الإدخال العربية
-(use-package reverse-im
-  :ensure t
-  :custom
-  (reverse-im-input-methods '("arabic"))
-  :config
-  (reverse-im-mode t))
-
-;; تحسين أداء بدء التشغيل
-(setq gc-cons-threshold (* 50 1000 1000))
-(add-hook 'emacs-startup-hook
-          (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
-
-;; دعم أسماء الملفات باللغة العربية باستخدام UTF-8
-(prefer-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
-
-;; تقليل عدد التحذيرات المعروضة
-(setq warning-minimum-level :error)
-#+end_src
-
-*** Configuring Emacs Fonts
-
-في هذا القسم نقوم بتخصيص الخطوط المستخدمة في Emacs.
-أستخدم خطوط [[https://github.com/tonsky/FiraCode][Fira Code]] للبرمجة و[[https://fonts.google.com/specimen/Cantarell][Cantarell]] للنصوص العامة.
-من المهم تثبيت هذه الخطوط على جهازك لتظهر بشكل صحيح.
-كما نقوم بإنشاء مجلد `fonts` داخل مجلد `emacs-data` لاستخدامه عبر الأجهزة (مثل الحاسوب والهاتف)، بدون إعادة إنشائه إذا كان موجودًا.
-
-#+begin_src emacs-lisp
-(defvar osama/preferred-font "Fira Code"
-  "Preferred font in Emacs.")
-
-(when (find-font (font-spec :name osama/preferred-font))
-  ;; الخط الرئيسي
-  (set-face-attribute 'default nil :font osama/preferred-font :height 120)
-  (set-face-attribute 'fixed-pitch nil :font osama/preferred-font) ;; للكود والجداول
-  (set-face-attribute 'variable-pitch nil :font osama/preferred-font :height 100)
-
-  ;; خط مختلف للعربية
-  (set-fontset-font t 'arabic (font-spec :name "STC Forward")))
-
-;; إنشاء مجلد fonts إذا لم يكن موجودًا
-(let ((fonts-dir (expand-file-name "fonts" "~/sync-thing/online-sync/emacs/emacs-data/")))
-  (unless (file-directory-p fonts-dir)
-    (make-directory fonts-dir t)))
-#+end_src
-
-*** Icons Fonts Setup
-
-بعض الحزم مثل `doom-modeline` تحتاج إلى خطوط خاصة لعرض الأيقونات بشكل صحيح.
-من أشهر هذه الحزم:
-- `all-the-icons`
-- `nerd-icons`
-
-بدلاً من تحميل الخطوط يدويًا، يقوم الكود التالي تلقائيًا عند أول تشغيل بـ:
-- إنشاء مجلد ثابت داخل Emacs: `~/sync-thing/online-sync/emacs/emacs-data/fonts/`
-- تنزيل الخطوط الخاصة بالحزمتين بصمت (بدون نوافذ أو تدخل).
-- بعد ذلك، يمكنك تثبيت الخطوط يدويًا عبر فتحها من المجلد.
-
-#+begin_src emacs-lisp
-;; تحديد مجلد حفظ الخطوط مباشرة داخل fonts
-(defvar osama/icons-dir
-  (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
-                    (getenv "HOME"))
-  "Custom directory to store icon fonts.")
-
-;; إنشاء المجلد إذا لم يكن موجودًا
-(unless (file-directory-p osama/icons-dir)
-  (make-directory osama/icons-dir t))
-
-;; دالة مساعدة لتحميل خط إذا لم يكن موجودًا
-(defun osama/download-font-if-missing (font-name url)
-  "Download FONT-NAME from URL to `osama/icons-dir` if missing."
-  (let ((target (expand-file-name font-name osama/icons-dir)))
-    (unless (file-exists-p target)
-      (url-copy-file url target t)
-      (message "📦 Downloaded: %s" font-name))))
-
-;; تحميل خطوط all-the-icons
-(use-package all-the-icons
-  :config
-  (dolist (font
-           '(("all-the-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/all-the-icons.ttf")
-             ("file-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/file-icons.ttf")
-             ("material-design-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/material-design-icons.ttf")
-             ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
-             ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
-             ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf")))
-    (osama/download-font-if-missing (car font) (cdr font))))
-
-;; تحميل خطوط nerd-icons (بما في ذلك NFM.ttf)
-(use-package nerd-icons
-  :config
-  (dolist (font
-           '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
-             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf")))
-    (osama/download-font-if-missing (car font) (cdr font))))
-#+end_src
-
-*** Window and Buffer Management
-
-#+begin_src emacs-lisp
-;; Moving Buffers Between Windows
-(use-package buffer-move
-  :ensure t)
-
-;; Kill All Other Buffers Except Current One
-(defun kill-other-buffers ()
-  "Kill all other buffers except the current one."
-  (interactive)
-  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
-#+end_src
-
-*** Theme and Modeline
-
-#+begin_src emacs-lisp
-;; Doom Themes
-;; https://github.com/hlissner/emacs-doom-themes
-(use-package doom-themes
-  :init
-  (load-theme 'doom-dracula t))
-
-;; Doom Modeline
-;; https://github.com/seagle0128/doom-modeline
+*** The =osama-emacs-theme.el= section for ~modeline~
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 (use-package doom-modeline
-  :ensure t
   :init
   (doom-modeline-mode 1)
   :custom
@@ -1214,222 +239,217 @@ Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالس�
   (doom-modeline-indent-info t))
 #+end_src
 
-** Org Mode
+** The =osama-emacs-fonts.el= module
 
-[[https://orgmode.org/][Org Mode]] هي واحدة من أبرز ميزات Emacs.
-إنها أداة قوية لتحرير المستندات، وتخطيط المشاريع، وتتبع المهام والوقت، وإنشاء المدونات، والبرمجة التوضيحية (literate programming)، وكل ذلك في حزمة واحدة.
+*** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
 
-*** Better Font Faces
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
+;; Define the folder to save fonts directly inside fonts
+(defvar osama-icons-dir
+  (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
+                    (getenv "HOME"))
+  "Custom directory to store icon fonts.")
 
-الدالة =osama/org-font-setup= تقوم بضبط مظهر الخطوط في Org Mode، بحيث:
-- يتم تكبير العناوين بحسب مستواها.
-- يتم استخدام خط متغير العرض (Variable-pitch) لمعظم النصوص لجعل الملف يبدو كمستند.
-- أما الكود والجداول فيتم عرضها بخط ثابت العرض (Monospace) لضمان التناسق.
+;; Create the folder if it doesn't exist
+(unless (file-directory-p osama-icons-dir)
+  (make-directory osama-icons-dir t))
 
-#+begin_src emacs-lisp
-(defun osama/org-font-setup ()
-  ;; استبدال الشرطات بالنقاط في القوائم
-  (font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+;; Helper function to download a font if missing
+(defun osama-download-font-if-missing (font-name url)
+  "Download FONT-NAME from URL to `osama-icons-dir` if missing."
+  (let ((target (expand-file-name font-name osama-icons-dir)))
+    (unless (file-exists-p target)
+      (url-copy-file url target t)
+      (message "Downloaded: %s" font-name))))
 
-  ;; تخصيص مظهر العناوين إذا الخط موجود
-  (when (find-font (font-spec :name osama/preferred-font))
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil
-                          :font osama/preferred-font
-                          :weight 'bold
-                          :height (cdr face))))
-#+end_src
-
-*** Org Mode Configuration
-
-#+begin_src emacs-lisp
-;; الإعدادات الأساسية
-(defun osama/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1))
-
-(use-package org
-  :hook (org-mode . osama/org-mode-setup)
+;; Download all-the-icons fonts
+(use-package all-the-icons
   :config
-  (setq org-ellipsis " ▾")
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
+  (dolist (font
+           '(("all-the-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/all-the-icons.ttf")
+             ("file-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/file-icons.ttf")
+             ("material-design-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/material-design-icons.ttf")
+             ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
+             ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
+             ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf")))
+    (osama-download-font-if-missing (car font) (cdr font))))
 
-  ;; مجلد ملفات الأجندة
-  (setq org-directory "~/sync-thing/online-sync/emacs/osama-org/org/agenda")
-  (unless (file-directory-p org-directory)
-    (make-directory org-directory t))
-  (setq org-agenda-files (directory-files-recursively org-directory "\\.org$"))
-
-  ;; دعم العادات (habits)
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
-
-  ;; حالات TODO مخصصة
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-          (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-  ;; التصنيفات (tags)
-  (setq org-tag-alist
-        '((:startgroup)
-          ;; exclusive tags group
-          (:endgroup)
-          ("@errand" . ?E)
-          ("@home" . ?H)
-          ("@work" . ?W)
-          ("agenda" . ?a)
-          ("planning" . ?p)
-          ("publish" . ?P)
-          ("batch" . ?b)
-          ("note" . ?n)
-          ("idea" . ?i)))
-
-  ;; إعادة ترتيب المهام (refile)
-  (setq org-refile-targets
-        '(("Archive.org" :maxlevel . 1)
-          ("Tasks.org" :maxlevel . 1)))
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-  ;; أوامر الأجندة المخصصة
-  (setq org-agenda-custom-commands
-        '(("d" "Dashboard"
-           ((agenda "" ((org-deadline-warning-days 7)))
-            (todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))
-            (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-          ("n" "Next Tasks"
-           ((todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))))
-
-          ("W" "Work Tasks" tags-todo "+work-email")
-
-          ("e" "Low Effort Tasks"
-           ((tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-             ((org-agenda-overriding-header "Low Effort Tasks")
-              (org-agenda-max-todos 20)
-              (org-agenda-files org-agenda-files)))))
-
-          ("w" "Workflow Status"
-           ((todo "WAIT" ((org-agenda-overriding-header "Waiting on External")))
-            (todo "REVIEW" ((org-agenda-overriding-header "In Review")))
-            (todo "PLAN" ((org-agenda-overriding-header "In Planning") (org-agenda-todo-list-sublevels nil)))
-            (todo "BACKLOG" ((org-agenda-overriding-header "Project Backlog") (org-agenda-todo-list-sublevels nil)))
-            (todo "READY" ((org-agenda-overriding-header "Ready for Work")))
-            (todo "ACTIVE" ((org-agenda-overriding-header "Active Projects")))
-            (todo "COMPLETED" ((org-agenda-overriding-header "Completed Projects")))
-            (todo "CANC" ((org-agenda-overriding-header "Cancelled Projects")))))))
-
-  ;; اختصار سريع للالتقاط
-  (define-key global-map (kbd "C-c j")
-    (lambda () (interactive) (org-capture nil "jj")))
-
-  ;; إعداد الخطوط (موجودة كدالة مفترضة)
-  (osama/org-font-setup))
-
-;; org-bullets لجمالية العناوين
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-;; توسيط محتوى org-mode
-(defun osama/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook (org-mode . osama/org-mode-visual-fill))
-
-;; تفعيل لغات babel
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)))
-
-(push '("conf-unix" . conf-unix) org-src-lang-modes)
-#+end_src
-
-*** Org Roam Installation
-
-#+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :custom
-  ;; مجلد ملاحظات org-roam
-  (org-roam-directory (file-truename "~/sync-thing/online-sync/emacs/osama-org/org/roam"))
-  ;; مكان قاعدة البيانات
-  (org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
-  :bind (("C-c n l" . org-roam-buffer-toggle) ;; عرض/إخفاء لوحة الروابط
-         ("C-c n f" . org-roam-node-find)     ;; البحث عن ملاحظة
-         ("C-c n g" . org-roam-graph)         ;; عرض الرسم البياني
-         ("C-c n i" . org-roam-node-insert)   ;; إدراج رابط لملاحظة
-         ("C-c n c" . org-roam-capture))      ;; إنشاء ملاحظة جديدة
+;; Download nerd-icons fonts (including NFM.ttf)
+(use-package nerd-icons
   :config
-  ;; مزامنة قاعدة البيانات تلقائياً
-  (org-roam-db-autosync-mode))
-#+END_SRC
-
-
-*** Denote Package
-
-#+begin_src emacs-lisp
-(use-package denote
-  :ensure t
-  :bind (("C-c d n" . denote)
-         ("C-c d f" . denote-open-or-create)
-         ("C-c d t" . denote-tag)
-         ("C-c d s" . denote-subtree)))
+  (dolist (font
+           '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
+             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf")))
+    (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-** Programming & Language Support
+*** The =osama-emacs-fonts.el=: Section for Font Customization
 
-** Custom Functions
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
+(use-package fontaine
+  :hook (after-init . (lambda ()
+                        (fontaine-mode 1)
+                        (fontaine-set-preset 'osama-fonts)))
+  :config
+  ;; Define your custom preset
+  (setq fontaine-presets
+        '((osama-fonts
+           :default-family "Fira Code"
+           :default-weight regular
+           :default-height 100
+           :variable-pitch-family "Fira Code"
+           :variable-pitch-height 1.0
+           :fixed-pitch-family "Fira Code"
+           :fixed-pitch-height 100))))
 
-*** Save All Buffers
+;; Arabic Font
+(when (member "STC Forward" (font-family-list))
+  (set-fontset-font t 'arabic (font-spec :family "STC Forward")))
 
-#+begin_src emacs-lisp
-(defun osama/save-all-buffers ()
-  (interactive)
-  (save-some-buffers t))
+
+;; Create fonts directory if it doesn't exist
+(defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+  "Directory to store fonts for Emacs.")
+
+(unless (file-directory-p osama-fonts-dir)
+  (make-directory osama-fonts-dir t))
 #+end_src
 
-*** Kill Current Buffer Without Confirmation
+** The =osama-emacs-essentials.el= module
 
-#+begin_src emacs-lisp
-(defun osama/kill-this-buffer ()
-  (interactive)
-  (kill-this-buffer))
+This module load basic configurations that apply to most facets of Emacs.
+
+*** The =osama-emacs-essentials.el= Section for Hide Tool bar
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(set-fringe-mode 10)        ; Give some breathing room
+(menu-bar-mode -1)          ; Disable the menu bar
 #+end_src
 
-*** Toggle RTL/LTR/Auto Direction
+*** The =osama-emacs-essentials.el= Section for Emacs Commands Keybindings
 
-في هذا الجزء، سننشئ دالة في Emacs Lisp لتبديل اتجاه الفقرة في org-mode بين:
+some commands dont have major mode example: (org, dired, consult) so we need to write our custom key 
 
-1. اليسار إلى اليمين (LTR)
-2. اليمين إلى اليسار (RTL)
-3. الوضع التلقائي (Auto): يحدد الاتجاه حسب أول حرف من الفقرة.
-#+begin_src emacs-lisp
-;; تفعيل إعادة ترتيب النصوص للغات التي تكتب من اليمين لليسار
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :bind
+  (("C-c f f" . find-file)))
+#+end_src
+
+
+*** The =osama-emacs-essentials.el= Section for UI Basics
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Visible bell
+(setq visible-bell t)
+
+;; Arabic Layout
+(setq default-input-method "arabic")
+
+;; Show current column number
+(column-number-mode)
+
+;; Enable line numbers globally and disable in specific modes
+(global-display-line-numbers-mode t)
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; Make cursor a vertical bar
+(setq-default cursor-type 'bar)
+
+;; Highlight current line
+(global-hl-line-mode 1)
+
+;; Contextual menu with right mouse button
+(when (display-graphic-p)
+  (context-menu-mode))
+#+end_src
+
+*** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Define cache directory
+(defvar osama-cache-dir
+  (expand-file-name "~/osama-emacs/emacs-cache/")
+  "Portable directory for saving Emacs session cache across devices.")
+
+;; Ensure cache directory exists
+(defun osama-ensure-cache-directory (dir)
+  "Ensure that the cache directory DIR exists, creating it if necessary."
+  (unless (file-directory-p dir)
+    (make-directory dir t)))
+
+;; Prepare subdirectories
+(let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
+  (dolist (sub dirs)
+    (osama-ensure-cache-directory (expand-file-name sub osama-cache-dir))))
+
+;; Savehist: command history
+(setq savehist-file (expand-file-name "savehist/savehist" osama-cache-dir))
+(savehist-mode 1)
+
+;; Recentf: recent files list
+(setq recentf-save-file (expand-file-name "recentf/recentf" osama-cache-dir))
+(recentf-mode 1)
+
+;; Desktop: full session restore
+(setq desktop-path           (list (expand-file-name "desktop" osama-cache-dir))
+      desktop-dirname        (expand-file-name "desktop" osama-cache-dir)
+      desktop-base-file-name "emacs-desktop")
+(desktop-save-mode 1)
+
+;; Backups: store ~ files in backups/
+(setq backup-directory-alist
+      `((".*" . ,(expand-file-name "backups/" osama-cache-dir)))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 5
+      kept-old-versions 2)
+
+;; Auto-saves: store #files# in autosaves/
+(setq auto-save-file-name-transforms
+      `((".*" ,(concat (expand-file-name "autosaves/" osama-cache-dir) "\\1") t))
+      auto-save-default t
+      auto-save-timeout 20
+      auto-save-interval 200)
+
+;; Optional: disable lockfiles
+(setq create-lockfiles nil)
+#+end_src
+
+*** The =osama-emacs-essentials.el= Settings for Better Performance
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Increase GC threshold during startup to speed up launch
+  (setq gc-cons-threshold (* 50 1000 1000))
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
+#+end_src
+
+*** The =osama-emacs-essentials.el= Section for Support Arabic Filenames
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+  (prefer-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8)
+#+end_src
+
+*** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Enable text reordering for right-to-left (RTL) languages
 (setq-default bidi-display-reordering t)
 
-;; الوضع الافتراضي لكل الملفات (اتجاه الفقرة تلقائي)
+;; Default mode for all files (paragraph direction is automatic)
 (setq-default bidi-paragraph-direction nil)
 
-(defun osama/toggle-bidi-paragraph-direction ()
+(defun osama-emacs-toggle-bidi-paragraph-direction ()
   "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
   (interactive)
   (setq bidi-paragraph-direction
@@ -1445,516 +465,668 @@ Emacs يعرض هذا التحذير ويسألك إن كنت ترغب بالس�
 
   (recenter))
 
-;; تعيين مفتاح اختصار عام لتبديل الاتجاه في كل أوضاع Emacs
-(global-set-key (kbd "C-c r") #'osama/toggle-bidi-paragraph-direction)
+;; Set a global shortcut to toggle paragraph direction in all Emacs modes
+(global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
 #+end_src
 
-في هذا القسم أضع الدوال التي أقوم بكتابتها بنفسي لتوسيع وظائف Emacs،
+*** The =osama-emacs-essentials.el= Section for ~Spacious padding~
 
-*** Quran Script
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package spacious-padding
+  :custom
+  (line-spacing 3)
+  (spacious-padding-mode 1))
+#+end_src
 
-** Completion and Selection Packages
 
-#+begin_src emacs-lisp
-;; which-key: عرض الاختصارات الممكنة لأي بادئة
+
+*** The =osama-emacs-essentials.el= settings for ~text-mode~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package text-mode
+  :ensure
+  nil
+  :hook
+  (text-mode . visual-line-mode)
+  :init
+  (delete-selection-mode t)
+  :custom
+  (sentence-end-double-space nil)
+  (scroll-error-top-bottom t)
+  (save-interprogram-paste-before-kill t))
+#+end_src
+
+
+*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+;; Open files with external applications
+(use-package openwith
+  :config
+  (openwith-mode t)
+  :custom
+  (openwith-associations
+   '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
+#+end_src
+
+** The =osama-emacs-completion.el= module
+
+The term “completion” describes a process where user input is assisted by pattern matching algorithms to type out incomplete terms. The most basic way of this model of interaction is what we get in a command-line prompt, where we can hit TAB to expand the word before point to something the program already knows about (e.g ema followed by TAB may complete to emacs).
+
+In Emacs, completion encompasses user interfaces that show the available candidates (the likely options) right away, as well as provide more advanced capabilities for storing the history of previous inputs, displaying helpful annotations next to each candidate, and “completion styles” to control how user input is matched to candidates. Because we use the minibuffer for most common interactions, completion is an integral part of any setup.
+
+*** The =osama-emacs-completion.el= section for ~which-key~
+
+The which-key package provides hints for keys that complete the currently incomplete sequence.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 1))
+  (setq which-key-idle-delay 1)
+  (which-key-add-key-based-replacements
+    "C-c h" "Help"
+    "C-c x" "Text"
+    "C-c s" "Search"
+    "C-c w" "Windows"
+    "C-c e" "Emacs"
+    "C-c n" "Notes"
+    "C-c o" "Org"
+    "C-c o a" "Agenda"
+    "C-c f" "Files"
+    "C-c b" "Buffers"
+    "C-c d" "Dired"
+    "C-c t" "Toggles"
+    "C-c i" "Insert"
+    "C-c a" "Attachments"))
+#+end_src
 
-;; vertico: واجهة إكمال خفيفة وعامودية
+
+*** The =osama-emacs-completion.el= section for ~vertico~
+
+The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package vertico
-  :ensure t
   :config
   (setq vertico-cycle t
         vertico-resize nil)
   (vertico-mode 1))
+#+end_src
 
-;; marginalia: عرض معلومات إضافية بجانب نتائج الإكمال
+*** The =osama-emacs-completion.el= section for ~marginalia~
+
+The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful annotations to the side of completion candidates. We see its effect, for example, when we call M-x: each command has a brief description next to it (taken from its doc string) as well as a key binding, if it has one.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package marginalia
   :after vertico
   :init
   (marginalia-mode))
+#+end_src
 
-;; consult: أوامر بحث وتنقل قوية تتكامل مع vertico
+*** The =osama-emacs-completion.el= section for ~consult~
+
+~consult~ is another wonderful package by Daniel Mendler. It provides a number of commands that turbocharge the minibuffer with advanced capabilities for filtering, asynchronous input, and previewing of the current candidate’s context.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package consult
-  :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
-         ("C-M-j" . consult-switch-buffer)
-         ("M-y" . consult-yank-pop)))
+  :bind
+  (("C-c s s" . consult-line)
+   ("C-c s r" . consult-ripgrep)
+   ("C-c s f" . consult-fd)
+   ("C-c s l" . consult-line-multi)
+   ("C-c f f" . consult-find)
+   ("C-c f r" . consult-recent-file)
+   ("C-c f m" . consult-file-externally)
+   ("C-c b b" . consult-buffer)
+   ("C-c b B" . consult-switch-buffer)
+   ("C-c h o" . consult-outline)
+   ("C-c o h" . consult-org-heading)
+   ("C-c m m" . consult-mode-command)
+   ("C-c m l" . consult-minor-mode)
+   ("C-c t t" . consult-theme)
+   ("C-c y y" . consult-yank-pop)))
+#+end_src
 
-;; orderless: نظام إكمال ذكي وغير مرتب
+*** The =osama-emacs-completion.el= section for ~orderless~
+
+~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package orderless
   :custom
   (completion-styles '(orderless))
   (completion-category-defaults nil))
+#+end_src
 
-;; embark: إجراءات سياقية للعناصر المحددة
+*** The =osama-emacs-completion.el= section for ~embark~
+
+~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package embark
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim))
+  :bind (("C-c ." . embark-act)
+         ("C-c ;" . embark-dwim))
   :init
   (setq embark-prompter 'embark-completing-read-prompter))
+#+end_src
 
-;; company: نافذة الإكمال التلقائي في كل الأوضاع
-(use-package company
-  :hook (after-init . global-company-mode)
-  :custom
-  (company-idle-delay 0.2)
-  (company-minimum-prefix-length 2)
-  (company-selection-wrap-around t))
+*** The =osama-emacs-completion.el= section for ~corfu~
 
-;; helpful: وصف أوامر Emacs بشكل أعمق وأكثر فائدة
+Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+(use-package corfu
+  :init
+  (global-corfu-mode))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~corfu~
+
+Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
 (use-package helpful
   :bind
-  ([remap describe-function] . helpful-function)
-  ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key]      . helpful-key))
+  (("C-c h f" . helpful-function)   ;; Describe function
+   ("C-c h c" . helpful-command)    ;; Describe command
+   ("C-c h v" . helpful-variable)   ;; Describe variable
+   ("C-c h k" . helpful-key)))      ;; Describe key
+#+end_src
 
-;; evil-mode: تجربة تحرير على نمط Vim
+** The =osama-emacs-org.el= module
+
+At its core, Org is a plain text markup language. By "markup
+language", we refer to the use of common characters to apply styling,
+such as how a word wrapped in asterisks acquires strong emphasis.
+Check the video I link to above on the basics of Org mode.
+
+Though what makes Org powerful is not the markup per se, but the fact
+that it has a rich corpus of Emacs Lisp code that does a lot with this
+otherwise plain text notation. Some of the headline features:
+
+- Cycle the visibility of any heading and its subheadings. This lets
+  you quickly fold a section you do not need to see (or reveal the one
+  you care about).
+- Mix prose with code in a single document to either make the whole
+  thing an actual program or to evaluate/demonstrate some snippets.
+- Convert ("export") an Org file to a variety of formats, including
+  HTML and PDF.
+- Use LaTeX inside of Org files to produce a scientific paper without
+  all the markup of LaTeX.
+- Manage TODO lists and implement a concomitant methodology of
+  labelling task states.
+- Quickly shift a "thing" (heading, list item, paragraph, ...) further
+  up or down in the file.
+- Use tables with formulas as a lightweight alternative to spreadsheet
+  software.
+- Capture data or fleeting thoughts efficiently using templates.
+- Maintain an agenda for all your date-bound activities.
+- Clock in and out of tasks, to eventually track how you are spending
+  your time.
+- Link to files regardless of file type. This includes special links
+  such as to an Info manual or an email.
+
+In other words, Org is highly capable and widely considered one of the
+killer apps of Emacs.
+
+This section covers the relevant configurations. You will notice that
+it is not limited to Org, as some other built-in features are also
+relevant here.
+
+*** The =osama-emacs-org.el= section for the ~calendar~
+
+The calendar is technically independent of Org, though it tightly integrates with it.
+We can see this when setting timestamps, such as when defining a SCHEDULED or DEADLINE entry for a given heading.
+Here, I am simply setting some stylistic preferences.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+;;; Calendar setup
+(use-package calendar
+  :ensure nil ;; calendar is built into Emacs
+  :commands (calendar)
+  :config
+  ;; Do not highlight diary entries in the calendar
+  (setq calendar-mark-diary-entries-flag nil)
+
+  ;; Show holidays
+  (setq calendar-mark-holidays-flag t)
+
+  ;; Do not display a dedicated calendar mode line
+  (setq calendar-mode-line-format nil)
+
+  ;; Time format (24-hour)
+  (setq calendar-time-display-form
+        '(24-hours ":" minutes
+          (when time-zone (format "(%s)" time-zone))))
+
+  ;; Start the week on Monday instead of Sunday
+  (setq calendar-week-start-day 1)
+
+  ;; Display dates in ISO format (example: 2025-08-18)
+  (setq calendar-date-style 'iso)
+
+  ;; Show numeric time zone
+  (setq calendar-time-zone-style 'numeric)
+
+  ;; Coordinates (for sunrise/sunset calculation)
+  ;; Change them according to your city
+  (setq calendar-latitude 15.3694    ; Sana'a (example)
+        calendar-longitude 44.1910)
+
+  ;; Time zone
+  (setq calendar-standard-time-zone-name "+0300") ; GMT+3
+  (setq calendar-daylight-time-zone-name "+0300"))
+#+end_src
+
+*** The =osama-emacs-org.el= section about appointment reminders (=appt.el=)
+
+The built-in appt.el handles appointment notifications. It was originally designed for the diary but also integrates well with the Org agenda. I extend this integration so that whenever I add or change a task, the appointments are refreshed through hooks and advice.
+Here I only keep minimal settings: I don’t need full agenda details, just a mode line notice showing how many minutes remain until the event.
+In Org files, each heading can have an APPT_WARNTIME property (minutes before the event). I use this with org-capture for time-sensitive tasks like coaching sessions.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package appt
+  :ensure nil ;; built-in in Emacs, no need to install
+  :commands (appt-activate) ;; main command to activate the system
+  :config
+  (setq appt-display-diary nil          ;; do not use the old diary
+        appt-display-format nil         ;; default display format
+        appt-display-mode-line t        ;; show reminder in the mode line
+        appt-display-interval 3         ;; repeat reminder every 3 minutes
+        appt-audible nil                ;; sound disabled (set to t for sound)
+        appt-warning-time-regexp "appt \\([0-9]+\\)" ;; regex for diary
+        appt-message-warning-time 6)    ;; warn 6 minutes before
+
+  (with-eval-after-load 'org-agenda
+    (appt-activate 1) ;; enable appt with org-agenda
+
+    ;; convert Org tasks with time info into appt reminders
+    (org-agenda-to-appt)))
+#+end_src
+
+
+*** The =osama-emacs-org.el= section with basic Org settings
+
+Org, also known as "Org mode", is one of the potentially most useful
+feature sets available to every Emacs user. At its core, Org is a
+lightweight markup language: you can have headings and paragraphs,
+mark a portion of text with emphasis, produce bullet lists, include
+code blocks, and the like. Though what really sets Org apart from
+other markup languages is the rich corpus of Emacs Lisp written around
+it to do all sorts of tasks with this otherwise plain text format.
+
+With Org you can write technical documents (e.g. the manuals of all my
+Emacs packages), maintain a simple or highly sophisticated system for
+task management, organise your life using the agenda, write tables
+that can evaluate formulas to have spreadsheet functionality, have
+embedded LaTeX, evaluate code blocks in a wide range of programming
+languages and reuse their results for literate programming, include
+the contents of other files into a singular file, use one file to
+generate other files/directories with all their contents, and export
+the Org document to a variety of formats like =.pdf= and =.odt=.
+Furthermore, Org can be used as a lightweight, plain text database, as
+each heading can have its own metadata. This has practical
+applications in most of the aforementioned.
+
+In short, if something can be done with plain text, Org probably does
+it already or has all the elements for piecing it together.
+
+This being Emacs, everything is customisable and Org is a good example
+of this. There are a lot of user options for us to tweak things to our
+liking. I do as much, though know that Org is perfectly usable without
+any configuration. The following sections contain further commentary
+on how I use Org.
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+  (use-package org
+    :ensure nil ;; org is built-in
+    :init
+    ;; Org files directory
+    (setq org-directory (expand-file-name "~/osama-vault/org/"))
+    ;; Depth for imenu
+    (setq org-imenu-depth 5)
+    ;; RET follows links
+    (setq org-return-follows-link t)
+    ;; Folding without empty line
+    (setq org-cycle-separator-lines 0)
+    ;; Respect content when inserting heading
+    (setq org-insert-heading-respect-content t)
+    ;; Ellipsis for folded sections
+    (setq org-ellipsis "...")
+    ;; Hide emphasis markers globally
+    (setq org-hide-emphasis-markers t)
+    ;; Hide extra stars in headings
+    (setq org-hide-leading-stars t)
+    ;; Highlight quote and verse blocks
+    (setq org-fontify-quote-and-verse-blocks t)
+    ;; Color the entire block delimiter line
+    (setq org-fontify-whole-block-delimiter-line t))
+    
+  ;; Useful keybindings
+(use-package org
+  :bind
+  (("C-c o l" . org-store-link)
+   ("C-c o o" . org-open-at-point-global)))
+
+
+  ;; Show emphasis markers only while editing
+  (use-package org-appear
+    :hook (org-mode . org-appear-mode))
+
+  ;; Modern appearance
+  (use-package org-modern
+    :hook (org-mode . org-modern-mode)
+    :custom
+    (org-modern-table nil)
+    (org-modern-keyword nil)
+    (org-modern-timestamp nil)
+    (org-modern-priority nil)
+    (org-modern-checkbox nil)
+    (org-modern-tag nil)
+    (org-modern-block-name nil)
+    (org-modern-footnote nil)
+    (org-modern-internal-target nil)
+    (org-modern-radio-target nil)
+    (org-modern-statistics nil)
+    (org-modern-progress nil))
+
+  ;; Superstar bullets
+  (use-package org-superstar
+    :hook (org-mode . org-superstar-mode)
+    :config
+    ;; Replace default heading stars with custom bullets
+    (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
+
+  ;; Font setup for org headings and bullets
+  (defun org-font-setup ()
+    ;; Replace dashes with bullets
+    (font-lock-add-keywords 'org-mode
+      '(("^ *\\([-]\\) "
+         (0 (prog1 ()
+              (compose-region (match-beginning 1)
+                              (match-end 1) "•"))))))
+    ;; Set heading sizes
+    (let ((family (face-attribute 'default :family)))
+      (dolist (face '((org-level-1 . 1.2)
+                      (org-level-2 . 1.1)
+                      (org-level-3 . 1.05)
+                      (org-level-4 . 1.0)
+                      (org-level-5 . 1.0)
+                      (org-level-6 . 1.0)
+                      (org-level-7 . 1.0)
+                      (org-level-8 . 1.0)))
+        (set-face-attribute (car face) nil
+                            :family family
+                            :weight 'bold
+                            :height (cdr face)))))
+  ;; Change document title size
+  (custom-set-faces
+   '(org-document-title ((t (:height 2.0 :underline nil)))))
+
+  ;; Hook font setup into org-mode
+  (add-hook 'org-mode-hook #'org-font-setup)
+#+end_src
+
+*** The =osama-emacs-org.el= section for ~denote~ package
+
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package denote
+  :defer t
+  :custom
+  ;; Sort keywords automatically when creating notes
+  (denote-sort-keywords t)
+  ;; Use Title Case for link descriptions
+  (denote-link-description-function #'osama-denote-link-description-title-case)
+  ;; Automatically rename buffer when saving
+  (denote-rename-buffer-mode 1)
+  :hook
+  ;; Enable denote mode when opening dired
+  (dired-mode . denote-dired-mode)
+  :custom-face
+  ;; Style for Denote links
+  (denote-faces-link ((t (:slant italic))))
+  :bind
+  (("C-c n b" . denote-find-backlink)
+   ("C-c n d" . denote-date)
+   ("C-c n l" . denote-find-link)
+   ("C-c n i" . denote-link-or-create)
+   ("C-c n k" . denote-rename-file-keywords)
+   ("C-c n n" . denote)
+   ("C-c n r" . denote-rename-file)
+   ("C-c d R" . denote-rename-file-using-front-matter)))
+
+;;; Fixed by Prot: Title Case link description
+(defun osama-denote-link-description-title-case (file)
+  "Return link description for FILE.
+
+If the region is active, use it as the description.
+The title is formatted with the `titlecase' package.
+
+This function is useful as the value of `denote-link-description-function' to
+generate links in titlecase for attachments."
+  (require 'titlecase)
+  (let* ((file-type (denote-filetype-heuristics file))
+         (title (denote-retrieve-title-or-filename file file-type)))
+    (cond
+     ((denote--get-active-region-content))
+     ((or (null title) (string-blank-p title))
+      "")
+     ((string-match-p " " title)
+      title)
+     (t
+      (let ((clean-title (replace-regexp-in-string "\\([a-zA-Z0-9]\\)-\\([a-zA-Z0-9]\\)" "\\1 \\2" title)))
+        (format "%s" (titlecase--string clean-title titlecase-style)))))))
+#+end_src
+
+*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
+
+
+
+** The =osama-emacs-evil.el= module
+
+*** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+;;; Evil-mode setup
 (use-package evil
   :init
-  (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-want-C-u-scroll t
-        evil-want-C-i-jump nil)
+  (setq evil-want-integration t          ;; integrate with other packages
+        evil-want-keybinding nil         ;; don't load default keybindings
+        evil-want-C-u-scroll t           ;; C-u scroll up
+        evil-want-C-i-jump nil)          ;; disable C-i jump
   :config
-  (evil-mode 1))
+  (evil-mode 1)
 
-;; evil-collection: دعم أوضاع Emacs المختلفة ضمن evil-mode
+  ;; Global keybindings
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+
+  ;; Motion keys: move by visual lines
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  ;; Set initial state for specific modes
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;;; Evil-collection setup (integrates evil with other Emacs modes)
 (use-package evil-collection
   :after evil
   :config
   (evil-collection-init))
+#+end_src
 
-;; hydra: إنشاء اختصارات مؤقتة قابلة للتنقل
-(use-package hydra
-  :ensure t)
+*** The =osama-emacs-evil.el= section for general leader key
 
-;; general: تسهيل تعريف اختصارات عالمية ومرتبطة بـ which-key
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
 (use-package general
   :config
-  (general-create-definer osama/leader-keys
+  ;; Define leader key
+  (general-create-definer leader
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
-    :global-prefix "C-SPC"))
-#+end_src
+    :global-prefix "C-SPC")
 
-** Custom Keybindings
+  ;; Command Palette
+  (leader
+    ":"  '(execute-extended-command :which-key "Command Palette"))
 
-*** Global: Set ESC Key to Close Popups and Dialogs
+  ;; Dired Menu
+  (leader
+    "d"  '(:ignore t :which-key "dired")
+    "dd" '(dired-jump :which-key "open dired here")
+    "dp" '(project-dired :which-key "project dired"))
 
-#+begin_src emacs-lisp
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-#+end_src
+  ;; Buffers Menu
+  (leader
+    "b"  '(:ignore t :which-key "buffers")
+    "bb" '(consult-buffer :which-key "switch buffer")
+    "bk" '(osama/kill-this-buffer :which-key "kill buffer")
+    "bm" '(kill-other-buffers :which-key "kill other buffers")
+    "bn" '(next-buffer :which-key "next buffer")
+    "bp" '(previous-buffer :which-key "prev buffer"))
 
-*** Hydra & General: Text Scaling
+  ;; Files Menu
+  (leader
+    "f"  '(:ignore t :which-key "files")
+    "fd" '(delete-file :which-key "delete file")
+    "ff" '(find-file :which-key "find file")
+    "fr" '(consult-recent-file :which-key "recent files")
+    "fR" '(rename-file :which-key "rename file")
+    "fs" '(save-buffer :which-key "save file")
+    "fS" '(osama/save-all-buffers :which-key "save some buffers"))
 
-#+begin_src emacs-lisp
-(defhydra hydra-text-scale (:timeout 4)
-  "Text Scale"
-  ("j" text-scale-increase "Increase")
-  ("k" text-scale-decrease "Decrease")
-  ("f" nil "Finish" :exit t))
-#+end_src
+  ;; Org Menu
+  (leader
+    "o"  '(:ignore t :which-key "org")
+    "oa" '(org-agenda :which-key "agenda")
+    "oc" '(org-capture :which-key "capture")
+    "ot" '(org-todo-list :which-key "todo list"))
 
-*** Evil: Insert Mode: Exit to Normal with C-g
+  ;; Notes Menu
+  (leader
+    "n"  '(:ignore t :which-key "notes")
+    "nn" '(org-roam-node-find :which-key "find note")
+    "ni" '(org-roam-node-insert :which-key "insert note"))
 
-#+begin_src emacs-lisp
-(define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-#+end_src
+  ;; Emacs Config Menu
+  (leader
+    "e"  '(:ignore t :which-key "emacs/config")
+    "er" '(reload-init-file :which-key "reload config")
+    "eR" '(restart-emacs :which-key "restart emacs")
+    "eQ" '(save-buffers-kill-emacs :which-key "quit emacs")
+    "ee" '(eval-expression :which-key "eval expression"))
 
-*** Evil: Visual Line Motions for j and k
+  ;; Windows Menu
+  (leader
+    "w"  '(:ignore t :which-key "windows")
+    "wh" '(windmove-left :which-key "move left")
+    "wl" '(windmove-right :which-key "move right")
+    "wj" '(windmove-down :which-key "move down")
+    "wk" '(windmove-up :which-key "move up")
+    "wH" '(buf-move-left :which-key "move buffer left")
+    "wL" '(buf-move-right :which-key "move buffer right")
+    "wJ" '(buf-move-down :which-key "move buffer down")
+    "wK" '(buf-move-up :which-key "move buffer up")
+    "wv" '(split-window-right :which-key "vertical split")
+    "ws" '(split-window-below :which-key "horizontal split")
+    "wd" '(delete-window :which-key "delete this window")
+    "wD" '(delete-other-windows :which-key "delete other windows")
+    "w." '(hydra-windows/body :which-key "window management hydra")
+    "w=" '(balance-windows :which-key "balance"))
 
-#+begin_src emacs-lisp
-(evil-global-set-key 'motion "j" 'evil-next-visual-line)
-(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-#+end_src
+  ;; Search Menu
+  (leader
+    "s"  '(:ignore t :which-key "search")
+    "ss" '(consult-line :which-key "search in buffer")
+    "sp" '(consult-ripgrep :which-key "search in project")
+    "sf" '(consult-fd :which-key "search with fd")
+    "sb" '(consult-buffer :which-key "search buffer")
+    "sm" '(consult-mark :which-key "jump to mark")
+    "sl" '(consult-goto-line :which-key "jump to line"))
 
-*** Evil: Set Initial States for Specific Modes
+  ;; Toggles Menu
+  (leader
+    "t"  '(:ignore t :which-key "toggles")
+    "ts" '(hydra-text-scale/body :which-key "text scale")
+    "tt" '(consult-theme :which-key "choose theme")
+    "tl" '(display-line-numbers-mode :which-key "line numbers")
+    "tw" '(visual-line-mode :which-key "word wrap"))
 
-#+begin_src emacs-lisp
-(evil-set-initial-state 'messages-buffer-mode 'normal)
-(evil-set-initial-state 'dashboard-mode 'normal)
-#+end_src
+  ;; Text Menu
+  (leader
+    "x"  '(:ignore t :which-key "text/editing")
+    "xu" '(upcase-word :which-key "uppercase word")
+    "xl" '(downcase-word :which-key "lowercase word")
+    "xc" '(capitalize-word :which-key "capitalize word")
+    "xj" '(join-line :which-key "join lines"))
 
-*** Window Management Hydra
+  ;; Help Menu
+  (leader
+    "h"  '(:ignore t :which-key "helpful/documentation")
+    "hf" '(helpful-function :which-key "describe function")
+    "hk" '(helpful-key :which-key "describe key")
+    "hv" '(helpful-variable :which-key "describe variable")
+    "hi" '(info :which-key "info documentation")
+    "ho" '(org-info :which-key "org info")
+    "<f1>" '(helpful-at-point :which-key "help at point")
+    "SPC" '(execute-extended-command :which-key "M-x"))
 
-#+begin_src emacs-lisp
-(defhydra hydra-windows (:hint nil)
-  "
-  ^Window^            ^Move^               ^Resize^
-  ──────────────┬───────────────┬───────────────
-  _h_: ← left    _H_: move left  _<_ : shrink width
-  _l_: → right   _L_: move right _>_ : enlarge width
-  _j_: ↓ down    _J_: move down  _+_ : enlarge height
-  _k_: ↑ up      _K_: move up    _-_ : shrink height
-  _s_: split h   _d_: delete win _o_: only this window
-  _q_: quit
-  "
-  ("h" windmove-left)
-  ("j" windmove-down)
-  ("k" windmove-up)
-  ("l" windmove-right)
-
-  ("H" buf-move-left)
-  ("J" buf-move-down)
-  ("K" buf-move-up)
-  ("L" buf-move-right)
-
-  ("<" shrink-window-horizontally)
-  (">" enlarge-window-horizontally)
-  ("+" enlarge-window)
-  ("-" shrink-window)
-
-  ("s" split-window-below)
-  ("d" delete-window)
-  ("o" delete-other-windows)
-
-  ("q" nil :exit t))
-#+end_src
-
-** General - Leader Key Menu
-
-#+begin_src emacs-lisp
-;; Command Palette
-(osama/leader-keys
-  ":"  '(execute-extended-command :which-key "Command Palette"))
-
-;; Dired Menu
-(osama/leader-keys
-  "d"  '(:ignore t :which-key "dired")
-  "dd" '(dired-jump :which-key "open dired here")
-  "dp" '(project-dired :which-key "project dired"))
-
-;; Buffers Menu
-(osama/leader-keys
-  "b"  '(:ignore t :which-key "buffers")
-  "bb" '(consult-buffer :which-key "switch buffer")
-  "bk" '(osama/kill-this-buffer :which-key "kill buffer")
-  "bm" '(kill-other-buffers :which-key "kill other buffers")
-  "bn" '(next-buffer :which-key "next buffer")
-  "bp" '(previous-buffer :which-key "prev buffer"))
-
-;; Files Menu
-(osama/leader-keys
-  "f"  '(:ignore t :which-key "files")
-  "fd" '(delete-file :which-key "delete file")
-  "ff" '(find-file :which-key "find file")
-  "fr" '(consult-recent-file :which-key "recent files")
-  "fR" '(rename-file :which-key "rename file")
-  "fs" '(save-buffer :which-key "save file")
-  "fS" '(osama/save-all-buffers :which-key "save some buffers"))
-
-;; Org Menu
-(osama/leader-keys
-  "o"  '(:ignore t :which-key "org")
-  "oa" '(org-agenda :which-key "agenda")
-  "oc" '(org-capture :which-key "capture")
-  "ot" '(org-todo-list :which-key "todo list"))
-
-;; Notes Menu
-(osama/leader-keys
-  "n"  '(:ignore t :which-key "notes")
-  "nn" '(org-roam-node-find :which-key "find note")
-  "ni" '(org-roam-node-insert :which-key "insert note"))
-
-;; Emacs Config Menu
-(osama/leader-keys
-  "e"  '(:ignore t :which-key "emacs/config")
-  "er" '(reload-init-file :which-key "reload config")
-  "eR" '(restart-emacs :which-key "restart emacs")
-  "eQ" '(save-buffers-kill-emacs :which-key "quit emacs")
-  "ee" '(eval-expression :which-key "eval expression"))
-
-;; Windows Menu
-(osama/leader-keys
-  "w"  '(:ignore t :which-key "windows")
-  "wh" '(windmove-left :which-key "move left")
-  "wl" '(windmove-right :which-key "move right")
-  "wj" '(windmove-down :which-key "move down")
-  "wk" '(windmove-up :which-key "move up")
-  "wH" '(buf-move-left :which-key "move buffer left")
-  "wL" '(buf-move-right :which-key "move buffer right")
-  "wJ" '(buf-move-down :which-key "move buffer down")
-  "wK" '(buf-move-up :which-key "move buffer up")
-  "wv" '(split-window-right :which-key "vertical split")
-  "ws" '(split-window-below :which-key "horizontal split")
-  "wd" '(delete-window :which-key "delete this window")
-  "wD" '(delete-other-windows :which-key "delete other windows")
-  "w." '(hydra-windows/body :which-key "window management hydra")
-  "w=" '(balance-windows :which-key "balance"))
-
-;; Search Menu
-(osama/leader-keys
-  "s"  '(:ignore t :which-key "search")
-  "ss" '(consult-line :which-key "search in buffer")
-  "sp" '(consult-ripgrep :which-key "search in project")
-  "sf" '(consult-fd :which-key "search with fd")
-  "sb" '(consult-buffer :which-key "search buffer")
-  "sm" '(consult-mark :which-key "jump to mark")
-  "sl" '(consult-goto-line :which-key "jump to line"))
-
-;; Toggles Menu
-(osama/leader-keys
-  "t"  '(:ignore t :which-key "toggles")
-  "ts" '(hydra-text-scale/body :which-key "text scale")
-  "tt" '(consult-theme :which-key "choose theme")
-  "tl" '(display-line-numbers-mode :which-key "line numbers")
-  "tw" '(visual-line-mode :which-key "word wrap"))
-
-;; Text Menu
-(osama/leader-keys
-  "x"  '(:ignore t :which-key "text/editing")
-  "xu" '(upcase-word :which-key "uppercase word")
-  "xl" '(downcase-word :which-key "lowercase word")
-  "xc" '(capitalize-word :which-key "capitalize word")
-  "xj" '(join-line :which-key "join lines"))
-
-;; Help Menu
-(osama/leader-keys
-  "h"  '(:ignore t :which-key "helpful/documentation")
-  "hf" '(helpful-function :which-key "describe function")
-  "hk" '(helpful-key :which-key "describe key")
-  "hv" '(helpful-variable :which-key "describe variable")
-  "hi" '(info :which-key "info documentation")
-  "ho" '(org-info :which-key "org info")
-  "<f1>" '(helpful-at-point :which-key "help at point")
-  "SPC" '(execute-extended-command :which-key "M-x"))
-
-;; Perspective Menu
-(osama/leader-keys
-  "p"  '(:ignore t :which-key "perspectives")
-  "ps" '(persp-switch :which-key "switch perspective")
-  "pn" '(persp-next :which-key "next perspective")
-  "pp" '(persp-prev :which-key "previous perspective")
-  "pr" '(persp-rename :which-key "rename perspective")
-  "pk" '(persp-kill :which-key "kill perspective")
-  "pa" '(persp-add-buffer :which-key "add buffer to persp")
-  "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp"))
-#+end_src
-
-* System Selector Settings
-
-هذا القسم يتيح لك تحميل إعدادات خاصة حسب النظام الذي تستخدمه (مثل: Android، Linux، Windows...).
-الفكرة أن يكون لديك ملف إعدادات مستقل لكل نظام داخل مجلد `~/.emacs.d/`، يبدأ اسمه بـ `init-`، ويتم اختياره تلقائيًا عند تشغيل Emacs.
-
-#+begin_src emacs-lisp
-(add-hook 'after-init-hook
-          (lambda ()
-            (let* ((init-dir "~/.emacs.d/")
-                   (init-files (directory-files init-dir nil "^init-.*\\.el$"))
-                   (options (mapcar (lambda (f)
-                                      (string-remove-suffix ".el" (string-remove-prefix "init-" f)))
-                                    init-files))
-                   (choice (completing-read "أي إعداد تريد تحميله؟ " options nil t))
-                   (settings-file (expand-file-name (concat "init-" choice ".el") init-dir)))
-              (when (file-exists-p settings-file)
-                (load-file settings-file)))))
+  ;; Perspective Menu
+  (leader
+    "p"  '(:ignore t :which-key "perspectives")
+    "ps" '(persp-switch :which-key "switch perspective")
+    "pn" '(persp-next :which-key "next perspective")
+    "pp" '(persp-prev :which-key "previous perspective")
+    "pr" '(persp-rename :which-key "rename perspective")
+    "pk" '(persp-kill :which-key "kill perspective")
+    "pa" '(persp-add-buffer :which-key "add buffer to persp")
+    "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
 
 #+end_src
 
-** Important Notes
 
-- لكل نظام (مثل "Linux" أو "Android") يجب أن يكون عنوان من المستوى الأول `*`.
-- مباشرة **بعد العنوان**، يجب وضع خصائص التانجل داخل `:PROPERTIES:` دون فواصل أو أسطر فارغة.
-- كل كود داخل القسم يجب أن يكون تحت عنوان فرعي `**`.
 
-** Adding New System Settings (Example: Linux)
+** The =osama-emacs-dired.el= module
 
-لإضافة إعدادات لنظام جديد، اتبع الخطوات التالية:
+(use-package dired
+  :ensure nil ;; built-in package
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-alh") ;; human-readable sizes
+  (dired-dwim-target t)           ;; smart target when copying/moving
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'top)
+  (dired-auto-revert-buffer t)    ;; auto refresh on changes
+  :bind
+  (("C-c d" . dired)
+   ("C-c d j" . dired-jump)))
 
-1. أضف عنوانًا من المستوى الأول باسم النظام، مثل:
-
-   `* إعدادات Linux`
-
-2. مباشرة بعد العنوان، أضف خصائص التانجل:
-
-#+begin_example
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle ~/.emacs.d/init-linux.el :mkdirp yes
-:END:
-#+end_example
-
-3. تأكد أن ملف الإعداد يبدأ بالسطر التالي لتفعيل `lexical-binding`:
-
-#+begin_example
-;;; init-linux.el --- Linux configuration -*- lexical-binding: t; -*-
-#+end_example
-
-   هذا السطر ضروري لتفعيل الربط المعجمي، مما يجعل الكود أكثر كفاءة وأمانًا، ومدعوم من معظم الحزم الحديثة.
-
-4. أضف إعداداتك داخل عناوين فرعية من المستوى الثاني `**` أو أكثر. مثال:
-
-*** Linux Settings Example
-
-#+begin_example
-(setq user-full-name "أسامة")
-(setq user-mail-address "you@example.com")
-#+end_example
-
-*** Additional Notes
-
-- `:mkdirp yes`: يضمن إنشاء المجلدات تلقائيًا عند تصدير الكود إذا لم تكن موجودة.
-- تأكد أن كل ملفات الإعداد (`init-*.el`) موجودة في `~/.emacs.d/` ليتم التعرف عليها.
-- سطر `lexical-binding` يجب أن يكون أول سطر فعلي في كل ملف إعداد.
-
-* Windows Settings
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle ~/.emacs.d/init-windows.el :mkdirp yes
-:END:
-
-** lexical-binding
-
-#+begin_src emacs-lisp
-;;; init-windows.el --- Windows configuration -*- lexical-binding: t; -*-
-#+end_src
-
-** Straight Package Management
-
-#+begin_src emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-#+end_src
-
-** Ui Settings
-
-*** Remove Unnecessary UI Elements
-
-- تعطيل شريط التمرير لتقليل الفوضى.
-- تعطيل شريط الأدوات وأدوات التلميحات (tooltips).
-- تقليل الهوامش (fringes) لإعطاء مساحة أفضل للنص.
-- تعطيل شريط القوائم (menu bar) بشكل افتراضي.
-
-#+begin_src emacs-lisp
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
-(menu-bar-mode -1)          ; Disable the menu bar
-#+end_src
-
-*** Frame Appearance
-
-#+begin_src emacs-lisp
-;; إعدادات الإطار (Title bar, border)
-;; 'undecorated' تفعيل 't' لإخفاء شريط العنوان (title bar)، و 'nil' لإظهاره
-(add-to-list 'default-frame-alist '(undecorated . nil))
-(add-to-list 'default-frame-alist '(drag-internal-border . 1))
-(add-to-list 'default-frame-alist '(internal-border-width . 10))
-
-;; وظائف تحريك الإطار
-(defun move-frame-up ()    (interactive) (set-frame-position nil (car (frame-position)) (- (cdr (frame-position)) 20)))
-(defun move-frame-down ()  (interactive) (set-frame-position nil (car (frame-position)) (+ (cdr (frame-position)) 20)))
-(defun move-frame-left ()  (interactive) (set-frame-position nil (- (car (frame-position)) 20) (cdr (frame-position))))
-(defun move-frame-right () (interactive) (set-frame-position nil (+ (car (frame-position)) 20) (cdr (frame-position))))
-
-;; Hydra لتكبير وتحريك الإطار
-(defhydra hydra-frame-control (:hint nil)
-  "
-Frame Control:
-_m_: Maximize    _f_: Fullscreen
-_h_: ←           _l_: →
-_k_: ↑           _j_: ↓
-_q_: Quit
-"
-  ("m" toggle-frame-maximized)
-  ("f" toggle-frame-fullscreen)
-  ("h" move-frame-left)
-  ("l" move-frame-right)
-  ("k" move-frame-up)
-  ("j" move-frame-down)
-  ("q" nil :exit t))
-
-;; ربط التحكم في الإطار بمفتاح القائد
-(osama/leader-keys
-  "wF" '(hydra-frame-control/body :which-key "frame control"))
-#+end_src
-
-** Media Handling in org-mode
-
-- نسخ الصور (مثل PNG وJPG) إلى assets/images/
-- نسخ الفيديوهات (مثل MP4 وMOV) إلى assets/videos/
-- نسخ الملفات الأخرى (مثل ZIP وPSD وPDF...) إلى assets/random/
-- إدراج رابط مباشر للملف داخل ملاحظتي.
-- هذا يسهل تنظيم المرفقات داخل المشروع بدل تراكمها في نفس مجلد الملاحظات.
-- الصور والفيديوهات والملفات تُعاد تسميتها بناءً على الوقت الحالي (تاريخ + ساعة) وتُخزَّن تلقائيًا في مجلدها المخصص.
-- ملاحظة: يتم إنشاء المجلدات تلقائيًا إذا لم تكن موجودة، ولا حاجة لتثبيت أدوات خارجية على Windows.
-
-#+begin_src emacs-lisp
-(use-package org-download
-  :after org
+(use-package dired-x
+  :ensure nil
+  :after dired
   :config
-  (defun osama/org-download-insert-function (link)
-    "Custom handler for inserting downloads into appropriate folders under ~/sync-thing/online-sync/emacs/osama-org/assets."
-    (let* ((ext (downcase (file-name-extension link)))
-           (time (format-time-string "%Y%m%d-%H%M%S"))
-           (filename (format "%s.%s" time ext))
-           (base-dir (expand-file-name "~/sync-thing/online-sync/emacs/osama-org/assets"))
-           (target-dir
-            (cond
-             ((member ext '("png" "jpg" "jpeg" "gif" "svg"))
-              (expand-file-name "images" base-dir))
-             ((member ext '("mp4" "mov" "avi" "mkv"))
-              (expand-file-name "videos" base-dir))
-             (t (expand-file-name "random" base-dir))))
-           (target-path (expand-file-name filename target-dir)))
-      (unless (file-exists-p target-dir)
-        (make-directory target-dir t))
-      (copy-file link target-path t)
-      ;; ترجع اسم الملف النهائي ليتم إدراجه تلقائيًا في org-download
-      target-path))
+  (setq dired-omit-files "^\\.?#\\|^\\.")) ;; hide clutter files like .#temp
 
-  (setq org-download-method 'osama/org-download-insert-function
-        org-download-heading-lvl nil
-        org-download-screenshot-method
-        "powershell -command \"Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $bmp = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height); $graphics = [System.Drawing.Graphics]::FromImage($bmp); $graphics.CopyFromScreen(0, 0, 0, 0, $bmp.Size); $file = 'screenshot.png'; $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Png); Write-Output $file\"")
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 
-  (add-hook 'org-mode-hook 'org-download-enable)
-  (add-hook 'dired-mode-hook 'org-download-enable))
-#+end_src
+** The =osama-emacs-windows.el= module
 
-* Android Settings
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle ~/.emacs.d/init-android.el :mkdirp yes
-:END:
 
-** lexical-binding
 
-#+begin_src emacs-lisp
-;;; init-android.el --- Android Emacs init -*- lexical-binding: t; -*-
-#+end_src
+** The =osama-emacs-system-custom.el= module
 
-** UI Configuration
+** The =osama-emacs-system-custom.el= module
 
-*** Tool Bar Settings
+*** The =osama-emacs-system-custom.el= module section for android
 
-#+begin_src emacs-lisp
-(menu-bar-mode 1)
-(tool-bar-mode 1)
-(tooltip-mode 1)
-#+end_src
+*** The =osama-emacs-system-custom.el= module section for windows
 
-*** Fix Virtual Keyboard
+* Android Section For Personal Settings
 
-#+begin_src emacs-lisp
-(setq overriding-text-conversion-style nil)
-#+end_src
-
-*** Always Show Virtual Keyboard
-
-#+begin_src emacs-lisp
-(setq touch-screen-display-keyboard t)
-#+end_src
+* The Personal Functions
