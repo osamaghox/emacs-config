@@ -1158,8 +1158,51 @@ generate links in titlecase for attachments."
    ("C-c t p" . tab-previous)))
 #+end_src
 
+** The =osama-emacs-dashboard.el= module
 
-** The =osama-emacs-system-custom.el= module
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-dashboard.el" :mkdirp yes
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+
+  ;; Banner
+  (setq dashboard-startup-banner 'official)
+  (setq dashboard-banner-logo-title "Welcome to Emacs, Osama!")
+
+  ;; Center content
+  (setq dashboard-center-content t)
+
+  ;; Enable icons
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+
+  ;; Customize items with icons and shortcuts
+  (setq dashboard-items '((recents  . 5)
+                          (projects . 5)
+                          (bookmarks . 5)))
+
+  ;; Add custom widget for shortcuts
+  (setq dashboard-item-generators
+        '((recents . (lambda (list-size)
+                       (dashboard-insert-heading " Recent Files" 'all-the-icons-blue)
+                       (dashboard-insert-recents list-size)))
+          (projects . (lambda (list-size)
+                        (dashboard-insert-heading " Projects" 'all-the-icons-green)
+                        (dashboard-insert-projects list-size)))
+          (bookmarks . (lambda (list-size)
+                         (dashboard-insert-heading " Bookmarks" 'all-the-icons-orange)
+                         (dashboard-insert-bookmarks list-size)))))
+
+  ;; Shortcut hints
+  (setq dashboard-set-shortcuts t)
+  (setq dashboard-shortcut-list
+        '(("SPC f r" . recents)
+          ("SPC f p" . projects)
+          ("SPC f b" . bookmarks)))))
+#+end_src
+
+
 
 ** The =osama-emacs-system-custom.el= module
 
