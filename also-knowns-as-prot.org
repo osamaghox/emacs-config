@@ -491,8 +491,24 @@ The which-key package provides hints for keys that complete the currently incomp
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 1))
+  (setq which-key-idle-delay 1)
+  (which-key-add-key-based-replacements
+    "C-c h" "Help"
+    "C-c x" "Text"
+    "C-c s" "Search"
+    "C-c w" "Windows"
+    "C-c e" "Emacs"
+    "C-c n" "Notes"
+    "C-c o" "Org"
+    "C-c o a" "Agenda"
+    "C-c f" "Files"
+    "C-c b" "Buffers"
+    "C-c d" "Dired"
+    "C-c t" "Toggles"
+    "C-c i" "Insert"
+    "C-c a" "Attachments"))
 #+end_src
+
 
 *** The =osama-emacs-completion.el= section for ~vertico~
 
@@ -535,6 +551,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c h o" . consult-outline)
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
+   ("C-c t t" . consult-theme)
    ("C-c y y" . consult-yank-pop)))
 #+end_src
 
@@ -585,8 +602,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 ** The =osama-emacs-org.el= module
-
-org modern + org appear
 
 At its core, Org is a plain text markup language. By "markup
 language", we refer to the use of common characters to apply styling,
@@ -745,7 +760,7 @@ on how I use Org.
     ;; Respect content when inserting heading
     (setq org-insert-heading-respect-content t)
     ;; Ellipsis for folded sections
-    (setq org-ellipsis "[...]")
+    (setq org-ellipsis "...")
     ;; Hide emphasis markers globally
     (setq org-hide-emphasis-markers t)
     ;; Hide extra stars in headings
@@ -821,6 +836,8 @@ on how I use Org.
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~denote~ package
+
+
 
 *** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
 
