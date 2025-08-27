@@ -890,14 +890,14 @@ on how I use Org.
   ;; Style for Denote links
   (denote-faces-link ((t (:slant italic))))
   :bind
-  (("C-c c n b" . denote-find-backlink)
-   ("C-c c n d" . denote-date)
-   ("C-c c n l" . denote-find-link)
-   ("C-c c n i" . denote-link-or-create)
-   ("C-c c n k" . denote-rename-file-keywords)
-   ("C-c c n n" . denote)
-   ("C-c c n r" . denote-rename-file)
-   ("C-c c d R" . denote-rename-file-using-front-matter)))
+  (("C-c n b" . denote-find-backlink)
+   ("C-c n d" . denote-date)
+   ("C-c n l" . denote-find-link)
+   ("C-c n i" . denote-link-or-create)
+   ("C-c n k" . denote-rename-file-keywords)
+   ("C-c n n" . denote)
+   ("C-c n r" . denote-rename-file)
+   ("C-c d R" . denote-rename-file-using-front-matter)))
 
 ;;; Fixed by Prot: Title Case link description
 (defun osama-denote-link-description-title-case (file)
@@ -1103,8 +1103,8 @@ generate links in titlecase for attachments."
   (dired-recursive-deletes 'top)
   (dired-auto-revert-buffer t)    ;; auto refresh on changes
   :bind
-  (("C-c d j" . dired-jump)
-   ("C-c d" . dired)))
+  (("C-c d d" . dired)
+   ("C-c d j" . dired-jump)))
 
 (use-package dired-x
   :ensure nil
