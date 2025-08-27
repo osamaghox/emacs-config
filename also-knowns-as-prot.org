@@ -897,7 +897,7 @@ on how I use Org.
    ("C-c n k" . denote-rename-file-keywords)
    ("C-c n n" . denote)
    ("C-c n r" . denote-rename-file)
-   ("C-c d R" . denote-rename-file-using-front-matter)))
+   ("C-c n R" . denote-rename-file-using-front-matter)))
 
 ;;; Fixed by Prot: Title Case link description
 (defun osama-denote-link-description-title-case (file)
@@ -1087,8 +1087,6 @@ generate links in titlecase for attachments."
     "pa" '(persp-add-buffer :which-key "add buffer to persp")
     "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
 #+end_src
-
-
 
 ** The =osama-emacs-dired.el= module
 
