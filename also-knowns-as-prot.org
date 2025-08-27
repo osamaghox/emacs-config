@@ -976,9 +976,9 @@ generate links in titlecase for attachments."
         evil-want-keybinding nil         ;; don't load default keybindings
         evil-want-C-u-scroll t           ;; C-u scroll up
         evil-want-C-i-jump nil)          ;; disable C-i jump
-        evil-mode-line-format nil) 
   :config
-  (evil-mode 1)
+  (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
+  (evil-mode 1))
 
   ;; Global keybindings
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
