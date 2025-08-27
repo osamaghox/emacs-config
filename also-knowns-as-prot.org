@@ -7,6 +7,25 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
+* Prefix Keys
+
+| Command     | Key |
+|-------------+-----|
+| help        | h   |
+| text        | x   |
+| search      | s   |
+| windows     | w   |
+| emacs       | e   |
+| notes       | n   |
+| org         | o   |
+| agenda      | o a |
+| files       | f   |
+| buffers     | b   |
+| dired       | d   |
+| toggles     | t   |
+| insert      | i   |
+| attachments | a   |
+
 
 * Basic Keybindings
 
