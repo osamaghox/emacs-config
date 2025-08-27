@@ -812,6 +812,7 @@ on how I use Org.
 (use-package org
   :bind
   (("C-c o l" . org-store-link)
+   ("C-c o t" . org-toggle-link-display)
    ("C-c o o" . org-open-at-point-global)))
 
 
