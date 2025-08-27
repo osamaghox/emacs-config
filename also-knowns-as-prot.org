@@ -1001,10 +1001,33 @@ generate links in titlecase for attachments."
   :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-** The =osama-emacs-windows.el= module
+** The =osama-emacs-window.el= module
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-window.el" :mkdirp yes
+(use-package emacs
+  :bind
+  (("C-c w w" . other-window)                ;; next window
 
+   ;; Split windows
+   ("C-c w s" . split-window-below)          ;; split below (horizontal)
+   ("C-c w v" . split-window-right)          ;; split right (vertical)
 
+   ;; Delete windows
+   ("C-c w d" . delete-window)               ;; delete current window
+   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
+   ("C-c w o" . delete-other-windows)        ;; keep only current window
+
+   ;; Resize windows
+   ("C-c w {" . shrink-window-horizontally)
+   ("C-c w }" . enlarge-window-horizontally)
+   ("C-c w ^" . enlarge-window)
+
+   ;; Move between windows with arrows
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down)))
+#+end_src
 
 ** The =osama-emacs-system-custom.el= module
 
