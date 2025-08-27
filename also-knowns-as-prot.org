@@ -376,9 +376,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-;; Define the folder to save fonts directly inside ~/emacs-data/fonts
+;; Define the folder to save fonts directly inside ~/osama-emacs/emacs-data/fonts
 (defvar osama-icons-dir
-  (expand-file-name "~/emacs-data/fonts/")
+  (expand-file-name "~/osama-emacs/emacs-data/fonts/")
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
