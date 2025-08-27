@@ -1086,13 +1086,13 @@ generate links in titlecase for attachments."
     "pk" '(persp-kill :which-key "kill perspective")
     "pa" '(persp-add-buffer :which-key "add buffer to persp")
     "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
-
 #+end_src
 
 
 
 ** The =osama-emacs-dired.el= module
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
 (use-package dired
   :ensure nil ;; built-in package
   :commands (dired dired-jump)
@@ -1105,7 +1105,7 @@ generate links in titlecase for attachments."
   :bind
   (("C-c d d" . dired)
    ("C-c d j" . dired-jump)))
-
+   
 (use-package dired-x
   :ensure nil
   :after dired
@@ -1114,6 +1114,7 @@ generate links in titlecase for attachments."
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
 
 ** The =osama-emacs-windows.el= module
 
