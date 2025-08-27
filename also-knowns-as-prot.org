@@ -1100,22 +1100,37 @@ generate links in titlecase for attachments."
 (use-package emacs
   :ensure nil
   :init
-  ;; Enable Tab Bar Mode globally
   (tab-bar-mode 1)
-  
-  ;; Optional settings
   (setq tab-bar-show t
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-tab-name-truncated-max 20
         tab-bar-close-button-show nil
         tab-bar-back-button-show nil)
   
-  ;; Keybindings
+  ;; Functions to jump to tab by number
+  (dotimes (i 9)
+    (let ((n (1+ i)))
+      (defalias (intern (format "tab-goto-%d" n))
+        `(lambda ()
+           (interactive)
+           (tab-bar-select-tab ,n)))))
+
+  ;; Keybindings C-c t 1 .. C-c t 9
   :bind
-  (("C-c t i" . tab-new)       ;; Create new tab
-   ("C-c t c" . tab-close)     ;; Close current tab
-   ("C-c t n" . tab-next)      ;; Go to next tab
-   ("C-c t p" . tab-previous))) ;; Go to previous tab
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
+   ;; Optional: new / close / next / prev
+   ("C-c t i" . tab-new)
+   ("C-c t c" . tab-close)
+   ("C-c t n" . tab-next)
+   ("C-c t p" . tab-previous)))
 #+end_src
 
 
