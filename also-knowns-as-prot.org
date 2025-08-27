@@ -148,20 +148,6 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
-** The =init.el= entry point
-
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
-(defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
-  "The root dir of the Osama Emacs distribution.")
-
-(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
-  "This directory houses all of the built-in Osama Emacs modules.")
-
-;; Load all .el files from modules directory
-(dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
-  (load file nil 'nomessage))
-#+end_src
-
 ** The =init.el= settings for packages (=package.el=)
 
 The =package.el= is built into Emacs and is perfectly fine for my
@@ -185,7 +171,19 @@ by ~use-package~ when it needs it
 (setq use-package-always-ensure t)
 #+end_src
 
-This module load basic configurations that apply to most facets of Emacs.
+** The =init.el= entry point
+
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+(defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
+  "The root dir of the Osama Emacs distribution.")
+
+(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
+  "This directory houses all of the built-in Osama Emacs modules.")
+
+;; Load all .el files from modules directory
+(dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
+  (load file nil 'nomessage))
+#+end_src
 
 * The modules of my Emacs configuration
 
@@ -295,7 +293,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ** The =osama-emacs-essentials.el= module
 
-This module load basic configurations that apply to most facets of Emacs. Many of my own custom libraries are loaded here 
+This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Section for Hide Tool bar
 
