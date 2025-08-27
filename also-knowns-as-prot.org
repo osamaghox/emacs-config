@@ -1104,18 +1104,18 @@ generate links in titlecase for attachments."
   (tab-bar-mode 1)
   
   ;; Optional settings
-  (setq tab-bar-show t                ;; always show tab bar
-        tab-bar-new-tab-choice "*scratch*"  ;; default buffer for new tabs
-        tab-bar-tab-name-truncated-max 20   ;; max tab name length
-        tab-bar-close-button-show nil       ;; hide close button on tabs
-        tab-bar-back-button-show nil))      ;; hide back button
-
-  ;; Optional keybindings
+  (setq tab-bar-show t
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-tab-name-truncated-max 20
+        tab-bar-close-button-show nil
+        tab-bar-back-button-show nil)
+  
+  ;; Keybindings
   :bind
-  (("C-c t n" . tab-new)         ;; Create new tab
-   ("C-c t c" . tab-close)       ;; Close current tab
-   ("C-c t o" . tab-next)        ;; Go to next tab
-   ("C-c t p" . tab-previous)))  ;; Go to previous tab
+  (("C-c t i" . tab-new)       ;; Create new tab
+   ("C-c t c" . tab-close)     ;; Close current tab
+   ("C-c t n" . tab-next)      ;; Go to next tab
+   ("C-c t p" . tab-previous))) ;; Go to previous tab
 #+end_src
 
 
