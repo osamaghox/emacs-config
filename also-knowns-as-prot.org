@@ -546,30 +546,27 @@ some commands dont have major mode example: (org, dired, consult) so we need to 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-;; Enable text reordering for right-to-left (RTL) languages
-(setq-default bidi-display-reordering t)
-
-;; Default mode for all files (paragraph direction is automatic)
-(setq-default bidi-paragraph-direction nil)
-
-(defun osama-emacs-toggle-bidi-paragraph-direction ()
-  "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
-  (interactive)
-  (setq bidi-paragraph-direction
-        (cond
-         ((eq bidi-paragraph-direction nil) 'left-to-right)
-         ((eq bidi-paragraph-direction 'left-to-right) 'right-to-left)
-         ((eq bidi-paragraph-direction 'right-to-left) nil)))
-  (message "Paragraph direction now: %s"
-           (pcase bidi-paragraph-direction
-             ('left-to-right "LTR")
-             ('right-to-left "RTL")
-             (_ "Auto")))
-
-  (recenter))
-
-;; Set a global shortcut to toggle paragraph direction in all Emacs modes
-(global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
+(use-package emacs
+  :init
+  (setq-default bidi-display-reordering t
+                bidi-paragraph-direction nil)
+  :config
+  (defun osama-toggle-text-direction ()
+    "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
+    (interactive)
+    (setq bidi-paragraph-direction
+          (cond
+           ((eq bidi-paragraph-direction nil) 'left-to-right)
+           ((eq bidi-paragraph-direction 'left-to-right) 'right-to-left)
+           ((eq bidi-paragraph-direction 'right-to-left) nil)))
+    (message "Paragraph direction now: %s"
+             (pcase bidi-paragraph-direction
+               ('left-to-right "LTR")
+               ('right-to-left "RTL")
+               (_ "Auto")))
+    (recenter))
+  :bind
+  ("C-c t r" . osama-toggle-text-direction))
 #+end_src
 
 *** The =osama-emacs-essentials.el= settings for ~text-mode~
