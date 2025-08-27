@@ -293,6 +293,31 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (("C-c t o" . osama-toggle-transparency)))
 #+end_src
 
+
+*** The =osama-emacs-theme.el= Section for Toggle Title Bar & Decorations
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Default frame settings
+  (add-to-list 'default-frame-alist '(undecorated . nil))
+  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+  (add-to-list 'default-frame-alist '(internal-border-width . 10))
+
+  ;; Function to toggle title bar
+  (defun osama-frame-toggle-decoration ()
+    "Toggle the frame title bar visibility (undecorated)."
+    (interactive)
+    (let* ((current (frame-parameter nil 'undecorated))
+           (new (not current)))
+      (set-frame-parameter nil 'undecorated new)))
+
+  ;; Bind the toggle function to a shortcut
+  :bind
+  (("C-c t f" . osama-frame-toggle-decoration)))
+#+end_src
+
 *** The =osama-emacs-theme.el= section for ~theme~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
