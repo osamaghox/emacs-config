@@ -2,7 +2,7 @@
 #+author: Osama Ghourab
 #+email: osamaghox@gmail.com
 #+language: en
-#+options: ':t toc:nil num:t author:t email:t
+#+options: ':t toc:t num:t author:t email:t
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
