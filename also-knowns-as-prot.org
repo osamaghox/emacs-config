@@ -107,6 +107,7 @@ osama-emacs-test.el
 
 ** this is the best for refernce
 
+https://github.com/rougier/dotemacs
 https://github.com/SophieBosio/.emacs.d/blob/main/init.org#mode-line
 https://github.com/ianyepan/yay-evil-emacs/blob/master/config.org
 https://github.com/pprevos/emacs-writing-studio/blob/master/init.el
