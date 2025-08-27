@@ -1162,7 +1162,6 @@ generate links in titlecase for attachments."
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-dashboard.el" :mkdirp yes
 (use-package dashboard
-  :ensure t
   :config
   (dashboard-setup-startup-hook)
 
