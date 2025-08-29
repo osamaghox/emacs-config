@@ -1013,7 +1013,17 @@ generate links in titlecase for attachments."
 
 *** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
 
-
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :config
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-directory "~/osama-emacs/org/agenda/")
+  (setq org-agenda-files (list org-directory))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
+#+end_src
 
 ** The =osama-emacs-evil.el= module
 
