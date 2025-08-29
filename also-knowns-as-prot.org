@@ -988,6 +988,7 @@ on how I use Org.
 - unique id because we can change title as we wish without breaking nites link
 
 نصائح
+- يفصل ان تكتب ملاحظاتك في الحياة وفي الجامعة مثلا في دفتر وتستخدم denotr file naming scheme مثلا التاريخ والkeywords و title تبع المءكرة ولو كان تعريف صغير
 - استخدم الkeywords بصيغة الجمع
 - خلي كل الملاحظات والملفات بنفس المجلد لانك بتحتاج تعمل تصنيف ايضا للصور والفيدوهات والثوتيات وملفات pdfs
 - استخدم ااربط بشكل كبير ضروري لان الملاحظات عبارة عن atom
