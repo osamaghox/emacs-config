@@ -981,6 +981,7 @@ on how I use Org.
 *** The =osama-emacs-denote.el= section for basic settings
 
 لماذا استخدمنا denote
+- لان الملاحظات عبارة عن ملاحظات صغير atom notes وتقوم بالربط بينهن حتى لو كان تعريف صغير تخليه ملاحظة لحالها
 - no database
 - id method can even be writted in you hand note book
 - you can use it from any emacs distro like doom or vanilla because its plain text
