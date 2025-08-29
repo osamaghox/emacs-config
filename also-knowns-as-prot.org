@@ -1025,6 +1025,11 @@ generate links in titlecase for attachments."
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
 #+end_src
 
+*** The =osama-emacs-org.el= section for ~org-capture~
+
+
+
+
 ** The =osama-emacs-evil.el= module
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
