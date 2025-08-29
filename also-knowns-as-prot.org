@@ -1017,9 +1017,15 @@ on how I use Org.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
 (use-package consult-denote
+  :demand t
   :bind
   (("C-c n f" . consult-denote-find)
    ("C-c n g" . consult-denote-grep))
+  :custom
+  ;; force consult-denote to use consult-fd instead of find
+  (consult-denote-find-command #'consult-fd)
+  ;; force consult-denote to use consult-ripgrep instead of grep
+  (consult-denote-grep-command #'consult-ripgrep)
   :config
   (consult-denote-mode 1))
 #+end_src
