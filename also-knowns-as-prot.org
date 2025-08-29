@@ -987,6 +987,11 @@ on how I use Org.
 - you can use it from any emacs distro like doom or vanilla because its plain text
 - unique id because we can change title as we wish without breaking nites link
 
+نصائح
+- استخدم الkeywords بصيغة الجمع
+- خلي كل الملاحظات والملفات بنفس المجلد لانك بتحتاج تعمل تصنيف ايضا للصور والفيدوهات والثوتيات وملفات pdfs
+- استخدم ااربط بشكل كبير ضروري لان الملاحظات عبارة عن atom
+
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
@@ -995,10 +1000,9 @@ on how I use Org.
    ("C-c n r" . denote-rename-file)
    ("C-c n l" . denote-link)
    ("C-c n b" . denote-backlinks)
-   ("C-c n d" . denote-dired)
-   ("C-c n g" . denote-grep))
+   ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "~/Documents/notes/"))
+  (setq denote-directory (expand-file-name "~/osama-emacs/notes/"))
 
   ;; Automatically rename Denote buffers when opening them so that
   ;; instead of their long file name they have, for example, a literal
