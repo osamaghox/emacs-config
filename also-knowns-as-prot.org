@@ -961,6 +961,11 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~denote~ package
 
+لماذا استخدمنا denote
+- no database
+- id method can even be writted in you hand note book
+- you can use it from any emacs distro like doom or vanilla because its plain text
+- unique id because we can change title as we wish without breaking nites link
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
 (use-package denote
