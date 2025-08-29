@@ -893,7 +893,7 @@ on how I use Org.
   ;; Make M-RET insert a new item without splitting the current line
   (setq org-M-RET-may-split-line '((default . nil)))
   ;; Color the entire block delimiter line
-  (setq org-fontify-whole-block-delimiter-line t))
+  (setq org-fontify-whole-block-delimiter-line t)
   :bind
   (("C-c o l" . org-store-link)
    ("C-c o t" . org-toggle-link-display)
