@@ -1037,6 +1037,17 @@ generate links in titlecase for attachments."
         (format "%s" (titlecase--string clean-title titlecase-style)))))))
 #+end_src
 
+*** The =osama-emacs-denote.el= section for ~consult-denote~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
+(use-package consult-denote
+  :bind
+  (("C-c n f" . consult-denote-find)
+   ("C-c n g" . consult-denote-grep))
+  :config
+  (consult-denote-mode 1))
+#+end_src
+
 ** The =osama-emacs-evil.el= module
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
