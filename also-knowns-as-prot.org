@@ -959,7 +959,28 @@ on how I use Org.
   (add-hook 'org-mode-hook #'org-font-setup)
 #+end_src
 
-*** The =osama-emacs-org.el= section for ~denote~ package
+
+
+*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :config
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-directory "~/osama-emacs/org/agenda/")
+  (setq org-agenda-files (list org-directory))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
+#+end_src
+
+*** The =osama-emacs-org.el= section for ~org-capture~
+
+
+** The =osama-emacs-denote.el= module
+
+*** The =osama-emacs-denote.el= section for basic settings
 
 لماذا استخدمنا denote
 - no database
@@ -967,7 +988,7 @@ on how I use Org.
 - you can use it from any emacs distro like doom or vanilla because its plain text
 - unique id because we can change title as we wish without breaking nites link
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote
   :defer t
   :custom
@@ -1015,25 +1036,6 @@ generate links in titlecase for attachments."
       (let ((clean-title (replace-regexp-in-string "\\([a-zA-Z0-9]\\)-\\([a-zA-Z0-9]\\)" "\\1 \\2" title)))
         (format "%s" (titlecase--string clean-title titlecase-style)))))))
 #+end_src
-
-*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-(use-package org
-  :ensure nil
-  :config
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-  (setq org-directory "~/osama-emacs/org/agenda/")
-  (setq org-agenda-files (list org-directory))
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
-#+end_src
-
-*** The =osama-emacs-org.el= section for ~org-capture~
-
-
-
 
 ** The =osama-emacs-evil.el= module
 
