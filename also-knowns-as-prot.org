@@ -871,7 +871,7 @@ on how I use Org.
     :ensure nil ;; org is built-in
     :init
     ;; Org files directory
-    (setq org-directory (expand-file-name "~/osama-vault/org/"))
+    (setq org-directory (expand-file-name "~/osama-emacs/org/"))
     ;; Depth for imenu
     (setq org-imenu-depth 5)
     ;; RET follows links
@@ -888,6 +888,8 @@ on how I use Org.
     (setq org-hide-leading-stars t)
     ;; Highlight quote and verse blocks
     (setq org-fontify-quote-and-verse-blocks t)
+    ;; Make M-RET insert a new item without splitting the current line
+    (setq org-M-RET-may-split-line '((default . nil)))
     ;; Color the entire block delimiter line
     (setq org-fontify-whole-block-delimiter-line t))
     
