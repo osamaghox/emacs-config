@@ -529,18 +529,43 @@ some commands dont have major mode example: (org, dired, consult) so we need to 
             (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Support Arabic Typing & Arabic Filenames
+*** The =osama-emacs-essentials.el= Section for for UTF-8 Defaults
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil ;; built-in
+  :init
+  ;; أهم شيء: نجعل UTF-8 الافتراضي في كل مكان
+  (set-language-environment "UTF-8")
+  (prefer-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8-unix)
+  (setq coding-system-for-read 'utf-8)
+  (setq coding-system-for-write 'utf-8)
+
+  ;; للتأكد من أن الملفات الجديدة كلها UTF-8
+  (modify-coding-system-alist 'file "" 'utf-8)
+
+  ;; للتعامل مع العملية الخارجية (ripgrep, fd ...)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+
+  ;; على Windows أحيانًا لازم نضمن هذا
+  (when (eq system-type 'windows-nt)
+    (set-clipboard-coding-system 'utf-8)
+    (set-file-name-coding-system 'utf-8)))
+#+end_src
+
+
+*** The =osama-emacs-essentials.el= Section for Support Arabic Typing
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
   ;; Arabic input method
-  (setq default-input-method "arabic")
-
-  ;; UTF-8 everywhere
-  (prefer-coding-system 'utf-8)
-  (setq default-buffer-file-coding-system 'utf-8))
+  (setq default-input-method "arabic"))
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
