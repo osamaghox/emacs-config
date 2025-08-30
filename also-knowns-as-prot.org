@@ -938,6 +938,7 @@ on how I use Org.
 
   ;; Modern appearance
   (use-package org-modern
+    :disabled t
     :hook (org-mode . org-modern-mode)
     :custom
     (org-modern-table nil)
