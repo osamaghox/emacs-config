@@ -158,7 +158,7 @@ This is the first file that Emacs reads when starting up. It should contain code
                                     (getenv "LD_LIBRARY_PATH")))
   (push "/data/data/com.termux/files/usr/bin" exec-path)
 
-  ;; حل مشكلة Ctrl+C / Ctrl+V والنسخ الافتراضي في Emacs Termux
+  ;; fix evil mode in termux
   (setq overriding-text-conversion-style nil))
 
   ;; Windows settings
