@@ -202,23 +202,23 @@ mkdir -p /data/data/org.gnu.emacs/files
 
 # إنشاء مجلدات المصدر على sdcard إذا مش موجودة
 mkdir -p /sdcard/.emacs.d
-mkdir -p /sdcard/sync-thing
-mkdir -p /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts
+mkdir -p /sdcard/osama-vault
+mkdir -p /sdcard/osama-vault/emacs/data/fonts
 
 # رابط sdcard/.emacs.d
 rm -rf /data/data/org.gnu.emacs/files/.emacs.d
 ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
 
-# رابط sdcard/sync-thing
-rm -rf /data/data/org.gnu.emacs/files/sync-thing
-ln -s /sdcard/sync-thing /data/data/org.gnu.emacs/files/sync-thing
+# رابط sdcard/osama-vault
+rm -rf /data/data/org.gnu.emacs/files/osama-vault
+ln -s /sdcard/osama-vault /data/data/org.gnu.emacs/files/osama-vault
 
 # إنشاء مجلد fonts قبل الربط
 mkdir -p /data/data/org.gnu.emacs/files/fonts
 
 # رابط مجلد الخطوط
 rm -rf /data/data/org.gnu.emacs/files/fonts
-ln -s /sdcard/sync-thing/online-sync/emacs/emacs-data/fonts /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 #+END_EXAMPLE
 
 *** After completing all steps, verify early-init.el exists
