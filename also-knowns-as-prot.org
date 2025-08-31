@@ -146,16 +146,20 @@ This is the first file that Emacs reads when starting up. It should contain code
 ;; Detect system type and add appropriate paths
 (let ((path-sep (if (eq system-type 'windows-nt) ";" ":")))
 
-  ;; Android (Termux) settings
-  (when (string-equal system-type "android")
-    (setenv "PATH" (format "%s%s%s"
-                           "/data/data/com.termux/files/usr/bin"
-                           path-sep
-                           (getenv "PATH")))
-    (setenv "LD_LIBRARY_PATH" (format "%s:%s"
-                                      "/data/data/com.termux/files/usr/lib"
-                                      (getenv "LD_LIBRARY_PATH")))
-    (push "/data/data/com.termux/files/usr/bin" exec-path))
+;; Android (Termux) settings
+(when (string-equal system-type "android")
+  ;; تعديل PATH و LD_LIBRARY_PATH
+  (setenv "PATH" (format "%s%s%s"
+                         "/data/data/com.termux/files/usr/bin"
+                         path-sep
+                         (getenv "PATH")))
+  (setenv "LD_LIBRARY_PATH" (format "%s:%s"
+                                    "/data/data/com.termux/files/usr/lib"
+                                    (getenv "LD_LIBRARY_PATH")))
+  (push "/data/data/com.termux/files/usr/bin" exec-path)
+
+  ;; حل مشكلة Ctrl+C / Ctrl+V والنسخ الافتراضي في Emacs Termux
+  (setq overriding-text-conversion-style nil))
 
   ;; Windows settings
   (when (eq system-type 'windows-nt)
