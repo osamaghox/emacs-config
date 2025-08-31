@@ -542,26 +542,21 @@ Administrative > Change system local... > Arabic (Saudi Arabia) > Beta: Use Unic
 (use-package emacs
   :ensure nil ;; built-in
   :init
-  ;; أهم شيء: نجعل UTF-8 الافتراضي في كل مكان
+  ;; اجعل UTF-8 الافتراضي في كل مكان
   (set-language-environment "UTF-8")
-  (prefer-coding-system 'utf-8)
-  (setq locale-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8-unix)
+  (setq locale-coding-system 'utf-8-unix)
   (setq default-buffer-file-coding-system 'utf-8-unix)
-  (setq coding-system-for-read 'utf-8)
-  (setq coding-system-for-write 'utf-8)
 
-  ;; للتأكد من أن الملفات الجديدة كلها UTF-8
-  (modify-coding-system-alist 'file "" 'utf-8)
+  ;; للتعامل مع العمليات الخارجية (ripgrep, fd ...)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-selection-coding-system 'utf-8-unix)
 
-  ;; للتعامل مع العملية الخارجية (ripgrep, fd ...)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-
-  ;; على Windows أحيانًا لازم نضمن هذا
+  ;; على Windows: أسماء الملفات والـ clipboard
   (when (eq system-type 'windows-nt)
-    (set-clipboard-coding-system 'utf-8)
-    (set-file-name-coding-system 'utf-8)))
+    (set-clipboard-coding-system 'utf-8-unix)
+    (set-file-name-coding-system 'utf-8-unix)))
 #+end_src
 
 
