@@ -148,18 +148,12 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ;; Android (Termux) settings
 (when (string-equal system-type "android")
-  ;; تعديل PATH و LD_LIBRARY_PATH
-  (setenv "PATH" (format "%s%s%s"
-                         "/data/data/com.termux/files/usr/bin"
-                         path-sep
-                         (getenv "PATH")))
-  (setenv "LD_LIBRARY_PATH" (format "%s:%s"
-                                    "/data/data/com.termux/files/usr/lib"
-                                    (getenv "LD_LIBRARY_PATH")))
-  (push "/data/data/com.termux/files/usr/bin" exec-path)
-
-  ;; fix evil mode in termux
-  (setq overriding-text-conversion-style nil))
+  ;; Add Termux binaries to PATH environment
+  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
+    (setenv "PATH" (concat (getenv "PATH") ":" termuxpath))
+    (setq exec-path (append exec-path (list termuxpath)))
+     ;; conversion-style set to nil for evil integration
+    (setq overriding-text-conversion-style nil)))
 
   ;; Windows settings
   (when (eq system-type 'windows-nt)
