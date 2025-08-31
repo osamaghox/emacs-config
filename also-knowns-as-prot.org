@@ -1063,6 +1063,19 @@ on how I use Org.
   (consult-denote-mode 1))
 #+end_src
 
+** The =osama-emacs-markdown.el= module
+
+*** The =osama-emacs-markdown.el= section for Basic Settings
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-markdown.el" :mkdirp yes
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
+#+end_src
+
 ** The =osama-emacs-evil.el= module
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
