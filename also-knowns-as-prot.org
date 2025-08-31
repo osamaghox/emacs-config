@@ -160,7 +160,7 @@ This is the first file that Emacs reads when starting up. It should contain code
   ;; Windows settings
   (when (eq system-type 'windows-nt)
     ;; Git
-    (let ((tools-dir (expand-file-name "~/osama-emacs/emacs-data/tools/")))
+    (let ((tools-dir (expand-file-name "~/osama-vault/emacs/data/tools/")))
       (add-to-list 'exec-path (concat tools-dir "git/cmd"))
       (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
                              path-sep
@@ -379,9 +379,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-;; Define the folder to save fonts directly inside ~/osama-emacs/emacs-data/fonts
+;; Define the folder to save fonts directly inside ~/osama-vault/emacs/data/fonts
 (defvar osama-icons-dir
-  (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+  (expand-file-name "~/osama-vault/emacs/data/fonts/")
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
@@ -442,7 +442,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 
 ;; Create fonts directory if it doesn't exist
-(defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+(defvar osama-fonts-dir (expand-file-name "~/osama-vault/emacs/data/fonts/")
   "Directory to store fonts for Emacs.")
 
 (unless (file-directory-p osama-fonts-dir)
@@ -472,7 +472,7 @@ some commands dont have major mode example: (org, dired, consult) so we need to 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Define cache directory
 (defvar osama-cache-dir
-  (expand-file-name "~/osama-emacs/emacs-cache/")
+  (expand-file-name "~/osama-vault/emacs/cache/")
   "Portable directory for saving Emacs session cache across devices.")
 
 ;; Ensure cache directory exists
@@ -892,7 +892,7 @@ on how I use Org.
   :ensure nil ;; org built-in
   :init
   ;; Org files directory
-  (setq org-directory (expand-file-name "~/osama-emacs/org/"))
+  (setq org-directory (expand-file-name "~/osama-vault/emacs/org/"))
   ;; Depth for imenu
   (setq org-imenu-depth 5)
   ;; RET follows links
@@ -987,7 +987,7 @@ on how I use Org.
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  (setq org-directory "~/osama-emacs/org/agenda/")
+  (setq org-directory "~/osama-vault/emacs/org/agenda/")
   (setq org-agenda-files (list org-directory))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
@@ -1024,7 +1024,7 @@ on how I use Org.
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "~/osama-emacs/notes/"))
+  (setq denote-directory (expand-file-name "~/osama-vault/emacs/notes/"))
 
   ;; Automatically rename Denote buffers when opening them so that
   ;; instead of their long file name they have, for example, a literal
