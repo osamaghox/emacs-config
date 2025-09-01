@@ -1159,7 +1159,7 @@ on how I use Org.
   :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-*** The =osama-emacs-dired.el= settings for hide toggle files extension
+*** The =osama-emacs-dired.el= settings for hide files extension
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
 (defvar-local osama-dired-hide-extensions-enabled nil
@@ -1186,7 +1186,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
   (message "Dired: %s extensions"
            (if osama-dired-hide-extensions-enabled "hiding" "showing")))
 
-(global-set-key (kbd "C-c d t") #'osama-dired-toggle-hide-extensions)
+(global-set-key (kbd "C-c d h") #'osama-dired-toggle-hide-extensions)
 #+end_src
 
 ** The =osama-emacs-window.el= module
