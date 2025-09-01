@@ -143,34 +143,34 @@ This is the first file that Emacs reads when starting up. It should contain code
 ** The =early-init.el= section to set PATH and system tools
 
 #+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
-;; Detect system type and add appropriate paths
-(let ((path-sep (if (eq system-type 'windows-nt) ";" ":")))
+;; Detect system type and set appropriate PATH separators
+(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
 
 ;; Android (Termux) settings
 (when (string-equal system-type "android")
-  ;; Add Termux binaries to PATH environment
+  ;; Add Termux binaries to the PATH environment
   (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
-    ;; نحط termuxpath أول شي في PATH عشان يغلب على busybox grep
+    ;; Prepend termuxpath to PATH to override busybox grep
     (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
     (setq exec-path (cons termuxpath exec-path))
+    ;; Set conversion style to nil for better Evil integration
+    (setq overriding-text-conversion-style nil)))
 
-    ;; conversion-style set to nil for evil integration
-    (setq overriding-text-conversion-style nil))))
+;; Windows settings
+(when (eq system-type 'windows-nt)
+  ;; Define tools directory
+  (let ((tools-dir (expand-file-name "~/osama-vault/emacs/data/tools/")))
+    ;; Add Git to exec-path and PATH
+    (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+    (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
+                           path-sep
+                           (getenv "PATH")))
 
-  ;; Windows settings
-  (when (eq system-type 'windows-nt)
-    ;; Git
-    (let ((tools-dir (expand-file-name "~/osama-vault/emacs/data/tools/")))
-      (add-to-list 'exec-path (concat tools-dir "git/cmd"))
-      (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
-                             path-sep
-                             (getenv "PATH")))
+    ;; Add fd (file search tool) to exec-path
+    (add-to-list 'exec-path (concat tools-dir "fd/"))
 
-      ;; fd (file search tool)
-      (add-to-list 'exec-path (concat tools-dir "fd/"))
-
-      ;; ripgrep
-      (add-to-list 'exec-path (concat tools-dir "ripgrep/")))))
+    ;; Add ripgrep to exec-path
+    (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 #+end_src
 
 * The main initialisation of Emacs (=init.el=)
