@@ -592,21 +592,17 @@ Administrative > Change system local... > Arabic (Saudi Arabia) > Beta: Use Unic
   :ensure nil
   :init
   (setq-default bidi-display-reordering t
-                bidi-paragraph-direction nil)
+                bidi-paragraph-direction 'left-to-right)
   :config
   (defun osama-toggle-text-direction ()
-    "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
+    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
     (interactive)
     (setq bidi-paragraph-direction
-          (cond
-           ((eq bidi-paragraph-direction nil) 'left-to-right)
-           ((eq bidi-paragraph-direction 'left-to-right) 'right-to-left)
-           ((eq bidi-paragraph-direction 'right-to-left) nil)))
+          (if (eq bidi-paragraph-direction 'left-to-right)
+              'right-to-left
+            'left-to-right))
     (message "Paragraph direction now: %s"
-             (pcase bidi-paragraph-direction
-               ('left-to-right "LTR")
-               ('right-to-left "RTL")
-               (_ "Auto")))
+             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
     (recenter))
   :bind
   ("C-c t r" . osama-toggle-text-direction))
@@ -1162,31 +1158,34 @@ on how I use Org.
 *** The =osama-emacs-dired.el= settings for hide files extension
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
-(defvar-local osama-dired-hide-extensions-enabled nil
-  "Non-nil if file extensions are hidden in this Dired buffer.")
+(use-package dired
+  :ensure nil
+  :bind (:map dired-mode-map
+              ("C-c d h" . osama-dired-toggle-hide-extensions))
+  :config
+  (defvar-local osama-dired-hide-extensions-enabled nil
+    "Non-nil if file extensions are hidden in this Dired buffer.")
 
-(defun osama-dired--apply-hide-extensions (hide)
-  "Apply or remove hiding of ALL file extensions in current buffer.
+  (defun osama-dired--apply-hide-extensions (hide)
+    "Apply or remove hiding of ALL file extensions in current buffer.
 If HIDE is non-nil, hide extensions; otherwise show them."
-  (let ((inhibit-read-only t)
-        (regex "\\.[^.]+$"))
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward regex nil t)
-        (if hide
-            (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
-          (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
+    (let ((inhibit-read-only t)
+          (regex "\\.[^.]+$"))
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward regex nil t)
+          (if hide
+              (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
+            (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
 
-(defun osama-dired-toggle-hide-extensions ()
-  "Toggle hiding of ALL file extensions in current Dired buffer."
-  (interactive)
-  (setq osama-dired-hide-extensions-enabled
-        (not osama-dired-hide-extensions-enabled))
-  (osama-dired--apply-hide-extensions osama-dired-hide-extensions-enabled)
-  (message "Dired: %s extensions"
-           (if osama-dired-hide-extensions-enabled "hiding" "showing")))
-
-(global-set-key (kbd "C-c d h") #'osama-dired-toggle-hide-extensions)
+  (defun osama-dired-toggle-hide-extensions ()
+    "Toggle hiding of ALL file extensions in current Dired buffer."
+    (interactive)
+    (setq osama-dired-hide-extensions-enabled
+          (not osama-dired-hide-extensions-enabled))
+    (osama-dired--apply-hide-extensions osama-dired-hide-extensions-enabled)
+    (message "Dired: %s extensions"
+             (if osama-dired-hide-extensions-enabled "hiding" "showing"))))
 #+end_src
 
 ** The =osama-emacs-window.el= module
