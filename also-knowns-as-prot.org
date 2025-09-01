@@ -378,7 +378,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
 (use-package doom-themes
-  :ensure t
   :defer t)
 #+end_src
 
