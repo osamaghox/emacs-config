@@ -1143,6 +1143,7 @@ on how I use Org.
   (dired-auto-revert-buffer t)    ;; auto refresh on changes
   :bind
   (("C-c d d" . dired)
+   ("C-c d f" . find-file-other-window)
    ("C-c d j" . dired-jump)))
    
 (use-package dired-x
