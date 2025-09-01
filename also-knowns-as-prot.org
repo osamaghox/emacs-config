@@ -329,9 +329,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (load-theme 'ef-deuteranopia-light t))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~modeline~
+*** [Disabled] The =osama-emacs-theme.el= section for modeline
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle no :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -372,6 +372,29 @@ In this module I define everything broadly related to the aesthetics of Emacs.
                           (format-time-string " %H:%M ")
                           'face 'mode-line))
                   mode-line-end-spaces)))
+#+end_src
+
+*** The =osama-emacs-theme.el= section for ~doom-themes~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+end_src
+(use-package doom-themes
+  :ensure t
+  :defer t)
+*** The =osama-emacs-theme.el= section for ~doom-modeline~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+(use-package doom-modeline
+  :ensure t
+  :init
+  (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count t)
+  (doom-modeline-indent-info t))
 #+end_src
 
 ** The =osama-emacs-fonts.el= module
