@@ -1133,6 +1133,8 @@ on how I use Org.
 
 ** The =osama-emacs-dired.el= module
 
+** The =osama-emacs-dired.el= section for basic settings
+
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
 (use-package dired
   :ensure nil ;; built-in package
@@ -1155,6 +1157,36 @@ on how I use Org.
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+
+*** The =osama-emacs-dired.el= settings for hide toggle files extension
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
+(defvar-local osama-dired-hide-extensions-enabled nil
+  "Non-nil if file extensions are hidden in this Dired buffer.")
+
+(defun osama-dired--apply-hide-extensions (hide)
+  "Apply or remove hiding of ALL file extensions in current buffer.
+If HIDE is non-nil, hide extensions; otherwise show them."
+  (let ((inhibit-read-only t)
+        (regex "\\.[^.]+$"))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward regex nil t)
+        (if hide
+            (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
+          (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
+
+(defun osama-dired-toggle-hide-extensions ()
+  "Toggle hiding of ALL file extensions in current Dired buffer."
+  (interactive)
+  (setq osama-dired-hide-extensions-enabled
+        (not osama-dired-hide-extensions-enabled))
+  (osama-dired--apply-hide-extensions osama-dired-hide-extensions-enabled)
+  (message "Dired: %s extensions"
+           (if osama-dired-hide-extensions-enabled "hiding" "showing")))
+
+(global-set-key (kbd "C-c d t") #'osama-dired-toggle-hide-extensions)
 #+end_src
 
 ** The =osama-emacs-window.el= module
