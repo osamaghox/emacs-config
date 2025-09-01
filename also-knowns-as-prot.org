@@ -1155,18 +1155,18 @@ on how I use Org.
   :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-*** The =osama-emacs-dired.el= settings for hide files extension
+*** The =osama-emacs-dired.el= settings for ~dired-hide-details-mode~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
 (use-package dired
   :ensure nil
   :bind (:map dired-mode-map
-              ("C-c d h" . osama-dired-toggle-hide-extensions))
+              ("C-c d h" . osama-dired-hide-details-mode))
   :config
-  (defvar-local osama-dired-hide-extensions-enabled nil
-    "Non-nil if file extensions are hidden in this Dired buffer.")
+  (defvar-local osama-dired-hide-details-enabled nil
+    "Non-nil if details and extensions are hidden in this Dired buffer.")
 
-  (defun osama-dired--apply-hide-extensions (hide)
+  (defun osama-dired-hide-details-apply-extensions (hide)
     "Apply or remove hiding of ALL file extensions in current buffer.
 If HIDE is non-nil, hide extensions; otherwise show them."
     (let ((inhibit-read-only t)
@@ -1178,14 +1178,20 @@ If HIDE is non-nil, hide extensions; otherwise show them."
               (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
             (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
 
-  (defun osama-dired-toggle-hide-extensions ()
-    "Toggle hiding of ALL file extensions in current Dired buffer."
+  (defun osama-dired-hide-details-mode ()
+    "Toggle hiding of details + ALL file extensions in current Dired buffer."
     (interactive)
-    (setq osama-dired-hide-extensions-enabled
-          (not osama-dired-hide-extensions-enabled))
-    (osama-dired--apply-hide-extensions osama-dired-hide-extensions-enabled)
-    (message "Dired: %s extensions"
-             (if osama-dired-hide-extensions-enabled "hiding" "showing"))))
+    (setq osama-dired-hide-details-enabled
+          (not osama-dired-hide-details-enabled))
+    (if osama-dired-hide-details-enabled
+        (progn
+          (dired-hide-details-mode 1)
+          (osama-dired-hide-details-apply-extensions t)
+          (message "Dired: hiding details + extensions"))
+      (progn
+        (dired-hide-details-mode 0)
+        (osama-dired-hide-details-apply-extensions nil)
+        (message "Dired: showing details + extensions")))))
 #+end_src
 
 ** The =osama-emacs-window.el= module
