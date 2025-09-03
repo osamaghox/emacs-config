@@ -1017,6 +1017,26 @@ on how I use Org.
 *** The =osama-emacs-org.el= section for ~org-capture~
 
 
+*** The =osama-emacs-org.el= section for ~org-roam~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package org-roam
+  :ensure t
+  :custom
+  ;; مجلد ملاحظات org-roam
+  (org-roam-directory (file-truename "~/sync-thing/online-sync/emacs/osama-org/org/roam"))
+  ;; مكان قاعدة البيانات
+  (org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
+  :bind (("C-c n l" . org-roam-buffer-toggle) ;; عرض/إخفاء لوحة الروابط
+         ("C-c n f" . org-roam-node-find)     ;; البحث عن ملاحظة
+         ("C-c n g" . org-roam-graph)         ;; عرض الرسم البياني
+         ("C-c n i" . org-roam-node-insert)   ;; إدراج رابط لملاحظة
+         ("C-c n c" . org-roam-capture))      ;; إنشاء ملاحظة جديدة
+  :config
+  ;; مزامنة قاعدة البيانات تلقائياً
+  (org-roam-db-autosync-mode))
+#+end_src
+
 ** The =osama-emacs-denote.el= module
 
 *** The =osama-emacs-denote.el= section for basic settings
