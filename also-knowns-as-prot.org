@@ -1263,9 +1263,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
    ;; Optional: new / close / next / prev
    ("C-c t i" . tab-new)
    ("C-c t c" . tab-close)
-   ("C-c t n" . tab-next)
-   ("C-c t u" . tab-undo)
-   ("C-c t p" . tab-previous)))
+   ("C-c t u" . tab-undo)))
 #+end_src
 
 ** The =osama-emacs-dashboard.el= module
