@@ -1024,7 +1024,7 @@ on how I use Org.
   :ensure t
   :custom
   ;; مجلد ملاحظات org-roam
-  (org-roam-directory (file-truename "~/sync-thing/online-sync/emacs/osama-org/org/roam"))
+  (org-roam-directory (file-truename "~/osama-vault/emacs/org/roam"))
   ;; مكان قاعدة البيانات
   (org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
   :bind (("C-c n l" . org-roam-buffer-toggle) ;; عرض/إخفاء لوحة الروابط
