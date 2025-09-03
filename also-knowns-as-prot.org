@@ -1264,6 +1264,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
    ("C-c t i" . tab-new)
    ("C-c t c" . tab-close)
    ("C-c t n" . tab-next)
+   ("C-c t u" . tab-undo)
    ("C-c t p" . tab-previous)))
 #+end_src
 
