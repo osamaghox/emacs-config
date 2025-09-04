@@ -1285,7 +1285,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
    ("C-c 8" . tab-goto-8)
    ("C-c 9" . tab-goto-9)
    ;; Optional: new / close / next / prev
-   ("C-c t i" . tab-new)
+   ("C-c t n" . tab-new)
    ("C-c t c" . tab-close)
    ("C-c t u" . tab-undo)))
 #+end_src
