@@ -177,6 +177,12 @@ This is the first file that Emacs reads when starting up. It should contain code
 
     ;; Add ripgrep to exec-path
     (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
+
+;; Fix Arabic text search issues with fd and ripgrep on Windows
+(when (eq system-type 'windows-nt)
+  (dolist (prog '("[rR][gG]" "[fF][dD]"))
+    (add-to-list 'process-coding-system-alist
+                 `(,prog . (utf-8 . windows-1256)))))
 #+end_src
 
 * The main initialisation of Emacs (=init.el=)
