@@ -1080,26 +1080,23 @@ on how I use Org.
   (denote-rename-buffer-mode 1))
 #+end_src
 
-*** The =osama-emacs-denote.el= section for basic settings
+*** The =osama-emacs-denote.el= section for ~denote-sequence~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote-sequence
   :ensure t
   :bind
-  ( :map global-map
-    ;; Here we make "C-c n s" a prefix for all "[n]otes with [s]equence".
-    ("C-c n s s" . denote-sequence)
-    ("C-c n s f" . denote-sequence-find)
-    ("C-c n s l" . denote-sequence-link)
-    ("C-c n s d" . denote-sequence-dired)
-    ("C-c n s r" . denote-sequence-reparent)
-    ("C-c n s c" . denote-sequence-convert))
-  :config
-  ;; The default sequence scheme is `numeric'.
-  (setq denote-sequence-scheme 'alphanumeric))
+  (:map global-map
+        ;; Here we make "C-c n s" a prefix for all "[n]otes with [s]equence".
+        ("C-c n s s" . denote-sequence)
+        ("C-c n s f" . denote-sequence-find)
+        ("C-c n s l" . denote-sequence-link)
+        ("C-c n s d" . denote-sequence-dired)
+        ("C-c n s r" . denote-sequence-reparent)
+        ("C-c n s n" . denote-sequence-new-child-of-current)
+        ("C-c n s b" . denote-sequence-new-sibling-of-current)
+        ("C-c n s c" . denote-sequence-convert)))
 #+end_src
-
-
 
 *** The =osama-emacs-denote.el= section for ~consult-denote~
 
