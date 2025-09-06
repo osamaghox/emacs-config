@@ -1031,7 +1031,7 @@ on how I use Org.
   (setq org-agenda-files (list org-directory))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)")))
-  (setq (org-agenda-prefix-format "%t %s")))
+  (setq org-agenda-prefix-format "%t %s"))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~org-capture~
