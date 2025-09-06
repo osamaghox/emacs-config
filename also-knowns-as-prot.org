@@ -1035,26 +1035,39 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~org-capture~
 
+*** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
-*** The =osama-emacs-org.el= section for ~org-roam~
+هذه الخطوات في windows 11
+
+طبعًا با تسوي المسار حسب الـ Vault في obsidian
+in my case its:
+=C:/Syncthing/Obsidian/Vaults/MyNewVault/draws=
+
+and my draws path is:=~/osama-vault/emacs/notes/draws=
+
+بنسوي لهن symlink :
+
+mklink /D "C:\Syncthing\Obsidian\Vaults\MyNewVault\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
+
+
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-(use-package org-roam
-  :ensure t
-  :custom
-  ;; مجلد ملاحظات org-roam
-  (org-roam-directory (file-truename "~/osama-vault/emacs/org/roam"))
-  ;; مكان قاعدة البيانات
-  (org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
-  :bind (("C-c n l" . org-roam-buffer-toggle) ;; عرض/إخفاء لوحة الروابط
-         ("C-c n f" . org-roam-node-find)     ;; البحث عن ملاحظة
-         ("C-c n g" . org-roam-graph)         ;; عرض الرسم البياني
-         ("C-c n i" . org-roam-node-insert)   ;; إدراج رابط لملاحظة
-         ("C-c n c" . org-roam-capture))      ;; إنشاء ملاحظة جديدة
+(use-package emacs-obsidian-excalidraw
+  :vc (:url "https://github.com/hsingko/emacs-obsidian-excalidraw.git"
+       :rev :newest)
   :config
-  ;; مزامنة قاعدة البيانات تلقائياً
-  (org-roam-db-autosync-mode))
+  ;; هذا مجرد اسم الفولت، تقدر تخليه زي اسم الفولدر
+  (setq emacs-obsidian-excalidraw-vault "MyNewVault")
+
+  ;; هذا هو مسار الفولت في ويندوز
+  (setq emacs-obsidian-excalidraw-vault-dir
+        "C:/Syncthing/Obsidian/Vaults/MyNewVault/draws")
+
+  ;; نخلي الصور بصيغة SVG بدل PNG
+  (setq emacs-obsidian-excalidraw-image-format "svg"))
 #+end_src
+
+
 
 ** The =osama-emacs-denote.el= module
 
