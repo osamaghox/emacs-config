@@ -770,7 +770,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   (global-corfu-mode))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~corfu~
+*** The =osama-emacs-completion.el= section for ~helpful~
 
 Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
 
