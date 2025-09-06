@@ -1066,7 +1066,12 @@ on how I use Org.
   :hook (dired-mode . denote-dired-mode)
   :bind
   (("C-c n n" . denote)
-   ("C-c n r" . denote-rename-file)
+   ;; rename section keybindings
+   ("C-c n r r" . denote-rename-file)
+   ("C-c n r d" . denote-rename-file-date)
+   ("C-c n r f" . denote-rename-file-using-front-matter)
+   ("C-c n r t" . denote-rename-file-title)
+   ("C-c n r s" . denote-rename-signature)
    ("C-c n l" . denote-link-or-create)
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
