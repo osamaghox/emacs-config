@@ -1030,7 +1030,12 @@ on how I use Org.
   (setq org-directory "~/osama-vault/emacs/org/agenda/")
   (setq org-agenda-files (list org-directory))
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)"))))
+        '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)")))
+  (setq org-agenda-prefix-format '((agenda . " %t %s")
+                                     (timeline . " %s")
+                                     (todo . " %i %-12:c")
+                                     (tags . " %i %-12:c")
+                                     (search . " %i %-12:c"))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~org-capture~
