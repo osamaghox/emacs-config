@@ -79,6 +79,13 @@
   )
 -------------------------------- straight.el package manager ------------------------------
 
+** حل مشكلة singature sig
+
+احذف مجلد
+gnupg
+من
+.emacsd/elpa/ستجده هنا
+
 ** lazy loading use-packages
 
 ** use package for melpa
