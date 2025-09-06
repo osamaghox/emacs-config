@@ -2,7 +2,8 @@
 #+author: Osama Ghourab
 #+email: osamaghox@gmail.com
 #+language: en
-#+options: ':t toc:nil num:t author:t email:t
+#+options: toc:t num:nil author:t email:t
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
