@@ -1057,11 +1057,11 @@ mklink /D "C:\Syncthing\Obsidian\Vaults\MyNewVault\draws" "%USERPROFILE%\osama-v
        :rev :newest)
   :config
   ;; هذا مجرد اسم الفولت، تقدر تخليه زي اسم الفولدر
-  (setq emacs-obsidian-excalidraw-vault "MyNewVault")
+  (setq emacs-obsidian-excalidraw-vault "draws")
 
   ;; هذا هو مسار الفولت في ويندوز
   (setq emacs-obsidian-excalidraw-vault-dir
-        "C:/Syncthing/Obsidian/Vaults/MyNewVault/draws")
+        "~/osama-vault/emacs/notes/draws")
 
   ;; نخلي الصور بصيغة SVG بدل PNG
   (setq emacs-obsidian-excalidraw-image-format "svg"))
