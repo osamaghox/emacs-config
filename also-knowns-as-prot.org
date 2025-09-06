@@ -464,21 +464,25 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-fonts.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-(use-package fontaine
+(use-package emacs
+  :ensure nil
   :hook (after-init . (lambda ()
-                        (fontaine-mode 1)
-                        (fontaine-set-preset 'osama-fonts)))
-  :config
-  ;; Define your custom preset
-  (setq fontaine-presets
-        '((osama-fonts
-           :default-family "Fira Code"
-           :default-weight regular
-           :default-height 100
-           :variable-pitch-family "Fira Code"
-           :variable-pitch-height 1.0
-           :fixed-pitch-family "Fira Code"
-           :fixed-pitch-height 100))))
+                        ;; Default font
+                        (set-face-attribute 'default nil
+                                            :family "Fira Code"
+                                            :height 120
+                                            :weight 'normal)
+                        ;; Fixed-pitch (مثل الكود)
+                        (set-face-attribute 'fixed-pitch nil
+                                            :family "Fira Code"
+                                            :height 120
+                                            :weight 'normal)
+                        ;; Variable-pitch (مثل Org Mode)
+                        (set-face-attribute 'variable-pitch nil
+                                            :family "Source Sans Pro"
+                                            :height 140
+                                            :weight 'normal))))
+
 
 ;; Arabic Font
 (when (member "STC Forward" (font-family-list))
