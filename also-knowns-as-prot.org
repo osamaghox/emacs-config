@@ -160,6 +160,9 @@ This is the first file that Emacs reads when starting up. It should contain code
 ;; Base directory for all Emacs files
 (defvar osama-emacs-home-dir "~/osama-vault/emacs/"
   "Base directory for all my Emacs files.")
+
+;; Always open Emacs in the osama-emacs-home-dir folder
+(cd osama-emacs-home-dir)
 #+end_src
 
 ** The =early-init.el= section to set PATH and system tools
