@@ -158,7 +158,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 #+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
 ;; Base directory for all Emacs files
-(defvar osama-emacs "~/osama-vault/emacs/"
+(defvar osama-emacs-home-dir "~/osama-vault/emacs/"
   "Base directory for all my Emacs files.")
 #+end_src
 
@@ -182,8 +182,8 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ;; Windows settings
 (when (eq system-type 'windows-nt)
-  ;; Define tools directory using osama-emacs variable
-  (let ((tools-dir (expand-file-name "data/tools/" osama-emacs)))
+  ;; Define tools directory using osama-emacs-home-dir variable
+  (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
     ;; Add Git to exec-path and PATH
     (add-to-list 'exec-path (concat tools-dir "git/cmd"))
     (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
@@ -234,10 +234,10 @@ by ~use-package~ when it needs it
 ** The =init.el= entry point
 
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
-(defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
+(defvar osama-emacs-dot-dir (expand-file-name "~/.emacs.d/")
   "The root dir of the Osama Emacs distribution.")
 
-(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
+(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dot-dir)
   "This directory houses all of the built-in Osama Emacs modules.")
 
 ;; Load all .el files from modules directory
@@ -433,9 +433,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-;; Define the folder to save fonts directly inside osama-emacs
+;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
-  (expand-file-name "data/fonts/" osama-emacs)
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
@@ -499,7 +499,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-fonts-dir
-  (expand-file-name "data/fonts/" osama-emacs)
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
   "Directory to store fonts for Emacs.")
 
 (unless (file-directory-p osama-fonts-dir)
@@ -529,27 +529,27 @@ some commands dont have major mode example: (org, dired, consult) so we need to 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Ensure cache subdirectories exist
 (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
-  (let ((dir (expand-file-name (concat "cache/" sub "/") osama-emacs)))
+  (let ((dir (expand-file-name (concat "cache/" sub "/") osama-emacs-home-dir)))
     (unless (file-directory-p dir)
       (make-directory dir t))))
 
 ;; Savehist: command history
-(setq savehist-file (expand-file-name "cache/savehist/savehist" osama-emacs))
+(setq savehist-file (expand-file-name "cache/savehist/savehist" osama-emacs-home-dir))
 (savehist-mode 1)
 
 ;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "cache/recentf/recentf" osama-emacs))
+(setq recentf-save-file (expand-file-name "cache/recentf/recentf" osama-emacs-home-dir))
 (recentf-mode 1)
 
 ;; Desktop: full session restore
-(setq desktop-path    (list (expand-file-name "cache/desktop/" osama-emacs))
-      desktop-dirname (expand-file-name "cache/desktop/" osama-emacs)
+(setq desktop-path    (list (expand-file-name "cache/desktop/" osama-emacs-home-dir))
+      desktop-dirname (expand-file-name "cache/desktop/" osama-emacs-home-dir)
       desktop-base-file-name "emacs-desktop")
 (desktop-save-mode 1)
 
 ;; Backups: store ~ files in backups/
 (setq backup-directory-alist
-      `((".*" . ,(expand-file-name "cache/backups/" osama-emacs)))
+      `((".*" . ,(expand-file-name "cache/backups/" osama-emacs-home-dir)))
       backup-by-copying t
       version-control t
       delete-old-versions t
@@ -558,7 +558,7 @@ some commands dont have major mode example: (org, dired, consult) so we need to 
 
 ;; Auto-saves: store #files# in autosaves/
 (setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "cache/autosaves/" osama-emacs) t))
+      `((".*" ,(expand-file-name "cache/autosaves/" osama-emacs-home-dir) t))
       auto-save-default t
       auto-save-timeout 20
       auto-save-interval 200)
@@ -935,7 +935,7 @@ on how I use Org.
   :ensure nil ;; org built-in
   :init
   ;; Org files directory
-  (setq org-directory (expand-file-name "org/" osama-emacs))
+  (setq org-directory (expand-file-name "org/" osama-emacs-home-dir))
   ;; Depth for imenu
   (setq org-imenu-depth 5)
   ;; RET follows links
@@ -1035,7 +1035,7 @@ on how I use Org.
   (setq org-log-into-drawer t)
   (setq org-agenda-files
       (directory-files-recursively
-       (expand-file-name "org/agenda" osama-emacs)
+       (expand-file-name "org/agenda" osama-emacs-home-dir)
        "\\.org$"))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)")))
@@ -1133,7 +1133,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "notes/" osama-emacs))
+  (setq denote-directory (expand-file-name "notes/" osama-emacs-home-dir))
   ;; Automatically rename Denote buffers when opening them so that
   ;; instead of their long file name they have, for example, a literal
   ;; "[D]" followed by the file's title.  Read the doc string of
