@@ -1030,6 +1030,9 @@ on how I use Org.
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil
+  :bind
+  (("C-c o a a" . org-agenda)
+   ("C-c o a t" . org-set-tags-command))
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
