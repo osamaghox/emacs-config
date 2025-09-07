@@ -935,7 +935,7 @@ on how I use Org.
   :ensure nil ;; org built-in
   :init
   ;; Org files directory
-  (setq org-directory (expand-file-name "~/osama-vault/emacs/org/"))
+  (setq org-directory (expand-file-name "org/" osama-vault))
   ;; Depth for imenu
   (setq org-imenu-depth 5)
   ;; RET follows links
@@ -1034,7 +1034,9 @@ on how I use Org.
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-agenda-files
-      (directory-files-recursively "~/osama-vault/emacs/org/agenda" "\\.org$"))
+      (directory-files-recursively
+       (expand-file-name "org/agenda" osama-vault)
+       "\\.org$"))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)")))
   (setq org-agenda-prefix-format "%t %s")
@@ -1131,8 +1133,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "~/osama-vault/emacs/notes/"))
-
+  (setq denote-directory (expand-file-name "notes/" osama-vault))
   ;; Automatically rename Denote buffers when opening them so that
   ;; instead of their long file name they have, for example, a literal
   ;; "[D]" followed by the file's title.  Read the doc string of
