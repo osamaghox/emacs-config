@@ -1115,7 +1115,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
    ("C-c n r d" . denote-rename-file-date)
    ("C-c n r f" . denote-rename-file-using-front-matter)
    ("C-c n r t" . denote-rename-file-title)
-   ("C-c n r s" . denote-rename-signature)
+   ("C-c n r s" . denote-rename-file-signature)
    ("C-c n l" . denote-link-or-create)
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
