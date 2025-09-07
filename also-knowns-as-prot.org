@@ -199,6 +199,12 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
+** The =init.el= section we define the =osama-vault= folder variable
+
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+(defvar osama-vault "~/osama-vault/emacs/")
+#+end_src
+
 ** The =init.el= settings for packages (=package.el=)
 
 The =package.el= is built into Emacs and is perfectly fine for my
