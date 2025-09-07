@@ -1036,8 +1036,8 @@ on how I use Org.
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  (setq org-directory "~/osama-vault/emacs/org/agenda/")
-  (setq org-agenda-files (list org-directory))
+  (setq org-agenda-files
+      (directory-files-recursively "~/osama-vault/emacs/org/agenda" "\\.org$"))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "CANCEL(c!)" "DONE(d!)")))
   (setq org-agenda-prefix-format "%t %s")
