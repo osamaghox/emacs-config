@@ -1172,43 +1172,53 @@ on how I use Org.
   :bind
   (("C-c o c" . org-capture))
   :config
-(setq org-capture-templates
-      `(
-        ;; ============================
-        ;; Tasks / Projects
-        ;; ============================
-        ("t" "Tasks / Projects")
-        ("tt" "Task" entry
-         (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
-         "* TODO %?\n  %U\n  %a\n  %i"
-         :empty-lines 1
-         :prepend t)  ;; يضيف المهمة في أعلى الملف
+  (setq org-capture-templates
+        `(
+          ;; ============================
+          ;; Personal Tasks
+          ;; ============================
+          ("t" "Personal Tasks")
+          ("tt" "Task" entry
+           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)  ;; يضيف المهمة في أعلى الملف
 
-        ;; ============================
-        ;; Journal Entries
-        ;; ============================
-        ("j" "Journal Entries")
-        ("jj" "Journal" entry
-         (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-         :clock-in :clock-resume
-         :empty-lines 1)
+          ;; ============================
+          ;; Work Tasks
+          ;; ============================
+          ("w" "Work Tasks")
+          ("ww" "Task" entry
+           (file+olp ,(expand-file-name "org/Work.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)
 
-        ("jm" "Meeting" entry
-         (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-         "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-         :clock-in :clock-resume
-         :empty-lines 1)
+          ;; ============================
+          ;; Journal Entries
+          ;; ============================
+          ("j" "Journal Entries")
+          ("jj" "Journal" entry
+           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
+           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
 
-        ;; ============================
-        ;; Metrics / Tracking
-        ;; ============================
-        ("m" "Metrics Capture")
-        ("mw" "Weight" table-line
-         (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
-         "| %U | %^{Weight} | %^{Notes} |"
-         :kill-buffer t)
-        )))
+          ("jm" "Meeting" entry
+           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
+           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
+
+          ;; ============================
+          ;; Metrics / Tracking
+          ;; ============================
+          ("m" "Metrics Capture")
+          ("mw" "Weight" table-line
+           (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
+           "| %U | %^{Weight} | %^{Notes} |"
+           :kill-buffer t)
+          )))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
