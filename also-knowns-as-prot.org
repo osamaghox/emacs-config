@@ -742,7 +742,6 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c e" "Emacs"
     "C-c n" "Notes"
     "C-c o" "Org"
-    "C-c o a" "Agenda"
     "C-c f" "Files"
     "C-c b" "Buffers"
     "C-c d" "Dired"
@@ -1085,7 +1084,7 @@ on how I use Org.
 (use-package org
   :ensure nil
   :bind
-  (("C-c o a a" . org-agenda)
+  (("C-c o a" . org-agenda)
    ("C-c o h" . org-habit)
    ("C-c o r" . org-refile)
    ("C-c o t" . org-set-tags-command))
