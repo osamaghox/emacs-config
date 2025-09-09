@@ -1122,7 +1122,7 @@ on how I use Org.
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-  (setq org-agenda-prefix-format "%t %s")
+;; (setq org-agenda-prefix-format "%t %s")
 
   ;; Default tags
   (setq org-tag-alist
