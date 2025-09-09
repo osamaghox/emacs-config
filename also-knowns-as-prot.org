@@ -1131,24 +1131,24 @@ on how I use Org.
   ;; Default tags
 (setq org-tag-alist
       '(;; Places
-        ("@home" . ?H)
-        ("@work" . ?W)
-        ("@school" . ?W)
+        ("@home"     . ?H)
+        ("@work"     . ?W)
+        ("@school"   . ?S)
+        ("@errands"  . ?E)
 
         ;; Devices
         ("@computer" . ?C)
-        ("@phone" . ?P)
+        ("@phone"    . ?P)
 
         ;; Activities
-        ("@planning" . ?n)
+        ("@planning"    . ?n)
         ("@programming" . ?p)
-        ("@writing" . ?w)
-        ("@reading" . ?r)
-        ("@creative" . ?c)
-        ("@learn" . ?l)
-        ("@calls" . ?a)
-        ("@errands" . ?e)))
-        
+        ("@writing"     . ?w)
+        ("@reading"     . ?r)
+        ("@creative"    . ?c)
+        ("@learn"       . ?l)
+        ("@calls"       . ?a)))
+
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
