@@ -1126,13 +1126,14 @@ on how I use Org.
 
   ;; Default tags
   (setq org-tag-alist
-      '(("design"  . ?d)
-        ("coding"  . ?c)
-        ("writing" . ?w)
-        ("reading" . ?r)
-        ("home"    . ?h)
-        ("work"    . ?o)
-        ("school"  . ?s)))
+      '(("design"   . ?d)
+        ("coding"   . ?c)
+        ("writing"  . ?w)
+        ("reading"  . ?r)
+        ("home"     . ?h)
+        ("work"     . ?o)
+        ("personal" . ?p)
+        ("school"   . ?s)))
         
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
