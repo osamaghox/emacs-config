@@ -1145,7 +1145,7 @@ on how I use Org.
         ("@creative" . ?c)
         ("@learn" . ?l)
         ("@calls" . ?a)
-        ("@errands" . ?e))
+        ("@errands" . ?e)))
         
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
