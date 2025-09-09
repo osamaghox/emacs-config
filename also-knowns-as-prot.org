@@ -1086,9 +1086,9 @@ on how I use Org.
   :ensure nil
   :bind
   (("C-c o a a" . org-agenda)
-   ("C-c o a h" . org-habit)
-   ("C-c o a r" . org-refile)
-   ("C-c o a t" . org-set-tags-command))
+   ("C-c o h" . org-habit)
+   ("C-c o r" . org-refile)
+   ("C-c o t" . org-set-tags-command))
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
