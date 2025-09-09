@@ -1086,6 +1086,7 @@ on how I use Org.
   :bind
   (("C-c o a a" . org-agenda)
    ("C-c o a h" . org-habit)
+   ("C-c o a r" . org-refile)
    ("C-c o a t" . org-set-tags-command))
   :config
   (setq org-log-done 'time)
