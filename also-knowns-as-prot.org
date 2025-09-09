@@ -1014,6 +1014,8 @@ on how I use Org.
   :bind
   (("C-c o l" . org-store-link)
    ("C-c o e" . org-export)
+   ("C-c o s" . org-schedule)
+   ("C-c o d" . org-deadline)
    ("C-c o t" . org-toggle-link-display)
    ("C-c o o" . org-open-at-point-global)))
 
