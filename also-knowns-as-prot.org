@@ -1137,32 +1137,27 @@ on how I use Org.
         
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-      ((agenda "" ((org-deadline-warning-days 7)))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "Next Tasks")))
-       (todo "ACTIVE"
-             ((org-agenda-overriding-header "Active Tasks")))
-       (todo "WAITING"
-             ((org-agenda-overriding-header "Waiting On")))))
+      '(("d" "Dashboard"
+         ((agenda "" ((org-deadline-warning-days 7)))
+          (todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))
+          (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
+          (todo "WAITING" ((org-agenda-overriding-header "Waiting On")))))
 
-     ("n" "Next Tasks"
-      ((todo "NEXT"
-             ((org-agenda-overriding-header "Next Tasks")))))
+        ("n" "Next Tasks"
+         ((todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))))
 
-     ("a" "Active Tasks"
-      ((todo "ACTIVE"
-             ((org-agenda-overriding-header "Currently Active")))))
+        ("a" "Active Tasks"
+         ((todo "ACTIVE" ((org-agenda-overriding-header "Currently Active")))))
 
-     ("w" "Waiting"
-      ((todo "WAITING"
-             ((org-agenda-overriding-header "Waiting On Others")))))
+        ("w" "Waiting"
+         ((todo "WAITING" ((org-agenda-overriding-header "Waiting On Others")))))
 
-     ("c" "Completed/Cancelled"
-      ((todo "DONE"
-             ((org-agenda-overriding-header "Completed Tasks")))
-       (todo "CANCELLED"
-             ((org-agenda-overriding-header "Cancelled Tasks"))))))))
+        ("c" "Completed/Cancelled"
+         ((todo "DONE" ((org-agenda-overriding-header "Completed Tasks")))
+          (todo "CANCELLED" ((org-agenda-overriding-header "Cancelled Tasks")))))
+
+        ("u" "Untagged Tasks"
+         ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks"))))))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~org-capture~
