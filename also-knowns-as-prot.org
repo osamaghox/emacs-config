@@ -1299,15 +1299,15 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   :hook (dired-mode . denote-dired-mode)
   :bind
   (("C-c n n" . denote)
+   ("C-c n l" . denote-link-or-create)
+   ("C-c n b" . denote-backlinks)
+   ("C-c n d" . denote-dired)
    ;; rename section keybindings
    ("C-c n r r" . denote-rename-file)
    ("C-c n r d" . denote-rename-file-date)
    ("C-c n r f" . denote-rename-file-using-front-matter)
    ("C-c n r t" . denote-rename-file-title)
-   ("C-c n r s" . denote-rename-file-signature)
-   ("C-c n l" . denote-link-or-create)
-   ("C-c n b" . denote-backlinks)
-   ("C-c n d" . denote-dired))
+   ("C-c n r s" . denote-rename-file-signature))
   :config
   ;; (setq denote-prompts '(title file-type keywords))
   (setq denote-directory (expand-file-name "notes/" osama-emacs-home-dir))
