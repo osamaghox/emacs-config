@@ -1089,11 +1089,14 @@ on how I use Org.
   :config
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  (setq org-agenda-files
-      (directory-files-recursively
-       (expand-file-name "org/agenda" osama-emacs-home-dir)
-       "\\.org$"))
-       
+
+(setq org-agenda-files
+      (list
+       (expand-file-name "org/Tasks.org" osama-emacs-home-dir)
+       (expand-file-name "org/Archive.org" osama-emacs-home-dir)
+       (expand-file-name "org/Habits.org" osama-emacs-home-dir)
+       (expand-file-name "org/Events.org" osama-emacs-home-dir)))
+
   (setq org-todo-keywords
       '((sequence
          "TODO(t)"        ; مهمة جديدة
