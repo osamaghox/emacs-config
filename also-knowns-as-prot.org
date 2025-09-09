@@ -1204,14 +1204,14 @@ on how I use Org.
          :empty-lines 1
          :prepend t)  ;; يضيف المهمة في أعلى الملف
 
-        ;; ============================
-        ;; Ideas / Fast Notes
-        ;; ============================
-        ("ni" "New Idea / Note" entry
-         (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
-         "* %? :idea:\n  %U\n  %a\n  %i"
-         :empty-lines 1
-         :prepend t)
+       ;; ============================
+       ;; Quick Notes
+       ;; ============================
+       ("n" "Quick Notes" entry
+        (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
+        "* %U - %^{Title}\n  %?\n"
+        :empty-lines 1
+        :prepend t)
 
         ;; ============================
         ;; Journal Entries
