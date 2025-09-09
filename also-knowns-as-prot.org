@@ -1155,6 +1155,14 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~org-capture~
 
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :bind
+  (("C-c o c" . org-capture))
+  :config
+#+end_src
+
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
 These instructions are for **Windows 11**.
