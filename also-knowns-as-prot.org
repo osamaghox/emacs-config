@@ -1085,6 +1085,7 @@ on how I use Org.
   :ensure nil
   :bind
   (("C-c o a a" . org-agenda)
+   ("C-c o a h" . org-habit)
    ("C-c o a t" . org-set-tags-command))
   :config
   (setq org-log-done 'time)
@@ -1160,7 +1161,7 @@ on how I use Org.
 
   ;; إعدادات org-habit
   (setq org-habit-graph-column 60) ; عمود الرسم البياني في ال-agenda
-  (setq org-habit-show-habits-only-for-today nil)) ; عرض كل العادات وليس اليوم فقط
+  (setq org-habit-show-habits-only-for-today nil) ; عرض كل العادات وليس اليوم فقط
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~org-capture~
