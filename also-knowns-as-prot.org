@@ -1014,6 +1014,7 @@ on how I use Org.
   (setq org-fontify-whole-block-delimiter-line t)
   :bind
   (("C-c o l" . org-store-link)
+   ("C-c o e" . org-export)
    ("C-c o t" . org-toggle-link-display)
    ("C-c o o" . org-open-at-point-global)))
 
