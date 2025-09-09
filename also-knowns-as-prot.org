@@ -1534,6 +1534,8 @@ If HIDE is non-nil, hide extensions; otherwise show them."
    ("C-c t u" . tab-undo)))
 #+end_src
 
+** The =osama-emacs-dev.el= module
+
 ** The =osama-emacs-system-custom.el= module
 
 *** The =osama-emacs-system-custom.el= module section for android
