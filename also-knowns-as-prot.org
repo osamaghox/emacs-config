@@ -1140,20 +1140,11 @@ on how I use Org.
         ("@planning" . ?n)
         ("@programming" . ?p)
         ("@writing" . ?w)
+        ("@reading" . ?r)
         ("@creative" . ?c)
-        ("@email" . ?e)
+        ("@learn" . ?l)
         ("@calls" . ?a)
-        ("@errands" . ?r))
-
-  (setq org-tag-alist
-      '(("design"   . ?d)
-        ("coding"   . ?c)
-        ("writing"  . ?w)
-        ("reading"  . ?r)
-        ("home"     . ?h)
-        ("work"     . ?o)
-        ("personal" . ?p)
-        ("school"   . ?s)))
+        ("@errands" . ?e))
         
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
