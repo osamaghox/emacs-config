@@ -1180,7 +1180,7 @@ on how I use Org.
           ("t" "Personal Tasks")
           ("tt" "Task" entry
            (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i"
+           "* TODO %?\n  %U\n  %a\n  %i\n  :personal:"
            :empty-lines 1
            :prepend t)  ;; يضيف المهمة في أعلى الملف
 
@@ -1190,7 +1190,7 @@ on how I use Org.
           ("w" "Work Tasks")
           ("ww" "Task" entry
            (file+olp ,(expand-file-name "org/Work.org" osama-emacs-home-dir) "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i"
+           "* TODO %?\n  %U\n  %a\n  %i\n  :work:"
            :empty-lines 1
            :prepend t)
 
