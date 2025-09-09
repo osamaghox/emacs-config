@@ -1200,6 +1200,25 @@ on how I use Org.
         )))
 #+end_src
 
+*** The =osama-emacs-org.el= section for ~org-habit~
+
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :bind
+  (("C-c o c" . org-capture))
+  :config
+  ;; تفعيل org-habit
+  (require 'org-habit)
+  
+  ;; مجلد الملفات
+  (setq org-agenda-files `(,(expand-file-name "org" osama-emacs-home-dir)))
+
+  ;; إعدادات org-habit
+  (setq org-habit-graph-column 60) ; عمود الرسم البياني في ال-agenda
+  (setq org-habit-show-habits-only-for-today nil)) ; عرض كل العادات وليس اليوم فقط
+#+end_src
+
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
 These instructions are for **Windows 11**.
