@@ -1404,7 +1404,13 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   :config
   (general-define-key
    :keymaps 'normal
-   "SPC"   (general-simulate-key "C-c")))
+   "SPC"   (general-simulate-key "C-c"))
+
+  ;; dired mode map
+  (general-define-key
+   :keymaps 'dired-mode-map
+   :states 'normal
+   "SPC" (general-simulate-key "C-c")))
 #+end_src
 
 ** The =osama-emacs-dired.el= module
