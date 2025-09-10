@@ -531,7 +531,7 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c b p" . previous-buffer)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for windows
+*** The =osama-emacs-essentials.el= section for Windows
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
