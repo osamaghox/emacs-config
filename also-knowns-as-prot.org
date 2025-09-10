@@ -1180,7 +1180,7 @@ on how I use Org.
           (todo "CANCELLED" ((org-agenda-overriding-header "Cancelled Tasks")))))
 
         ("u" "Untagged Tasks"
-         ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
+         ((todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
 
         ("W" "Weekly Review"
          ((agenda ""
