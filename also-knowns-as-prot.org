@@ -1163,7 +1163,7 @@ on how I use Org.
         ("n" "Next Tasks"
          ((todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))))
 
-        ("a" "Active Tasks"
+        ("A" "Active Tasks"
          ((todo "ACTIVE" ((org-agenda-overriding-header "Currently Active")))))
 
         ("w" "Waiting"
