@@ -1222,7 +1222,15 @@ on how I use Org.
 
         ;; Custom agenda views مناسبة لحالاتك
 (setq org-agenda-custom-commands
-      '(("d" "Dashboard"
+      '(
+        ;; Daily Agenda first
+        ("d" "Daily Agenda"
+         ((agenda ""
+                  ((org-agenda-span 'day)
+                   (org-agenda-overriding-header "Daily Agenda")))))
+
+        ;; Dashboard next
+        ("D" "Dashboard"
          ((agenda "" ((org-deadline-warning-days 7)))
           (todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))
           (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
@@ -1244,7 +1252,7 @@ on how I use Org.
         ("u" "Untagged Tasks"
          ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
 
-        ("w" "Weekly Review"
+        ("W" "Weekly Review"
          ((agenda ""
                   ((org-agenda-overriding-header "Completed Tasks")
                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo 'done))
