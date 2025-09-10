@@ -513,18 +513,22 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-essentials.el= Section for Emacs Commands Keybindings
-
-some commands dont have major mode example: (org, dired, consult) so we need to write our custom key 
-
+*** The =osama-emacs-essentials.el= Section for Files
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
   (("C-c f f" . find-file)
    ("C-c f s" . save-buffer)
-   ("C-c f S" . write-file)
-   ("C-c b k" . kill-buffer)
+   ("C-c f S" . write-file)))
+#+end_src
+
+*** The =osama-emacs-essentials.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c b k" . kill-buffer)
    ("C-c b n" . next-buffer)
    ("C-c b p" . previous-buffer)))
 #+end_src
