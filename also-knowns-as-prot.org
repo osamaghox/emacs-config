@@ -252,11 +252,11 @@ by ~use-package~ when it needs it
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-** The =osama-emacs-theme.el= module
+** The =osama-emacs-appearance.el= module
 
-*** The =osama-emacs-theme.el= Section for UI Basics
+*** The =osama-emacs-appearance.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -293,18 +293,18 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (context-menu-mode 1)))
 #+end_src
 
-*** The =osama-emacs-theme.el= Section for ~Spacious padding~
+*** The =osama-emacs-appearance.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package spacious-padding
   :custom
   (line-spacing 3)
   (spacious-padding-mode 1))
 #+end_src
 
-*** The =osama-emacs-theme.el= Section for ~Toggle Transparency~
+*** The =osama-emacs-appearance.el= Section for ~Toggle Transparency~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -331,9 +331,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 #+end_src
 
 
-*** The =osama-emacs-theme.el= Section for Toggle Title Bar & Decorations
+*** The =osama-emacs-appearance.el= Section for Toggle Title Bar & Decorations
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -355,17 +355,17 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (("C-c t f" . osama-frame-toggle-decoration)))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~doom-themes~
+*** The =osama-emacs-appearance.el= section for ~doom-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
   :config
   (load-theme 'doom-one t))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~doom-modeline~
+*** The =osama-emacs-appearance.el= section for ~doom-modeline~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-modeline
   :ensure t
   :init
@@ -379,7 +379,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (doom-modeline-indent-info t))
 #+end_src
 
-*** [Disabled] The =osama-emacs-theme.el= section for modeline
+*** [Disabled] The =osama-emacs-appearance.el= section for modeline
 
 #+begin_src emacs-lisp :tangle no :mkdirp yes
 (use-package emacs
@@ -424,16 +424,14 @@ In this module I define everything broadly related to the aesthetics of Emacs.
                   mode-line-end-spaces)))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~ef-themes~
+*** The =osama-emacs-appearance.el= section for ~ef-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package ef-themes
   :defer t)
 #+end_src
 
-** The =osama-emacs-fonts.el= module
-
-*** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
+*** The =osama-emacs-appearance.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
@@ -474,7 +472,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-*** The =osama-emacs-fonts.el=: Section for Font Customization
+*** The =osama-emacs-appearance.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
 (use-package emacs
