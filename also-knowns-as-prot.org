@@ -1203,16 +1203,16 @@ on how I use Org.
         ("t"  "Tasks / Projects")
         ("tt" "Task" entry
          (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
-         "* TODO %^{Task Title} %^g\n  %U\n  %a\n  %i"
+         "* TODO %?\n  %U\n  %a\n  %i"
          :empty-lines 1
-         :prepend t)  ;; يضيف المهمة في أعلى الملف
+         :prepend t)
 
         ;; ============================
         ;; Quick Notes
         ;; ============================
         ("n"  "Quick Notes" entry
          (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
-         "* %U - %^{Title} %^g\n  %?\n"
+         "* %U - %?\n  %i"
          :empty-lines 1
          :prepend t)
 
