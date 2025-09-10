@@ -1173,14 +1173,14 @@ on how I use Org.
          ((todo "ACTIVE" ((org-agenda-overriding-header "Currently Active")))))
 
         ("w" "Waiting"
-         ((tags-todo "WAITING" ((org-agenda-overriding-header "Waiting On Others")))))
+         ((todo "WAITING" ((org-agenda-overriding-header "Waiting On Others")))))
 
         ("c" "Completed/Cancelled"
          ((todo "DONE" ((org-agenda-overriding-header "Completed Tasks")))
           (todo "CANCELLED" ((org-agenda-overriding-header "Cancelled Tasks")))))
 
         ("u" "Untagged Tasks"
-         ((todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
+         ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
 
         ("W" "Weekly Review"
          ((agenda ""
