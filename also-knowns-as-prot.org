@@ -786,7 +786,6 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c s r" . consult-ripgrep)
    ("C-c s f" . consult-fd)
    ("C-c s l" . consult-line-multi)
-   ("C-c f f" . consult-find)
    ("C-c f r" . consult-recent-file)
    ("C-c f m" . consult-file-externally)
    ("C-c b b" . consult-buffer)
