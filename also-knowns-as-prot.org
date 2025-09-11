@@ -454,7 +454,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-fonts.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
-  (expand-file-name "data/fonts/" osama-emacs-dot-dir)
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
