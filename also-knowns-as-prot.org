@@ -1037,10 +1037,11 @@ on how I use Org.
    ("C-c o L" . org-toggle-link-display)
    ("C-c o o" . org-open-at-point-global)))
 
-
   ;; Show emphasis markers only while editing
   (use-package org-appear
-    :hook (org-mode . org-appear-mode))
+    :hook (org-mode . org-appear-mode)
+    :config
+    (setq org-appear-autolinks t))
 
   ;; Modern appearance
   (use-package org-modern
