@@ -236,7 +236,7 @@ by ~use-package~ when it needs it
 
 ** The =init.el= entry point
 
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 (defvar osama-emacs-dot-dir (expand-file-name "~/.emacs.d/")
   "The root dir of the Osama Emacs distribution.")
 
@@ -256,7 +256,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -295,7 +295,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package spacious-padding
   :custom
   (line-spacing 3)
@@ -304,7 +304,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= Section for ~Toggle Transparency~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -332,7 +332,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= Section for Toggle Title Bar & Decorations
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -356,7 +356,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= section for ~custom-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 ;; Include the "themes" folder in Emacs' theme search path
 (add-to-list 'custom-theme-load-path
              (expand-file-name "data/themes/" osama-emacs-home-dir))
@@ -364,7 +364,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= section for ~doom-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
   :config
   (load-theme 'doom-one t))
@@ -372,7 +372,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= section for ~doom-two-tone-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-two-tone-themes
   :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
             :rev :newest)
@@ -384,14 +384,14 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= section for ~ef-themes~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package ef-themes
   :defer t)
 #+end_src
 
 *** The =osama-emacs-appearance.el= section for ~doom-modeline~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
@@ -451,7 +451,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el= section for ~nerd-icons~ fonts
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-fonts.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
   (expand-file-name "data/fonts/" osama-emacs-dot-dir)
@@ -492,7 +492,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 *** The =osama-emacs-appearance.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-fonts.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :hook (after-init . (lambda ()
@@ -530,7 +530,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Section for Files
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -551,7 +551,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -580,7 +580,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -618,7 +618,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Ensure cache subdirectories exist
 (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
   (let ((dir (expand-file-name (concat "cache/" sub "/") osama-emacs-dot-dir)))
@@ -661,7 +661,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Settings for Better Performance
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -680,7 +680,7 @@ This module load basic configurations that apply to most facets of Emacs.
 واختر
 Administrative > Change system local... > Arabic (Saudi Arabia)
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -693,7 +693,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= Section for Support Arabic Typing
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -703,7 +703,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -726,7 +726,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= settings for ~text-mode~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package text-mode
   :ensure nil
   :hook
@@ -741,7 +741,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -753,7 +753,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= section for Markdown Basic Settings
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
@@ -764,7 +764,7 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 *** The =osama-emacs-essentials.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package dashboard
   :config
   (dashboard-setup-startup-hook)
@@ -816,7 +816,7 @@ In Emacs, completion encompasses user interfaces that show the available candida
 
 The which-key package provides hints for keys that complete the currently incomplete sequence.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package which-key
   :ensure nil
   :init (which-key-mode)
@@ -843,7 +843,7 @@ The which-key package provides hints for keys that complete the currently incomp
 
 The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package vertico
   :config
   (setq vertico-cycle t
@@ -855,7 +855,7 @@ The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical la
 
 The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful annotations to the side of completion candidates. We see its effect, for example, when we call M-x: each command has a brief description next to it (taken from its doc string) as well as a key binding, if it has one.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package marginalia
   :after vertico
   :init
@@ -866,7 +866,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~consult~ is another wonderful package by Daniel Mendler. It provides a number of commands that turbocharge the minibuffer with advanced capabilities for filtering, asynchronous input, and previewing of the current candidate’s context.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package consult
   :bind
   (("C-c s s" . consult-line)
@@ -888,7 +888,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package orderless
   :custom
   (completion-styles '(orderless))
@@ -899,7 +899,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package embark
   :bind (("C-c ." . embark-act)
          ("C-c ;" . embark-dwim))
@@ -911,7 +911,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package corfu
   :init
   (global-corfu-mode))
@@ -921,7 +921,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package helpful
   :bind
   (("C-c h f" . helpful-function)   ;; Describe function
@@ -1002,7 +1002,7 @@ liking. I do as much, though know that Org is perfectly usable without
 any configuration. The following sections contain further commentary
 on how I use Org.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil ;; org built-in
   :init
@@ -1101,7 +1101,7 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~ and ~Habits~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil
   :bind
@@ -1214,7 +1214,7 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~org-capture~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil
   :bind
@@ -1287,7 +1287,7 @@ mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
 
 This links the Emacs draws folder to a folder inside the Vault, so both Emacs and Obsidian can access the drawings seamlessly.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package emacs-obsidian-excalidraw
   :vc (:url "https://github.com/hsingko/emacs-obsidian-excalidraw.git"
        :rev :newest)
@@ -1331,7 +1331,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 ولكن بنستخدم الصور والpdfs نخليهن في نفس مجلد المذكرات
 
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
   :bind
@@ -1357,7 +1357,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-denote.el= section for ~denote-sequence~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote-sequence
   :ensure t
   :bind
@@ -1375,7 +1375,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-denote.el= section for ~consult-denote~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
 (use-package consult-denote
   :demand t
   :bind
@@ -1394,7 +1394,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
 ;;; Evil-mode setup
 (use-package evil
   :init
@@ -1427,7 +1427,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-evil.el= section for general leader key
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
 (use-package general
   :config
   (general-define-key
@@ -1445,7 +1445,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 ** The =osama-emacs-dired.el= section for basic settings
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
 (use-package dired
   :ensure nil ;; built-in package
   :commands (dired dired-jump)
@@ -1472,7 +1472,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-dired.el= settings for ~dired-hide-details-mode~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-dired.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
 (use-package dired
   :ensure nil
   :bind (:map dired-mode-map
