@@ -367,8 +367,28 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
+  :defer t)
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~doom-two-tone-themes~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package doom-two-tone-themes
+  :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
+            :rev :newest)
   :config
-  (load-theme 'doom-one t))
+  ;; أضف الثيمات إلى load-path
+  (add-to-list 'custom-theme-load-path
+               "~/.emacs.d/elpa/doom-two-tone-themes/themes")
+  ;; فعل الثيم
+  (load-theme 'doom-orange-grey t))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~ef-themes~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package ef-themes
+  :defer t)
 #+end_src
 
 *** The =osama-emacs-appearance.el= section for ~doom-modeline~
@@ -430,13 +450,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
                           (format-time-string " %H:%M ")
                           'face 'mode-line))
                   mode-line-end-spaces)))
-#+end_src
-
-*** The =osama-emacs-appearance.el= section for ~ef-themes~
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
-(use-package ef-themes
-  :defer t)
 #+end_src
 
 *** The =osama-emacs-appearance.el= section for ~nerd-icons~ fonts
