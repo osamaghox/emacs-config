@@ -355,6 +355,14 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (("C-c t f" . osama-frame-toggle-decoration)))
 #+end_src
 
+*** The =osama-emacs-appearance.el= section for ~custom-themes~
+
+#+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
+;; Include the "themes" folder in Emacs' theme search path
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "data/themes/" osama-emacs-home-dir))
+#+end_src
+
 *** The =osama-emacs-appearance.el= section for ~doom-themes~
 
 #+begin_src emacs-lisp :tangle "modules/osama-emacs-appearance.el" :mkdirp yes
