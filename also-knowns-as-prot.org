@@ -540,7 +540,7 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Buffers
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -1281,7 +1281,7 @@ In my case:
 
 To make Obsidian recognize drawings stored outside the Vault, we create a **symlink**:
 
-#+BEGIN_SRC powershell :tangle nil
+#+BEGIN_SRC powershell :tangle no
 mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
 #+END_SRC
 
