@@ -156,7 +156,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ** The =early-init.el= section we define the =osama-vault= folder variable
 
-#+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
 ;; Base directory for all Emacs files
 (defvar osama-emacs-home-dir "~/osama-vault/emacs/"
   "Base directory for all my Emacs files.")
@@ -167,7 +167,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ** The =early-init.el= section to set PATH and system tools
 
-#+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
 ;; Detect system type and set appropriate PATH separators
 (defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
 
@@ -216,7 +216,7 @@ The =package.el= is built into Emacs and is perfectly fine for my
 use-case. We do not need to load it explicitly, as it will be called
 by ~use-package~ when it needs it
 
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 (require 'package)
 (setq package-archives
       '(("melpa"  . "https://melpa.org/packages/")
