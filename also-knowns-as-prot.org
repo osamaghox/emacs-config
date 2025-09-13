@@ -1217,53 +1217,54 @@ on how I use Org.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil
-  :bind
-  (("C-c o c" . org-capture))
+  :bind (("C-c o c" . org-capture))
   :config
-(setq org-capture-templates
-      `(
-        ;; ============================
-        ;; Tasks / Projects
-        ;; ============================
-        ("t"  "Tasks / Projects")
-        ("tt" "Task" entry
-         (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
-         "* TODO %?\n  %U\n  %a\n  %i"
-         :empty-lines 1
-         :prepend t)
+  (setq org-capture-templates
+        `(
+          ;; ============================
+          ;; Tasks / Projects
+          ;; ============================
+          ("t" "Task" entry
+           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)
 
-        ;; ============================
-        ;; Quick Notes
-        ;; ============================
-        ("n"  "Quick Notes" entry
-         (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
-         "* %U - %?\n  %i"
-         :empty-lines 1
-         :prepend t)
+          ;; ============================
+          ;; Repeated Tasks
+          ;; ============================
+          ("r" "Repeated Task" entry
+           (file+olp ,(expand-file-name "org/Repeated.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  SCHEDULED: %^t"
+           :empty-lines 1
+           :prepend t)
 
-        ;; ============================
-        ;; Journal Entries
-        ;; ============================
-        ("j"  "Journal Entries")
-        ("jj" "Journal" entry
-         (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-         :clock-in :clock-resume
-         :empty-lines 1)
-        ("jm" "Meeting" entry
-         (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-         "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-         :clock-in :clock-resume
-         :empty-lines 1)
+          ;; ============================
+          ;; Quick Notes
+          ;; ============================
+          ("n" "Quick Notes" entry
+           (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
+           "* %U - %?\n  %i"
+           :empty-lines 1
+           :prepend t)
 
-        ;; ============================
-        ;; Metrics / Tracking
-        ;; ============================
-        ("m"  "Metrics Capture")
-        ("mw" "Weight" table-line
-         (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
-         "| %U | %^{Weight} | %^{Notes} |"
-         :kill-buffer t))))
+          ;; ============================
+          ;; Journal Entry
+          ;; ============================
+          ("j" "Journal" entry
+           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
+           "* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
+
+          ;; ============================
+          ;; Metrics / Tracking
+          ;; ============================
+          ("m" "Metrics Capture")
+          ("mw" "Weight" table-line
+           (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
+           "| %U | %^{Weight} | %^{Notes} |"
+           :kill-buffer t))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
