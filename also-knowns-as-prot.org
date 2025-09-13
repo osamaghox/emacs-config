@@ -1530,7 +1530,7 @@ Opens i-search if it's closed, closes it if it's open."
     (isearch-forward nil 1)
     ;; As soon as it opens, close it after a short delay 
     ;; if the goal is just to show the keyboard
-    (run-at-time "0.1 sec" nil
+    (run-at-time "0.3 sec" nil
                  (lambda ()
                    (when (and (boundp 'isearch-mode) isearch-mode)
                      (isearch-abort))))
