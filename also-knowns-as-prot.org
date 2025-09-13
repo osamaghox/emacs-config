@@ -235,9 +235,6 @@ by ~use-package~ when it needs it
 ** The =init.el= entry point
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
-(defvar osama-emacs-dot-dir (expand-file-name "~/.emacs.d/")
-  "The root dir of the Osama Emacs distribution.")
-
 (defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
   "This directory houses all of the built-in Osama Emacs modules.")
 
