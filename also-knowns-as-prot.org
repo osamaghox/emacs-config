@@ -238,7 +238,7 @@ by ~use-package~ when it needs it
 (defvar osama-emacs-dot-dir (expand-file-name "~/.emacs.d/")
   "The root dir of the Osama Emacs distribution.")
 
-(defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory))
+(defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
   "This directory houses all of the built-in Osama Emacs modules.")
 
 ;; Load all .el files from modules directory
@@ -629,27 +629,27 @@ This module load basic configurations that apply to most facets of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Ensure cache subdirectories exist
 (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
-  (let ((dir (expand-file-name (concat "cache/" sub "/") osama-emacs-dot-dir)))
+  (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
     (unless (file-directory-p dir)
       (make-directory dir t))))
 
 ;; Savehist: command history
-(setq savehist-file (expand-file-name "cache/savehist/savehist" osama-emacs-dot-dir))
+(setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
 (savehist-mode 1)
 
 ;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "cache/recentf/recentf" osama-emacs-dot-dir))
+(setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
 (recentf-mode 1)
 
 ;; Desktop: full session restore
-(setq desktop-path    (list (expand-file-name "cache/desktop/" osama-emacs-dot-dir))
-      desktop-dirname (expand-file-name "cache/desktop/" osama-emacs-dot-dir)
+(setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
+      desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
       desktop-base-file-name "emacs-desktop")
 (desktop-save-mode 1)
 
 ;; Backups: store ~ files in backups/
 (setq backup-directory-alist
-      `((".*" . ,(expand-file-name "cache/backups/" osama-emacs-dot-dir)))
+      `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
       backup-by-copying t
       version-control t
       delete-old-versions t
@@ -658,7 +658,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 ;; Auto-saves: store #files# in autosaves/
 (setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "cache/autosaves/" osama-emacs-dot-dir) t))
+      `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
       auto-save-default t
       auto-save-timeout 20
       auto-save-interval 200)
