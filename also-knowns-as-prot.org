@@ -1226,10 +1226,10 @@ on how I use Org.
           ;; Tasks / Projects
           ;; ============================
           ("t" "Task" entry
-          (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
-          "* TODO %?\n  SCHEDULED: %t\n  %a\n  %i"
-          :empty-lines 1
-          :prepend t)
+           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)
 
           ;; ============================
           ;; Repeated Tasks
