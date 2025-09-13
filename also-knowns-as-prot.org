@@ -238,7 +238,7 @@ by ~use-package~ when it needs it
 (defvar osama-emacs-dot-dir (expand-file-name "~/.emacs.d/")
   "The root dir of the Osama Emacs distribution.")
 
-(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dot-dir)
+(defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory))
   "This directory houses all of the built-in Osama Emacs modules.")
 
 ;; Load all .el files from modules directory
