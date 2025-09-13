@@ -178,8 +178,6 @@ This is the first file that Emacs reads when starting up. It should contain code
     ;; Prepend termuxpath to PATH to override busybox grep
     (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
     (setq exec-path (cons termuxpath exec-path))
-    ;; Tap anywhere on the screen to show the soft keyboard
-    ;; (setq touch-screen-display-keyboard t)
     ;; Set conversion style to nil for better Evil integration
     (setq overriding-text-conversion-style nil)))
 
