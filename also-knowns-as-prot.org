@@ -1232,15 +1232,6 @@ on how I use Org.
            :prepend t)
 
           ;; ============================
-          ;; Repeated Tasks
-          ;; ============================
-          ("r" "Repeated Task" entry
-           (file+olp ,(expand-file-name "org/Repeated.org" osama-emacs-home-dir) "Inbox")
-           "* TODO %?\n  SCHEDULED: %^t"
-           :empty-lines 1
-           :prepend t)
-
-          ;; ============================
           ;; Quick Notes
           ;; ============================
           ("n" "Quick Notes" entry
