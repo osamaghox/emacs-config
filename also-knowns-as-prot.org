@@ -245,14 +245,15 @@ by ~use-package~ when it needs it
 (dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
   (load file nil 'nomessage))
 
-;; Load System-specific settings
-(add-to-list 'load-path osama-emacs-dot-dir)
+;; add lisp directory to load path
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; Load system-specific settings
 (cond
  ((eq system-type 'android)
-  (require 'osama-emacs-android))
+  (load "osama-emacs-android"))
  ((eq system-type 'windows-nt)
-  (require 'osama-emacs-windows)))
+  (load "osama-emacs-windows")))
 #+end_src
 
 * The modules of my Emacs configuration
@@ -1515,7 +1516,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
 
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/osama-emacs-android.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
 (defvar osama-emacs-keyboard-toggle-state nil
   "Current toggle state of the Android keyboard using isearch.")
 
@@ -1540,7 +1541,7 @@ If the keyboard is open, close it. If closed, open it."
 
 *** The =osama-emacs-windows.el= section for
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/osama-emacs-windows.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 
 #+end_src
 
