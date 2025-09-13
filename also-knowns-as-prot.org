@@ -375,19 +375,22 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   :config
   (load-theme 'doom-plain-dark t)
 
+  ;; تعديل لون النص المحدد فقط (region)
+  (custom-set-faces
+   '(region ((t (:background "#555555")))))
+
   (defun osama-emacs-toggle-doom-plain-theme ()
     "Toggle between `doom-plain` and `doom-plain-dark`."
     (interactive)
     (cond
-     ;; لو الحالي doom-plain → بدّل لـ doom-plain-dark
      ((member 'doom-plain custom-enabled-themes)
       (disable-theme 'doom-plain)
-      (load-theme 'doom-plain-dark t))
-     ;; لو الحالي doom-plain-dark → بدّل لـ doom-plain
+      (load-theme 'doom-plain-dark t)
+      (custom-set-faces
+       '(region ((t (:background "#555555"))))))
      ((member 'doom-plain-dark custom-enabled-themes)
       (disable-theme 'doom-plain-dark)
       (load-theme 'doom-plain t))
-     ;; لو ولا واحد شغال → اختر الافتراضي doom-plain
      (t
       (load-theme 'doom-plain t)))))
 #+end_src
