@@ -1518,7 +1518,36 @@ If HIDE is non-nil, hide extensions; otherwise show them."
 
 ** The =osama-emacs-android.el= module
 
+*** The =osama-emacs-android.el= section for ~toggle-keyboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
+(defvar osama-emacs-keyboard-toggle-state nil
+  "Current toggle state of the Android keyboard using isearch.")
+
+(defun osama-emacs-toggle-keyboard ()
+  "Toggle the Android keyboard using isearch-forward.
+If the keyboard is open, close it. If closed, open it."
+  (interactive)
+  (if osama-emacs-keyboard-toggle-state
+      (progn
+        (when (and (boundp 'isearch-mode) isearch-mode)
+          (isearch-abort))  ;; Close isearch and hide the keyboard
+        (setq osama-emacs-keyboard-toggle-state nil))
+    (isearch-forward nil 1)  ;; Open isearch (shows the keyboard)
+    (setq osama-emacs-keyboard-toggle-state t)))
+
+;; Bind volume buttons to toggle the keyboard
+(global-set-key (kbd "<volume-up>") #'osama-emacs-toggle-keyboard)
+(global-set-key (kbd "<volume-down>") #'osama-emacs-toggle-keyboard)
+#+end_src
+
 ** The =osama-emacs-windows.el= module
+
+*** The =osama-emacs-windows.el= section for
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
+
+#+end_src
 
 * Android Section For Personal Settings
 
