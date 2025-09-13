@@ -523,23 +523,28 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   :hook (after-init . (lambda ()
                         ;; Default font
                         (set-face-attribute 'default nil
-                                            :family "Fira Code"
+                                            :family "Iosevka Fixed"
                                             :height 120
-                                            :weight 'normal)
+                                            :weight 'light
+                                            :slant 'normal)
+
                         ;; Fixed-pitch (مثل الكود)
                         (set-face-attribute 'fixed-pitch nil
-                                            :family "Fira Code"
+                                            :family "Iosevka Fixed"
                                             :height 120
-                                            :weight 'normal)
+                                            :weight 'light
+                                            :slant 'normal)
+
                         ;; Variable-pitch (مثل Org Mode)
                         (set-face-attribute 'variable-pitch nil
-                                            :family "Source Sans Pro"
-                                            :height 140
-                                            :weight 'normal))))
-
+                                            :family "Iosevka Aile"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+                                            
 ;; Arabic Font
-(when (member "STC Forward" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "STC Forward")))
+(when (member "Noto Kufi Arabic" (font-family-list))
+(set-fontset-font t 'arabic (font-spec :family "Noto Kufi Arabic")))
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-fonts-dir
@@ -547,7 +552,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   "Directory to store fonts for Emacs.")
 
 (unless (file-directory-p osama-fonts-dir)
-  (make-directory osama-fonts-dir t))
+  (make-directory osama-fonts-dir t)))))
 #+end_src
 
 ** The =osama-emacs-essentials.el= module
