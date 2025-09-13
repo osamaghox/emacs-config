@@ -367,9 +367,18 @@ In this module I define everything broadly related to the aesthetics of Emacs.
              (expand-file-name "data/themes/" osama-emacs-home-dir))
 #+end_src
 
+
 *** The =osama-emacs-appearance.el= section for ~doom-themes~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t)
+#+end_src
+
+*** [Disabled] The =osama-emacs-appearance.el= section for ~doom-plain-theme~
+
+#+begin_src emacs-lisp :tangle no
 (use-package doom-themes
   :bind (("C-c t t" . osama-emacs-toggle-doom-plain-theme))
   :config
