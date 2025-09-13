@@ -244,11 +244,8 @@ by ~use-package~ when it needs it
 ;; Load all .el files from modules directory
 (dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
   (load file nil 'nomessage))
-#+end_src
 
-** The =init.el= settings for System-specific settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
+;; Load System-specific settings
 (add-to-list 'load-path osama-emacs-dot-dir)
 
 (cond
