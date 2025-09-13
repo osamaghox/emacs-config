@@ -246,7 +246,7 @@ by ~use-package~ when it needs it
   (load file nil 'nomessage))
 #+end_src
 
-** The =init.el= settings for system custom settings
+** The =init.el= settings for System-specific settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 (add-to-list 'load-path osama-emacs-dot-dir)
@@ -1518,7 +1518,7 @@ If HIDE is non-nil, hide extensions; otherwise show them."
 
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/osama-emacs-android.el" :mkdirp yes
 (defvar osama-emacs-keyboard-toggle-state nil
   "Current toggle state of the Android keyboard using isearch.")
 
@@ -1543,7 +1543,7 @@ If the keyboard is open, close it. If closed, open it."
 
 *** The =osama-emacs-windows.el= section for
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/osama-emacs-windows.el" :mkdirp yes
 
 #+end_src
 
