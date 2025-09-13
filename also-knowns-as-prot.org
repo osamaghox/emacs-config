@@ -1140,8 +1140,9 @@ on how I use Org.
          "DONE(d!)")))    ; أنجزت
 
 (setq org-refile-targets
-      `((,(expand-file-name "org/Archive.org" osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Tasks.org"   osama-emacs-home-dir) :maxlevel . 1)))
+      `((,(expand-file-name "org/Archive.org"    osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/Repeated.org"   osama-emacs-home-dir) :maxlevel . 1)))
 
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
