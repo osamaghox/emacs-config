@@ -1096,6 +1096,7 @@ on how I use Org.
   (use-package org-modern
     :hook (org-mode . org-modern-mode)
     :custom
+    (org-modern-star t)
     (org-modern-table t)
     (org-modern-keyword t)
     (org-modern-timestamp t)
