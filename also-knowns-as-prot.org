@@ -1106,7 +1106,9 @@ on how I use Org.
     (org-modern-internal-target nil)
     (org-modern-radio-target nil)
     (org-modern-statistics nil)
-    (org-modern-progress t))
+    (org-modern-progress t)
+    :bind
+     ("C-c o m" . org-modern-mode))
 
   ;; Superstar bullets
   (use-package org-superstar
