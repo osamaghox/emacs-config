@@ -593,9 +593,6 @@ This module load basic configurations that apply to most facets of Emacs.
 (use-package emacs
   :ensure nil
   :config
-  ;; Ask for confirmation before exiting Emacs
-  (setq confirm-kill-emacs 'y-or-n-p)
-
   ;; Function to open your config file
   (defun open-emacs-config ()
     "Open Emacs configuration file."
