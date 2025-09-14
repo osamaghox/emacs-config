@@ -1385,6 +1385,15 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   ;; "[D]" followed by the file's title.  Read the doc string of
   ;; `denote-rename-buffer-format' for how to modify this.
   (denote-rename-buffer-mode 1))
+
+  (setq denote-known-keywords
+      '("watching" "movies" "tv-shows" "anime" "documentaries" "youtube"
+        "writting" "ideas" "books" "homeworks" "articles"
+        "reading" "novels"
+        "listening" "music" "podcasts"
+        "learning" "designing" "programming" "skills" "religion" "school" "quran" "tafsir" "hadith"
+        "work" "productivity" "creative" "project"
+        "personal" "quotes" "people" "health" "project"))
 #+end_src
 
 *** The =osama-emacs-denote.el= section for ~denote-sequence~
