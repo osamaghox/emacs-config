@@ -823,43 +823,37 @@ Administrative > Change system local... > Arabic (Saudi Arabia)
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package dashboard
+  :ensure t
   :config
   (dashboard-setup-startup-hook)
 
-  ;; Banner
-  (setq dashboard-startup-banner 'official)
-  (setq dashboard-banner-logo-title "Welcome to Emacs, Osama!")
+  ;; Banner + Welcome message
+  (setq dashboard-startup-banner
+        (expand-file-name "data/osama-emacs-banner.svg" osama-emacs-home-dir))
+  (setq dashboard-banner-logo-title "“The things you own end up owning you.”")
 
-  ;; Center content
-  (setq dashboard-center-content t)
+  ;; Remove all default dashboard items
+  (setq dashboard-items nil)
 
-  ;; Enable icons
+  ;; Custom commands (displayed under the banner)
+  (setq dashboard-set-init-info t)
+  (setq dashboard-show-icons t)
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
 
-  ;; Customize items with icons and shortcuts
-  (setq dashboard-items '((recents  . 5)
-                          (projects . 5)
-                          (bookmarks . 5)))
-
-  ;; Add custom widget for shortcuts
-  (setq dashboard-item-generators
-        '((recents . (lambda (list-size)
-                       (dashboard-insert-heading " Recent Files" 'all-the-icons-blue)
-                       (dashboard-insert-recents list-size)))
-          (projects . (lambda (list-size)
-                        (dashboard-insert-heading " Projects" 'all-the-icons-green)
-                        (dashboard-insert-projects list-size)))
-          (bookmarks . (lambda (list-size)
-                         (dashboard-insert-heading " Bookmarks" 'all-the-icons-orange)
-                         (dashboard-insert-bookmarks list-size)))))
-
-  ;; Shortcut hints
-  (setq dashboard-set-shortcuts t)
-  (setq dashboard-shortcut-list
-        '(("SPC f r" . recents)
-          ("SPC f p" . projects)
-          ("SPC f b" . bookmarks))))
+  (setq dashboard-init-info
+        (concat "\n"
+                "󰃭 Org Agenda ............ [SPC o a]\n"
+                " Org Capture ........... [SPC o c]\n"
+                "󰎚 New Note .............. [SPC n n]\n"
+                "󰠮 Notes Folder .......... [SPC n d]\n"
+                "󰈞 Find File ............. [SPC f f]\n"
+                " Recent Files .......... [SPC f h]\n"
+                " Jump to Bookmarks ..... [SPC f b]\n"
+                " Dired ................. [SPC d d]\n"
+                " Find Word ............. [SPC s r]\n"
+                "󰔎 Theme-toggle  ......... [SPC t t]\n"
+                "󰈞 Settings .............. [SPC e c]\n")))
 #+end_src
 
 
