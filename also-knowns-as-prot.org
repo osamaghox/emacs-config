@@ -847,7 +847,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
   ;; Banner + Welcome message
   (setq dashboard-startup-banner
-        (expand-file-name "data/osama-emacs-banner.svg" osama-emacs-home-dir))
+        (expand-file-name "data/dashboard/osama-emacs-banner.svg" osama-emacs-home-dir))
   (setq dashboard-banner-logo-title "“The things you own end up owning you.”")
 
   ;; Remove all default dashboard items
