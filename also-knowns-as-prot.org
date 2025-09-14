@@ -562,11 +562,13 @@ In this module I define everything broadly related to the aesthetics of Emacs.
                                             
 ;; Arabic Font
 (when (member "Noto Kufi Arabic" (font-family-list))
-(set-fontset-font t 'arabic (font-spec :family "Noto Kufi Arabic")))
+  (set-fontset-font t 'arabic (font-spec :family "Noto Kufi Arabic")))
 
-;; Nerd Font
+;; Nerd Font only for symbols
 (when (member "Symbols Nerd Font Mono" (font-family-list))
-  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
+  ;; نحدد فقط رموز معينة بدل 'unicode الكامل
+  (dolist (charset '(symbol dingbats))
+    (set-fontset-font t charset (font-spec :family "Symbols Nerd Font Mono"))))
 
 ;; Emoji Font
 (when (member "Noto Color Emoji" (font-family-list))
