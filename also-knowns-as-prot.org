@@ -585,6 +585,27 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 This module load basic configurations that apply to most facets of Emacs.
 
+
+
+
+*** The =osama-emacs-essentials.el= Section for Emacs Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+
+(use-package emacs
+  :ensure nil
+  :config
+  ;; Ask for confirmation before exiting Emacs
+  (setq confirm-kill-emacs 'y-or-n-p)
+
+  :bind
+  (("C-c e q" . kill-emacs)
+   ("C-c e f" . osama-buffer)
+   ("C-c f R" . rename-file)
+
+
+#+end_src
+
 *** The =osama-emacs-essentials.el= Section for Files
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
@@ -729,13 +750,6 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for for UTF-8 Defaults
-
-طبعًا بتحتاج اعداد بسيط لل Utf-8 اذا كنت على Windows 11
-
-قم بفتح =run=
-اكتب =intl.cpl=
-واختر
-Administrative > Change system local... > Arabic (Saudi Arabia)
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
