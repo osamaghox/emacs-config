@@ -1555,10 +1555,10 @@ If HIDE is non-nil, hide extensions; otherwise show them."
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
-(defvar osama-emacs-keyboard-toggle-state nil
+(defvar osama-keyboard-toggle-state nil
   "Current toggle state of the Android keyboard using isearch.")
 
-(defun osama-emacs-toggle-keyboard ()
+(defun osama-toggle-keyboard ()
   "Automatically toggle the Android keyboard using isearch.
 Opens i-search if it's closed, closes it if it's open."
   (interactive)
@@ -1566,7 +1566,7 @@ Opens i-search if it's closed, closes it if it's open."
       ;; If i-search is open, close it immediately
       (progn
         (isearch-abort)
-        (setq osama-emacs-keyboard-toggle-state nil))
+        (setq osama-keyboard-toggle-state nil))
     ;; If i-search is closed, open it immediately
     (isearch-forward nil 1)
     ;; As soon as it opens, close it after a short delay 
@@ -1575,11 +1575,11 @@ Opens i-search if it's closed, closes it if it's open."
                  (lambda ()
                    (when (and (boundp 'isearch-mode) isearch-mode)
                      (isearch-abort))))
-    (setq osama-emacs-keyboard-toggle-state t)))
+    (setq osama-keyboard-toggle-state t)))
 
 ;; Bind volume buttons
-(global-set-key (kbd "<volume-up>") #'osama-emacs-toggle-keyboard)
-(global-set-key (kbd "<volume-down>") #'osama-emacs-toggle-keyboard)
+(global-set-key (kbd "<volume-up>") #'osama-toggle-keyboard)
+(global-set-key (kbd "<volume-down>") #'osama-toggle-keyboard)
 #+end_src
 
 ** The =osama-emacs-windows.el= module
