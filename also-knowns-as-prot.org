@@ -367,39 +367,50 @@ In this module I define everything broadly related to the aesthetics of Emacs.
              (expand-file-name "data/themes/" osama-emacs-home-dir))
 #+end_src
 
-
-*** The =osama-emacs-appearance.el= section for ~doom-themes~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
-(use-package doom-themes)
-#+end_src
-
 *** The =osama-emacs-appearance.el= section for ~doom-plain-theme~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
   :bind (("C-c t t" . osama-toggle-doom-plain-theme))
   :config
-  (load-theme 'doom-plain-dark t)
+  ;; دالة تضبط وجوه doom-plain-dark بعد تحميله
+  (defun osama-setup-doom-plain-dark ()
+    (when (member 'doom-plain-dark custom-enabled-themes)
+      (custom-theme-set-faces
+       'doom-plain-dark
+       '(region ((t (:background "#555555"))))
+       '(org-block            ((t (:background "#2a2a2a" :foreground "#d7d5d1"))))
+       '(org-block-background ((t (:background "#2a2a2a"))))
+       '(org-block-begin-line ((t (:foreground "#bbbbbb" :background "#444444"))))
+       '(org-block-end-line   ((t (:foreground "#bbbbbb" :background "#444444")))))))
 
-  ;; تعديل لون النص المحدد فقط (region)
-  (custom-set-faces
-   '(region ((t (:background "#555555")))))
+  ;; إذا عندك Emacs 29+ استعمل after-load-theme-hook
+  (when (boundp 'after-load-theme-hook)
+    (add-hook 'after-load-theme-hook #'osama-setup-doom-plain-dark))
 
+  ;; إذا أقل من 29 استعمل advice
+  (unless (boundp 'after-load-theme-hook)
+    (advice-add 'load-theme :after (lambda (&rest _) (osama-setup-doom-plain-dark))))
+
+  ;; دالة التبديل بين الثيمين
   (defun osama-toggle-doom-plain-theme ()
-    "Toggle between `doom-plain` and `doom-plain-dark`."
+    "Toggle between doom-plain (light) and doom-plain-dark (dark)."
     (interactive)
     (cond
+     ;; light → dark
      ((member 'doom-plain custom-enabled-themes)
       (disable-theme 'doom-plain)
-      (load-theme 'doom-plain-dark t)
-      (custom-set-faces
-       '(region ((t (:background "#555555"))))))
+      (load-theme 'doom-plain-dark t))
+     ;; dark → light
      ((member 'doom-plain-dark custom-enabled-themes)
       (disable-theme 'doom-plain-dark)
       (load-theme 'doom-plain t))
+     ;; لا يوجد ثيم → light افتراضي
      (t
-      (load-theme 'doom-plain t)))))
+      (load-theme 'doom-plain t))))
+
+  ;; ✅ حمل الثيم الافتراضي
+  (load-theme 'doom-plain-dark t))
 #+end_src
 
 *** The =osama-emacs-appearance.el= section for ~doom-two-tone-themes~
