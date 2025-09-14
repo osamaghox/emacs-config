@@ -371,14 +371,12 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 *** The =osama-emacs-appearance.el= section for ~doom-themes~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
-(use-package doom-themes
-  :config
-  (load-theme 'doom-one t))
+(use-package doom-themes)
 #+end_src
 
-*** [Disabled] The =osama-emacs-appearance.el= section for ~doom-plain-theme~
+*** The =osama-emacs-appearance.el= section for ~doom-plain-theme~
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
   :bind (("C-c t t" . osama-emacs-toggle-doom-plain-theme))
   :config
@@ -919,7 +917,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
-   ("C-c t t" . consult-theme)
+   ("C-c t c" . consult-theme)
    ("C-c y y" . consult-yank-pop)))
 #+end_src
 
