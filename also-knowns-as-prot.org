@@ -378,7 +378,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-themes
-  :bind (("C-c t t" . osama-emacs-toggle-doom-plain-theme))
+  :bind (("C-c t t" . osama-toggle-doom-plain-theme))
   :config
   (load-theme 'doom-plain-dark t)
 
@@ -386,7 +386,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (custom-set-faces
    '(region ((t (:background "#555555")))))
 
-  (defun osama-emacs-toggle-doom-plain-theme ()
+  (defun osama-toggle-doom-plain-theme ()
     "Toggle between `doom-plain` and `doom-plain-dark`."
     (interactive)
     (cond
