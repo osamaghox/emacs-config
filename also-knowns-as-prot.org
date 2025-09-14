@@ -584,6 +584,7 @@ This module load basic configurations that apply to most facets of Emacs.
   :bind
   (("C-c f f" . find-file)
    ("C-c f s" . save-buffer)
+   ("C-c f R" . rename-file)
    ("C-c f S" . write-file)))
 #+end_src
 
