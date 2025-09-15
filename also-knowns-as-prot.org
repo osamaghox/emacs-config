@@ -884,18 +884,18 @@ This module load basic configurations that apply to most facets of Emacs.
   ;; Custom commands section
   (setq dashboard-init-info
         (concat "\n"
-                "󰃭  Org Agenda ........... [SPC o a]\n"
-                "  Org Capture .......... [SPC o c]\n"
-                "󰎚  New Note ............. [SPC n n]\n"
-                "󰠮  Notes Folder ......... [SPC n d]\n"
-                "󰈞  Find File ............ [SPC f f]\n"
-                "  Recent Files ......... [SPC f h]\n"
-                "  Jump to Bookmarks .... [SPC f b]\n"
-                "  Dired ................ [SPC d d]\n"
-                "  Find Word ............ [SPC s r]\n"
-                "󰔎  Theme Toggle ......... [SPC t t]\n"
-                "󰈞  Open Config .......... [SPC e c]\n"
-                "󰈞  Quit ................. [SPC e q]\n")))
+                "󰃭  Org Agenda .......... [SPC o a] \n"
+                "  Org Capture ......... [SPC o c] \n"
+                "󰎚  New Note ............ [SPC n n] \n"
+                "󰠮  Notes Folder ........ [SPC n d] \n"
+                "󰈞  Find File ........... [SPC f f] \n"
+                "  Recent Files ........ [SPC f h] \n"
+                "  Jump to Bookmarks ... [SPC f b] \n"
+                "  Dired ............... [SPC d d] \n"
+                "  Find Word ........... [SPC s r] \n"
+                "󰔎  Theme Toggle ........ [SPC t t] \n"
+                "󰈞  Open Config ......... [SPC e c] \n"
+                "󰈞  Quit ................ [SPC e q] \n")))
 #+end_src
 
 ** The =osama-emacs-completion.el= module
