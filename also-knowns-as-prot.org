@@ -850,14 +850,13 @@ This module load basic configurations that apply to most facets of Emacs.
   (dashboard-setup-startup-hook)
 
   ;; ASCII logo
-  ;; ASCII logo
 (setq dashboard-banner-logo-title
 "   ______ ______ ______ ______ ______ 
   ||O   |||S   |||A   |||M   |||A   || 
   ||____|||____|||____|||____|||____|| 
   |/____\\|/____\\|/____\\|/____\\|/____\\|
    __________________________________
-  ||                                ||    
+  ||     Emacs, Saves Your Soul     ||    
   ||________________________________|| 
   |/________________________________\\|")
 
