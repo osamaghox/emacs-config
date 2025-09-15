@@ -774,8 +774,8 @@ This module load basic configurations that apply to most facets of Emacs.
   :init
   ;; Arabic input method
   (setq default-input-method "arabic")
-  :bind
-  ("C-c \" . toggle-input-method))
+  ;; :bind
+  ;; ("C-c \" . toggle-input-method))
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
