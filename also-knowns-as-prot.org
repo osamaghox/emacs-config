@@ -864,6 +864,18 @@ This module load basic configurations that apply to most facets of Emacs.
         dashboard-show-icons      t
         dashboard-set-heading-icons t
         dashboard-set-file-icons  t)
+  ;; Footer messages: random inspirational quotes
+  (setq dashboard-footer-messages
+      '("Welcome back, Osama!"
+        "Focus on progress, not perfection."
+        "Every note is a step forward."
+        "Keep building your system."
+        "Consistency beats intensity."
+        "Small steps lead to big changes."
+        "Your notes are your second brain."
+        "Stay curious, stay organized."
+        "One task at a time."
+        "Knowledge compounds over time."))
 
   ;; Custom commands section
   (setq dashboard-init-info
