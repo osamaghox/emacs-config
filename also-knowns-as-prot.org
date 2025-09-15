@@ -683,15 +683,15 @@ This module load basic configurations that apply to most facets of Emacs.
 
   ;; Keybindings C-c t 1 .. C-c t 9
   :bind
-  (("C-c 1" . tab-goto-1)
-   ("C-c 2" . tab-goto-2)
-   ("C-c 3" . tab-goto-3)
-   ("C-c 4" . tab-goto-4)
-   ("C-c 5" . tab-goto-5)
-   ("C-c 6" . tab-goto-6)
-   ("C-c 7" . tab-goto-7)
-   ("C-c 8" . tab-goto-8)
-   ("C-c 9" . tab-goto-9)
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
    ;; Optional: new / close / next / prev
    ("C-c t n" . tab-new)
    ("C-c t c" . tab-close)
