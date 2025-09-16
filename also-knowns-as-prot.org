@@ -853,7 +853,14 @@ This module load basic configurations that apply to most facets of Emacs.
 
   ;; ASCII logo
 (setq dashboard-banner-logo-title
-" ______ ______ ______ ______ ______
+"
+
+
+
+
+
+
+ ______ ______ ______ ______ ______
 ||O   |||S   |||A   |||M   |||A   ||
 ||____|||____|||____|||____|||____||
 |/____\\|/____\\|/____\\|/____\\|/____\\|
@@ -897,7 +904,7 @@ This module load basic configurations that apply to most facets of Emacs.
                 "  Find Word ............ [SPC s r]\n"
                 "󰔎  Theme Toggle ......... [SPC t t]\n"
                 "󰈞  Open Config .......... [SPC e c]\n"
-                "󰈞  Quit ................. [SPC e q]\n")))
+                "󰈞  Quit ................. [SPC e q]")))
 #+end_src
 
 ** The =osama-emacs-completion.el= module
