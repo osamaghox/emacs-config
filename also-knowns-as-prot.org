@@ -891,7 +891,7 @@ This module load basic configurations that apply to most facets of Emacs.
                 "󰎚  New Note ............. [SPC n n]\n"
                 "󰠮  Notes Folder ......... [SPC n d]\n"
                 "󰈞  Find File ............ [SPC f f]\n"
-                "  Recent Files ......... [SPC f h]\n"
+                "  Recent Files ......... [SPC f r]\n"
                 "  Jump to Bookmarks .... [SPC f b]\n"
                 "  Dired ................ [SPC d d]\n"
                 "  Find Word ............ [SPC s r]\n"
