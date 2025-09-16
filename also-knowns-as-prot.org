@@ -374,15 +374,17 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   :bind (("C-c t t" . osama-toggle-doom-plain-theme))
   :config
   ;; دالة تضبط وجوه doom-plain-dark بعد تحميله
-  (defun osama-setup-doom-plain-dark ()
-    (when (member 'doom-plain-dark custom-enabled-themes)
-      (custom-theme-set-faces
-       'doom-plain-dark
-       '(region ((t (:background "#555555"))))
-       '(org-block            ((t (:background "#2a2a2a" :foreground "#d7d5d1"))))
-       '(org-block-background ((t (:background "#2a2a2a"))))
-       '(org-block-begin-line ((t (:foreground "#bbbbbb" :background "#444444"))))
-       '(org-block-end-line   ((t (:foreground "#bbbbbb" :background "#444444")))))))
+(defun osama-setup-doom-plain-dark ()
+  (when (member 'doom-plain-dark custom-enabled-themes)
+    (custom-theme-set-faces
+     'doom-plain-dark
+     ;; لون التحديد region مختلف عن hl-line
+     '(region ((t (:background "#666699" :foreground nil))))  ;; اختر اللون اللي تحبه
+     '(hl-line ((t (:background "#333333"))))                ;; hl-line لون مظلم
+     '(org-block            ((t (:background "#2a2a2a" :foreground "#d7d5d1"))))
+     '(org-block-background ((t (:background "#2a2a2a"))))
+     '(org-block-begin-line ((t (:foreground "#bbbbbb" :background "#444444"))))
+     '(org-block-end-line   ((t (:foreground "#bbbbbb" :background "#444444")))))))
 
   ;; إذا عندك Emacs 29+ استعمل after-load-theme-hook
   (when (boundp 'after-load-theme-hook)
