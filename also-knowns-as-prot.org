@@ -609,7 +609,6 @@ This module load basic configurations that apply to most facets of Emacs.
 ;; Keybindings
 (global-set-key (kbd "C-c e q") 'osama-kill-emacs)       ;; Quit Emacs with confirmation
 (global-set-key (kbd "C-c e c") 'open-emacs-config)   ;; Open config file
-
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Files
@@ -814,6 +813,14 @@ This module load basic configurations that apply to most facets of Emacs.
   (sentence-end-double-space nil)
   (scroll-error-top-bottom t)
   (save-interprogram-paste-before-kill t))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for ~undo-tree~ package
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package undo-tree
+  :init
+  (global-undo-tree-mode))
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~OpenWith~ package
