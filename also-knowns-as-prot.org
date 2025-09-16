@@ -820,7 +820,9 @@ This module load basic configurations that apply to most facets of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package undo-tree
   :init
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  :bind
+   ("C-c u t" . undo-tree-visualize))  ;; Visualize Tree
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~OpenWith~ package
