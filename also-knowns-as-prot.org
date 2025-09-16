@@ -773,9 +773,7 @@ This module load basic configurations that apply to most facets of Emacs.
   :ensure nil
   :init
   ;; Arabic input method
-  (setq default-input-method "arabic")
-  ;; :bind
-  ;; ("C-c \" . toggle-input-method))
+  (setq default-input-method "arabic"))
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
@@ -854,7 +852,6 @@ This module load basic configurations that apply to most facets of Emacs.
   ;; ASCII logo
 (setq dashboard-banner-logo-title
 "
-
 
 
 
