@@ -161,3 +161,28 @@
 (provide 'orgdoc-mouse)
 
 ;;; orgdoc-mouse.el ends here
+
+
+من هنا تمسح النصوص كامل ومنزل
+;; ------------------------------
+;; posframe (ضروري للـ hover)
+;; ------------------------------
+(use-package posframe
+  :ensure t)
+
+;; ------------------------------
+;; eldoc-box (اختياري، لتحسين popups)
+;; ------------------------------
+(use-package eldoc-box
+  :ensure t
+  :hook (after-init . eldoc-box-hover-mode))
+
+;; ------------------------------
+;; eldoc-mouse-denote (hover للروابط)
+;; ------------------------------
+;; ضع الملف eldoc-mouse-denote.el في ~/.emacs.d/lisp/
+(add-to-list 'load-path "~/.emacs.d/lisp/") ;; عدّل المسار إذا لزم
+(require 'orgdoc-mouse)
+
+;; تفعيل hover على روابط Denote في org-mode
+(add-hook 'org-mode-hook #'orgdoc-mouse-enable)
