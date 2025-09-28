@@ -1138,7 +1138,7 @@ on how I use Org.
   (setq org-fontify-whole-block-delimiter-line t)
   :bind
   (("C-c o l" . org-store-link)
-   ("C-c o e" . org-export)
+   ("C-c o e" . org-export-dispatch)
    ("C-c o s" . org-schedule)
    ("C-c o d" . org-deadline)
    ("C-c o p" . org-set-property)
