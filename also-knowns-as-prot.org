@@ -1136,6 +1136,9 @@ on how I use Org.
   (setq org-M-RET-may-split-line '((default . nil)))
   ;; Color the entire block delimiter line
   (setq org-fontify-whole-block-delimiter-line t)
+  ;; Enable Text Selection with the Shift Key
+  (setq org-support-shift-select t)
+
   :bind
   (("C-c o l" . org-store-link)
    ("C-c o e" . org-export-dispatch)
