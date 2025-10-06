@@ -900,18 +900,18 @@ This module load basic configurations that apply to most facets of Emacs.
   ;; Custom commands section
   (setq dashboard-init-info
         (concat "\n"
-                "󰃭  Org Agenda ........... [C-c o a]\n"
-                "  Org Capture .......... [C-c o c]\n"
-                "󰎚  New Note ............. [C-c n n]\n"
-                "󰠮  Notes Folder ......... [C-c n d]\n"
-                "󰈞  Find File ............ [C-c f f]\n"
-                "  Recent Files ......... [C-c f r]\n"
-                "  Jump to Bookmarks .... [C-c f b]\n"
-                "  Dired ................ [C-c d d]\n"
-                "  Find Word ............ [C-c s r]\n"
-                "󰔎  Theme Toggle ......... [C-c t t]\n"
-                "󰈞  Open Config .......... [C-c e c]\n"
-                "󰈞  Quit ................. [C-c e q]")))
+                "󰃭  Org Agenda ........... [SPC o a]\n"
+                "  Org Capture .......... [SPC o c]\n"
+                "󰎚  New Note ............. [SPC n n]\n"
+                "󰠮  Notes Folder ......... [SPC n d]\n"
+                "󰈞  Find File ............ [SPC f f]\n"
+                "  Recent Files ......... [SPC f r]\n"
+                "  Jump to Bookmarks .... [SPC f b]\n"
+                "  Dired ................ [SPC d d]\n"
+                "  Find Word ............ [SPC s r]\n"
+                "󰔎  Theme Toggle ......... [SPC t t]\n"
+                "󰈞  Open Config .......... [SPC e c]\n"
+                "󰈞  Quit ................. [SPC e q]")))
 #+end_src
 
 ** The =osama-emacs-completion.el= module
@@ -1503,6 +1503,57 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   (consult-denote-grep-command #'consult-ripgrep)
   :config
   (consult-denote-mode 1))
+#+end_src
+
+** The =osama-emacs-evil.el= module
+
+*** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+;;; Evil-mode setup
+(use-package evil
+  :init
+  (setq evil-want-integration t          ;; integrate with other packages
+        evil-want-keybinding nil         ;; don't load default keybindings
+        evil-want-C-u-scroll t           ;; C-u scroll up
+        evil-want-C-i-jump nil)          ;; disable C-i jump
+  :config
+  (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
+  (evil-mode 1)
+
+  ;; Global keybindings
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+
+  ;; Motion keys: move by visual lines
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  ;; Set initial state for specific modes
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;;; Evil-collection setup (integrates evil with other Emacs modes)
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+#+end_src
+
+*** The =osama-emacs-evil.el= section for general leader key
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+(use-package general
+  :config
+  (general-define-key
+   :keymaps 'normal
+   "SPC"   (general-simulate-key "C-c"))
+
+  ;; dired mode map
+  (general-define-key
+   :keymaps 'dired-mode-map
+   :states 'normal
+   "SPC" (general-simulate-key "C-c")))
 #+end_src
 
 ** The =osama-emacs-dired.el= module
