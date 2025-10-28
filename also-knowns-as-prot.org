@@ -1234,6 +1234,8 @@ on how I use Org.
        (expand-file-name "org/Repeated.org" osama-emacs-home-dir)
        (expand-file-name "org/Archive.org" osama-emacs-home-dir)
        (expand-file-name "org/Habits.org" osama-emacs-home-dir)
+       (expand-file-name "org/voltaic/Voltaic_Routine.org" osama-emacs-home-dir)
+       (expand-file-name "org/voltaic/Voltaic_Benchmark.org" osama-emacs-home-dir)
        (expand-file-name "org/Events.org" osama-emacs-home-dir)))
 
   ;; تفعيل org-habit
