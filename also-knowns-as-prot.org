@@ -1697,7 +1697,7 @@ return value can be used with `define-key'."
   :config
 (setq org-agenda-files
       (list
-       (expand-file-name "org/voltaic/Voltaic_Routine.org" osama-emacs-home-dir)
+       (expand-file-name "org/voltaic/Voltaic_VDIM.org" osama-emacs-home-dir)
        (expand-file-name "org/voltaic/Voltaic_Benchmark.org" osama-emacs-home-dir)))
 
   (setq org-capture-templates
