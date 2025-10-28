@@ -863,10 +863,6 @@ This module load basic configurations that apply to most facets of Emacs.
 (setq dashboard-banner-logo-title
 "
 
-
-
-
-
  ______ ______ ______ ______ ______
 ||O   |||S   |||A   |||M   |||A   ||
 ||____|||____|||____|||____|||____||
@@ -1234,8 +1230,6 @@ on how I use Org.
        (expand-file-name "org/Repeated.org" osama-emacs-home-dir)
        (expand-file-name "org/Archive.org" osama-emacs-home-dir)
        (expand-file-name "org/Habits.org" osama-emacs-home-dir)
-       (expand-file-name "org/voltaic/Voltaic_Routine.org" osama-emacs-home-dir)
-       (expand-file-name "org/voltaic/Voltaic_Benchmark.org" osama-emacs-home-dir)
        (expand-file-name "org/Events.org" osama-emacs-home-dir)))
 
   ;; تفعيل org-habit
@@ -1693,3 +1687,29 @@ return value can be used with `define-key'."
 * Android Section For Personal Settings
 
 * The Personal Functions
+
+** The =osama-emacs-voltaic.el= module
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-voltaic.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :bind
+  :config
+(setq org-agenda-files
+      (list
+       (expand-file-name "org/voltaic/Voltaic_Routine.org" osama-emacs-home-dir)
+       (expand-file-name "org/voltaic/Voltaic_Benchmark.org" osama-emacs-home-dir)))
+
+  (setq org-capture-templates
+        `(
+          ;; ============================
+          ;; Tasks / Projects
+          ;; ============================
+          ("t" "Task" entry
+           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)
+)))
+#+end_src
+
