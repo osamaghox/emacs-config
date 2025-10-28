@@ -1155,7 +1155,7 @@ on how I use Org.
     :hook (org-mode . org-modern-mode)
     :custom
     (org-modern-star nil)
-    (org-modern-table t)
+    (org-modern-table nil)
     (org-modern-keyword t)
     (org-modern-timestamp t)
     (org-modern-priority t)
