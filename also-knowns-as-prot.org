@@ -1556,6 +1556,27 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
    "SPC" (general-simulate-key "C-c")))
 #+end_src
 
+
+*** The =osama-emacs-evil.el= section for fixing rtl cursor
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+(use-package evil
+  :config
+  ;; دالة إصلاح اتجاه الحركة في النص العربي
+  (defun osama-evil-mode-rtl-fix ()
+    "Swap h and l movement keys in Evil when paragraph direction is RTL."
+    (if (equal bidi-paragraph-direction 'right-to-left)
+        (progn
+          (define-key evil-normal-state-map "h" 'evil-forward-char)
+          (define-key evil-normal-state-map "l" 'evil-backward-char))
+      (define-key evil-normal-state-map "h" 'evil-backward-char)
+      (define-key evil-normal-state-map "l" 'evil-forward-char)))
+
+  ;; إضافة الهُوك لتحديث الاتجاه بعد كل أمر
+  (add-hook 'post-command-hook #'osama-evil-mode-rtl-fix))
+#+end_src
+
+
 ** The =osama-emacs-dired.el= module
 
 ** The =osama-emacs-dired.el= section for basic settings
