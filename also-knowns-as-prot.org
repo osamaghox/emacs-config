@@ -1371,24 +1371,23 @@ on how I use Org.
            "| %U | %^{Weight} | %^{Notes} |"
            :kill-buffer t)
 
-          ;; ============================
-          ;; Fitness / Exercise Capture
-          ;; ============================
-          ("e" "New Exercise" entry
-           (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
-           "* %^{Exercise Name}
-**** Muscle Group: %^{Muscle Group|Chest|Back|Legs|Shoulders|Arms|Core|Other}
-**** Type: %^{Type|Strength (With Weight)|Bodyweight (No Weight)}
+;; ============================
+;; Fitness / Exercise Capture
+;; ============================
+("e" "New Exercise" entry
+ (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
+ "* %^{Exercise Name}
+\\*\\* Muscle Group: %^{Muscle Group|Chest|Back|Legs|Shoulders|Arms|Core|Other}
+\\*\\* Type: %^{Type|Strength (With Weight)|Bodyweight (No Weight)}
 %?  ;; optional description / instructions
-**** Log
+\\*\\* Log
 | Date       | Weight | Reps | Notes           |
 |------------+--------+------+----------------|
-**** Notes
+\\*\\* Notes
 - Enter your notes here
 "
-           :empty-lines 1
-           :prepend t)
-          )))
+ :empty-lines 1
+ :prepend t))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
