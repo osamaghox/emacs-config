@@ -1142,6 +1142,7 @@ on how I use Org.
    ("C-c o d" . org-deadline)
    ("C-c o p" . org-set-property)
    ("C-c o L" . org-toggle-link-display)
+   ("C-c o <" . org-date-from-calendar)
    ("C-c o o" . org-open-at-point-global)))
 
   ;; Show emphasis markers only while editing
