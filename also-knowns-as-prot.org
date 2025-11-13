@@ -1388,7 +1388,7 @@ on how I use Org.
                               "| Date       | Reps | Notes           |
 |------------+------+----------------|")))
                 (concat
-                 "** " exercise "\n"
+                 "* " exercise "\n"
                  (unless (string= muscle "Empty")
                    (format "**** Muscle Group: %s\n" muscle))
                  "\n%?\n"
