@@ -1390,11 +1390,11 @@ on how I use Org.
                 (concat
                  "* " exercise "\n"
                  (unless (string= muscle "Empty")
-                   (format "**** Muscle Group: %s\n" muscle))
+                   (format "*** Muscle Group: %s\n" muscle))
                  "\n%?\n"
-                 "**** Log\n"
+                 "*** Log\n"
                  table "\n"
-                 "**** Notes\n- Enter your notes here\n"))))
+                 "*** Notes\n- Enter your notes here\n"))))
            :empty-lines 1
            :prepend t)
           )))
