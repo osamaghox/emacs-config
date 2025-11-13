@@ -1329,6 +1329,9 @@ on how I use Org.
 *** The =osama-emacs-org.el= section for ~org-capture~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+;; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with ‘C-x C-f’ and enter text in its buffer.
+
 (use-package org
   :ensure nil
   :bind (("C-c o c" . org-capture))
@@ -1369,7 +1372,25 @@ on how I use Org.
           ("mw" "Weight" table-line
            (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
            "| %U | %^{Weight} | %^{Notes} |"
-           :kill-buffer t))))
+           :kill-buffer t)
+
+;; ============================
+;; Fitness / Exercise Capture
+;; ============================
+("e" "New Exercise" entry
+ (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
+ "* %^{Exercise Name}
+**** Muscle Group: %^{Muscle Group|Chest|Back|Legs|Shoulders|Arms|Core|Other}
+**** Type: %^{Type|Strength (With Weight)|Bodyweight (No Weight)}
+%?  ;; optional description / instructions
+**** Log
+| Date       | Weight | Reps | Notes           |
+|------------+--------+------+----------------|
+**** Notes
+- Enter your notes here
+"
+ :empty-lines 1
+ :prepend t))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
