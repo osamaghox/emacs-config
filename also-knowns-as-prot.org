@@ -1371,23 +1371,33 @@ on how I use Org.
            "| %U | %^{Weight} | %^{Notes} |"
            :kill-buffer t)
 
-;; ============================
-;; Fitness / Exercise Capture
-;; ============================
-("e" "New Exercise" entry
- (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
- "* %^{Exercise Name}
-\\*\\* Muscle Group: %^{Muscle Group|Chest|Back|Legs|Shoulders|Arms|Core|Other}
-\\*\\* Type: %^{Type|Strength (With Weight)|Bodyweight (No Weight)}
-%?  ;; optional description / instructions
-\\*\\* Log
-| Date       | Weight | Reps | Notes           |
-|------------+--------+------+----------------|
-\\*\\* Notes
-- Enter your notes here
-"
- :empty-lines 1
- :prepend t))))
+          ;; ============================
+          ;; Fitness / Exercise Capture
+          ;; ============================
+          ("e" "New Exercise" entry
+           (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
+           (function
+            (lambda ()
+              (let* ((exercise (read-string "Exercise Name: "))
+                     (muscle (completing-read "Muscle Group: "
+                                              '("Empty" "Chest" "Back" "Legs" "Shoulders" "Arms" "Core")))
+                     (with-weight (y-or-n-p "هل التمرين بوزن؟ "))
+                     (table (if with-weight
+                                "| Date       | Weight | Reps | Notes           |
+|------------+--------+------+----------------|"
+                              "| Date       | Reps | Notes           |
+|------------+------+----------------|")))
+                (concat
+                 "* " exercise "\n"
+                 (unless (string= muscle "Empty")
+                   (format "*** Muscle Group: %s\n" muscle))
+                 "\n%?\n"
+                 "*** Log\n"
+                 table "\n"
+                 "*** Notes\n- Enter your notes here\n"))))
+           :empty-lines 1
+           :prepend t)
+          )))
 #+end_src
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
