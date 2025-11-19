@@ -797,7 +797,7 @@ This module load basic configurations that apply to most facets of Emacs.
              (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
     (recenter))
   :bind
-  ("C-c t r" . osama-toggle-text-direction))
+  ("C-c r" . osama-toggle-text-direction))
 #+end_src
 
 *** The =osama-emacs-essentials.el= settings for ~text-mode~
