@@ -1404,6 +1404,79 @@ on how I use Org.
 *** The =osama-emacs-org.el= section for Diet Tracker
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :config
+  (setq org-capture-templates
+   '("w" "Weigh-in" entry
+   (file+headline "~/emacs/org/self/diet.org" "Daily Logs")
+   "* CAL-IN Diet for day %t
+%^{Weight}p
+| Timestamp | Food | Calories | Quantity | Total |
+|--------------+---+----------+----------+-------|
+|--------------+---+----------+----------+-------|
+| Total        |   |          |          |       |
+#+TBLFM: $5=$3*$4::@>$5=vsum(@2$5..@-I$5)"
+   :prepend t))
+
+
+(defun org-diet-move-today ()
+  "Move to today's entry in the org-diet file."
+  (interactive)
+  (beginning-of-buffer)
+
+  ;; Move to first heading (Daily Logs) and expand.
+  (outline-next-visible-heading 1)
+  (show-children)
+  (outline-next-visible-heading 1))
+
+(defun org-diet-move-last-entry ()
+  "Move to the last entry in the current diet table."
+  (interactive)
+
+  (search-forward "#+TBLFM")
+
+  ;; Move to start of final line.
+  (previous-line 1)
+  (previous-line 1)
+  (move-beginning-of-line 1))
+
+(defun org-diet-copy ()
+  "Copy the current table line to today.
+
+Copies the current table line and moves it to the bottom of
+today's diet table.  Changes the timestamp to the current time
+and day."
+  (interactive)
+
+  (let ((diet-line (thing-at-point 'line t)))
+    ;; Jump to today & last line.
+    (org-diet-move-today)
+    (org-diet-move-last-entry)
+
+    ;; Insert the copied line.
+    (insert diet-line)
+
+    ;; Move back to last line.
+    (org-diet-move-last-entry)
+    (forward-line -1)
+
+    ;; Replace the date.
+    (beginning-of-line)
+    (search-forward "| ")
+    (zap-to-char 1 93)
+    (insert (format-time-string "[%Y-%m-%d %a %H:%M]" (current-time)))
+
+    ;; Update the table.
+    (forward-line 2)
+    (org-table-recalculate)
+
+    ;; Move to inserted line.
+    (beginning-of-line)
+    (forward-line -2)))
+
+;; Bind copying to `C-c C-C`.
+(global-set-key "\C-cC" #'org-diet-copy))
 
 #+end_src
 
