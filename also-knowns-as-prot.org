@@ -1401,6 +1401,12 @@ on how I use Org.
           )))
 #+end_src
 
+*** The =osama-emacs-org.el= section for Diet Tracker
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+
+#+end_src
+
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
 These instructions are for **Windows 11**.
