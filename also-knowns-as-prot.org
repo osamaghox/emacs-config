@@ -1407,20 +1407,20 @@ on how I use Org.
 (use-package org
   :ensure nil
   :bind
-  ("C-c C-c" . osama-org-copy-entry)
+  (("C-c C-c" . osama-org-copy-entry))
   :config
   ;; Capture template للوزن
   (setq org-capture-templates
-        '(("w" "Weigh-in" entry
-           (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
-           "* CAL-IN Diet for day %t
+      `(("w" "Weigh-in" entry
+         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Quantity | Total |
 |--------------+---+----------+----------+-------|
 |--------------+---+----------+----------+-------|
 | Total        |   |          |          |       |
-#+TBLFM: $5=$3*$4::@>$5=vsum(@2$5..@-I$5)"
-           :prepend t)))
+#+TBLFM: $5=$3*$4;%.0f::@>$5=vsum(@2$5..@-I$5);%.0f"
+         :prepend t)))
 
   ;; الدوال الخاصة بالنسخ والتحريك
   (defun osama-org-move-today ()
