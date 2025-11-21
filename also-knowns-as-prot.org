@@ -1407,7 +1407,7 @@ on how I use Org.
 (use-package org
   :ensure nil
   :bind
-  (("C-c C-c" . osama-org-copy-entry))
+  (("C-c o C" . osama-org-copy-entry))
   :config
   ;; Capture template للوزن
   (setq org-capture-templates
