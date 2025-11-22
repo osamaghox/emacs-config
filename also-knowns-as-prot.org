@@ -1410,16 +1410,16 @@ on how I use Org.
   (("C-c o C" . osama-org-copy-entry))
   :config
   ;; Capture template للوزن
-  (setq org-capture-templates
+(setq org-capture-templates
       `(("w" "Weigh-in" entry
          (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
-| Timestamp | Food | Calories | Quantity | Total |
-|--------------+---+----------+----------+-------|
-|--------------+---+----------+----------+-------|
-| Total        |   |          |          |       |
-#+TBLFM: $5=$3*$4;%.0f::@>$5=vsum(@2$5..@-I$5);%.0f"
+| Timestamp | Food | Calories | Protein | Quantity | Total Calories | Total Protein |
+|-----------+------+----------+---------+----------+----------------+---------------|
+|-----------+------+----------+---------+----------+----------------+---------------|
+| Totals    |      |          |         |          |                |               |
+#+TBLFM: $6=$3*$5;%.0f::$7=$4*$5;%.1f::@>$6=vsum(@2$6..@-I$6);%.0f::@>$7=vsum(@2$7..@-I$7);%.1f"
          :prepend t)))
 
   ;; الدوال الخاصة بالنسخ والتحريك
