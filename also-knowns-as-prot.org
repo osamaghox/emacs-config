@@ -655,10 +655,10 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w ^" . enlarge-window)
 
    ;; Move between windows with arrows
-   ("C-c w h" . windmove-left)
-   ("C-c w l" . windmove-right)
-   ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down)))
+   ("C-c h" . windmove-left)
+   ("C-c l" . windmove-right)
+   ("C-c k" . windmove-up)
+   ("C-c j" . windmove-down)))
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
@@ -928,7 +928,7 @@ The which-key package provides hints for keys that complete the currently incomp
   :config
   (setq which-key-idle-delay 1)
   (which-key-add-key-based-replacements
-    "C-c h" "Help"
+    "C-c H" "Help"
     "C-c x" "Text"
     "C-c s" "Search"
     "C-c w" "Windows"
@@ -980,7 +980,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c f r" . consult-recent-file)
    ("C-c f m" . consult-file-externally)
    ("C-c b b" . consult-buffer)
-   ("C-c h o" . consult-outline)
+   ("C-c H o" . consult-outline)
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
@@ -1028,10 +1028,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package helpful
   :bind
-  (("C-c h f" . helpful-function)   ;; Describe function
-   ("C-c h c" . helpful-command)    ;; Describe command
-   ("C-c h v" . helpful-variable)   ;; Describe variable
-   ("C-c h k" . helpful-key)))      ;; Describe key
+  (("C-c H f" . helpful-function)   ;; Describe function
+   ("C-c H c" . helpful-command)    ;; Describe command
+   ("C-c H v" . helpful-variable)   ;; Describe variable
+   ("C-c H k" . helpful-key)))      ;; Describe key
 #+end_src
 
 ** The =osama-emacs-org.el= module
