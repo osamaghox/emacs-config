@@ -540,6 +540,7 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
+  :bind (("C-c t F" . set-frame-font))
   :hook (after-init . (lambda ()
                         ;; Default font
                         (set-face-attribute 'default nil
