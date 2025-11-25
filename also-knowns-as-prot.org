@@ -930,13 +930,12 @@ The which-key package provides hints for keys that complete the currently incomp
   :config
   (setq which-key-idle-delay 1)
 
-  ;; إخفاء اختصارات C-c 1..9 من which-key
-  (dolist (n (number-sequence 1 9))
-    (add-to-list 'which-key-replacement-alist
-                 `((nil . ,(format "C-c %d" n)) . ignore)))
+(add-to-list 'which-key-replacement-alist 
+               '(("C-c [2-9]" . nil) . t)))
 
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
+    "C-c 1" "Tabs 1..9"
     "C-c H" "Help"
     "C-c x" "Text"
     "C-c s" "Search"
