@@ -8,6 +8,13 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
+
+نخلي اي حاجة تعديل او اختصار بمفرده في editing.el
+
+با نسوي ملف موديل جديد بيحتوي على الاشياء الثانوية الغير اساسية في النظام
+
+
+
 * The early initialisation of Emacs (=early-init.el=)
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
@@ -93,33 +100,46 @@ by ~use-package~ when it needs it
 ** The =init.el= entry point
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
-(defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
-  "This directory houses all of the built-in Osama Emacs modules.")
+  (defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
+    "This directory houses all of the built-in Osama Emacs modules.")
 
-;; Load all .el files from modules directory
-(dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
-  (load file nil 'nomessage))
+  ;; Load all .el files from modules directory
+  (dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
+    (load file nil 'nomessage))
 
-;; add lisp directory to load path
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; Load Core Essentials first
+(load (expand-file-name "modules/osama-emacs-core.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-editing.el" user-emacs-directory)) ;; Evil needs to load early often
 
-;; Load system-specific settings
-(cond
- ((eq system-type 'android)
-  (load "osama-emacs-android"))
- ((eq system-type 'windows-nt)
-  (load "osama-emacs-windows")))
+;; Load Appearance
+(load (expand-file-name "modules/osama-emacs-ui-appearance.el" user-emacs-directory))
+
+;; Load Features
+(load (expand-file-name "modules/osama-emacs-completion.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-org.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-denote.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-dired.el" user-emacs-directory))
+
+  ;; add lisp directory to load path
+  (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+  ;; Load system-specific settings
+  (cond
+   ((eq system-type 'android)
+    (load "osama-emacs-android"))
+   ((eq system-type 'windows-nt)
+    (load "osama-emacs-windows")))
 #+end_src
 
 * The modules of my Emacs configuration
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-** The =osama-emacs-appearance.el= module
+** The =osama-emacs-ui-appearance.el= module
 
-*** The =osama-emacs-appearance.el= Section for UI Basics
+*** The =osama-emacs-ui-appearance.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -156,18 +176,18 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (context-menu-mode 1)))
 #+end_src
 
-*** The =osama-emacs-appearance.el= Section for ~Spacious padding~
+*** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package spacious-padding
   :custom
   (line-spacing 3)
   (spacious-padding-mode 1))
 #+end_src
 
-*** The =osama-emacs-appearance.el= Section for ~Toggle Transparency~
+*** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -193,9 +213,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (("C-c t o" . osama-toggle-transparency)))
 #+end_src
 
-*** The =osama-emacs-appearance.el= Section for Toggle Title Bar & Decorations
+*** The =osama-emacs-ui-appearance.el= Section for Toggle Title Bar & Decorations
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -217,17 +237,17 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (("C-c t f" . osama-frame-toggle-decoration)))
 #+end_src
 
-*** The =osama-emacs-appearance.el= section for ~custom-themes~
+*** The =osama-emacs-ui-appearance.el= section for ~custom-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 ;; Include the "themes" folder in Emacs' theme search path
 (add-to-list 'custom-theme-load-path
              (expand-file-name "data/themes/" osama-emacs-home-dir))
 #+end_src
 
-*** The =osama-emacs-appearance.el= section for ~doom-plain-theme~
+*** The =osama-emacs-ui-appearance.el= section for ~doom-plain-theme~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package doom-themes
   :bind (("C-c t t" . osama-toggle-doom-plain-theme))
   :config
@@ -273,9 +293,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (load-theme 'doom-plain-dark t))
 #+end_src
 
-*** The =osama-emacs-appearance.el= section for ~doom-two-tone-themes~
+*** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package doom-two-tone-themes
   :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
             :rev :newest)
@@ -285,16 +305,16 @@ In this module I define everything broadly related to the aesthetics of Emacs.
                "~/.emacs.d/elpa/doom-two-tone-themes/themes"))
 #+end_src
 
-*** The =osama-emacs-appearance.el= section for ~ef-themes~
+*** The =osama-emacs-ui-appearance.el= section for ~ef-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package ef-themes
   :defer t)
 #+end_src
 
-*** The =osama-emacs-appearance.el= section for ~doom-modeline~
+*** The =osama-emacs-ui-appearance.el= section for ~doom-modeline~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
@@ -307,54 +327,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (doom-modeline-indent-info t))
 #+end_src
 
-*** [Disabled] The =osama-emacs-appearance.el= section for modeline
+*** The =osama-emacs-ui-appearance.el= section for ~nerd-icons~ fonts
 
-#+begin_src emacs-lisp :tangle no :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Header line: buffer name + file path
-  (setq-default header-line-format
-                '(:eval
-                  (let* ((buf (buffer-name))
-                         (file (or (buffer-file-name) "")))
-                    (propertize
-                     (concat buf " — " file)
-                     'face 'header-line))))
-
-  ;; Mode line: Evil state + last key + position + UTF-8 indicator + time
-  (setq-default mode-line-format
-                '("%e"
-                  mode-line-front-space
-                  ;; Evil state
-                  (:eval (propertize (format " %s " evil-state)
-                                     'face 'mode-line))
-                  (:eval " | ")
-                  ;; Last key pressed
-                  (:eval (when-let ((keys (this-command-keys-vector)))
-                           (propertize
-                            (key-description keys)
-                            'face '(:weight bold
-                                   :inherit mode-line
-                                   :box (:line-width 1 :color "gray30")))))
-                  (:eval " | ")
-                  ;; Position (line:column)
-                  mode-line-position
-                  "  %p  "
-                  ;; UTF-8 indicator as text
-                  (:eval (propertize "UTF-8"
-                                     'face '(:weight bold :inherit mode-line)))
-                  "  "
-                  ;; Clock
-                  (:eval (propertize
-                          (format-time-string " %H:%M ")
-                          'face 'mode-line))
-                  mode-line-end-spaces)))
-#+end_src
-
-*** The =osama-emacs-appearance.el= section for ~nerd-icons~ fonts
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
   (expand-file-name "data/fonts/" osama-emacs-home-dir)
@@ -393,9 +368,9 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-*** The =osama-emacs-appearance.el=: Section for Font Customization
+*** The =osama-emacs-ui-appearance.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind (("C-c t F" . set-frame-font))
@@ -442,13 +417,13 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (make-directory osama-fonts-dir t)))))
 #+end_src
 
-** The =osama-emacs-essentials.el= module
+** The =osama-emacs-core.el= module
 
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-essentials.el= Section for Emacs Settings
+*** The =osama-emacs-core.el= Section for Emacs Settings
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :config
@@ -470,8 +445,8 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-set-key (kbd "C-c e c") 'open-emacs-config)   ;; Open config file
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Files
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+*** The =osama-emacs-core.el= Section for Files
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -481,8 +456,82 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c f S" . write-file)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Buffers
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+*** The =osama-emacs-core.el= section for Dired
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+    (use-package dired
+      :ensure nil ;; built-in package
+      :commands (dired dired-jump)
+      :custom
+      (dired-listing-switches "-alh") ;; human-readable sizes
+      (dired-dwim-target t)           ;; smart target when copying/moving
+      (dired-recursive-copies 'always)
+      (dired-recursive-deletes 'top)
+      (dired-auto-revert-buffer t)    ;; auto refresh on changes
+      :bind
+      (("C-c d d" . dired)
+       ("C-c d f" . find-file-other-window)
+       ("C-c d j" . dired-jump)))
+       
+    (use-package dired-x
+      :ensure nil
+      :after dired
+      :config
+      (setq dired-omit-files "^\\.?#\\|^\\.")) ;; hide clutter files like .#temp
+
+    (use-package all-the-icons-dired
+      :hook (dired-mode . all-the-icons-dired-mode))
+
+
+  
+  ;;settings for dired-hide-details-mode
+  (use-package dired
+    :ensure nil
+    :bind (:map dired-mode-map
+                ("C-c d h" . osama-dired-hide-details-mode))
+    :config
+    (defvar-local osama-dired-hide-details-enabled nil
+      "Non-nil if details and extensions are hidden in this Dired buffer.")
+
+    (defun osama-dired-hide-details-apply-extensions (hide)
+      "Apply or remove hiding of ALL file extensions in current buffer.
+  If HIDE is non-nil, hide extensions; otherwise show them."
+      (let ((inhibit-read-only t)
+            (regex "\\.[^.]+$"))
+        (save-excursion
+          (goto-char (point-min))
+          (while (re-search-forward regex nil t)
+            (if hide
+                (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
+              (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
+
+    (defun osama-dired-hide-details-mode ()
+      "Toggle hiding of details + ALL file extensions in current Dired buffer."
+      (interactive)
+      (setq osama-dired-hide-details-enabled
+            (not osama-dired-hide-details-enabled))
+      (if osama-dired-hide-details-enabled
+          (progn
+            (dired-hide-details-mode 1)
+            (osama-dired-hide-details-apply-extensions t)
+            (message "Dired: hiding details + extensions"))
+        (progn
+          (dired-hide-details-mode 0)
+          (osama-dired-hide-details-apply-extensions nil)
+          (message "Dired: showing details + extensions")))))
+#+end_src
+
+
+
+
+
+
+  
+#+end_src
+
+
+*** The =osama-emacs-core.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -491,9 +540,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c b p" . previous-buffer)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Windows
+*** The =osama-emacs-core.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -520,9 +569,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w j" . windmove-down)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
+*** The =osama-emacs-core.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -558,9 +607,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c t u" . tab-undo)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
+*** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;; Ensure cache subdirectories exist
 (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
   (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
@@ -601,9 +650,9 @@ This module load basic configurations that apply to most facets of Emacs.
 (setq create-lockfiles nil)
 #+end_src
 
-*** The =osama-emacs-essentials.el= Settings for Better Performance
+*** The =osama-emacs-core.el= Settings for Better Performance
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -613,9 +662,9 @@ This module load basic configurations that apply to most facets of Emacs.
             (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for for UTF-8 Defaults
+*** The =osama-emacs-core.el= Section for for UTF-8 Defaults
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -626,9 +675,9 @@ This module load basic configurations that apply to most facets of Emacs.
   (set-language-environment "UTF-8"))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Support Arabic Typing
+*** The =osama-emacs-core.el= Section for Support Arabic Typing
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -636,9 +685,9 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
+*** The =osama-emacs-core.el= Section for Paragraph Text Direction
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -659,9 +708,9 @@ This module load basic configurations that apply to most facets of Emacs.
   ("C-c r" . osama-toggle-text-direction))
 #+end_src
 
-*** The =osama-emacs-essentials.el= settings for ~text-mode~
+*** The =osama-emacs-core.el= settings for ~text-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package text-mode
   :ensure nil
   :hook
@@ -674,18 +723,18 @@ This module load basic configurations that apply to most facets of Emacs.
   (save-interprogram-paste-before-kill t))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for ~undo-tree~ package
+*** The =osama-emacs-core.el= section for ~undo-tree~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package vundo
   :ensure t
   :bind
   ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
+*** The =osama-emacs-core.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -695,9 +744,9 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Markdown Basic Settings
+*** The =osama-emacs-core.el= section for Markdown Basic Settings
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
@@ -706,9 +755,9 @@ This module load basic configurations that apply to most facets of Emacs.
          ("C-c C-e" . markdown-do)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= settings for ~dashboard~
+*** The =osama-emacs-core.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package dashboard
   :ensure t
   :config
@@ -1472,11 +1521,10 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   (consult-denote-mode 1))
 #+end_src
 
-** The =osama-emacs-evil.el= module
+** The =osama-emacs-editing.el= module
+*** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
-*** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 ;;; Evil-mode setup
 (use-package evil
   :init
@@ -1507,9 +1555,9 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   (evil-collection-init))
 #+end_src
 
-*** The =osama-emacs-evil.el= section for general leader key
+*** The =osama-emacs-editing.el= section for general leader key
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 (use-package general
   :config
   (general-define-key
@@ -1524,9 +1572,9 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 #+end_src
 
 
-*** The =osama-emacs-evil.el= section for fixing rtl cursor
+*** The =osama-emacs-editing.el= section for fixing rtl cursor
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 (use-package evil
   :config
   ;; دالة إصلاح اتجاه الحركة في النص العربي
@@ -1544,73 +1592,6 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 #+end_src
 
 
-** The =osama-emacs-dired.el= module
-
-** The =osama-emacs-dired.el= section for basic settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
-(use-package dired
-  :ensure nil ;; built-in package
-  :commands (dired dired-jump)
-  :custom
-  (dired-listing-switches "-alh") ;; human-readable sizes
-  (dired-dwim-target t)           ;; smart target when copying/moving
-  (dired-recursive-copies 'always)
-  (dired-recursive-deletes 'top)
-  (dired-auto-revert-buffer t)    ;; auto refresh on changes
-  :bind
-  (("C-c d d" . dired)
-   ("C-c d f" . find-file-other-window)
-   ("C-c d j" . dired-jump)))
-   
-(use-package dired-x
-  :ensure nil
-  :after dired
-  :config
-  (setq dired-omit-files "^\\.?#\\|^\\.")) ;; hide clutter files like .#temp
-
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-#+end_src
-
-*** The =osama-emacs-dired.el= settings for ~dired-hide-details-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
-(use-package dired
-  :ensure nil
-  :bind (:map dired-mode-map
-              ("C-c d h" . osama-dired-hide-details-mode))
-  :config
-  (defvar-local osama-dired-hide-details-enabled nil
-    "Non-nil if details and extensions are hidden in this Dired buffer.")
-
-  (defun osama-dired-hide-details-apply-extensions (hide)
-    "Apply or remove hiding of ALL file extensions in current buffer.
-If HIDE is non-nil, hide extensions; otherwise show them."
-    (let ((inhibit-read-only t)
-          (regex "\\.[^.]+$"))
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward regex nil t)
-          (if hide
-              (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
-            (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
-
-  (defun osama-dired-hide-details-mode ()
-    "Toggle hiding of details + ALL file extensions in current Dired buffer."
-    (interactive)
-    (setq osama-dired-hide-details-enabled
-          (not osama-dired-hide-details-enabled))
-    (if osama-dired-hide-details-enabled
-        (progn
-          (dired-hide-details-mode 1)
-          (osama-dired-hide-details-apply-extensions t)
-          (message "Dired: hiding details + extensions"))
-      (progn
-        (dired-hide-details-mode 0)
-        (osama-dired-hide-details-apply-extensions nil)
-        (message "Dired: showing details + extensions")))))
-#+end_src
 
 ** The =osama-emacs-dev.el= module
 
