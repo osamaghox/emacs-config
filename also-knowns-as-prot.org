@@ -685,53 +685,6 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-*** The =osama-emacs-core.el= Section for Paragraph Text Direction
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  (setq-default bidi-display-reordering t
-                bidi-paragraph-direction 'left-to-right)
-  :config
-  (defun osama-toggle-text-direction ()
-    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
-    (interactive)
-    (setq bidi-paragraph-direction
-          (if (eq bidi-paragraph-direction 'left-to-right)
-              'right-to-left
-            'left-to-right))
-    (message "Paragraph direction now: %s"
-             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
-    (recenter))
-  :bind
-  ("C-c r" . osama-toggle-text-direction))
-#+end_src
-
-*** The =osama-emacs-core.el= settings for ~text-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package text-mode
-  :ensure nil
-  :hook
-  (text-mode . visual-line-mode)
-  :init
-  (delete-selection-mode t)
-  :custom
-  (sentence-end-double-space nil)
-  (scroll-error-top-bottom t)
-  (save-interprogram-paste-before-kill t))
-#+end_src
-
-*** The =osama-emacs-core.el= section for ~undo-tree~ package
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package vundo
-  :ensure t
-  :bind
-  ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
-#+end_src
-
 *** The =osama-emacs-core.el= section for ~OpenWith~ package
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
@@ -1590,6 +1543,58 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   ;; إضافة الهُوك لتحديث الاتجاه بعد كل أمر
   (add-hook 'post-command-hook #'osama-evil-mode-rtl-fix))
 #+end_src
+
+
+*** The =osama-emacs-editing.el= Section for Paragraph Text Direction
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default bidi-display-reordering t
+                bidi-paragraph-direction 'left-to-right)
+  :config
+  (defun osama-toggle-text-direction ()
+    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
+    (interactive)
+    (setq bidi-paragraph-direction
+          (if (eq bidi-paragraph-direction 'left-to-right)
+              'right-to-left
+            'left-to-right))
+    (message "Paragraph direction now: %s"
+             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
+    (recenter))
+  :bind
+  ("C-c r" . osama-toggle-text-direction))
+#+end_src
+
+
+*** The =osama-emacs-editing.el= settings for ~text-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package text-mode
+  :ensure nil
+  :hook
+  (text-mode . visual-line-mode)
+  :init
+  (delete-selection-mode t)
+  :custom
+  (sentence-end-double-space nil)
+  (scroll-error-top-bottom t)
+  (save-interprogram-paste-before-kill t))
+#+end_src
+
+
+
+*** The =osama-emacs-editing.el= section for ~undo-tree~ package
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package vundo
+  :ensure t
+  :bind
+  ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
+#+end_src
+
 
 
 
