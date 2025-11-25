@@ -2,10 +2,44 @@
 #+author: Osama Ghourab
 #+email: osamaghox@gmail.com
 #+language: en
-#+options: ':t toc:nil num:t author:t email:t
+#+options: toc:t num:nil author:t email:t
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
+
+* ممنوع تستخدم الماوس والنم باد و arrows
+
+:custom > يعني تخصيص
+:config > اعدادات خاصة بالباكج 
+:init > حاجة تشتغل قبل الباكج ما تتحمل
+
+
+** https://codeberg.org/ashton314/emacs-bedrock/src/branch/main/extras
+
+* Prefix Keys
+
+| Command     | Key |
+|-------------+-----|
+| help        | h   |
+| text        | x   |
+| search      | s   |
+| windows     | w   |
+| emacs       | e   |
+| notes       | n   |
+| org         | o   |
+| org agenda      | o a |
+| org capture      | o a |
+| org clocking      | o a |
+| org export      | o a |
+| agenda      | o a |
+| agenda      | o a |
+| files       | f   |
+| buffers     | b   |
+| dired       | d   |
+| toggles     | t   |
+| insert      | i   |
+| attachments | a   |
 
 
 * Basic Keybindings
@@ -48,6 +82,13 @@
   )
 -------------------------------- straight.el package manager ------------------------------
 
+** حل مشكلة singature sig
+
+احذف مجلد
+gnupg
+من
+.emacsd/elpa/ستجده هنا
+
 ** lazy loading use-packages
 
 ** use package for melpa
@@ -83,6 +124,8 @@ osama-emacs-test.el
 
 ** this is the best for refernce
 
+https://github.com/rougier/dotemacs
+https://github.com/SophieBosio/.emacs.d/blob/main/init.org#mode-line
 https://github.com/ianyepan/yay-evil-emacs/blob/master/config.org
 https://github.com/pprevos/emacs-writing-studio/blob/master/init.el
 
@@ -111,37 +154,54 @@ https://github.com/konrad1977/punch-line
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
 
+** The =early-init.el= section we define the =osama-vault= folder variable
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
+;; Base directory for all Emacs files
+(defvar osama-emacs-home-dir "~/osama-vault/emacs/"
+  "Base directory for all my Emacs files.")
+
+;; Always open Emacs in the osama-emacs-home-dir folder
+(cd osama-emacs-home-dir)
+#+end_src
+
 ** The =early-init.el= section to set PATH and system tools
 
-#+begin_src emacs-lisp :tangle "early-init.el" :mkdirp yes
-;; Detect system type and add appropriate paths
-(let ((path-sep (if (eq system-type 'windows-nt) ";" ":")))
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
+;; Detect system type and set appropriate PATH separators
+(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
 
-  ;; Android (Termux) settings
-  (when (string-equal system-type "android")
-    (setenv "PATH" (format "%s%s%s"
-                           "/data/data/com.termux/files/usr/bin"
+;; Android (Termux) settings
+(when (string-equal system-type "android")
+  ;; Add Termux binaries to the PATH environment
+  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
+    ;; Prepend termuxpath to PATH to override busybox grep
+    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
+    (setq exec-path (cons termuxpath exec-path))
+    ;; Set conversion style to nil for better Evil integration
+    (setq overriding-text-conversion-style nil)))
+
+;; Windows settings
+(when (eq system-type 'windows-nt)
+  ;; Define tools directory using osama-emacs-home-dir variable
+  (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
+    ;; Add Git to exec-path and PATH
+    (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+    (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
                            path-sep
                            (getenv "PATH")))
-    (setenv "LD_LIBRARY_PATH" (format "%s:%s"
-                                      "/data/data/com.termux/files/usr/lib"
-                                      (getenv "LD_LIBRARY_PATH")))
-    (push "/data/data/com.termux/files/usr/bin" exec-path))
 
-  ;; Windows settings
-  (when (eq system-type 'windows-nt)
-    ;; Git
-    (let ((tools-dir (expand-file-name "~/osama-emacs/emacs-data/tools/")))
-      (add-to-list 'exec-path (concat tools-dir "git/cmd"))
-      (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
-                             path-sep
-                             (getenv "PATH")))
+    ;; Add fd (file search tool) to exec-path
+    (add-to-list 'exec-path (concat tools-dir "fd/"))
 
-      ;; fd (file search tool)
-      (add-to-list 'exec-path (concat tools-dir "fd/"))
+    ;; Add ripgrep to exec-path
+    (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 
-      ;; ripgrep
-      (add-to-list 'exec-path (concat tools-dir "ripgrep/")))))
+;; Fix Arabic text search issues with fd and ripgrep on Windows
+(when (eq system-type 'windows-nt)
+  (dolist (prog '("[rR][gG]" "[fF][dD]"))
+    (add-to-list 'process-coding-system-alist
+                 `(,prog . (utf-8 . windows-1256)))))
 #+end_src
 
 * The main initialisation of Emacs (=init.el=)
@@ -154,12 +214,13 @@ The =package.el= is built into Emacs and is perfectly fine for my
 use-case. We do not need to load it explicitly, as it will be called
 by ~use-package~ when it needs it
 
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 (require 'package)
 (setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("org"   . "https://orgmode.org/elpa/")
-        ("elpa"  . "https://elpa.gnu.org/packages/")))
+      '(("melpa"  . "https://melpa.org/packages/")
+        ("org"    . "https://orgmode.org/elpa/")
+        ("elpa"   . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
 
 ;; Install use-package if missing
@@ -173,40 +234,213 @@ by ~use-package~ when it needs it
 
 ** The =init.el= entry point
 
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
-(defvar osama-emacs-dir (expand-file-name "~/.emacs.d/")
-  "The root dir of the Osama Emacs distribution.")
-
-(defvar osama-emacs-modules-dir (expand-file-name "modules" osama-emacs-dir)
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
+(defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
   "This directory houses all of the built-in Osama Emacs modules.")
 
 ;; Load all .el files from modules directory
 (dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
   (load file nil 'nomessage))
+
+;; add lisp directory to load path
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+;; Load system-specific settings
+(cond
+ ((eq system-type 'android)
+  (load "osama-emacs-android"))
+ ((eq system-type 'windows-nt)
+  (load "osama-emacs-windows")))
 #+end_src
 
 * The modules of my Emacs configuration
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-** The =osama-emacs-theme.el= module
+** The =osama-emacs-appearance.el= module
 
-*** The =osama-emacs-theme.el= section for ~theme~
+*** The =osama-emacs-appearance.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
-(use-package ef-themes
-  :config
-  (load-theme 'ef-deuteranopia-light t))
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Hide UI elements
+  (scroll-bar-mode -1)   ;; Disable visible scrollbar
+  (tool-bar-mode -1)     ;; Disable the toolbar
+  (tooltip-mode -1)      ;; Disable tooltips
+  (set-fringe-mode 10)   ;; Give some breathing room
+  (menu-bar-mode -1)     ;; Disable the menu bar
+
+  ;; Visible bell instead of audible bell
+  (setq visible-bell t)
+
+  ;; Show current column number
+  (column-number-mode 1)
+
+  ;; Enable line numbers globally
+  (global-display-line-numbers-mode 1)
+  ;; Disable line numbers in specific modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  ;; Make cursor a vertical bar
+  (setq-default cursor-type 'bar)
+
+  ;; Highlight current line
+  (global-hl-line-mode 1)
+
+  ;; Contextual menu with right mouse button (only in GUI)
+  (when (display-graphic-p)
+    (context-menu-mode 1)))
 #+end_src
 
-*** The =osama-emacs-theme.el= section for ~modeline~
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-theme.el" :mkdirp yes
+*** The =osama-emacs-appearance.el= Section for ~Spacious padding~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package spacious-padding
+  :custom
+  (line-spacing 3)
+  (spacious-padding-mode 1))
+#+end_src
+
+*** The =osama-emacs-appearance.el= Section for ~Toggle Transparency~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Ensure initial frame is fully opaque
+  (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+
+  ;; Function to toggle transparency
+  (defun osama-toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (or (eql (cond ((numberp alpha) alpha)
+                          ((numberp (cdr alpha)) (cdr alpha))
+                          ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+               (null alpha))  ;; if alpha is not set previously
+           '(95 . 90)
+         '(100 . 100)))))
+
+  ;; Bind the function to a shortcut
+  :bind
+  (("C-c t o" . osama-toggle-transparency)))
+#+end_src
+
+*** The =osama-emacs-appearance.el= Section for Toggle Title Bar & Decorations
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Default frame settings
+  (add-to-list 'default-frame-alist '(undecorated . nil))
+  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+  (add-to-list 'default-frame-alist '(internal-border-width . 10))
+
+  ;; Function to toggle title bar
+  (defun osama-frame-toggle-decoration ()
+    "Toggle the frame title bar visibility (undecorated)."
+    (interactive)
+    (let* ((current (frame-parameter nil 'undecorated))
+           (new (not current)))
+      (set-frame-parameter nil 'undecorated new)))
+
+  ;; Bind the toggle function to a shortcut
+  :bind
+  (("C-c t f" . osama-frame-toggle-decoration)))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~custom-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+;; Include the "themes" folder in Emacs' theme search path
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "data/themes/" osama-emacs-home-dir))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~doom-plain-theme~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package doom-themes
+  :bind (("C-c t t" . osama-toggle-doom-plain-theme))
+  :config
+  ;; دالة تضبط وجوه doom-plain-dark بعد تحميله
+(defun osama-setup-doom-plain-dark ()
+  (when (member 'doom-plain-dark custom-enabled-themes)
+    (custom-theme-set-faces
+     'doom-plain-dark
+     ;; لون التحديد region مختلف عن hl-line
+     '(region ((t (:background "#666699" :foreground nil))))  ;; اختر اللون اللي تحبه
+     '(hl-line ((t (:background "#333333"))))                ;; hl-line لون مظلم
+     '(org-block            ((t (:background "#2a2a2a" :foreground "#d7d5d1"))))
+     '(org-block-background ((t (:background "#2a2a2a"))))
+     '(org-block-begin-line ((t (:foreground "#bbbbbb" :background "#444444"))))
+     '(org-block-end-line   ((t (:foreground "#bbbbbb" :background "#444444")))))))
+
+  ;; إذا عندك Emacs 29+ استعمل after-load-theme-hook
+  (when (boundp 'after-load-theme-hook)
+    (add-hook 'after-load-theme-hook #'osama-setup-doom-plain-dark))
+
+  ;; إذا أقل من 29 استعمل advice
+  (unless (boundp 'after-load-theme-hook)
+    (advice-add 'load-theme :after (lambda (&rest _) (osama-setup-doom-plain-dark))))
+
+  ;; دالة التبديل بين الثيمين
+  (defun osama-toggle-doom-plain-theme ()
+    "Toggle between doom-plain (light) and doom-plain-dark (dark)."
+    (interactive)
+    (cond
+     ;; light → dark
+     ((member 'doom-plain custom-enabled-themes)
+      (disable-theme 'doom-plain)
+      (load-theme 'doom-plain-dark t))
+     ;; dark → light
+     ((member 'doom-plain-dark custom-enabled-themes)
+      (disable-theme 'doom-plain-dark)
+      (load-theme 'doom-plain t))
+     ;; لا يوجد ثيم → light افتراضي
+     (t
+      (load-theme 'doom-plain t))))
+
+  ;; ✅ حمل الثيم الافتراضي
+  (load-theme 'doom-plain-dark t))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~doom-two-tone-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package doom-two-tone-themes
+  :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
+            :rev :newest)
+  :config
+  ;; أضف الثيمات إلى load-path
+  (add-to-list 'custom-theme-load-path
+               "~/.emacs.d/elpa/doom-two-tone-themes/themes"))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~ef-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package ef-themes
+  :defer t)
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~doom-modeline~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
   :custom
-  (doom-modeline-height 40)
-  (doom-modeline-bar-width 3)
   (doom-modeline-buffer-file-name-style 'truncate-with-project)
   (doom-modeline-icon t)
   (doom-modeline-major-mode-icon t)
@@ -215,15 +449,57 @@ In this module I define everything broadly related to the aesthetics of Emacs.
   (doom-modeline-indent-info t))
 #+end_src
 
-** The =osama-emacs-fonts.el= module
+*** [Disabled] The =osama-emacs-appearance.el= section for modeline
 
-*** The =osama-emacs-fonts.el= section for ~nerd-icons~ fonts
+#+begin_src emacs-lisp :tangle no :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Header line: buffer name + file path
+  (setq-default header-line-format
+                '(:eval
+                  (let* ((buf (buffer-name))
+                         (file (or (buffer-file-name) "")))
+                    (propertize
+                     (concat buf " — " file)
+                     'face 'header-line))))
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-;; Define the folder to save fonts directly inside fonts
+  ;; Mode line: Evil state + last key + position + UTF-8 indicator + time
+  (setq-default mode-line-format
+                '("%e"
+                  mode-line-front-space
+                  ;; Evil state
+                  (:eval (propertize (format " %s " evil-state)
+                                     'face 'mode-line))
+                  (:eval " | ")
+                  ;; Last key pressed
+                  (:eval (when-let ((keys (this-command-keys-vector)))
+                           (propertize
+                            (key-description keys)
+                            'face '(:weight bold
+                                   :inherit mode-line
+                                   :box (:line-width 1 :color "gray30")))))
+                  (:eval " | ")
+                  ;; Position (line:column)
+                  mode-line-position
+                  "  %p  "
+                  ;; UTF-8 indicator as text
+                  (:eval (propertize "UTF-8"
+                                     'face '(:weight bold :inherit mode-line)))
+                  "  "
+                  ;; Clock
+                  (:eval (propertize
+                          (format-time-string " %H:%M ")
+                          'face 'mode-line))
+                  mode-line-end-spaces)))
+#+end_src
+
+*** The =osama-emacs-appearance.el= section for ~nerd-icons~ fonts
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
-  (expand-file-name "sync-thing/online-sync/emacs/emacs-data/fonts/"
-                    (getenv "HOME"))
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
   "Custom directory to store icon fonts.")
 
 ;; Create the folder if it doesn't exist
@@ -259,112 +535,197 @@ In this module I define everything broadly related to the aesthetics of Emacs.
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-*** The =osama-emacs-fonts.el=: Section for Font Customization
+*** The =osama-emacs-appearance.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-fonts.el" :mkdirp yes
-(use-package fontaine
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind (("C-c t F" . set-frame-font))
   :hook (after-init . (lambda ()
-                        (fontaine-mode 1)
-                        (fontaine-set-preset 'osama-fonts)))
-  :config
-  ;; Define your custom preset
-  (setq fontaine-presets
-        '((osama-fonts
-           :default-family "Fira Code"
-           :default-weight regular
-           :default-height 100
-           :variable-pitch-family "Fira Code"
-           :variable-pitch-height 1.0
-           :fixed-pitch-family "Fira Code"
-           :fixed-pitch-height 100))))
+                        ;; Default font
+                        (set-face-attribute 'default nil
+                                            :family "Iosevka Fixed"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+
+                        ;; Fixed-pitch (مثل الكود)
+                        (set-face-attribute 'fixed-pitch nil
+                                            :family "Iosevka Fixed"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+
+                        ;; Variable-pitch (مثل Org Mode)
+                        (set-face-attribute 'variable-pitch nil
+                                            :family "Iosevka Aile"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+                                            
+;; Nerd Font
+(when (member "Symbols Nerd Font Mono" (font-family-list))
+  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
 
 ;; Arabic Font
-(when (member "STC Forward" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "STC Forward")))
+(when (member "Cairo" (font-family-list))
+  (set-fontset-font t 'arabic (font-spec :family "Cairo")))
 
+;; Emoji Font
+(when (member "Noto Color Emoji" (font-family-list))
+  (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
 
 ;; Create fonts directory if it doesn't exist
-(defvar osama-fonts-dir (expand-file-name "~/osama-emacs/emacs-data/fonts/")
+(defvar osama-fonts-dir
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
   "Directory to store fonts for Emacs.")
 
 (unless (file-directory-p osama-fonts-dir)
-  (make-directory osama-fonts-dir t))
+  (make-directory osama-fonts-dir t)))))
 #+end_src
 
 ** The =osama-emacs-essentials.el= module
 
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-essentials.el= Section for Hide Tool bar
+*** The =osama-emacs-essentials.el= Section for Emacs Settings
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
-(menu-bar-mode -1)          ; Disable the menu bar
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :config
+  ;; Function to open your config file
+  (defun open-emacs-config ()
+    "Open Emacs configuration file."
+    (interactive)
+    (find-file (expand-file-name "config.org" osama-emacs-home-dir)))
+
+  ;; Function to quit Emacs with explicit confirmation
+  (defun osama-kill-emacs ()
+    "Ask for confirmation before exiting Emacs."
+    (interactive)
+    (if (y-or-n-p "Are you sure you want to quit Emacs? ")
+        (kill-emacs))))
+
+;; Keybindings
+(global-set-key (kbd "C-c e q") 'osama-kill-emacs)       ;; Quit Emacs with confirmation
+(global-set-key (kbd "C-c e c") 'open-emacs-config)   ;; Open config file
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for UI Basics
+*** The =osama-emacs-essentials.el= Section for Files
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c f f" . find-file)
+   ("C-c f s" . save-buffer)
+   ("C-c f R" . rename-file)
+   ("C-c f S" . write-file)))
+#+end_src
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-;; Visible bell
-(setq visible-bell t)
+*** The =osama-emacs-essentials.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c b k" . kill-buffer)
+   ("C-c b n" . next-buffer)
+   ("C-c b p" . previous-buffer)))
+#+end_src
 
-;; Show current column number
-(column-number-mode)
+*** The =osama-emacs-essentials.el= section for Windows
 
-;; Enable line numbers globally and disable in specific modes
-(global-display-line-numbers-mode t)
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c w w" . other-window)                ;; next window
 
-;; Make cursor a vertical bar
-(setq-default cursor-type 'bar)
+   ;; Split windows
+   ("C-c w s" . split-window-below)          ;; split below (horizontal)
+   ("C-c w v" . split-window-right)          ;; split right (vertical)
 
-;; Highlight current line
-(global-hl-line-mode 1)
+   ;; Delete windows
+   ("C-c w d" . delete-window)               ;; delete current window
+   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
+   ("C-c w o" . delete-other-windows)        ;; keep only current window
+
+   ;; Resize windows
+   ("C-c w {" . shrink-window-horizontally)
+   ("C-c w }" . enlarge-window-horizontally)
+   ("C-c w ^" . enlarge-window)
+
+   ;; Move between windows with arrows
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down)))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  (tab-bar-mode 1)
+  (setq tab-bar-show t
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-tab-name-truncated-max 20
+        tab-bar-close-button-show nil
+        tab-bar-back-button-show nil)
+  
+  ;; Functions to jump to tab by number
+  (dotimes (i 9)
+    (let ((n (1+ i)))
+      (defalias (intern (format "tab-goto-%d" n))
+        `(lambda ()
+           (interactive)
+           (tab-bar-select-tab ,n)))))
+
+  ;; Keybindings C-c 1 .. C-c 9
+  :bind
+  (("C-c 1" . tab-goto-1)
+   ("C-c 2" . tab-goto-2)
+   ("C-c 3" . tab-goto-3)
+   ("C-c 4" . tab-goto-4)
+   ("C-c 5" . tab-goto-5)
+   ("C-c 6" . tab-goto-6)
+   ("C-c 7" . tab-goto-7)
+   ("C-c 8" . tab-goto-8)
+   ("C-c 9" . tab-goto-9)
+   ;; Optional: new / close / next / prev
+   ("C-c t n" . tab-new)
+   ("C-c t c" . tab-close)
+   ("C-c t u" . tab-undo)))
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-;; Define cache directory
-(defvar osama-cache-dir
-  (expand-file-name "~/osama-emacs/emacs-cache/")
-  "Portable directory for saving Emacs session cache across devices.")
-
-;; Ensure cache directory exists
-(defun osama-ensure-cache-directory (dir)
-  "Ensure that the cache directory DIR exists, creating it if necessary."
-  (unless (file-directory-p dir)
-    (make-directory dir t)))
-
-;; Prepare subdirectories
-(let ((dirs '("savehist" "recentf" "desktop" "backups" "autosaves")))
-  (dolist (sub dirs)
-    (osama-ensure-cache-directory (expand-file-name sub osama-cache-dir))))
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+;; Ensure cache subdirectories exist
+(dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
+  (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
+    (unless (file-directory-p dir)
+      (make-directory dir t))))
 
 ;; Savehist: command history
-(setq savehist-file (expand-file-name "savehist/savehist" osama-cache-dir))
+(setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
 (savehist-mode 1)
 
 ;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "recentf/recentf" osama-cache-dir))
+(setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
 (recentf-mode 1)
 
 ;; Desktop: full session restore
-(setq desktop-path           (list (expand-file-name "desktop" osama-cache-dir))
-      desktop-dirname        (expand-file-name "desktop" osama-cache-dir)
+(setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
+      desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
       desktop-base-file-name "emacs-desktop")
 (desktop-save-mode 1)
 
 ;; Backups: store ~ files in backups/
 (setq backup-directory-alist
-      `((".*" . ,(expand-file-name "backups/" osama-cache-dir)))
+      `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
       backup-by-copying t
       version-control t
       delete-old-versions t
@@ -373,7 +734,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 ;; Auto-saves: store #files# in autosaves/
 (setq auto-save-file-name-transforms
-      `((".*" ,(concat (expand-file-name "autosaves/" osama-cache-dir) "\\1") t))
+      `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
       auto-save-default t
       auto-save-timeout 20
       auto-save-interval 200)
@@ -384,66 +745,67 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Settings for Better Performance
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-;; Increase GC threshold during startup to speed up launch
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Increase GC threshold during startup to speed up launch
   (setq gc-cons-threshold (* 50 1000 1000))
   (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
+            (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= Section for Support Arabic Filenames
+*** The =osama-emacs-essentials.el= Section for for UTF-8 Defaults
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
   (prefer-coding-system 'utf-8)
-  (setq default-buffer-file-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-language-environment "UTF-8"))
+#+end_src
+
+*** The =osama-emacs-essentials.el= Section for Support Arabic Typing
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Arabic input method
+  (setq default-input-method "arabic"))
 #+end_src
 
 *** The =osama-emacs-essentials.el= Section for Paragraph Text Direction
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-;; Enable text reordering for right-to-left (RTL) languages
-(setq-default bidi-display-reordering t)
-
-;; Default mode for all files (paragraph direction is automatic)
-(setq-default bidi-paragraph-direction nil)
-
-(defun osama-emacs-toggle-bidi-paragraph-direction ()
-  "Toggle paragraph direction between LTR, RTL, and Auto in any Emacs mode."
-  (interactive)
-  (setq bidi-paragraph-direction
-        (cond
-         ((eq bidi-paragraph-direction nil) 'left-to-right)
-         ((eq bidi-paragraph-direction 'left-to-right) 'right-to-left)
-         ((eq bidi-paragraph-direction 'right-to-left) nil)))
-  (message "Paragraph direction now: %s"
-           (pcase bidi-paragraph-direction
-             ('left-to-right "LTR")
-             ('right-to-left "RTL")
-             (_ "Auto")))
-
-  (recenter))
-
-;; Set a global shortcut to toggle paragraph direction in all Emacs modes
-(global-set-key (kbd "C-c r") #'osama-emacs-toggle-bidi-paragraph-direction)
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default bidi-display-reordering t
+                bidi-paragraph-direction 'left-to-right)
+  :config
+  (defun osama-toggle-text-direction ()
+    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
+    (interactive)
+    (setq bidi-paragraph-direction
+          (if (eq bidi-paragraph-direction 'left-to-right)
+              'right-to-left
+            'left-to-right))
+    (message "Paragraph direction now: %s"
+             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
+    (recenter))
+  :bind
+  ("C-c r" . osama-toggle-text-direction))
 #+end_src
-
-*** The =osama-emacs-essentials.el= Section for ~Spacious padding~
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
-(use-package spacious-padding
-  :custom
-  (line-spacing 3)
-  (spacious-padding-mode 1))
-#+end_src
-
-
 
 *** The =osama-emacs-essentials.el= settings for ~text-mode~
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package text-mode
-  :ensure
-  nil
+  :ensure nil
   :hook
   (text-mode . visual-line-mode)
   :init
@@ -452,6 +814,101 @@ This module load basic configurations that apply to most facets of Emacs.
   (sentence-end-double-space nil)
   (scroll-error-top-bottom t)
   (save-interprogram-paste-before-kill t))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for ~undo-tree~ package
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package vundo
+  :ensure t
+  :bind
+  ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+;; Open files with external applications
+(use-package openwith
+  :config
+  (openwith-mode t)
+  :custom
+  (openwith-associations
+   '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for Markdown Basic Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
+#+end_src
+
+*** The =osama-emacs-essentials.el= settings for ~dashboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+(use-package dashboard
+  :ensure t
+  :config
+  ;; Disable default banner
+  (defun dashboard-insert-banner ()
+    "Do nothing, disable banner completely.")
+
+  (dashboard-setup-startup-hook)
+
+  ;; ASCII logo
+(setq dashboard-banner-logo-title
+"
+
+ ______ ______ ______ ______ ______
+||O   |||S   |||A   |||M   |||A   ||
+||____|||____|||____|||____|||____||
+|/____\\|/____\\|/____\\|/____\\|/____\\|
+ __________________________________
+||          Time is Money         ||
+||________________________________||
+|/________________________________\\|")
+
+  ;; Remove default items
+  (setq dashboard-items nil)
+
+  ;; General dashboard settings
+  (setq dashboard-set-init-info   t
+        dashboard-show-icons      t
+        dashboard-set-heading-icons t
+        dashboard-set-file-icons  t)
+  ;; Footer messages: random inspirational quotes
+  (setq dashboard-footer-messages
+      '("Welcome back, Osama!"
+        "Focus on progress, not perfection."
+        "Every note is a step forward."
+        "Keep building your system."
+        "Consistency beats intensity."
+        "Small steps lead to big changes."
+        "Your notes are your second brain."
+        "Stay curious, stay organized."
+        "One task at a time."
+        "Knowledge compounds over time."))
+
+  ;; Custom commands section
+  (setq dashboard-init-info
+        (concat "\n"
+                "󰃭  Org Agenda ........... [SPC o a]\n"
+                "  Org Capture .......... [SPC o c]\n"
+                "󰎚  New Note ............. [SPC n n]\n"
+                "󰠮  Notes Folder ......... [SPC n d]\n"
+                "󰈞  Find File ............ [SPC f f]\n"
+                "  Recent Files ......... [SPC f r]\n"
+                "  Jump to Bookmarks .... [SPC f b]\n"
+                "  Dired ................ [SPC d d]\n"
+                "  Find Word ............ [SPC s r]\n"
+                "󰔎  Theme Toggle ......... [SPC t t]\n"
+                "󰈞  Open Config .......... [SPC e c]\n"
+                "󰈞  Quit ................. [SPC e q]")))
 #+end_src
 
 ** The =osama-emacs-completion.el= module
@@ -464,19 +921,53 @@ In Emacs, completion encompasses user interfaces that show the available candida
 
 The which-key package provides hints for keys that complete the currently incomplete sequence.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package which-key
-  :init (which-key-mode)
+  :ensure nil
+  :init
+  (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 1))
+  (setq which-key-idle-delay 1)
+
+;; Hide tab-switching keybindings from which-key
+(add-to-list 'which-key-replacement-alist 
+               '(("C-c [2-9]" . nil) . t))
+
+;; Hide specific commands from which-key
+(add-to-list 'which-key-replacement-alist '(("C-c C-b" . nil) . t))
+(add-to-list 'which-key-replacement-alist '(("C-c C-e" . nil) . t))
+(add-to-list 'which-key-replacement-alist '(("C-c ;"   . nil) . t))
+
+
+  ;; مجموعات which-key
+  (which-key-add-key-based-replacements
+    "C-c 1" "Tabs 1..9"
+    "C-c H" "Help"
+    "C-c x" "Text"
+    "C-c s" "Search"
+    "C-c w" "Windows"
+    "C-c e" "Emacs"
+    "C-c r" "Toggle Text Direction"
+    "C-c n" "Notes"
+    "C-c m" "Consult-Modes"
+    "C-c y" "Yank"
+    "C-c u" "Undos"
+    "C-c ." "Embark"
+    "C-c o" "Org"
+    "C-c f" "Files"
+    "C-c b" "Buffers"
+    "C-c d" "Dired"
+    "C-c t" "Toggles"
+    "C-c i" "Insert"
+    "C-c a" "Attachments"))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~vertico~
 
 The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package vertico
   :config
   (setq vertico-cycle t
@@ -488,7 +979,7 @@ The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical la
 
 The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful annotations to the side of completion candidates. We see its effect, for example, when we call M-x: each command has a brief description next to it (taken from its doc string) as well as a key binding, if it has one.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package marginalia
   :after vertico
   :init
@@ -499,19 +990,29 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~consult~ is another wonderful package by Daniel Mendler. It provides a number of commands that turbocharge the minibuffer with advanced capabilities for filtering, asynchronous input, and previewing of the current candidate’s context.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package consult
-  :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
-         ("C-M-j" . consult-switch-buffer)
-         ("M-y" . consult-yank-pop)))
+  :bind
+  (("C-c s s" . consult-line)
+   ("C-c s r" . consult-ripgrep)
+   ("C-c s f" . consult-fd)
+   ("C-c s l" . consult-line-multi)
+   ("C-c f r" . consult-recent-file)
+   ("C-c f m" . consult-file-externally)
+   ("C-c b b" . consult-buffer)
+   ("C-c H o" . consult-outline)
+   ("C-c o h" . consult-org-heading)
+   ("C-c m m" . consult-mode-command)
+   ("C-c m l" . consult-minor-mode)
+   ("C-c t T" . consult-theme)
+   ("C-c y"   . consult-yank-pop)))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~orderless~
 
 ~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package orderless
   :custom
   (completion-styles '(orderless))
@@ -522,10 +1023,10 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package embark
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim))
+  :bind (("C-c ." . embark-act)
+         ("C-c ;" . embark-dwim))
   :init
   (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
@@ -534,28 +1035,26 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package corfu
   :init
   (global-corfu-mode))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~corfu~
+*** The =osama-emacs-completion.el= section for ~helpful~
 
 Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (use-package helpful
   :bind
-  ([remap describe-function] . helpful-function)
-  ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key]      . helpful-key))
+  (("C-c H f" . helpful-function)   ;; Describe function
+   ("C-c H c" . helpful-command)    ;; Describe command
+   ("C-c H v" . helpful-variable)   ;; Describe variable
+   ("C-c H k" . helpful-key)))      ;; Describe key
 #+end_src
 
 ** The =osama-emacs-org.el= module
-
-org modern + org appear
 
 At its core, Org is a plain text markup language. By "markup
 language", we refer to the use of common characters to apply styling,
@@ -595,78 +1094,6 @@ This section covers the relevant configurations. You will notice that
 it is not limited to Org, as some other built-in features are also
 relevant here.
 
-*** The =osama-emacs-org.el= section for the ~calendar~
-
-The calendar is technically independent of Org, though it tightly integrates with it.
-We can see this when setting timestamps, such as when defining a SCHEDULED or DEADLINE entry for a given heading.
-Here, I am simply setting some stylistic preferences.
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-;;; Calendar setup
-(use-package calendar
-  :ensure nil ;; calendar is built into Emacs
-  :commands (calendar)
-  :config
-  ;; Do not highlight diary entries in the calendar
-  (setq calendar-mark-diary-entries-flag nil)
-
-  ;; Show holidays
-  (setq calendar-mark-holidays-flag t)
-
-  ;; Do not display a dedicated calendar mode line
-  (setq calendar-mode-line-format nil)
-
-  ;; Time format (24-hour)
-  (setq calendar-time-display-form
-        '(24-hours ":" minutes
-          (when time-zone (format "(%s)" time-zone))))
-
-  ;; Start the week on Monday instead of Sunday
-  (setq calendar-week-start-day 1)
-
-  ;; Display dates in ISO format (example: 2025-08-18)
-  (setq calendar-date-style 'iso)
-
-  ;; Show numeric time zone
-  (setq calendar-time-zone-style 'numeric)
-
-  ;; Coordinates (for sunrise/sunset calculation)
-  ;; Change them according to your city
-  (setq calendar-latitude 15.3694    ; Sana'a (example)
-        calendar-longitude 44.1910)
-
-  ;; Time zone
-  (setq calendar-standard-time-zone-name "+0300") ; GMT+3
-  (setq calendar-daylight-time-zone-name "+0300"))
-#+end_src
-
-*** The =osama-emacs-org.el= section about appointment reminders (=appt.el=)
-
-The built-in appt.el handles appointment notifications. It was originally designed for the diary but also integrates well with the Org agenda. I extend this integration so that whenever I add or change a task, the appointments are refreshed through hooks and advice.
-Here I only keep minimal settings: I don’t need full agenda details, just a mode line notice showing how many minutes remain until the event.
-In Org files, each heading can have an APPT_WARNTIME property (minutes before the event). I use this with org-capture for time-sensitive tasks like coaching sessions.
-
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-(use-package appt
-  :ensure nil ;; built-in in Emacs, no need to install
-  :commands (appt-activate) ;; main command to activate the system
-  :config
-  (setq appt-display-diary nil          ;; do not use the old diary
-        appt-display-format nil         ;; default display format
-        appt-display-mode-line t        ;; show reminder in the mode line
-        appt-display-interval 3         ;; repeat reminder every 3 minutes
-        appt-audible nil                ;; sound disabled (set to t for sound)
-        appt-warning-time-regexp "appt \\([0-9]+\\)" ;; regex for diary
-        appt-message-warning-time 6)    ;; warn 6 minutes before
-
-  (with-eval-after-load 'org-agenda
-    (appt-activate 1) ;; enable appt with org-agenda
-
-    ;; convert Org tasks with time info into appt reminders
-    (org-agenda-to-appt)))
-#+end_src
-
-
 *** The =osama-emacs-org.el= section with basic Org settings
 
 Org, also known as "Org mode", is one of the potentially most useful
@@ -699,50 +1126,60 @@ liking. I do as much, though know that Org is perfectly usable without
 any configuration. The following sections contain further commentary
 on how I use Org.
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-org.el" :mkdirp yes
-  (use-package org
-    :ensure nil ;; org is built-in
-    :init
-    ;; Org files directory
-    (setq org-directory (expand-file-name "~/osama-vault/org/"))
-    ;; Depth for imenu
-    (setq org-imenu-depth 5)
-    ;; RET follows links
-    (setq org-return-follows-link t)
-    ;; Folding without empty line
-    (setq org-cycle-separator-lines 0)
-    ;; Respect content when inserting heading
-    (setq org-insert-heading-respect-content t)
-    ;; Ellipsis for folded sections
-    (setq org-ellipsis "[...]")
-    ;; Hide emphasis markers globally
-    (setq org-hide-emphasis-markers t)
-    ;; Hide extra stars in headings
-    (setq org-hide-leading-stars t)
-    ;; Highlight quote and verse blocks
-    (setq org-fontify-quote-and-verse-blocks t)
-    ;; Color the entire block delimiter line
-    (setq org-fontify-whole-block-delimiter-line t))
-    
-  ;; Useful keybindings
-  (use-package org
-    :bind
-    (:map global-map
-          ("C-c l" . org-store-link)
-          ("C-c o" . org-open-at-point-global)))
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil ;; org built-in
+  :init
+  ;; Org files directory
+  (setq org-directory (expand-file-name "org/" osama-emacs-home-dir))
+  ;; Depth for imenu
+  (setq org-imenu-depth 5)
+  ;; RET follows links
+  (setq org-return-follows-link t)
+  ;; Folding without empty line
+  (setq org-cycle-separator-lines 0)
+  ;; Respect content when inserting heading
+  (setq org-insert-heading-respect-content t)
+  ;; Ellipsis for folded sections
+  (setq org-ellipsis "...")
+  ;; Hide emphasis markers globally
+  (setq org-hide-emphasis-markers t)
+  ;; Hide extra stars in headings
+  (setq org-hide-leading-stars t)
+  ;; Highlight quote and verse blocks
+  (setq org-fontify-quote-and-verse-blocks t)
+  ;; Make M-RET insert a new item without splitting the current line
+  (setq org-M-RET-may-split-line '((default . nil)))
+  ;; Color the entire block delimiter line
+  (setq org-fontify-whole-block-delimiter-line t)
+  ;; Enable Text Selection with the Shift Key
+  (setq org-support-shift-select t)
+
+  :bind
+  (("C-c o l" . org-store-link)
+   ("C-c o e" . org-export-dispatch)
+   ("C-c o s" . org-schedule)
+   ("C-c o d" . org-deadline)
+   ("C-c o p" . org-set-property)
+   ("C-c o L" . org-toggle-link-display)
+   ("C-c o <" . org-date-from-calendar)
+   ("C-c o o" . org-open-at-point-global)))
 
   ;; Show emphasis markers only while editing
   (use-package org-appear
-    :hook (org-mode . org-appear-mode))
+    :hook (org-mode . org-appear-mode)
+    :config
+    (setq org-appear-autolinks t))
 
   ;; Modern appearance
   (use-package org-modern
     :hook (org-mode . org-modern-mode)
     :custom
+    (org-modern-star nil)
     (org-modern-table nil)
-    (org-modern-keyword nil)
-    (org-modern-timestamp nil)
-    (org-modern-priority nil)
+    (org-modern-keyword t)
+    (org-modern-timestamp t)
+    (org-modern-priority t)
     (org-modern-checkbox nil)
     (org-modern-tag nil)
     (org-modern-block-name nil)
@@ -750,7 +1187,9 @@ on how I use Org.
     (org-modern-internal-target nil)
     (org-modern-radio-target nil)
     (org-modern-statistics nil)
-    (org-modern-progress nil))
+    (org-modern-progress t)
+    :bind
+     ("C-c o m" . org-modern-mode))
 
   ;; Superstar bullets
   (use-package org-superstar
@@ -759,47 +1198,427 @@ on how I use Org.
     ;; Replace default heading stars with custom bullets
     (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
 
-  ;; Font setup for org headings and bullets
-  (defun org-font-setup ()
-    ;; Replace dashes with bullets
-    (font-lock-add-keywords 'org-mode
-      '(("^ *\\([-]\\) "
-         (0 (prog1 ()
-              (compose-region (match-beginning 1)
-                              (match-end 1) "•"))))))
-    ;; Set heading sizes
-    (let ((family (face-attribute 'default :family)))
-      (dolist (face '((org-level-1 . 1.2)
-                      (org-level-2 . 1.1)
-                      (org-level-3 . 1.05)
-                      (org-level-4 . 1.0)
-                      (org-level-5 . 1.0)
-                      (org-level-6 . 1.0)
-                      (org-level-7 . 1.0)
-                      (org-level-8 . 1.0)))
-        (set-face-attribute (car face) nil
-                            :family family
-                            :weight 'bold
-                            :height (cdr face)))))
-  ;; Change document title size
-  (custom-set-faces
-   '(org-document-title ((t (:height 2.0 :underline nil)))))
+;; Font setup for org headings and bullets
+(defun osama-org-font-setup ()
+  ;; Replace dashes with bullets
+  (font-lock-add-keywords 'org-mode
+    '(("^ *\\([-]\\) "
+       (0 (prog1 ()
+            (compose-region (match-beginning 1)
+                            (match-end 1) "•"))))))
+  ;; Set heading sizes
+  (let ((family (face-attribute 'default :family)))
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil
+                          :family family
+                          :weight 'bold
+                          :height (cdr face)))))
+;; Change document title size
+(custom-set-faces
+ '(org-document-title ((t (:height 2.0 :underline nil)))))
 
-  ;; Hook font setup into org-mode
-  (add-hook 'org-mode-hook #'org-font-setup)
+;; Hook font setup into org-mode
+(add-hook 'org-mode-hook #'osama-org-font-setup)
 #+end_src
 
-*** The =osama-emacs-org.el= section for ~denote~ package
 
-*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~
+*** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~ and ~Habits~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :bind
+  (("C-c o a" . org-agenda)
+   ("C-c o t" . org-todo)
+   ("C-c o r" . org-refile)
+   ("C-c o i" . org-insert-structure-template)
+   ("C-c o q" . org-set-tags-command))
+  :config
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-deadline-warning-days 7)
+
+(setq org-agenda-files
+      (list
+       (expand-file-name "org/Tasks.org" osama-emacs-home-dir)
+       (expand-file-name "org/Repeated.org" osama-emacs-home-dir)
+       (expand-file-name "org/Archive.org" osama-emacs-home-dir)
+       (expand-file-name "org/Habits.org" osama-emacs-home-dir)
+       (expand-file-name "org/Events.org" osama-emacs-home-dir)
+
+       ;; Voltaic Aim Routine
+       (expand-file-name "org/voltaic/Voltaic_VDIM.org" osama-emacs-home-dir)
+       (expand-file-name "org/voltaic/Voltaic_Benchmark.org" osama-emacs-home-dir)))
+
+  ;; تفعيل org-habit
+  (require 'org-habit)
+
+  ;; إعدادات org-habit
+  (setq org-habit-graph-column 60) ; عمود الرسم البياني في ال-agenda
+  (setq org-habit-show-habits-only-for-today nil) ; عرض كل العادات وليس اليوم فقط
+
+  (setq org-todo-keywords
+      '((sequence
+         "TODO(t)"        ; مهمة جديدة
+         "NEXT(n)"        ; المهمة القادمة
+         "ACTIVE(a)"      ; جاري العمل عليها
+         "WAITING(w@/!)"  ; بانتظار شخص/شيء
+         "|"              ; خط الفاصل قبل الحالات النهائية
+         "CANCELLED(c@)"  ; ألغيت
+         "DONE(d!)")))    ; أنجزت
+
+(setq org-refile-targets
+      `((,(expand-file-name "org/Archive.org"    osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)))
+
+;; Save Org buffers after refiling!
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+;; (setq org-agenda-prefix-format "%t %s")
+
+  ;; Default tags
+(setq org-tag-alist
+      '(;; Places
+        ("@home"     . ?H)
+        ("@work"     . ?W)
+        ("@school"   . ?S)
+        ("@errands"  . ?E)
+
+        ;; Devices
+        ("@computer" . ?C)
+        ("@phone"    . ?P)
+
+        ;; Activities
+        ("@planning"    . ?n)
+        ("@programming" . ?p)
+        ("@writing"     . ?w)
+        ("@reading"     . ?r)
+        ("@creative"    . ?c)
+        ("@learn"       . ?l)
+        ("@calls"       . ?a)))
+
+        ;; Custom agenda views مناسبة لحالاتك
+(setq org-agenda-custom-commands
+      '(
+        ;; Daily Agenda first
+        ("d" "Daily Agenda"
+         ((agenda ""
+                  ((org-agenda-span 'day)
+                   (org-agenda-overriding-header "Daily Agenda")))))
+
+        ;; Dashboard next
+        ("D" "Dashboard"
+         ((agenda "" ((org-deadline-warning-days 7)))
+          (todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))
+          (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
+          (todo "WAITING" ((org-agenda-overriding-header "Waiting On")))))
+
+        ("n" "Next Tasks"
+         ((todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))))
+
+        ("A" "Active Tasks"
+         ((todo "ACTIVE" ((org-agenda-overriding-header "Currently Active")))))
+
+        ("w" "Waiting"
+         ((todo "WAITING" ((org-agenda-overriding-header "Waiting On Others")))))
+
+        ("c" "Completed/Cancelled"
+         ((todo "DONE" ((org-agenda-overriding-header "Completed Tasks")))
+          (todo "CANCELLED" ((org-agenda-overriding-header "Cancelled Tasks")))))
+
+        ("u" "Untagged Tasks"
+         ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))))
+
+        ("W" "Weekly Review"
+         ((agenda ""
+                  ((org-agenda-overriding-header "Completed Tasks")
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo 'done))
+                   (org-agenda-span 'week)))
+          (agenda ""
+                  ((org-agenda-overriding-header "Unfinished Scheduled Tasks")
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-span 'week))))))))
+#+end_src
+
+*** The =osama-emacs-org.el= section for ~org-capture~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :bind (("C-c o c" . org-capture))
+  :config
+  (setq org-capture-templates
+        `(
+          ;; ============================
+          ;; Tasks / Projects
+          ;; ============================
+          ("t" "Task" entry
+           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i"
+           :empty-lines 1
+           :prepend t)
+
+          ;; ============================
+          ;; Quick Notes
+          ;; ============================
+          ("n" "Quick Notes" entry
+           (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
+           "* %U - %?\n  %i"
+           :empty-lines 1
+           :prepend t)
+
+          ;; ============================
+          ;; Journal Entry
+          ;; ============================
+          ("j" "Journal" entry
+           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
+           "* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
+
+          ;; ============================
+          ;; Fitness / Exercise Capture
+          ;; ============================
+          ("e" "New Exercise" entry
+           (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
+           (function
+            (lambda ()
+              (let* ((exercise (read-string "Exercise Name: "))
+                     (muscle (completing-read "Muscle Group: "
+                                              '("Empty" "Chest" "Back" "Legs" "Shoulders" "Arms" "Core")))
+                     (with-weight (y-or-n-p "هل التمرين بوزن؟ "))
+                     (table (if with-weight
+                                "| Date       | Weight | Reps | Notes           |
+|------------+--------+------+----------------|"
+                              "| Date       | Reps | Notes           |
+|------------+------+----------------|")))
+                (concat
+                 "* " exercise "\n"
+                 (unless (string= muscle "Empty")
+                   (format "** Muscle Group: %s\n" muscle))
+                 "\n%?\n"
+                 "** Log\n"
+                 table "\n"
+                 "** Notes\n- Enter your notes here\n"))))
+           :empty-lines 1
+           :prepend t)
+          )))
+#+end_src
+
+*** The =osama-emacs-org.el= section for Diet Tracker
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package org
+  :ensure nil
+  :bind
+  (("C-c o C" . osama-org-copy-entry))
+  :config
+
+  ;; Capture template للوزن
+  (add-to-list 'org-capture-templates
+      '("w" "Weigh-in" entry
+         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         "* CAL-IN Diet for day %t
+%^{Weight}p
+| Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
+|-----------+------+----------+-------+------+---------+----------+----------------+-------------+------------+---------------|
+|-----------+------+----------+-------+------+---------+----------+----------------+-------------+------------+---------------|
+| Totals    |      |          |       |      |         |          |                |             |            |               |
+#+TBLFM: $8=$3*$7;%.1f::$9=$4*$7;%.1f::$10=$5*$7;%.1f::$11=$6*$7;%.1f::@>$8..@>$11=vsum(@2..@-I);%.1f"
+         :prepend t))
+
+  ;; الدوال الخاصة بالنسخ والتحريك
+  (defun osama-org-move-today ()
+    "Move to today's entry in the org-diet file."
+    (interactive)
+    (beginning-of-buffer)
+    ;; Move to first heading (Daily Logs) and expand.
+    (outline-next-visible-heading 1)
+    (show-children)
+    (outline-next-visible-heading 1))
+
+  (defun osama-org-move-last-entry ()
+    "Move to the last entry in the current diet table."
+    (interactive)
+    (search-forward "#+TBLFM")
+    ;; Move to start of final line.
+    (previous-line 1)
+    (previous-line 1)
+    (move-beginning-of-line 1))
+
+  (defun osama-org-copy-entry ()
+    "Copy the current table line to today.
+Copies the current table line and moves it to the bottom of
+today's diet table. Changes the timestamp to the current time
+and day."
+    (interactive)
+    (let ((osama-org-line (thing-at-point 'line t)))
+      ;; Jump to today & last line.
+      (osama-org-move-today)
+      (osama-org-move-last-entry)
+      ;; Insert the copied line.
+      (insert osama-org-line)
+      ;; Move back to last line.
+      (osama-org-move-last-entry)
+      (forward-line -1)
+      ;; Replace the date.
+      (beginning-of-line)
+      (search-forward "| ")
+      (zap-to-char 1 93)
+      (insert (format-time-string "[%Y-%m-%d %a %H:%M]" (current-time)))
+      ;; Update the table.
+      (forward-line 2)
+      (org-table-recalculate)
+      ;; Move to inserted line.
+      (beginning-of-line)
+      (forward-line -2))))
+#+end_src
+
+*** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
+
+These instructions are for **Windows 11**.
+
+You need to configure the paths according to your Obsidian Vault.  
+In my case:
+
+- **Vault path in Obsidian:**  
+  =C:/obsidian/draws=
+
+- **Local draws path (where Emacs stores your drawings):**  
+  =~/osama-vault/emacs/notes/draws=
+
+To make Obsidian recognize drawings stored outside the Vault, we create a **symlink**:
+
+#+BEGIN_SRC powershell :tangle no
+mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
+#+END_SRC
+
+This links the Emacs draws folder to a folder inside the Vault, so both Emacs and Obsidian can access the drawings seamlessly.
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(use-package emacs-obsidian-excalidraw
+  :vc (:url "https://github.com/hsingko/emacs-obsidian-excalidraw.git"
+       :rev :newest)
+  :config
+  ;; Vault name (can be any name, here we match the folder name)
+  (setq emacs-obsidian-excalidraw-vault "draws")
+
+  ;; Vault directory path in Windows
+  (setq emacs-obsidian-excalidraw-vault-dir
+        "C:/obsidian/draws")
+
+  ;; Export images as SVG instead of PNG
+  (setq emacs-obsidian-excalidraw-image-format "svg"))
+#+end_src
+
+**Summary:**
+
+1. Emacs stores Excalidraw drawings in the local folder =~/osama-vault/emacs/notes/draws=.  
+2. Obsidian sees them via the symlink in the Vault =C:/obsidian/draws=.  
+3. All exported images are in **SVG** format.  
+4. Both Emacs and Obsidian can access the drawings seamlessly.
+
+** The =osama-emacs-denote.el= module
+
+*** The =osama-emacs-denote.el= section for basic settings
+
+لماذا استخدمنا denote
+- لان الملاحظات عبارة عن ملاحظات صغير atom notes وتقوم بالربط بينهن حتى لو كان تعريف صغير تخليه ملاحظة لحالها
+- no database
+- id method can even be writted in you hand note book
+- you can use it from any emacs distro like doom or vanilla because its plain text
+- unique id because we can change title as we wish without breaking nites link
+
+نصائح
+- DONT - use headings link because its compicted things and atomic notes
+- يفصل ان تكتب ملاحظاتك في الحياة وفي الجامعة مثلا في دفتر وتستخدم denotr file naming scheme مثلا التاريخ والkeywords و title تبع المءكرة ولو كان تعريف صغير
+- استخدم الkeywords بصيغة الجمع
+- خلي كل الملاحظات والملفات بنفس المجلد لانك بتحتاج تعمل تصنيف ايضا للصور والفيدوهات والثوتيات وملفات pdfs
+- استخدم ااربط بشكل كبير ضروري لان الملاحظات عبارة عن atom
+- الصور والملفات ما يحتاج يكونين بنفس المجلد صح تستخدم تسمية الملفات نفس بس ما بنحتاج فيديو مثلًا كبير كملاحظة
+ولكن بنستخدم الصور والpdfs نخليهن في نفس مجلد المذكرات
 
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+(use-package denote
+  :hook (dired-mode . denote-dired-mode)
+  :bind
+  (("C-c n n" . denote-open-or-create)
+   ("C-c n l" . denote-link-or-create)
+   ("C-c n b" . denote-backlinks)
+   ("C-c n d" . denote-dired)
+   ;; rename section keybindings
+   ("C-c n r r" . denote-rename-file)
+   ("C-c n r d" . denote-rename-file-date)
+   ("C-c n r f" . denote-rename-file-using-front-matter)
+   ("C-c n r t" . denote-rename-file-title)
+   ("C-c n r s" . denote-rename-file-signature))
+  :config
+  ;; (setq denote-prompts '(title file-type keywords))
+  (setq denote-directory (expand-file-name "notes/" osama-emacs-home-dir))
+  ;; Automatically rename Denote buffers when opening them so that
+  ;; instead of their long file name they have, for example, a literal
+  ;; "[D]" followed by the file's title.  Read the doc string of
+  ;; `denote-rename-buffer-format' for how to modify this.
+  (denote-rename-buffer-mode 1)
+
+  (setq denote-known-keywords
+      '("watching" "movies" "tv-shows" "anime" "documentaries" "youtube"
+        "writting" "ideas" "books" "homeworks" "articles"
+        "reading" "novels"
+        "listening" "music" "podcasts"
+        "learning" "designing" "programming" "skills" "religion" "school" "quran" "tafsir" "hadith"
+        "work" "productivity" "creative" "project"
+        "personal" "quotes" "people" "health" "project")))
+#+end_src
+
+*** The =osama-emacs-denote.el= section for ~denote-sequence~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+(use-package denote-sequence
+  :ensure t
+  :bind
+  (:map global-map
+        ;; Here we make "C-c n s" a prefix for all "[n]otes with [s]equence".
+        ("C-c n s s" . denote-sequence)
+        ("C-c n s f" . denote-sequence-find)
+        ("C-c n s l" . denote-sequence-link)
+        ("C-c n s d" . denote-sequence-dired)
+        ("C-c n s r" . denote-sequence-reparent)
+        ("C-c n s n" . denote-sequence-new-child-of-current)
+        ("C-c n s b" . denote-sequence-new-sibling-of-current)
+        ("C-c n s c" . denote-sequence-convert)))
+#+end_src
+
+*** The =osama-emacs-denote.el= section for ~consult-denote~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+(use-package consult-denote
+  :demand t
+  :bind
+  (("C-c n f" . consult-denote-find)
+   ("C-c n g" . consult-denote-grep))
+  :custom
+  ;; force consult-denote to use consult-fd instead of find
+  (consult-denote-find-command #'consult-fd)
+  ;; force consult-denote to use consult-ripgrep instead of grep
+  (consult-denote-grep-command #'consult-ripgrep)
+  :config
+  (consult-denote-mode 1))
+#+end_src
 
 ** The =osama-emacs-evil.el= module
 
 *** The =osama-emacs-evil.el= section for =evil-mode= & =evil-collection=
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
 ;;; Evil-mode setup
 (use-package evil
   :init
@@ -808,6 +1627,7 @@ on how I use Org.
         evil-want-C-u-scroll t           ;; C-u scroll up
         evil-want-C-i-jump nil)          ;; disable C-i jump
   :config
+  (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
   (evil-mode 1)
 
   ;; Global keybindings
@@ -831,148 +1651,172 @@ on how I use Org.
 
 *** The =osama-emacs-evil.el= section for general leader key
 
-#+begin_src emacs-lisp :tangle "modules/osama-emacs-evil.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
 (use-package general
   :config
-  ;; Define leader key
-  (general-create-definer leader
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
+  (general-define-key
+   :keymaps 'normal
+   "SPC"   (general-simulate-key "C-c"))
 
-  ;; Command Palette
-  (leader
-    ":"  '(execute-extended-command :which-key "Command Palette"))
-
-  ;; Dired Menu
-  (leader
-    "d"  '(:ignore t :which-key "dired")
-    "dd" '(dired-jump :which-key "open dired here")
-    "dp" '(project-dired :which-key "project dired"))
-
-  ;; Buffers Menu
-  (leader
-    "b"  '(:ignore t :which-key "buffers")
-    "bb" '(consult-buffer :which-key "switch buffer")
-    "bk" '(osama/kill-this-buffer :which-key "kill buffer")
-    "bm" '(kill-other-buffers :which-key "kill other buffers")
-    "bn" '(next-buffer :which-key "next buffer")
-    "bp" '(previous-buffer :which-key "prev buffer"))
-
-  ;; Files Menu
-  (leader
-    "f"  '(:ignore t :which-key "files")
-    "fd" '(delete-file :which-key "delete file")
-    "ff" '(find-file :which-key "find file")
-    "fr" '(consult-recent-file :which-key "recent files")
-    "fR" '(rename-file :which-key "rename file")
-    "fs" '(save-buffer :which-key "save file")
-    "fS" '(osama/save-all-buffers :which-key "save some buffers"))
-
-  ;; Org Menu
-  (leader
-    "o"  '(:ignore t :which-key "org")
-    "oa" '(org-agenda :which-key "agenda")
-    "oc" '(org-capture :which-key "capture")
-    "ot" '(org-todo-list :which-key "todo list"))
-
-  ;; Notes Menu
-  (leader
-    "n"  '(:ignore t :which-key "notes")
-    "nn" '(org-roam-node-find :which-key "find note")
-    "ni" '(org-roam-node-insert :which-key "insert note"))
-
-  ;; Emacs Config Menu
-  (leader
-    "e"  '(:ignore t :which-key "emacs/config")
-    "er" '(reload-init-file :which-key "reload config")
-    "eR" '(restart-emacs :which-key "restart emacs")
-    "eQ" '(save-buffers-kill-emacs :which-key "quit emacs")
-    "ee" '(eval-expression :which-key "eval expression"))
-
-  ;; Windows Menu
-  (leader
-    "w"  '(:ignore t :which-key "windows")
-    "wh" '(windmove-left :which-key "move left")
-    "wl" '(windmove-right :which-key "move right")
-    "wj" '(windmove-down :which-key "move down")
-    "wk" '(windmove-up :which-key "move up")
-    "wH" '(buf-move-left :which-key "move buffer left")
-    "wL" '(buf-move-right :which-key "move buffer right")
-    "wJ" '(buf-move-down :which-key "move buffer down")
-    "wK" '(buf-move-up :which-key "move buffer up")
-    "wv" '(split-window-right :which-key "vertical split")
-    "ws" '(split-window-below :which-key "horizontal split")
-    "wd" '(delete-window :which-key "delete this window")
-    "wD" '(delete-other-windows :which-key "delete other windows")
-    "w." '(hydra-windows/body :which-key "window management hydra")
-    "w=" '(balance-windows :which-key "balance"))
-
-  ;; Search Menu
-  (leader
-    "s"  '(:ignore t :which-key "search")
-    "ss" '(consult-line :which-key "search in buffer")
-    "sp" '(consult-ripgrep :which-key "search in project")
-    "sf" '(consult-fd :which-key "search with fd")
-    "sb" '(consult-buffer :which-key "search buffer")
-    "sm" '(consult-mark :which-key "jump to mark")
-    "sl" '(consult-goto-line :which-key "jump to line"))
-
-  ;; Toggles Menu
-  (leader
-    "t"  '(:ignore t :which-key "toggles")
-    "ts" '(hydra-text-scale/body :which-key "text scale")
-    "tt" '(consult-theme :which-key "choose theme")
-    "tl" '(display-line-numbers-mode :which-key "line numbers")
-    "tw" '(visual-line-mode :which-key "word wrap"))
-
-  ;; Text Menu
-  (leader
-    "x"  '(:ignore t :which-key "text/editing")
-    "xu" '(upcase-word :which-key "uppercase word")
-    "xl" '(downcase-word :which-key "lowercase word")
-    "xc" '(capitalize-word :which-key "capitalize word")
-    "xj" '(join-line :which-key "join lines"))
-
-  ;; Help Menu
-  (leader
-    "h"  '(:ignore t :which-key "helpful/documentation")
-    "hf" '(helpful-function :which-key "describe function")
-    "hk" '(helpful-key :which-key "describe key")
-    "hv" '(helpful-variable :which-key "describe variable")
-    "hi" '(info :which-key "info documentation")
-    "ho" '(org-info :which-key "org info")
-    "<f1>" '(helpful-at-point :which-key "help at point")
-    "SPC" '(execute-extended-command :which-key "M-x"))
-
-  ;; Perspective Menu
-  (leader
-    "p"  '(:ignore t :which-key "perspectives")
-    "ps" '(persp-switch :which-key "switch perspective")
-    "pn" '(persp-next :which-key "next perspective")
-    "pp" '(persp-prev :which-key "previous perspective")
-    "pr" '(persp-rename :which-key "rename perspective")
-    "pk" '(persp-kill :which-key "kill perspective")
-    "pa" '(persp-add-buffer :which-key "add buffer to persp")
-    "pb" '(persp-switch-to-buffer :which-key "switch buffer in persp")))
-
+  ;; dired mode map
+  (general-define-key
+   :keymaps 'dired-mode-map
+   :states 'normal
+   "SPC" (general-simulate-key "C-c")))
 #+end_src
 
+
+*** The =osama-emacs-evil.el= section for fixing rtl cursor
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-evil.el" :mkdirp yes
+(use-package evil
+  :config
+  ;; دالة إصلاح اتجاه الحركة في النص العربي
+  (defun osama-evil-mode-rtl-fix ()
+    "Swap h and l movement keys in Evil when paragraph direction is RTL."
+    (if (equal bidi-paragraph-direction 'right-to-left)
+        (progn
+          (define-key evil-normal-state-map "h" 'evil-forward-char)
+          (define-key evil-normal-state-map "l" 'evil-backward-char))
+      (define-key evil-normal-state-map "h" 'evil-backward-char)
+      (define-key evil-normal-state-map "l" 'evil-forward-char)))
+
+  ;; إضافة الهُوك لتحديث الاتجاه بعد كل أمر
+  (add-hook 'post-command-hook #'osama-evil-mode-rtl-fix))
+#+end_src
 
 
 ** The =osama-emacs-dired.el= module
 
+** The =osama-emacs-dired.el= section for basic settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
+(use-package dired
+  :ensure nil ;; built-in package
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-alh") ;; human-readable sizes
+  (dired-dwim-target t)           ;; smart target when copying/moving
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'top)
+  (dired-auto-revert-buffer t)    ;; auto refresh on changes
+  :bind
+  (("C-c d d" . dired)
+   ("C-c d f" . find-file-other-window)
+   ("C-c d j" . dired-jump)))
+   
+(use-package dired-x
+  :ensure nil
+  :after dired
+  :config
+  (setq dired-omit-files "^\\.?#\\|^\\.")) ;; hide clutter files like .#temp
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+
+*** The =osama-emacs-dired.el= settings for ~dired-hide-details-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dired.el" :mkdirp yes
+(use-package dired
+  :ensure nil
+  :bind (:map dired-mode-map
+              ("C-c d h" . osama-dired-hide-details-mode))
+  :config
+  (defvar-local osama-dired-hide-details-enabled nil
+    "Non-nil if details and extensions are hidden in this Dired buffer.")
+
+  (defun osama-dired-hide-details-apply-extensions (hide)
+    "Apply or remove hiding of ALL file extensions in current buffer.
+If HIDE is non-nil, hide extensions; otherwise show them."
+    (let ((inhibit-read-only t)
+          (regex "\\.[^.]+$"))
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward regex nil t)
+          (if hide
+              (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
+            (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
+
+  (defun osama-dired-hide-details-mode ()
+    "Toggle hiding of details + ALL file extensions in current Dired buffer."
+    (interactive)
+    (setq osama-dired-hide-details-enabled
+          (not osama-dired-hide-details-enabled))
+    (if osama-dired-hide-details-enabled
+        (progn
+          (dired-hide-details-mode 1)
+          (osama-dired-hide-details-apply-extensions t)
+          (message "Dired: hiding details + extensions"))
+      (progn
+        (dired-hide-details-mode 0)
+        (osama-dired-hide-details-apply-extensions nil)
+        (message "Dired: showing details + extensions")))))
+#+end_src
+
+** The =osama-emacs-dev.el= module
+
+** The =osama-emacs-android.el= module
+
+*** The =osama-emacs-android.el= section for ~toggle-keyboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
+(defvar osama-keyboard-toggle-state nil
+  "Current toggle state of the Android keyboard using isearch.")
+
+(defun osama-toggle-keyboard ()
+  "Automatically toggle the Android keyboard using isearch.
+Opens i-search if it's closed, closes it if it's open."
+  (interactive)
+  (if (and (boundp 'isearch-mode) isearch-mode)
+      ;; If i-search is open, close it immediately
+      (progn
+        (isearch-abort)
+        (setq osama-keyboard-toggle-state nil))
+    ;; If i-search is closed, open it immediately
+    (isearch-forward nil 1)
+    ;; As soon as it opens, close it after a short delay 
+    ;; if the goal is just to show the keyboard
+    (run-at-time "0.3 sec" nil
+                 (lambda ()
+                   (when (and (boundp 'isearch-mode) isearch-mode)
+                     (isearch-abort))))
+    (setq osama-keyboard-toggle-state t)))
+
+;; Bind volume buttons
+(global-set-key (kbd "<volume-up>") #'osama-toggle-keyboard)
+(global-set-key (kbd "<volume-down>") #'osama-toggle-keyboard)
+#+end_src
+
 ** The =osama-emacs-windows.el= module
 
+*** The =osama-emacs-windows.el= section for swapping ctrl with alt key
 
+[Disibled]#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
+;; There seems to be no built-in mechanism to swap modifier keys in
+;; Emacs, but it can be accomplished (for the most part) by
+;; translating a near-exhaustive list of modifiable keys.  In the case
+;; of 'control and 'meta, some keys must be omitted to avoid errors or
+;; other undesired effects.
+(defun my/make-key-string (modsymbol basic-event)
+  "Convert the combination of MODSYMBOL and BASIC-EVENT.
+BASIC-EVENT can be a character or a function-key symbol.  The
+return value can be used with `define-key'."
+  (vector (event-convert-list `(,modsymbol ,basic-event))))
 
-** The =osama-emacs-system-custom.el= module
-
-** The =osama-emacs-system-custom.el= module
-
-*** The =osama-emacs-system-custom.el= module section for android
-
-*** The =osama-emacs-system-custom.el= module section for windows
+;; Escaped chars are:
+;; tab return space del backspace (typically translated to del)
+(dolist (char (append '(up down left right menu print scroll pause
+			insert delete home end prior next
+			tab return space backspace escape
+			f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12)
+		      ;; Escape gets translated to `C-\[' in `local-function-key-map'
+		      ;; We want that to keep working, so we don't swap `C-\[' with `M-\['.
+		      (remq ?\[ (number-sequence 33 126))))
+  	;; Changing this to use `input-decode-map', as it works for more keys.
+	(define-key input-decode-map (my/make-key-string 'control char) (my/make-key-string 'meta char))
+ 	(define-key input-decode-map (my/make-key-string 'meta char) (my/make-key-string 'control char)))
+#+end_src
 
 * Android Section For Personal Settings
 
