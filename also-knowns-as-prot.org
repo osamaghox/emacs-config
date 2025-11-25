@@ -109,16 +109,16 @@ by ~use-package~ when it needs it
 
 ;; Load Core Essentials first
 (load (expand-file-name "modules/osama-emacs-core.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-essentials.el" user-emacs-directory)) ;; Evil needs to load early often
 (load (expand-file-name "modules/osama-emacs-editing.el" user-emacs-directory)) ;; Evil needs to load early often
 
-;; Load Appearance
+;; Load Ui Appearance
 (load (expand-file-name "modules/osama-emacs-ui-appearance.el" user-emacs-directory))
 
 ;; Load Features
 (load (expand-file-name "modules/osama-emacs-completion.el" user-emacs-directory))
 (load (expand-file-name "modules/osama-emacs-org.el" user-emacs-directory))
 (load (expand-file-name "modules/osama-emacs-denote.el" user-emacs-directory))
-(load (expand-file-name "modules/osama-emacs-dired.el" user-emacs-directory))
 
   ;; add lisp directory to load path
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
@@ -445,6 +445,92 @@ This module load basic configurations that apply to most facets of Emacs.
 (global-set-key (kbd "C-c e c") 'open-emacs-config)   ;; Open config file
 #+end_src
 
+*** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+;; Ensure cache subdirectories exist
+(dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
+  (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
+    (unless (file-directory-p dir)
+      (make-directory dir t))))
+
+;; Savehist: command history
+(setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
+(savehist-mode 1)
+
+;; Recentf: recent files list
+(setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
+(recentf-mode 1)
+
+;; Desktop: full session restore
+(setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
+      desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
+      desktop-base-file-name "emacs-desktop")
+(desktop-save-mode 1)
+
+;; Backups: store ~ files in backups/
+(setq backup-directory-alist
+      `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 5
+      kept-old-versions 2)
+
+;; Auto-saves: store #files# in autosaves/
+(setq auto-save-file-name-transforms
+      `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
+      auto-save-default t
+      auto-save-timeout 20
+      auto-save-interval 200)
+
+;; Optional: disable lockfiles
+(setq create-lockfiles nil)
+#+end_src
+
+*** The =osama-emacs-core.el= Settings for Better Performance
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Increase GC threshold during startup to speed up launch
+  (setq gc-cons-threshold (* 50 1000 1000))
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
+#+end_src
+
+*** The =osama-emacs-core.el= Section for for UTF-8 Defaults
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-language-environment "UTF-8"))
+#+end_src
+
+*** The =osama-emacs-core.el= Section for Support Arabic Typing
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Arabic input method
+  (setq default-input-method "arabic"))
+#+end_src
+
+
+
+
+
+** The =osama-emacs-essentials.el= module
+
+This module load basic configurations that apply to most facets of Emacs.
+
 *** The =osama-emacs-core.el= Section for Files
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 (use-package emacs
@@ -607,83 +693,7 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c t u" . tab-undo)))
 #+end_src
 
-*** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-;; Ensure cache subdirectories exist
-(dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
-  (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
-    (unless (file-directory-p dir)
-      (make-directory dir t))))
-
-;; Savehist: command history
-(setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
-(savehist-mode 1)
-
-;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
-(recentf-mode 1)
-
-;; Desktop: full session restore
-(setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
-      desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
-      desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
-
-;; Backups: store ~ files in backups/
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
-      backup-by-copying t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 5
-      kept-old-versions 2)
-
-;; Auto-saves: store #files# in autosaves/
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
-      auto-save-default t
-      auto-save-timeout 20
-      auto-save-interval 200)
-
-;; Optional: disable lockfiles
-(setq create-lockfiles nil)
-#+end_src
-
-*** The =osama-emacs-core.el= Settings for Better Performance
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Increase GC threshold during startup to speed up launch
-  (setq gc-cons-threshold (* 50 1000 1000))
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
-#+end_src
-
-*** The =osama-emacs-core.el= Section for for UTF-8 Defaults
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  (prefer-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-language-environment "UTF-8"))
-#+end_src
-
-*** The =osama-emacs-core.el= Section for Support Arabic Typing
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Arabic input method
-  (setq default-input-method "arabic"))
-#+end_src
 
 *** The =osama-emacs-core.el= section for ~OpenWith~ package
 
@@ -759,6 +769,7 @@ This module load basic configurations that apply to most facets of Emacs.
                 "󰈞  Open Config .......... [SPC e c]\n"
                 "󰈞  Quit ................. [SPC e q]")))
 #+end_src
+
 
 ** The =osama-emacs-completion.el= module
 
