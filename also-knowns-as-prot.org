@@ -3,16 +3,9 @@
 #+email: osamaghox@gmail.com
 #+language: en
 #+options: toc:t num:nil author:t email:t
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
-
-
-نخلي اي حاجة تعديل او اختصار بمفرده في editing.el
-
-با نسوي ملف موديل جديد بيحتوي على الاشياء الثانوية الغير اساسية في النظام
-
 
 
 * The early initialisation of Emacs (=early-init.el=)
@@ -130,288 +123,6 @@ by ~use-package~ when it needs it
 * The modules of my Emacs configuration
 
 In this module I define everything broadly related to the aesthetics of Emacs.
-
-** The =osama-emacs-ui-appearance.el= module
-
-*** The =osama-emacs-ui-appearance.el= Section for UI Basics
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Hide UI elements
-  (scroll-bar-mode -1)   ;; Disable visible scrollbar
-  (tool-bar-mode -1)     ;; Disable the toolbar
-  (tooltip-mode -1)      ;; Disable tooltips
-  (set-fringe-mode 10)   ;; Give some breathing room
-  (menu-bar-mode -1)     ;; Disable the menu bar
-
-  ;; Visible bell instead of audible bell
-  (setq visible-bell t)
-
-  ;; Show current column number
-  (column-number-mode 1)
-
-  ;; Enable line numbers globally
-  (global-display-line-numbers-mode 1)
-  ;; Disable line numbers in specific modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-  ;; Make cursor a vertical bar
-  (setq-default cursor-type 'bar)
-
-  ;; Highlight current line
-  (global-hl-line-mode 1)
-
-  ;; Contextual menu with right mouse button (only in GUI)
-  (when (display-graphic-p)
-    (context-menu-mode 1)))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package spacious-padding
-  :custom
-  (line-spacing 3)
-  (spacious-padding-mode 1))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Ensure initial frame is fully opaque
-  (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
-
-  ;; Function to toggle transparency
-  (defun osama-toggle-transparency ()
-    (interactive)
-    (let ((alpha (frame-parameter nil 'alpha)))
-      (set-frame-parameter
-       nil 'alpha
-       (if (or (eql (cond ((numberp alpha) alpha)
-                          ((numberp (cdr alpha)) (cdr alpha))
-                          ((numberp (cadr alpha)) (cadr alpha)))
-                100)
-               (null alpha))  ;; if alpha is not set previously
-           '(95 . 90)
-         '(100 . 100)))))
-
-  ;; Bind the function to a shortcut
-  :bind
-  (("C-c t o" . osama-toggle-transparency)))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= Section for Toggle Title Bar & Decorations
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Default frame settings
-  (add-to-list 'default-frame-alist '(undecorated . nil))
-  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
-  (add-to-list 'default-frame-alist '(internal-border-width . 10))
-
-  ;; Function to toggle title bar
-  (defun osama-frame-toggle-decoration ()
-    "Toggle the frame title bar visibility (undecorated)."
-    (interactive)
-    (let* ((current (frame-parameter nil 'undecorated))
-           (new (not current)))
-      (set-frame-parameter nil 'undecorated new)))
-
-  ;; Bind the toggle function to a shortcut
-  :bind
-  (("C-c t f" . osama-frame-toggle-decoration)))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~custom-themes~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-;; Include the "themes" folder in Emacs' theme search path
-(add-to-list 'custom-theme-load-path
-             (expand-file-name "data/themes/" osama-emacs-home-dir))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~doom-plain-theme~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package doom-themes
-  :bind (("C-c t t" . osama-toggle-doom-plain-theme))
-  :config
-  ;; دالة تضبط وجوه doom-plain-dark بعد تحميله
-(defun osama-setup-doom-plain-dark ()
-  (when (member 'doom-plain-dark custom-enabled-themes)
-    (custom-theme-set-faces
-     'doom-plain-dark
-     ;; لون التحديد region مختلف عن hl-line
-     '(region ((t (:background "#666699" :foreground nil))))  ;; اختر اللون اللي تحبه
-     '(hl-line ((t (:background "#333333"))))                ;; hl-line لون مظلم
-     '(org-block            ((t (:background "#2a2a2a" :foreground "#d7d5d1"))))
-     '(org-block-background ((t (:background "#2a2a2a"))))
-     '(org-block-begin-line ((t (:foreground "#bbbbbb" :background "#444444"))))
-     '(org-block-end-line   ((t (:foreground "#bbbbbb" :background "#444444")))))))
-
-  ;; إذا عندك Emacs 29+ استعمل after-load-theme-hook
-  (when (boundp 'after-load-theme-hook)
-    (add-hook 'after-load-theme-hook #'osama-setup-doom-plain-dark))
-
-  ;; إذا أقل من 29 استعمل advice
-  (unless (boundp 'after-load-theme-hook)
-    (advice-add 'load-theme :after (lambda (&rest _) (osama-setup-doom-plain-dark))))
-
-  ;; دالة التبديل بين الثيمين
-  (defun osama-toggle-doom-plain-theme ()
-    "Toggle between doom-plain (light) and doom-plain-dark (dark)."
-    (interactive)
-    (cond
-     ;; light → dark
-     ((member 'doom-plain custom-enabled-themes)
-      (disable-theme 'doom-plain)
-      (load-theme 'doom-plain-dark t))
-     ;; dark → light
-     ((member 'doom-plain-dark custom-enabled-themes)
-      (disable-theme 'doom-plain-dark)
-      (load-theme 'doom-plain t))
-     ;; لا يوجد ثيم → light افتراضي
-     (t
-      (load-theme 'doom-plain t))))
-
-  ;; ✅ حمل الثيم الافتراضي
-  (load-theme 'doom-plain-dark t))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package doom-two-tone-themes
-  :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
-            :rev :newest)
-  :config
-  ;; أضف الثيمات إلى load-path
-  (add-to-list 'custom-theme-load-path
-               "~/.emacs.d/elpa/doom-two-tone-themes/themes"))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~ef-themes~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package ef-themes
-  :defer t)
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~doom-modeline~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package doom-modeline
-  :init
-  (doom-modeline-mode 1)
-  :custom
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon t)
-  (doom-modeline-minor-modes nil)
-  (doom-modeline-enable-word-count t)
-  (doom-modeline-indent-info t))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~nerd-icons~ fonts
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-;; Define the folder to save fonts directly inside osama-emacs-home-dir
-(defvar osama-icons-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
-  "Custom directory to store icon fonts.")
-
-;; Create the folder if it doesn't exist
-(unless (file-directory-p osama-icons-dir)
-  (make-directory osama-icons-dir t))
-
-;; Helper function to download a font if missing
-(defun osama-download-font-if-missing (font-name url)
-  "Download FONT-NAME from URL to `osama-icons-dir` if missing."
-  (let ((target (expand-file-name font-name osama-icons-dir)))
-    (unless (file-exists-p target)
-      (url-copy-file url target t)
-      (message "Downloaded: %s" font-name))))
-
-;; Download all-the-icons fonts
-(use-package all-the-icons
-  :config
-  (dolist (font
-           '(("all-the-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/all-the-icons.ttf")
-             ("file-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/file-icons.ttf")
-             ("material-design-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/material-design-icons.ttf")
-             ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
-             ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
-             ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf")))
-    (osama-download-font-if-missing (car font) (cdr font))))
-
-;; Download nerd-icons fonts (including NFM.ttf)
-(use-package nerd-icons
-  :config
-  (dolist (font
-           '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
-             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf")))
-    (osama-download-font-if-missing (car font) (cdr font))))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el=: Section for Font Customization
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :bind (("C-c t F" . set-frame-font))
-  :hook (after-init . (lambda ()
-                        ;; Default font
-                        (set-face-attribute 'default nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
-
-                        ;; Fixed-pitch (مثل الكود)
-                        (set-face-attribute 'fixed-pitch nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
-
-                        ;; Variable-pitch (مثل Org Mode)
-                        (set-face-attribute 'variable-pitch nil
-                                            :family "Iosevka Aile"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
-                                            
-;; Nerd Font
-(when (member "Symbols Nerd Font Mono" (font-family-list))
-  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
-
-;; Arabic Font
-(when (member "Cairo" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "Cairo")))
-
-;; Emoji Font
-(when (member "Noto Color Emoji" (font-family-list))
-  (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
-
-;; Create fonts directory if it doesn't exist
-(defvar osama-fonts-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
-  "Directory to store fonts for Emacs.")
-
-(unless (file-directory-p osama-fonts-dir)
-  (make-directory osama-fonts-dir t)))))
-#+end_src
 
 ** The =osama-emacs-core.el= module
 
@@ -761,6 +472,378 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
+** The =osama-emacs-ui-appearance.el= module
+
+*** The =osama-emacs-ui-appearance.el= Section for UI Basics
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Hide UI elements
+  (scroll-bar-mode -1)   ;; Disable visible scrollbar
+  (tool-bar-mode -1)     ;; Disable the toolbar
+  (tooltip-mode -1)      ;; Disable tooltips
+  (set-fringe-mode 10)   ;; Give some breathing room
+  (menu-bar-mode -1)     ;; Disable the menu bar
+
+  ;; Visible bell instead of audible bell
+  (setq visible-bell t)
+
+  ;; Show current column number
+  (column-number-mode 1)
+
+  ;; Enable line numbers globally
+  (global-display-line-numbers-mode 1)
+  ;; Disable line numbers in specific modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  ;; Make cursor a vertical bar
+  (setq-default cursor-type 'bar)
+
+  ;; Highlight current line
+  (global-hl-line-mode 1)
+
+  ;; Contextual menu with right mouse button (only in GUI)
+  (when (display-graphic-p)
+    (context-menu-mode 1)))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package spacious-padding
+  :custom
+  (line-spacing 3)
+  (spacious-padding-mode 1))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Ensure initial frame is fully opaque
+  (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+
+  ;; Function to toggle transparency
+  (defun osama-toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (or (eql (cond ((numberp alpha) alpha)
+                          ((numberp (cdr alpha)) (cdr alpha))
+                          ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+               (null alpha))  ;; if alpha is not set previously
+           '(95 . 90)
+         '(100 . 100)))))
+
+  ;; Bind the function to a shortcut
+  :bind
+  (("C-c t o" . osama-toggle-transparency)))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= Section for Toggle Title Bar & Decorations
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Default frame settings
+  (add-to-list 'default-frame-alist '(undecorated . nil))
+  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+  (add-to-list 'default-frame-alist '(internal-border-width . 10))
+
+  ;; Function to toggle title bar
+  (defun osama-frame-toggle-decoration ()
+    "Toggle the frame title bar visibility (undecorated)."
+    (interactive)
+    (let* ((current (frame-parameter nil 'undecorated))
+           (new (not current)))
+      (set-frame-parameter nil 'undecorated new)))
+
+  ;; Bind the toggle function to a shortcut
+  :bind
+  (("C-c t f" . osama-frame-toggle-decoration)))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~custom-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+;; Include the "themes" folder in Emacs' theme search path
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "data/themes/" osama-emacs-home-dir))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package doom-two-tone-themes
+  :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
+            :rev :newest)
+  :config
+  ;; أضف الثيمات إلى load-path
+  (add-to-list 'custom-theme-load-path
+               "~/.emacs.d/elpa/doom-two-tone-themes/themes"))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~ef-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package ef-themes
+  :defer t)
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~doom-modeline~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package doom-modeline
+  :init
+  (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count t)
+  (doom-modeline-indent-info t))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~nerd-icons~ fonts
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+;; Define the folder to save fonts directly inside osama-emacs-home-dir
+(defvar osama-icons-dir
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
+  "Custom directory to store icon fonts.")
+
+;; Create the folder if it doesn't exist
+(unless (file-directory-p osama-icons-dir)
+  (make-directory osama-icons-dir t))
+
+;; Helper function to download a font if missing
+(defun osama-download-font-if-missing (font-name url)
+  "Download FONT-NAME from URL to `osama-icons-dir` if missing."
+  (let ((target (expand-file-name font-name osama-icons-dir)))
+    (unless (file-exists-p target)
+      (url-copy-file url target t)
+      (message "Downloaded: %s" font-name))))
+
+;; Download all-the-icons fonts
+(use-package all-the-icons
+  :config
+  (dolist (font
+           '(("all-the-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/all-the-icons.ttf")
+             ("file-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/file-icons.ttf")
+             ("material-design-icons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/material-design-icons.ttf")
+             ("octicons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/octicons.ttf")
+             ("weathericons.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/weathericons.ttf")
+             ("fontawesome.ttf" . "https://github.com/domtronn/all-the-icons.el/raw/master/fonts/fontawesome.ttf")))
+    (osama-download-font-if-missing (car font) (cdr font))))
+
+;; Download nerd-icons fonts (including NFM.ttf)
+(use-package nerd-icons
+  :config
+  (dolist (font
+           '(("NerdFontsSymbolsOnly.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NerdFontsSymbolsOnly.ttf")
+             ("NFM.ttf" . "https://github.com/rainstormstudio/nerd-icons.el/raw/main/fonts/NFM.ttf")))
+    (osama-download-font-if-missing (car font) (cdr font))))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el=: Section for Font Customization
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :bind (("C-c t F" . set-frame-font))
+  :hook (after-init . (lambda ()
+                        ;; Default font
+                        (set-face-attribute 'default nil
+                                            :family "Iosevka Fixed"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+
+                        ;; Fixed-pitch (مثل الكود)
+                        (set-face-attribute 'fixed-pitch nil
+                                            :family "Iosevka Fixed"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+
+                        ;; Variable-pitch (مثل Org Mode)
+                        (set-face-attribute 'variable-pitch nil
+                                            :family "Iosevka Aile"
+                                            :height 120
+                                            :weight 'light
+                                            :slant 'normal)
+                                            
+;; Nerd Font
+(when (member "Symbols Nerd Font Mono" (font-family-list))
+  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
+
+;; Arabic Font
+(when (member "Cairo" (font-family-list))
+  (set-fontset-font t 'arabic (font-spec :family "Cairo")))
+
+;; Emoji Font
+(when (member "Noto Color Emoji" (font-family-list))
+  (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
+
+;; Create fonts directory if it doesn't exist
+(defvar osama-fonts-dir
+  (expand-file-name "data/fonts/" osama-emacs-home-dir)
+  "Directory to store fonts for Emacs.")
+
+(unless (file-directory-p osama-fonts-dir)
+  (make-directory osama-fonts-dir t)))))
+#+end_src
+
+** The =osama-emacs-editing.el= module
+*** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+;;; Evil-mode setup
+(use-package evil
+  :init
+  (setq evil-want-integration t          ;; integrate with other packages
+        evil-want-keybinding nil         ;; don't load default keybindings
+        evil-want-C-u-scroll t           ;; C-u scroll up
+        evil-want-C-i-jump nil)          ;; disable C-i jump
+  :config
+  (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
+  (evil-mode 1)
+
+  ;; Global keybindings
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+
+  ;; Motion keys: move by visual lines
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  ;; Set initial state for specific modes
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;;; Evil-collection setup (integrates evil with other Emacs modes)
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+#+end_src
+
+*** The =osama-emacs-editing.el= section for general leader key
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package general
+  :config
+  (general-define-key
+   :keymaps 'normal
+   "SPC"   (general-simulate-key "C-c"))
+
+  ;; dired mode map
+  (general-define-key
+   :keymaps 'dired-mode-map
+   :states 'normal
+   "SPC" (general-simulate-key "C-c")))
+#+end_src
+
+
+*** The =osama-emacs-editing.el= section for fixing rtl cursor
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package evil
+  :config
+  ;; دالة إصلاح اتجاه الحركة في النص العربي
+  (defun osama-evil-mode-rtl-fix ()
+    "Swap h and l movement keys in Evil when paragraph direction is RTL."
+    (if (equal bidi-paragraph-direction 'right-to-left)
+        (progn
+          (define-key evil-normal-state-map "h" 'evil-forward-char)
+          (define-key evil-normal-state-map "l" 'evil-backward-char))
+      (define-key evil-normal-state-map "h" 'evil-backward-char)
+      (define-key evil-normal-state-map "l" 'evil-forward-char)))
+
+  ;; إضافة الهُوك لتحديث الاتجاه بعد كل أمر
+  (add-hook 'post-command-hook #'osama-evil-mode-rtl-fix))
+#+end_src
+
+
+*** The =osama-emacs-editing.el= Section for Paragraph Text Direction
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default bidi-display-reordering t
+                bidi-paragraph-direction 'left-to-right)
+  :config
+  (defun osama-toggle-text-direction ()
+    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
+    (interactive)
+    (setq bidi-paragraph-direction
+          (if (eq bidi-paragraph-direction 'left-to-right)
+              'right-to-left
+            'left-to-right))
+    (message "Paragraph direction now: %s"
+             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
+    (recenter))
+  :bind
+  ("C-c r" . osama-toggle-text-direction))
+#+end_src
+
+
+*** The =osama-emacs-editing.el= settings for ~text-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package text-mode
+  :ensure nil
+  :hook
+  (text-mode . visual-line-mode)
+  :init
+  (delete-selection-mode t)
+  :custom
+  (sentence-end-double-space nil)
+  (scroll-error-top-bottom t)
+  (save-interprogram-paste-before-kill t))
+#+end_src
+
+
+
+*** The =osama-emacs-editing.el= section for ~undo-tree~ package
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package vundo
+  :ensure t
+  :bind
+  ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
+#+end_src
+
+
+
+
+*** The =osama-emacs-editing.el= section for Markdown Basic Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
+#+end_src
+
+
+
+
 ** The =osama-emacs-completion.el= module
 
 The term “completion” describes a process where user input is assisted by pattern matching algorithms to type out incomplete terms. The most basic way of this model of interaction is what we get in a command-line prompt, where we can hit TAB to expand the word before point to something the program already knows about (e.g ema followed by TAB may complete to emacs).
@@ -854,7 +937,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
-   ("C-c t T" . consult-theme)
+   ("C-c t t" . consult-theme)
    ("C-c y"   . consult-yank-pop)))
 #+end_src
 
@@ -903,6 +986,8 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
    ("C-c H v" . helpful-variable)   ;; Describe variable
    ("C-c H k" . helpful-key)))      ;; Describe key
 #+end_src
+
+** The =osama-emacs-dev.el= module
 
 ** The =osama-emacs-org.el= module
 
@@ -1463,146 +1548,6 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   :config
   (consult-denote-mode 1))
 #+end_src
-
-** The =osama-emacs-editing.el= module
-*** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-;;; Evil-mode setup
-(use-package evil
-  :init
-  (setq evil-want-integration t          ;; integrate with other packages
-        evil-want-keybinding nil         ;; don't load default keybindings
-        evil-want-C-u-scroll t           ;; C-u scroll up
-        evil-want-C-i-jump nil)          ;; disable C-i jump
-  :config
-  (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
-  (evil-mode 1)
-
-  ;; Global keybindings
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-
-  ;; Motion keys: move by visual lines
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-  ;; Set initial state for specific modes
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-;;; Evil-collection setup (integrates evil with other Emacs modes)
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-#+end_src
-
-*** The =osama-emacs-editing.el= section for general leader key
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package general
-  :config
-  (general-define-key
-   :keymaps 'normal
-   "SPC"   (general-simulate-key "C-c"))
-
-  ;; dired mode map
-  (general-define-key
-   :keymaps 'dired-mode-map
-   :states 'normal
-   "SPC" (general-simulate-key "C-c")))
-#+end_src
-
-
-*** The =osama-emacs-editing.el= section for fixing rtl cursor
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package evil
-  :config
-  ;; دالة إصلاح اتجاه الحركة في النص العربي
-  (defun osama-evil-mode-rtl-fix ()
-    "Swap h and l movement keys in Evil when paragraph direction is RTL."
-    (if (equal bidi-paragraph-direction 'right-to-left)
-        (progn
-          (define-key evil-normal-state-map "h" 'evil-forward-char)
-          (define-key evil-normal-state-map "l" 'evil-backward-char))
-      (define-key evil-normal-state-map "h" 'evil-backward-char)
-      (define-key evil-normal-state-map "l" 'evil-forward-char)))
-
-  ;; إضافة الهُوك لتحديث الاتجاه بعد كل أمر
-  (add-hook 'post-command-hook #'osama-evil-mode-rtl-fix))
-#+end_src
-
-
-*** The =osama-emacs-editing.el= Section for Paragraph Text Direction
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :init
-  (setq-default bidi-display-reordering t
-                bidi-paragraph-direction 'left-to-right)
-  :config
-  (defun osama-toggle-text-direction ()
-    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
-    (interactive)
-    (setq bidi-paragraph-direction
-          (if (eq bidi-paragraph-direction 'left-to-right)
-              'right-to-left
-            'left-to-right))
-    (message "Paragraph direction now: %s"
-             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
-    (recenter))
-  :bind
-  ("C-c r" . osama-toggle-text-direction))
-#+end_src
-
-
-*** The =osama-emacs-editing.el= settings for ~text-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package text-mode
-  :ensure nil
-  :hook
-  (text-mode . visual-line-mode)
-  :init
-  (delete-selection-mode t)
-  :custom
-  (sentence-end-double-space nil)
-  (scroll-error-top-bottom t)
-  (save-interprogram-paste-before-kill t))
-#+end_src
-
-
-
-*** The =osama-emacs-editing.el= section for ~undo-tree~ package
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package vundo
-  :ensure t
-  :bind
-  ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
-#+end_src
-
-
-
-
-*** The =osama-emacs-editing.el= section for Markdown Basic Settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-(use-package markdown-mode
-  :ensure t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown")
-  :bind (:map markdown-mode-map
-         ("C-c C-e" . markdown-do)))
-#+end_src
-
-
-
-
-** The =osama-emacs-dev.el= module
 
 ** The =osama-emacs-android.el= module
 
