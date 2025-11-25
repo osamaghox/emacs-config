@@ -656,10 +656,10 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w ^" . enlarge-window)
 
    ;; Move between windows with arrows
-   ("C-c h" . windmove-left)
-   ("C-c l" . windmove-right)
-   ("C-c k" . windmove-up)
-   ("C-c j" . windmove-down)))
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down)))
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
@@ -947,10 +947,6 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c x" "Text"
     "C-c s" "Search"
     "C-c w" "Windows"
-    "C-c h" "Window Left"
-    "C-c j" "Window Down"
-    "C-c k" "Window Up"
-    "C-c l" "Window Right"
     "C-c e" "Emacs"
     "C-c r" "Toggle Text Direction"
     "C-c n" "Notes"
