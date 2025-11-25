@@ -103,10 +103,6 @@ by ~use-package~ when it needs it
   (defvar osama-emacs-modules-dir (expand-file-name "modules" user-emacs-directory)
     "This directory houses all of the built-in Osama Emacs modules.")
 
-  ;; Load all .el files from modules directory
-  (dolist (file (sort (directory-files osama-emacs-modules-dir t "\\.el$") #'string<))
-    (load file nil 'nomessage))
-
 ;; Load Core Essentials first
 (load (expand-file-name "modules/osama-emacs-core.el" user-emacs-directory))
 (load (expand-file-name "modules/osama-emacs-essentials.el" user-emacs-directory)) ;; Evil needs to load early often
