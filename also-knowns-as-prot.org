@@ -527,8 +527,8 @@ This module load basic configurations that apply to most facets of Emacs.
 
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-core.el= Section for Files
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+*** The =osama-emacs-essentials.el= Section for Files
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -538,9 +538,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c f S" . write-file)))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Dired
+*** The =osama-emacs-essentials.el= section for Dired
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
     (use-package dired
       :ensure nil ;; built-in package
       :commands (dired dired-jump)
@@ -563,10 +563,12 @@ This module load basic configurations that apply to most facets of Emacs.
 
     (use-package all-the-icons-dired
       :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
 
 
-  
-  ;;settings for dired-hide-details-mode
+  *** The =osama-emacs-essentials.el= section for ~dired-hide-details-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
   (use-package dired
     :ensure nil
     :bind (:map dired-mode-map
@@ -604,16 +606,8 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
-
-
-
-
-  
-#+end_src
-
-
-*** The =osama-emacs-core.el= Section for Buffers
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+*** The =osama-emacs-essentials.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -622,9 +616,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c b p" . previous-buffer)))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Windows
+*** The =osama-emacs-essentials.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :bind
@@ -651,9 +645,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w j" . windmove-down)))
 #+end_src
 
-*** The =osama-emacs-core.el= section for ~tab-bar-mode~
+*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package emacs
   :ensure nil
   :init
@@ -691,9 +685,9 @@ This module load basic configurations that apply to most facets of Emacs.
 
 
 
-*** The =osama-emacs-core.el= section for ~OpenWith~ package
+*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -703,9 +697,9 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-core.el= settings for ~dashboard~
+*** The =osama-emacs-essentials.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package dashboard
   :ensure t
   :config
