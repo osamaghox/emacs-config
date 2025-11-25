@@ -697,17 +697,6 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Markdown Basic Settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package markdown-mode
-  :ensure t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown")
-  :bind (:map markdown-mode-map
-         ("C-c C-e" . markdown-do)))
-#+end_src
-
 *** The =osama-emacs-core.el= settings for ~dashboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
@@ -1593,6 +1582,20 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   :ensure t
   :bind
   ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
+#+end_src
+
+
+
+
+*** The =osama-emacs-editing.el= section for Markdown Basic Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
 #+end_src
 
 
