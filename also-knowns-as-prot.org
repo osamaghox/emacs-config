@@ -1676,6 +1676,4 @@ return value can be used with `define-key'."
  	(define-key input-decode-map (my/make-key-string 'meta char) (my/make-key-string 'control char)))
 #+end_src
 
-* Android Section For Personal Settings
-
 * The Personal Functions
