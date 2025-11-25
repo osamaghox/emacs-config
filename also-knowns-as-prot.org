@@ -945,6 +945,7 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c k" "Window Up"
     "C-c l" "Window Right"
     "C-c e" "Emacs"
+    "C-c r" "Toggle Text Direction"
     "C-c n" "Notes"
     "C-c m" "Consult-Modes"
     "C-c y" "Yank"
