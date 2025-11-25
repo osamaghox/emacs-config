@@ -1384,15 +1384,6 @@ on how I use Org.
            :empty-lines 1)
 
           ;; ============================
-          ;; Metrics / Tracking
-          ;; ============================
-          ("m" "Metrics Capture")
-          ("mw" "Weight" table-line
-           (file+headline ,(expand-file-name "org/Metrics.org" osama-emacs-home-dir) "Weight")
-           "| %U | %^{Weight} | %^{Notes} |"
-           :kill-buffer t)
-
-          ;; ============================
           ;; Fitness / Exercise Capture
           ;; ============================
           ("e" "New Exercise" entry
