@@ -1430,11 +1430,6 @@ on how I use Org.
   (("C-c o C" . osama-org-copy-entry))
   :config
 
-
-(add-to-list 'org-capture-templates
-  '("w" "Weigh-in" entry
-    (file+headline ... ) 
-
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       '("w" "Weigh-in" entry
