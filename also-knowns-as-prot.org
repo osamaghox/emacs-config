@@ -997,7 +997,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c m m" . consult-mode-command)
    ("C-c m l" . consult-minor-mode)
    ("C-c t T" . consult-theme)
-   ("C-c y y" . consult-yank-pop)))
+   ("C-c y"   . consult-yank-pop)))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~orderless~
