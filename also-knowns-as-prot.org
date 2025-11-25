@@ -937,6 +937,8 @@ The which-key package provides hints for keys that complete the currently incomp
 ;; Hide specific commands from which-key
 (add-to-list 'which-key-replacement-alist '(("C-c C-b" . nil) . t))
 (add-to-list 'which-key-replacement-alist '(("C-c C-e" . nil) . t))
+(add-to-list 'which-key-replacement-alist '(("C-c ;"   . nil) . t))
+
 
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
