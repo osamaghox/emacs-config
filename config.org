@@ -582,6 +582,14 @@ This module load basic configurations that apply to most facets of Emacs.
              (expand-file-name "data/themes/" osama-emacs-home-dir))
 #+end_src
 
+*** The =osama-emacs-ui-appearance.el= section for ~doom-themes~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+  (use-package doom-themes
+    :config
+    (load-theme 'doom-one t))
+#+end_src
+
 *** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
