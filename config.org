@@ -1366,7 +1366,7 @@ on how I use Org.
 
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
-      '("w" "Weigh-in" entry
+      `("w" "Weigh-in" entry
          (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
