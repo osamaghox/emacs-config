@@ -98,8 +98,8 @@ by ~use-package~ when it needs it
 
 ;; Load Core Essentials first
 (load (expand-file-name "modules/osama-emacs-core.el" user-emacs-directory))
-(load (expand-file-name "modules/osama-emacs-essentials.el" user-emacs-directory)) ;; Evil needs to load early often
-(load (expand-file-name "modules/osama-emacs-editing.el" user-emacs-directory)) ;; Evil needs to load early often
+(load (expand-file-name "modules/osama-emacs-essentials.el" user-emacs-directory))
+(load (expand-file-name "modules/osama-emacs-editing.el" user-emacs-directory))
 
 ;; Load Ui Appearance
 (load (expand-file-name "modules/osama-emacs-ui-appearance.el" user-emacs-directory))
