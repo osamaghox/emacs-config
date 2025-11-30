@@ -1194,10 +1194,22 @@ on how I use Org.
   (setq org-deadline-warning-days 7)
 
 ;; load all .org files from the org directory to agenda
+
 (setq org-agenda-files
-      (directory-files-recursively
-       (expand-file-name "org" osama-emacs-home-dir)
-       "\\.org$"))
+      (list
+       (expand-file-name "org/Tasks.org"     osama-emacs-home-dir)
+       (expand-file-name "org/Repeated.org"  osama-emacs-home-dir)
+       (expand-file-name "org/Habits.org"    osama-emacs-home-dir)
+       (expand-file-name "org/Calendar.org"  osama-emacs-home-dir)
+       (expand-file-name "org/Planner.org"   osama-emacs-home-dir)
+
+       ;; self folder
+       (expand-file-name "org/self/Workout.org"  osama-emacs-home-dir)
+       (expand-file-name "org/self/Diet.org"     osama-emacs-home-dir)
+
+       ;; Voltaic Aim Routine
+       (expand-file-name "org/voltaic/Voltaic_VDIM.org" osama-emacs-home-dir)))
+
   ;; تفعيل org-habit
   (require 'org-habit)
 
