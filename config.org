@@ -1565,7 +1565,9 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   (consult-denote-mode 1))
 #+end_src
 
-** The =osama-emacs-android.el= module
+* Custom Functions (lisp) folder
+
+** The =osama-emacs-android.el= custom settings
 
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
@@ -1597,34 +1599,5 @@ Opens i-search if it's closed, closes it if it's open."
 (global-set-key (kbd "<volume-down>") #'osama-toggle-keyboard)
 #+end_src
 
-** The =osama-emacs-windows.el= module
+** The =osama-emacs-windows.el= custom settings
 
-*** The =osama-emacs-windows.el= section for swapping ctrl with alt key
-
-[Disibled]#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
-;; There seems to be no built-in mechanism to swap modifier keys in
-;; Emacs, but it can be accomplished (for the most part) by
-;; translating a near-exhaustive list of modifiable keys.  In the case
-;; of 'control and 'meta, some keys must be omitted to avoid errors or
-;; other undesired effects.
-(defun my/make-key-string (modsymbol basic-event)
-  "Convert the combination of MODSYMBOL and BASIC-EVENT.
-BASIC-EVENT can be a character or a function-key symbol.  The
-return value can be used with `define-key'."
-  (vector (event-convert-list `(,modsymbol ,basic-event))))
-
-;; Escaped chars are:
-;; tab return space del backspace (typically translated to del)
-(dolist (char (append '(up down left right menu print scroll pause
-			insert delete home end prior next
-			tab return space backspace escape
-			f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12)
-		      ;; Escape gets translated to `C-\[' in `local-function-key-map'
-		      ;; We want that to keep working, so we don't swap `C-\[' with `M-\['.
-		      (remq ?\[ (number-sequence 33 126))))
-  	;; Changing this to use `input-decode-map', as it works for more keys.
-	(define-key input-decode-map (my/make-key-string 'control char) (my/make-key-string 'meta char))
- 	(define-key input-decode-map (my/make-key-string 'meta char) (my/make-key-string 'control char)))
-#+end_src
-
-* The Personal Functions
