@@ -1321,7 +1321,7 @@ on how I use Org.
           ;; Planner
           ;; ============================
           ("p" "Planner" entry
-           (file+olp ,(expand-file-name "org/Planner.org" osama-emacs-home-dir) "Time Blocks")
+           (file+olp ,(expand-file-name "org/Planner.org" osama-emacs-home-dir) "Inbox")
            "* %^{Session Topic} %^g\n  %^T\n  %?"
            :empty-lines 1)
 
