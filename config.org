@@ -113,11 +113,11 @@ by ~use-package~ when it needs it
 ;; Add lisp directory to load path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-;; Load system-specific settings (from lisp folder)
 (defvar osama-emacs-lisp-dir
   (expand-file-name "lisp" user-emacs-directory)
   "Directory that contains Osama Emacs additional Lisp files.")
 
+;; Load system-specific settings (from osama-emacs-lisp-dir)
 (cond
  ((eq system-type 'android)
   (load (expand-file-name "osama-emacs-android.el" osama-emacs-lisp-dir)))
