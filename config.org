@@ -1335,7 +1335,7 @@ on how I use Org.
           ;; Fitness / Exercise Capture
           ;; ============================
           ("e" "New Exercise" entry
-           (file+olp ,(expand-file-name "org/fitness/Exercises.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/health/Exercises.org" osama-emacs-home-dir) "Inbox")
            (function
             (lambda ()
               (let* ((exercise (read-string "Exercise Name: "))
@@ -1372,7 +1372,7 @@ on how I use Org.
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
-         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         (file+headline ,(expand-file-name "org/health/Diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
