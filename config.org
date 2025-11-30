@@ -1601,3 +1601,6 @@ Opens i-search if it's closed, closes it if it's open."
 
 ** The =osama-emacs-windows.el= custom settings
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
+
+#+end_src
