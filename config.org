@@ -1316,6 +1316,14 @@ on how I use Org.
            :empty-lines 1
            :prepend t)
 
+         ;; ============================
+         ;; Planner
+         ;; ============================
+         ("p" "Planner" entry
+           (file ,(expand-file-name "org/Planner.org" osama-emacs-home-dir))
+           "* %^{Session Topic} %^g\n  وقت الجلسة: %^{Start Time} - %^{End Time}\n  %?"
+           :empty-lines 1))
+
           ;; ============================
           ;; Journal Entry
           ;; ============================
