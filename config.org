@@ -1217,9 +1217,9 @@ on how I use Org.
          "DONE(d!)")))    ; أنجزت
 
 (setq org-refile-targets
-      `((,(expand-file-name "org/Archive.org"      osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Tasks.org"        osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Planner.org"      osama-emacs-home-dir) :maxlevel . 1)))
+      `((,(expand-file-name "org/Archive.org     osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/Plans.org"      osama-emacs-home-dir) :maxlevel . 1)))
 
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -1318,11 +1318,11 @@ on how I use Org.
            :prepend t)
 
           ;; ============================
-          ;; Planner
+          ;; Plans
           ;; ============================
-          ("p" "Planner" entry
-           (file+olp ,(expand-file-name "org/Planner.org" osama-emacs-home-dir) "Inbox")
-           "* %^{Topic} %^g\n  %^T\n  %?"
+          ("p" "Plans" entry
+           (file+olp ,(expand-file-name "org/Plans.org" osama-emacs-home-dir) "Inbox")
+           "* %^{Activity} %^g\n  %^T\n  %?"
            :empty-lines 1)
 
           ;; ============================
