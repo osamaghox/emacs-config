@@ -725,6 +725,24 @@ Display Emacs startup time and garbage collection count
   (make-directory osama-fonts-dir t)))))
 #+end_src
 
+*** The =osama-emacs-ui-appearance.el= section for ~dired-fl~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package solaire-mode
+  :config
+  (solaire-global-mode +1))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~dired-fl~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(use-package dired-fl
+  :init
+  (dired-fl-global-mode 1))
+#+end_src
+
+
+
 ** The =osama-emacs-editing.el= module
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
@@ -1612,22 +1630,6 @@ Opens i-search if it's closed, closes it if it's open."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 
 #+end_src
-
-
-
-(use-package solaire-mode
-  :ensure t
-  :config
-  (solaire-global-mode +1))
-
-(use-package dired-fl
-  :ensure t
-  :init
-  (dired-fl-global-mode 1))
-
-(use-package doom-themes
-load vibrant
-)
 
 
 
