@@ -738,7 +738,7 @@ Display Emacs startup time and garbage collection count
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package dired-fl
   :init
-  (dired-fl-global-mode 1))
+  (diredfl-global-mode 1))
 #+end_src
 
 
