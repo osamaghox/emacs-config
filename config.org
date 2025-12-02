@@ -725,15 +725,6 @@ Display Emacs startup time and garbage collection count
   (solaire-global-mode +1))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~dired-fl~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package dired-fl
-  :init
-  (diredfl-global-mode 1))
-#+end_src
-
-
 ** The =osama-emacs-editing.el= module
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
