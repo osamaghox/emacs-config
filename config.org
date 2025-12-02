@@ -371,6 +371,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq tab-bar-show t
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-tab-name-truncated-max 20
+        tab-bar-tab-hints t
         tab-bar-close-button-show nil
         tab-bar-back-button-show nil)
   
