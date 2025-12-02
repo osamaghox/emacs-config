@@ -358,7 +358,11 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w h" . windmove-left)
    ("C-c w l" . windmove-right)
    ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down)))
+   ("C-c w j" . windmove-down))
+
+  :config
+  ;; Enable window undo/redo
+  (winner-mode 1))
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
