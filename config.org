@@ -924,7 +924,7 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c a" "Attachments"))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~vertico~ and ~vertico-posframe~
+*** The =osama-emacs-completion.el= section for ~vertico~
 
 The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
 
@@ -934,10 +934,6 @@ The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical la
   (setq vertico-cycle t
         vertico-resize nil)
   (vertico-mode 1))
-
-(use-package vertico-posframe
-  :config
-  (vertico-posframe-mode 1))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~marginalia~
