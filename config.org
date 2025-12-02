@@ -371,24 +371,16 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq centaur-tabs-style "bar"
         centaur-tabs-height 32
         centaur-tabs-set-icons t
+        centaur-tabs-icon-type 'all-the-icons  ; or 'nerd-icons
         centaur-tabs-show-new-tab-button t
         centaur-tabs-set-modified-marker t
         centaur-tabs-show-navigation-buttons t
         centaur-tabs-set-bar 'under
         centaur-tabs-show-count nil
-        ;; centaur-tabs-label-fixed-length 15
-        ;; centaur-tabs-gray-out-icons 'buffer
-        ;; centaur-tabs-plain-icons t
         x-underline-at-descent-line t
-        centaur-tabs-left-edge-margin nil)
-  (centaur-tabs-change-fonts (face-attribute 'default :font) 110)
-  (centaur-tabs-headline-match)
-  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
-  ;; (setq centaur-tabs-adjust-buffer-order t)
-  (centaur-tabs-mode t)
-  (setq uniquify-separator "/")
-  (setq uniquify-buffer-name-style 'forward))
-#+end_src
+        centaur-tabs-mode t
+        uniquify-separator "/"))
+#+end_src 
 
 
 
