@@ -1620,3 +1620,22 @@ Opens i-search if it's closed, closes it if it's open."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 
 #+end_src
+
+
+
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+
+(use-package dired-fl
+  :ensure t
+  :init
+  (dired-fl-global-mode 1))
+
+(use-package doom-themes
+load vibrant
+)
+
+;; Adjust modeline height (1 is the smallest)
+(setq doom-modeline-height 40)
