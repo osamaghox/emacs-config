@@ -631,6 +631,7 @@ Display Emacs startup time and garbage collection count
   (doom-modeline-major-mode-icon t)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count t)
+  (doom-modeline-height 40)
   (doom-modeline-indent-info t))
 #+end_src
 
@@ -1628,7 +1629,5 @@ Opens i-search if it's closed, closes it if it's open."
 load vibrant
 )
 
-;; Adjust modeline height (1 is the smallest)
-(setq doom-modeline-height 40)
 
 
