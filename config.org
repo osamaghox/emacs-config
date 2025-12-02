@@ -361,42 +361,33 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w j" . windmove-down)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
+*** The =osama-emacs-essentials.el= section for ~centaur-tabs~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
+(use-package centaur-tabs
   :init
-  (tab-bar-mode 1)
-  (setq tab-bar-show t
-        tab-bar-new-tab-choice "*scratch*"
-        tab-bar-tab-name-truncated-max 20
-        tab-bar-close-button-show nil
-        tab-bar-back-button-show nil)
-  
-  ;; Functions to jump to tab by number
-  (dotimes (i 9)
-    (let ((n (1+ i)))
-      (defalias (intern (format "tab-goto-%d" n))
-        `(lambda ()
-           (interactive)
-           (tab-bar-select-tab ,n)))))
-
-  ;; Keybindings C-c 1 .. C-c 9
-  :bind
-  (("C-c 1" . tab-goto-1)
-   ("C-c 2" . tab-goto-2)
-   ("C-c 3" . tab-goto-3)
-   ("C-c 4" . tab-goto-4)
-   ("C-c 5" . tab-goto-5)
-   ("C-c 6" . tab-goto-6)
-   ("C-c 7" . tab-goto-7)
-   ("C-c 8" . tab-goto-8)
-   ("C-c 9" . tab-goto-9)
-   ;; Optional: new / close / next / prev
-   ("C-c t n" . tab-new)
-   ("C-c t c" . tab-close)
-   ("C-c t u" . tab-undo)))
+  (setq centaur-tabs-enable-key-bindings t)
+  :config
+  (setq centaur-tabs-style "bar"
+        centaur-tabs-height 32
+        centaur-tabs-set-icons t
+        centaur-tabs-show-new-tab-button t
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-show-navigation-buttons t
+        centaur-tabs-set-bar 'under
+        centaur-tabs-show-count nil
+        ;; centaur-tabs-label-fixed-length 15
+        ;; centaur-tabs-gray-out-icons 'buffer
+        ;; centaur-tabs-plain-icons t
+        x-underline-at-descent-line t
+        centaur-tabs-left-edge-margin nil)
+  (centaur-tabs-change-fonts (face-attribute 'default :font) 110)
+  (centaur-tabs-headline-match)
+  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
+  ;; (setq centaur-tabs-adjust-buffer-order t)
+  (centaur-tabs-mode t)
+  (setq uniquify-separator "/")
+  (setq uniquify-buffer-name-style 'forward))
 #+end_src
 
 
@@ -1641,27 +1632,3 @@ load vibrant
 (setq doom-modeline-height 40)
 
 
-(use-package centaur-tabs
-  :init
-  (setq centaur-tabs-enable-key-bindings t)
-  :config
-  (setq centaur-tabs-style "bar"
-        centaur-tabs-height 32
-        centaur-tabs-set-icons t
-        centaur-tabs-show-new-tab-button t
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-show-navigation-buttons t
-        centaur-tabs-set-bar 'under
-        centaur-tabs-show-count nil
-        ;; centaur-tabs-label-fixed-length 15
-        ;; centaur-tabs-gray-out-icons 'buffer
-        ;; centaur-tabs-plain-icons t
-        x-underline-at-descent-line t
-        centaur-tabs-left-edge-margin nil)
-  (centaur-tabs-change-fonts (face-attribute 'default :font) 110)
-  (centaur-tabs-headline-match)
-  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
-  ;; (setq centaur-tabs-adjust-buffer-order t)
-  (centaur-tabs-mode t)
-  (setq uniquify-separator "/")
-  (setq uniquify-buffer-name-style 'forward))
