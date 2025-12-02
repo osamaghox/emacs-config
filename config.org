@@ -399,6 +399,8 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c t u" . tab-undo)))
 #+end_src
 
+
+
 *** The =osama-emacs-essentials.el= section for ~OpenWith~ package
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
@@ -638,7 +640,6 @@ Display Emacs startup time and garbage collection count
   (doom-modeline-major-mode-icon t)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count t)
-  (doom-modeline-height 40)
   (doom-modeline-indent-info t))
 #+end_src
 
@@ -730,14 +731,6 @@ Display Emacs startup time and garbage collection count
 
 (unless (file-directory-p osama-fonts-dir)
   (make-directory osama-fonts-dir t)))))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el= section for ~solaire-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(use-package solaire-mode
-  :config
-  (solaire-global-mode +1))
 #+end_src
 
 ** The =osama-emacs-editing.el= module
@@ -1627,6 +1620,3 @@ Opens i-search if it's closed, closes it if it's open."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 
 #+end_src
-
-
-
