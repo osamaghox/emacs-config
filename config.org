@@ -642,13 +642,21 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui-appearance.el= section for ~doom-themes~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-  (use-package doom-themes
-    :config
-    (load-theme 'doom-one t)
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; 1. تحميل الثيم
+  (load-theme 'doom-one t)
 
-    (setq doom-themes-treemacs-theme "doom-atom" ; شكل الأيقونات
-          doom-themes-treemacs-config)) ; تطبيق التنسيق وتصحيح الخلفية
+  ;; 2. تعيين المتغير (Variable)
+  (setq doom-themes-treemacs-theme "doom-atom") 
 
+  ;; 3. استدعاء الدالة لتطبيق التنسيق (Function Call)
+  ;; لاحظ أننا أخرجناها من الـ setq ووضعناها بين قوسين لتعمل
+  (doom-themes-treemacs-config)
+
+  ;; (اختياري) لتصحيح خطوط العناوين في Org-mode
+  (doom-themes-org-config))
 #+end_src
 
 *** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
