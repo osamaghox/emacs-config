@@ -358,7 +358,11 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c w h" . windmove-left)
    ("C-c w l" . windmove-right)
    ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down)))
+   ("C-c w j" . windmove-down))
+
+  :config
+  ;; Enable window undo/redo
+  (winner-mode 1))
 #+end_src
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
@@ -371,6 +375,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq tab-bar-show t
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-tab-name-truncated-max 20
+        tab-bar-tab-hints t
         tab-bar-close-button-show nil
         tab-bar-back-button-show nil)
   
@@ -1622,46 +1627,3 @@ Opens i-search if it's closed, closes it if it's open."
 #+end_src
 
 
-
-(use-package solaire-mode
-  :ensure t
-  :config
-  (solaire-global-mode +1))
-
-(use-package dired-fl
-  :ensure t
-  :init
-  (dired-fl-global-mode 1))
-
-(use-package doom-themes
-load vibrant
-)
-
-;; Adjust modeline height (1 is the smallest)
-(setq doom-modeline-height 40)
-
-
-(use-package centaur-tabs
-  :init
-  (setq centaur-tabs-enable-key-bindings t)
-  :config
-  (setq centaur-tabs-style "bar"
-        centaur-tabs-height 32
-        centaur-tabs-set-icons t
-        centaur-tabs-show-new-tab-button t
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-show-navigation-buttons t
-        centaur-tabs-set-bar 'under
-        centaur-tabs-show-count nil
-        ;; centaur-tabs-label-fixed-length 15
-        ;; centaur-tabs-gray-out-icons 'buffer
-        ;; centaur-tabs-plain-icons t
-        x-underline-at-descent-line t
-        centaur-tabs-left-edge-margin nil)
-  (centaur-tabs-change-fonts (face-attribute 'default :font) 110)
-  (centaur-tabs-headline-match)
-  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
-  ;; (setq centaur-tabs-adjust-buffer-order t)
-  (centaur-tabs-mode t)
-  (setq uniquify-separator "/")
-  (setq uniquify-buffer-name-style 'forward))
