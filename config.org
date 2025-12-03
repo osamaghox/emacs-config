@@ -496,6 +496,36 @@ Display Emacs startup time and garbage collection count
 (add-hook 'emacs-startup-hook #'osama-emacs-display-startup-time)
 #+end_src
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+;; 1. إعداد Treemacs
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  ;; (Requirement 1) جعل النافذة تظهر دائماً في الجهة اليسرى
+  (setq treemacs-position 'left)
+  :config
+  (setq treemacs-width 30) ; يمكنك تعديل العرض حسب رغبتك
+
+  ;; (Requirement 3) إضافة مجلدك الخاص تلقائياً إلى مساحة العمل
+  ;; نتأكد أولاً أن المتغير معرف والمجلد موجود لتجنب الأخطاء
+  (when (and (boundp 'osama-emacs-home-dir)
+             (file-directory-p osama-emacs-home-dir))
+    (treemacs-add-project-to-workspace osama-emacs-home-dir))
+  
+  ;; جعل المؤشر يتبع الملف المفتوح (اختياري ولكنه مفيد)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
+
+;; 2. إعداد إخفاء الـ Modeline داخل Treemacs
+(use-package hide-mode-line
+  :ensure t
+  :hook
+  ;; (Requirement 2) تفعيل الإخفاء عند فتح Treemacs فقط
+  (treemacs-mode . hide-mode-line-mode))
+#+end_src
+
+
 ** The =osama-emacs-ui-appearance.el= module
 
 *** The =osama-emacs-ui-appearance.el= Section for UI Basics
