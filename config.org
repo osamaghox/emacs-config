@@ -774,6 +774,31 @@ Display Emacs startup time and garbage collection count
   (make-directory osama-fonts-dir t)))))
 #+end_src
 
+*** The =osama-emacs-ui-appearance.el=: Section for Padding Space
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+(modify-all-frames-parameters '((internal-border-width . 20)))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el=: Section for Hiding Window Black Borders
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+;; إخفاء الخط الفاصل العمودي بجعل لونه مثل لون الخلفية
+(set-face-attribute 'vertical-border nil
+                    :foreground (face-attribute 'default :background)
+                    :background (face-attribute 'default :background))
+
+;; اختياري: إذا كنت تستخدم window-divider-mode (المستخدم في النسخ الحديثة)
+;; هذا يضمن إخفاءه أيضاً
+(setq window-divider-default-right-width 1)
+(setq window-divider-default-bottom-width 1)
+(window-divider-mode 1)
+(set-face-attribute 'window-divider nil 
+                    :foreground (face-attribute 'default :background)
+                    :background (face-attribute 'default :background))
+#+end_src
+
+
 ** The =osama-emacs-editing.el= module
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
