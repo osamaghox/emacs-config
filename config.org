@@ -652,7 +652,7 @@ Display Emacs startup time and garbage collection count
         doom-themes-enable-italic t) ; تمكين الخط المائل
 
   ;; 2. تعيين المتغير (Variable)
-  (setq doom-themes-treemacs-theme "doom-atom") 
+  (setq doom-themes-treemacs-theme "doom-colors") 
 
   ;; 3. استدعاء الدالة لتطبيق التنسيق (Function Call)
   ;; لاحظ أننا أخرجناها من الـ setq ووضعناها بين قوسين لتعمل
