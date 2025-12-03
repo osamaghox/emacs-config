@@ -486,13 +486,13 @@ This module load basic configurations that apply to most facets of Emacs.
 Display Emacs startup time and garbage collection count
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
-(defun osama-emacs-display-startup-time ()
+(defun osama-display-startup-time ()
   "Display Emacs startup time and garbage collection count in the echo area."
   (message "Emacs loaded in %s with %d garbage collections."
            (format "%.2f seconds" (float-time (time-subtract after-init-time before-init-time)))
            gcs-done))
 
-(add-hook 'emacs-startup-hook #'osama-emacs-display-startup-time)
+(add-hook 'emacs-startup-hook #'osama-display-startup-time)
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
@@ -511,7 +511,7 @@ Display Emacs startup time and garbage collection count
   (treemacs-mode . (lambda () (display-line-numbers-mode -1)))
 
   :config
-  (setq treemacs-width 30)
+  (setq treemacs-width 40)
 
   ;; إضافة مجلدك الخاص تلقائياً
   (when (and (boundp 'osama-emacs-home-dir)
