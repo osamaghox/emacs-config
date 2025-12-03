@@ -802,19 +802,26 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui-appearance.el=: Section for Hiding Window Black Borders
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-;; إخفاء الخط الفاصل العمودي بجعل لونه مثل لون الخلفية
-(set-face-attribute 'vertical-border nil
-                    :foreground (face-attribute 'default :background)
-                    :background (face-attribute 'default :background))
-
-;; اختياري: إذا كنت تستخدم window-divider-mode (المستخدم في النسخ الحديثة)
-;; هذا يضمن إخفاءه أيضاً
+;; 1. إعدادات تقسيم النوافذ (تعمل مرة واحدة)
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 (window-divider-mode 1)
-(set-face-attribute 'window-divider nil 
-                    :foreground (face-attribute 'default :background)
-                    :background (face-attribute 'default :background))
+
+;; 2. الدالة المسؤولة عن توحيد الألوان
+(defun osama-hide-window-dividers (&rest _)
+  "يخفي الفواصل بجعل لونها مطابقاً للون خلفية الثيم الحالي."
+  (let ((bg (face-attribute 'default :background)))
+    ;; تغيير لون الفاصل القديم
+    (set-face-attribute 'vertical-border nil :foreground bg :background bg)
+    ;; تغيير لون الفاصل الحديث (window-divider)
+    (set-face-attribute 'window-divider nil :foreground bg :background bg)))
+
+;; 3. (التعديل الهام) التفعيل الشامل لكل الحالات
+;; نستخدم enable-theme لأنه الأمر الذي ينفذه consult-theme وغيره عند تفعيل أي ثيم
+(advice-add 'enable-theme :after #'osama-hide-window-dividers)
+
+;; تشغيل الدالة الآن للتطبيق على الثيم الحالي
+(osama-hide-window-dividers)
 #+end_src
 
 
