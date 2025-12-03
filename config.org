@@ -502,18 +502,25 @@ Display Emacs startup time and garbage collection count
   :ensure t
   :defer t
   :init
-  ;; (Requirement 1) جعل النافذة تظهر دائماً في الجهة اليسرى
+  ;; جعل النافذة تظهر دائماً في الجهة اليسرى
   (setq treemacs-position 'left)
-  :config
-  (setq treemacs-width 30) ; يمكنك تعديل العرض حسب رغبتك
+  
+  :bind
+  ("C-c t T" . treemacs)
 
-  ;; (Requirement 3) إضافة مجلدك الخاص تلقائياً إلى مساحة العمل
-  ;; نتأكد أولاً أن المتغير معرف والمجلد موجود لتجنب الأخطاء
+  :hook
+  ;; (طلب جديد) إخفاء أرقام الأسطر عند فتح Treemacs
+  (treemacs-mode . (lambda () (display-line-numbers-mode -1)))
+
+  :config
+  (setq treemacs-width 30)
+
+  ;; إضافة مجلدك الخاص تلقائياً
   (when (and (boundp 'osama-emacs-home-dir)
              (file-directory-p osama-emacs-home-dir))
     (treemacs-add-project-to-workspace osama-emacs-home-dir))
   
-  ;; جعل المؤشر يتبع الملف المفتوح (اختياري ولكنه مفيد)
+  ;; جعل المؤشر يتبع الملف المفتوح
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t))
 
@@ -521,10 +528,9 @@ Display Emacs startup time and garbage collection count
 (use-package hide-mode-line
   :ensure t
   :hook
-  ;; (Requirement 2) تفعيل الإخفاء عند فتح Treemacs فقط
+  ;; تفعيل الإخفاء عند فتح Treemacs
   (treemacs-mode . hide-mode-line-mode))
 #+end_src
-
 
 ** The =osama-emacs-ui-appearance.el= module
 
