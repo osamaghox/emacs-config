@@ -648,6 +648,9 @@ Display Emacs startup time and garbage collection count
   ;; 1. تحميل الثيم
   (load-theme 'doom-one t)
 
+  (setq doom-themes-enable-bold t    ; تمكين الخط العريض
+        doom-themes-enable-italic t) ; تمكين الخط المائل
+
   ;; 2. تعيين المتغير (Variable)
   (setq doom-themes-treemacs-theme "doom-atom") 
 
