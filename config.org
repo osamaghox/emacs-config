@@ -422,7 +422,6 @@ This module load basic configurations that apply to most facets of Emacs.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 (use-package dashboard
-  :ensure t
   :config
   ;; Disable default banner
   (defun dashboard-insert-banner ()
@@ -499,7 +498,6 @@ Display Emacs startup time and garbage collection count
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;; 1. إعداد Treemacs
 (use-package treemacs
-  :ensure t
   :defer t
   :init
   ;; جعل النافذة تظهر دائماً في الجهة اليسرى
@@ -526,7 +524,6 @@ Display Emacs startup time and garbage collection count
 
 ;; 2. إعداد إخفاء الـ Modeline داخل Treemacs
 (use-package hide-mode-line
-  :ensure t
   :hook
   ;; تفعيل الإخفاء عند فتح Treemacs
   (treemacs-mode . hide-mode-line-mode))
@@ -915,7 +912,6 @@ Display Emacs startup time and garbage collection count
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 (use-package vundo
-  :ensure t
   :bind
   ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
 #+end_src
@@ -927,7 +923,6 @@ Display Emacs startup time and garbage collection count
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 (use-package markdown-mode
-  :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown")
   :bind (:map markdown-mode-map
@@ -1616,7 +1611,6 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
 (use-package denote-sequence
-  :ensure t
   :bind
   (:map global-map
         ;; Here we make "C-c n s" a prefix for all "[n]otes with [s]equence".
