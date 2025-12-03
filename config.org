@@ -678,6 +678,7 @@ Display Emacs startup time and garbage collection count
   (doom-modeline-major-mode-icon t)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count t)
+  (doom-modeline-height 30)
   (doom-modeline-indent-info t))
 #+end_src
 
@@ -769,6 +770,39 @@ Display Emacs startup time and garbage collection count
 
 (unless (file-directory-p osama-fonts-dir)
   (make-directory osama-fonts-dir t)))))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~solaire-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+;; 1. تفعيل Solaire Mode لتمييز الخلفيات
+(use-package solaire-mode
+  :ensure t
+  :hook
+  ;; تفعيل الوضع عالمياً عند التشغيل
+  (after-init . solaire-global-mode)
+  :config
+  ;; هذا السطر مهم جداً: يجبر treemacs على استخدام خلفية solaire (الداكنة)
+  (push '(treemacs-mode . solaire-mode-on) solaire-mode-remap-alist)
+  (push '(treemacs-mode . solaire-mode-on) solaire-mode-real-buffer-fn))
+
+;; 2. التأكد من أن الثيم يدعم هذا التباين (مهم جداً إذا كنت تستخدم Doom Themes)
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; تفعيل الثيم الذي تحبه (مثلاً doom-one أو غيره)
+  (load-theme 'doom-one t) 
+  
+  ;; (مهم) تفعيل دعم solaire-mode داخل الثيم ليظهر الفرق في الألوان
+  (doom-themes-visual-bell-config)
+  (setq doom-themes-treemacs-theme "doom-atom") ; ثيم خاص لـ treemacs يتماشى مع الخلفية
+  (doom-themes-treemacs-config)
+  
+  ;; تصحيح ألوان solaire-mode لتكون متناسقة
+  (set-face-attribute 'solaire-default-face nil :background (face-attribute 'default :background)) 
+  ;; ملاحظة: السطر السابق قد يحتاج تعديل عكسي حسب الثيم، 
+  ;; لكن عادة doom-themes يضبطه تلقائياً عند تفعيل الاضافة أدناه:
+)
 #+end_src
 
 *** The =osama-emacs-ui-appearance.el=: Section for Padding Space
