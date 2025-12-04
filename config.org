@@ -8,6 +8,11 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* TODO New Edits
+
+- [ ] add (lexical-binding) to every el file of this config 
+- [ ] remove the all mkdirp from org tangle except for first code in the module  
+
 * The early initialisation of Emacs (=early-init.el=)
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
