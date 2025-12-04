@@ -145,6 +145,8 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-core.el= Section for Emacs Settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package emacs
   :ensure nil
   :config
@@ -254,6 +256,8 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= Section for Files
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package emacs
   :ensure nil
   :bind
@@ -543,6 +547,8 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui-appearance.el= Section for UI Basics
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package emacs
   :ensure nil
   :init
@@ -832,6 +838,8 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 ;;; Evil-mode setup
 (use-package evil
   :init
@@ -971,6 +979,8 @@ In Emacs, completion encompasses user interfaces that show the available candida
 The which-key package provides hints for keys that complete the currently incomplete sequence.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package which-key
   :ensure nil
   :init
@@ -1178,6 +1188,8 @@ any configuration. The following sections contain further commentary
 on how I use Org.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package org
   :ensure nil ;; org built-in
   :init
@@ -1603,6 +1615,8 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
   :bind
