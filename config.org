@@ -24,6 +24,8 @@ This is the first file that Emacs reads when starting up. It should contain code
 ** The =early-init.el= section we define the =osama-vault= folder variable
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 ;; Base directory for all Emacs files
 (defvar osama-emacs-home-dir "~/osama-vault/emacs/"
   "Base directory for all my Emacs files.")
@@ -82,6 +84,8 @@ use-case. We do not need to load it explicitly, as it will be called
 by ~use-package~ when it needs it
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (require 'package)
 (setq package-archives
       '(("melpa"  . "https://melpa.org/packages/")
@@ -1690,6 +1694,8 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 (defvar osama-keyboard-toggle-state nil
   "Current toggle state of the Android keyboard using isearch.")
 
@@ -1720,6 +1726,8 @@ Opens i-search if it's closed, closes it if it's open."
 ** The =osama-emacs-windows.el= custom settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
+;;; -*- lexical-binding: t; -*-
+
 
 #+end_src
 
