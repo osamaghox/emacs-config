@@ -815,16 +815,9 @@ Display Emacs startup time and garbage collection count
   (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
 
 ;; Arabic Font
-;; 1. إعداد الخط العربي (النوع والوزن فقط)
+;; Arabic Font
 (when (member "Cairo" (font-family-list))
-  (set-fontset-font t 'arabic
-                    (font-spec :family "Cairo"
-                               :weight 'bold   ; نحدد الوزن هنا
-                               :slant 'normal)))
-
-;; 2. ضبط نسبة الحجم (Scaling)
-;; هذا السطر سيجعل Cairo أكبر بنسبة 1.2 من الخط الإنجليزي تلقائياً
-(add-to-list 'face-font-rescale-alist '("Cairo" . 1.2))
+  (set-fontset-font t 'arabic (font-spec :family "Cairo")))
 
 ;; Emoji Font
 (when (member "Noto Color Emoji" (font-family-list))
