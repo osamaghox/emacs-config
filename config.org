@@ -182,7 +182,17 @@ This module load basic configurations that apply to most facets of Emacs.
       (make-directory dir t))))
 
 ;; Savehist: command history
+;; 1. تحديد مكان الملف ليبقى المجلد نظيفاً (من الكود الطويل)
 (setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
+
+;; 2. تحديد ماذا نحفظ: النصوص المنسوخة وتاريخ البحث (من الكود الجديد)
+;; هذا السطر ضروري جداً لـ consult-yank-pop
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+
+;; 3. تحديد طول التاريخ (اختياري، 25 جيد)
+(setq history-length 25)
+
+;; 4. تشغيل الوضع أخيراً
 (savehist-mode 1)
 
 ;; Recentf: recent files list
