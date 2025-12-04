@@ -10,8 +10,8 @@
 
 * TODO New Edits
 
-- [ ] add (lexical-binding) to every el file of this config 
-- [ ] remove the all mkdirp from org tangle except for first code in the module  
+- [X] add (lexical-binding) to every el file of this config 
+- [X] remove the all mkdirp from org tangle except for first code in the module  
 - [ ] put windows and android tutorials inside each one of them moudle
 - [ ] yank pop ring save file in emacs home folder like clipboard
 
