@@ -864,13 +864,9 @@ Display Emacs startup time and garbage collection count
 (use-package general
   :config
   (general-define-key
-   :keymaps 'normal
-   "SPC"   (general-simulate-key "C-c"))
-
-  ;; dired mode map
-  (general-define-key
-   :keymaps 'dired-mode-map
-   :states 'normal
+   :states '(normal visual motion emacs)  ; تفعيل في الوضع العادي، المرئي، والحركة، ووضع إيماكس
+   :keymaps 'override                     ; إجبار الاختصار ليعمل فوق أي Mode آخر
+   :prefix-map 'user-prefix-map           ; (اختياري) لضمان عدم حدوث تضارب
    "SPC" (general-simulate-key "C-c")))
 #+end_src
 
