@@ -36,7 +36,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ** The =early-init.el= section to set PATH and system tools
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
 ;; Detect system type and set appropriate PATH separators
 (defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
 
@@ -105,7 +105,7 @@ by ~use-package~ when it needs it
 
 ** The =init.el= entry point
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el"
 (defvar osama-emacs-modules-dir
   (expand-file-name "modules" user-emacs-directory)
   "This directory houses all of the built-in Osama Emacs modules.")
@@ -174,7 +174,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 ;; Ensure cache subdirectories exist
 (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
   (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
@@ -217,7 +217,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Settings for Better Performance
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :init
@@ -229,7 +229,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for for UTF-8 Defaults
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :init
@@ -242,7 +242,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for Support Arabic Typing
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :init
@@ -273,7 +273,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for Dired
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
     (use-package dired
       :ensure nil ;; built-in package
       :commands (dired dired-jump)
@@ -301,7 +301,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
   *** The =osama-emacs-essentials.el= section for ~dired-hide-details-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
   (use-package dired
     :ensure nil
     :bind (:map dired-mode-map
@@ -340,7 +340,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 
 *** The =osama-emacs-essentials.el= Section for Buffers
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -351,7 +351,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -384,7 +384,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package emacs
   :ensure nil
   :init
@@ -425,7 +425,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -437,7 +437,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-essentials.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package dashboard
   :config
   ;; Disable default banner
@@ -502,7 +502,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 Display Emacs startup time and garbage collection count
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (defun osama-display-startup-time ()
   "Display Emacs startup time and garbage collection count in the echo area."
   (message "Emacs loaded in %s with %d garbage collections."
@@ -512,7 +512,7 @@ Display Emacs startup time and garbage collection count
 (add-hook 'emacs-startup-hook #'osama-display-startup-time)
 #+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;; 1. إعداد Treemacs
 (use-package treemacs
   :defer t
@@ -591,7 +591,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package spacious-padding
   :ensure t
   :if (display-graphic-p) ; تعمل فقط في الواجهة الرسومية
@@ -615,7 +615,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package emacs
   :ensure nil
   :init
@@ -643,7 +643,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= Section for Toggle Title Bar & Decorations
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package emacs
   :ensure nil
   :init
@@ -667,7 +667,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~custom-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 ;; Include the "themes" folder in Emacs' theme search path
 (add-to-list 'custom-theme-load-path
              (expand-file-name "data/themes/" osama-emacs-home-dir))
@@ -675,7 +675,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~doom-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package doom-themes
   :ensure t
   :config
@@ -698,7 +698,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package doom-two-tone-themes
   :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
             :rev :newest)
@@ -710,14 +710,14 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~ef-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package ef-themes
   :defer t)
 #+end_src
 
 *** The =osama-emacs-ui-appearance.el= section for ~doom-modeline~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
@@ -733,7 +733,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~nerd-icons~ fonts
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
   (expand-file-name "data/fonts/" osama-emacs-home-dir)
@@ -774,7 +774,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package emacs
   :ensure nil
   :bind (("C-c t F" . set-frame-font))
@@ -823,7 +823,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= section for ~solaire-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package solaire-mode
   :defer t
   :bind
@@ -876,7 +876,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= section for general leader key
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package general
   :config
   (general-define-key
@@ -889,7 +889,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= section for fixing rtl cursor
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package evil
   :config
   ;; دالة إصلاح اتجاه الحركة في النص العربي
@@ -909,7 +909,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= Section for Paragraph Text Direction
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package emacs
   :ensure nil
   :init
@@ -933,7 +933,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= settings for ~text-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package text-mode
   :ensure nil
   :hook
@@ -950,7 +950,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= section for ~undo-tree~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package vundo
   :bind
   ("C-c u" . vundo))  ;; Visualize Undo Tree (vundo)
@@ -961,7 +961,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= section for Markdown Basic Settings
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package markdown-mode
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown")
@@ -1030,7 +1030,7 @@ The which-key package provides hints for keys that complete the currently incomp
 
 The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical layout. Under the hood, it takes care to be responsive and to handle even massive completion tables gracefully. Whereas, say, the built-in completion user interface will suffer from a noticeable performance penalty.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package vertico
   :config
   (setq vertico-cycle t
@@ -1042,7 +1042,7 @@ The ~vertico~ package by Daniel Mendler displays the minibuffer in a vertical la
 
 The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful annotations to the side of completion candidates. We see its effect, for example, when we call M-x: each command has a brief description next to it (taken from its doc string) as well as a key binding, if it has one.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package marginalia
   :after vertico
   :init
@@ -1053,7 +1053,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~consult~ is another wonderful package by Daniel Mendler. It provides a number of commands that turbocharge the minibuffer with advanced capabilities for filtering, asynchronous input, and previewing of the current candidate’s context.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package consult
   :bind
   (("C-c s s" . consult-line)
@@ -1075,7 +1075,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~orderless~ is a completion style that matches input out-of-order. For example, in pa can match both insert-pair and package-install. Components are space-separated by default. Its design is powerful but avoids many false positives.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package orderless
   :custom
   (completion-styles '(orderless))
@@ -1086,7 +1086,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 ~embark~ by Omar Antolín Camarena lets you perform context-specific actions via keybindings. embark-act shows a list of actions for the current context (e.g., describe a symbol, manipulate files), while embark-dwim performs the default action. It can also collect minibuffer candidates into a buffer for further operations like in dired or ibuffer.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package embark
   :bind (("C-c ." . embark-act)
          ("C-c ;" . embark-dwim))
@@ -1098,7 +1098,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
   :init
   (global-corfu-mode))
@@ -1108,7 +1108,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package helpful
   :bind
   (("C-c h f" . helpful-function)   ;; Describe function
@@ -1300,7 +1300,7 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~agenda~ and ~TODO~ and ~Habits~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package org
   :ensure nil
   :bind
@@ -1413,7 +1413,7 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for ~org-capture~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package org
   :ensure nil
   :bind (("C-c o c" . org-capture))
@@ -1486,7 +1486,7 @@ on how I use Org.
 
 *** The =osama-emacs-org.el= section for Diet Tracker
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package org
   :ensure nil
   :bind
@@ -1574,7 +1574,7 @@ mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
 
 This links the Emacs draws folder to a folder inside the Vault, so both Emacs and Obsidian can access the drawings seamlessly.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package emacs-obsidian-excalidraw
   :vc (:url "https://github.com/hsingko/emacs-obsidian-excalidraw.git"
        :rev :newest)
@@ -1655,7 +1655,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-denote.el= section for ~denote-sequence~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el"
 (use-package denote-sequence
   :bind
   (:map global-map
@@ -1672,7 +1672,7 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
 
 *** The =osama-emacs-denote.el= section for ~consult-denote~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el"
 (use-package consult-denote
   :demand t
   :bind
@@ -1727,8 +1727,6 @@ Opens i-search if it's closed, closes it if it's open."
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
-
-
 #+end_src
 
 
