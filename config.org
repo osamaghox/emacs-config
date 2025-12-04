@@ -808,7 +808,15 @@ Display Emacs startup time and garbage collection count
 (use-package solaire-mode
   :defer t
   :bind
-  ("C-c t s" . solaire-mode))
+  ("C-c t s" . solaire-mode)
+  
+  :config  ;; <--- تمت إضافة هذا السطر المهم
+  ;; 1. تفعيل إعادة تلوين الـ Fringe (يوضع كمتغير)
+  (setq solaire-mode-remap-fringe t)
+
+  ;; 2. الحل الجذري لمشكلة أرقام الأسطر (جعل الخلفية شفافة)
+  (set-face-attribute 'line-number nil :background nil)
+  (set-face-attribute 'line-number-current-line nil :background nil))
 #+end_src
 
 ** The =osama-emacs-editing.el= module
