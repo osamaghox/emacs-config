@@ -572,11 +572,26 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
 (use-package spacious-padding
+  :ensure t
+  :if (display-graphic-p) ; تعمل فقط في الواجهة الرسومية
+  :hook (after-init . spacious-padding-mode) ; تشغيلها تلقائياً
   :custom
-  (line-spacing 3)
-  (spacious-padding-mode 1))
+  ;; هنا نضع القيم التي أرسلتها أنت في الرابط
+  (spacious-padding-widths
+   '( :internal-border-width 15  ; المسافة بين الإطار ومحتوى المحرر (الإطار الخارجي)
+      :header-line-width 4       ; مساحة الشريط العلوي
+      :mode-line-width 0         ; مساحة الشريط السفلي (يبدو أعرض وأجمل)
+      :tab-width 4               ; مساحة التبويبات إذا كنت تستخدمها
+      :right-divider-width 0    ; (مهم لك) المسافة الفاصلة بين النوافذ (مثل treemacs والكود)
+      :scroll-bar-width 8        ; عرض شريط التمرير
+      :fringe-width 20))         ; (إضافة مني) لعمل هامش يمين ويسار النص للكتابة
+
+  :init
+  ;; هذا الأمر يجعل الـ padding لا يختفي عند تغيير الثيم (Doom themes, etc.)
+  ;; ملاحظة: spacious-padding الحديثة تقوم بذلك تلقائياً لكن هذا السطر للضمان
+  (add-hook 'after-load-theme-hook #'spacious-padding-mode))
 #+end_src
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
@@ -795,38 +810,6 @@ Display Emacs startup time and garbage collection count
   :bind
   ("C-c t s" . solaire-mode))
 #+end_src
-
-*** The =osama-emacs-ui-appearance.el=: Section for Padding Space
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-(modify-all-frames-parameters '((internal-border-width . 20)))
-#+end_src
-
-*** The =osama-emacs-ui-appearance.el=: Section for Hiding Window Black Borders
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
-;; 1. إعدادات تقسيم النوافذ (تعمل مرة واحدة)
-(setq window-divider-default-right-width 1)
-(setq window-divider-default-bottom-width 1)
-(window-divider-mode 1)
-
-;; 2. الدالة المسؤولة عن توحيد الألوان
-(defun osama-hide-window-dividers (&rest _)
-  "يخفي الفواصل بجعل لونها مطابقاً للون خلفية الثيم الحالي."
-  (let ((bg (face-attribute 'default :background)))
-    ;; تغيير لون الفاصل القديم
-    (set-face-attribute 'vertical-border nil :foreground bg :background bg)
-    ;; تغيير لون الفاصل الحديث (window-divider)
-    (set-face-attribute 'window-divider nil :foreground bg :background bg)))
-
-;; 3. (التعديل الهام) التفعيل الشامل لكل الحالات
-;; نستخدم enable-theme لأنه الأمر الذي ينفذه consult-theme وغيره عند تفعيل أي ثيم
-(advice-add 'enable-theme :after #'osama-hide-window-dividers)
-
-;; تشغيل الدالة الآن للتطبيق على الثيم الحالي
-(osama-hide-window-dividers)
-#+end_src
-
 
 ** The =osama-emacs-editing.el= module
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
