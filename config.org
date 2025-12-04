@@ -816,8 +816,8 @@ Display Emacs startup time and garbage collection count
 
 ;; Arabic Font
 ;; Arabic Font
-(when (member "Cairo" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "Cairo")))
+(when (member "Vazirmatn" (font-family-list))
+  (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
 
 ;; Emoji Font
 (when (member "Noto Color Emoji" (font-family-list))
