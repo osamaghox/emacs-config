@@ -968,7 +968,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c h o" . consult-outline)
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
-   ("C-c m l" . consult-minor-mode)
+   ("C-c m l" . consult-minor-mode-menu)
    ("C-c t t" . consult-theme)
    ("C-c y"   . consult-yank-pop)))
 #+end_src
