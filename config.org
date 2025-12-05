@@ -153,6 +153,9 @@ This module load basic configurations that apply to most facets of Emacs.
 
 (use-package emacs
   :ensure nil
+  :bind
+  (("C-c e q" . osama-kill-emacs)    ;; Quit Emacs with confirmation
+   ("C-c e c" . open-emacs-config))  ;; Open config file
   :config
   ;; Function to open your config file
   (defun open-emacs-config ()
@@ -166,10 +169,6 @@ This module load basic configurations that apply to most facets of Emacs.
     (interactive)
     (if (y-or-n-p "Are you sure you want to quit Emacs? ")
         (kill-emacs))))
-
-;; Keybindings
-(global-set-key (kbd "C-c e q") 'osama-kill-emacs)       ;; Quit Emacs with confirmation
-(global-set-key (kbd "C-c e c") 'open-emacs-config)   ;; Open config file
 #+end_src
 
 *** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
