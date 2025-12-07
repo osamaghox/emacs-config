@@ -1468,7 +1468,7 @@ on how I use Org.
           ;; Fitness / Exercise Capture
           ;; ============================
           ("e" "New Exercise" entry
-           (file+olp ,(expand-file-name "org/health/Exercises.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/self/Exercises.org" osama-emacs-home-dir) "Inbox")
            (function
             (lambda ()
               (let* ((exercise (read-string "Exercise Name: "))
@@ -1505,7 +1505,7 @@ on how I use Org.
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
-         (file+headline ,(expand-file-name "org/health/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
@@ -1586,6 +1586,10 @@ and day."
       "القارعة" "التكاثر" "العصر" "الهمزة" "الفيل" "قريش" "الماعون" "الكوثر" "الكافرون" "النصر"
       "المسد" "الإخلاص" "الفلق" "الناس"))
 
+
+         (file+headline ,(expand-file-name "org/health/Diet.org" osama-emacs-home-dir) "Daily Logs")
+
+
   :config
   ;; -------------------------------------------------------
   ;; 2. إعدادات نظام القرآن (Capture Templates)
@@ -1598,7 +1602,7 @@ and day."
   ;; قالب الحفظ (qh)
   (add-to-list 'org-capture-templates
                '("qh" "Add Hifz Task" entry 
-                 (file+headline "~/org/Quran.org" "Hifz")
+                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Hifz")
                  "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1))
@@ -1606,7 +1610,7 @@ and day."
   ;; قالب المراجعة (qr)
   (add-to-list 'org-capture-templates
                '("qr" "Add Review Task" entry 
-                 (file+headline "~/org/Quran.org" "Review")
+                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Review")
                  "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1)))
