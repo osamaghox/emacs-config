@@ -1562,6 +1562,51 @@ and day."
       (forward-line -2))))
 #+end_src
 
+*** The =osama-emacs-org.el= section for Quran Memorization System
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
+
+;; ---------------------------------------------------------
+;; 1. Quran Surah List (osama-quran-surahs)
+;; ---------------------------------------------------------
+(defvar osama-quran-surahs
+  '("الفاتحة" "البقرة" "آل عمران" "النساء" "المائدة" "الأنعام" "الأعراف" "الأنفال" "التوبة" "يونس"
+    "هود" "يوسف" "الرعد" "إبراهيم" "الحجر" "النحل" "الإسراء" "الكهف" "مريم" "طه"
+    "الأنبياء" "الحج" "المؤمنون" "النور" "الفرقان" "الشعراء" "النمل" "القصص" "العنكبوت" "الروم"
+    "لقمان" "السجدة" "الأحزاب" "سبأ" "فاطر" "يس" "الصافات" "ص" "الزمر" "غافر"
+    "فصلت" "الشورى" "الزخرف" "الدخان" "الجاثية" "الأحقاف" "محمد" "الفتح" "الحجرات" "ق"
+    "الذاريات" "الطور" "النجم" "القمر" "الرحمن" "الواقعة" "الحديد" "المجادلة" "الحشر" "الممتحنة"
+    "الصف" "الجمعة" "المنافقون" "التغابن" "الطلاق" "التحريم" "الملك" "القلم" "الحاقة" "المعارج"
+    "نوح" "الجن" "المزمل" "المدثر" "القيامة" "الإنسان" "المرسلات" "النبأ" "النازعات" "عبس"
+    "التكوير" "الإنفطار" "المطففين" "الإنشقاق" "البروج" "الطارق" "الأعلى" "الغاشية" "الفجر" "البلد"
+    "الشمس" "الليل" "الضحى" "الشرح" "التين" "العلق" "القدر" "البينة" "الزلزلة" "العاديات"
+    "القارعة" "التكاثر" "العصر" "الهمزة" "الفيل" "قريش" "الماعون" "الكوثر" "الكافرون" "النصر"
+    "المسد" "الإخلاص" "الفلق" "الناس"))
+
+;; ---------------------------------------------------------
+;; 2. Simplified Capture Templates
+;; ---------------------------------------------------------
+
+;; المجموعة الرئيسية
+(add-to-list 'org-capture-templates
+             '("q" "Quran System"))
+
+(add-to-list 'org-capture-templates
+             '("qh" "Add Hifz Task" entry 
+               (file+headline "~/org/quran.org" "Hifz")
+               "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
+               :prepend t
+               :empty-lines 1))
+
+(add-to-list 'org-capture-templates
+             '("qr" "Add Review Task" entry 
+               (file+headline "~/org/quran.org" "Review")
+               "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
+               :prepend t
+               :empty-lines 1))
+
+#+end_src
+
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
 These instructions are for **Windows 11**.
