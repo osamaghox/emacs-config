@@ -1566,7 +1566,8 @@ and day."
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package org
-  :ensure nil  
+  :ensure nil
+  :defer t
   :init
   ;; -------------------------------------------------------
   ;; 1. تعريف قائمة السور (متغير مستقل)
