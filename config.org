@@ -533,16 +533,14 @@ Display Emacs startup time and garbage collection count
   ("C-c t T" . treemacs)
 
   :hook
-  ;; (طلب جديد) إخفاء أرقام الأسطر عند فتح Treemacs
+  ;; إخفاء أرقام الأسطر عند فتح Treemacs
   (treemacs-mode . (lambda () (display-line-numbers-mode -1)))
 
   :config
   (setq treemacs-width 40)
 
-  ;; إضافة مجلدك الخاص تلقائياً
-  (when (and (boundp 'osama-emacs-home-dir)
-             (file-directory-p osama-emacs-home-dir))
-    (treemacs-add-project-to-workspace osama-emacs-home-dir))
+  ;; تم إزالة كود إضافة المشروع التلقائي لتجنب الخطأ
+  ;; Treemacs سيحفظ مشاريعك تلقائياً بعد إضافتها يدوياً لأول مرة
   
   ;; جعل المؤشر يتبع الملف المفتوح
   (treemacs-follow-mode t)
