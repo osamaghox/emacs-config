@@ -14,7 +14,8 @@
 - [X] remove the all mkdirp from org tangle except for first code in the module  
 - [ ] put windows and android tutorials inside each one of them moudle
 - [ ] yank pop ring save file in emacs home folder like clipboard
-
+- [ ] quran memorize with org mode todo tasks (capture-template)
+- [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
 
 * The early initialisation of Emacs (=early-init.el=)
