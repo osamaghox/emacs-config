@@ -1570,7 +1570,7 @@ and day."
   :defer t
   :init
   ;; -------------------------------------------------------
-  ;; 1. تعريف قائمة السور (متغير مستقل)
+  ;; 1. تعريف قائمة السور
   ;; -------------------------------------------------------
   (defvar osama-quran-surahs
     '("الفاتحة" "البقرة" "آل عمران" "النساء" "المائدة" "الأنعام" "الأعراف" "الأنفال" "التوبة" "يونس"
@@ -1591,21 +1591,19 @@ and day."
   ;; 2. إعدادات نظام القرآن (Capture Templates)
   ;; -------------------------------------------------------
   
-  ;; المجموعة الرئيسية (q)
+  ;; المجموعة الرئيسية (Q)
   (add-to-list 'org-capture-templates
                '("Q" "Quran System"))
 
-  ;; قالب الحفظ (qh)
   (add-to-list 'org-capture-templates
-               '("qh" "Add Hifz Task" entry 
+               `("Qh" "Add Hifz Task" entry 
                  (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Hifz")
                  "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1))
 
-  ;; قالب المراجعة (qr)
   (add-to-list 'org-capture-templates
-               '("qr" "Add Review Task" entry 
+               `("Qr" "Add Review Task" entry 
                  (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Review")
                  "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
