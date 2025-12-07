@@ -1592,12 +1592,12 @@ and day."
   
   ;; المجموعة الرئيسية (q)
   (add-to-list 'org-capture-templates
-               '("q" "Quran System"))
+               '("Q" "Quran System"))
 
   ;; قالب الحفظ (qh)
   (add-to-list 'org-capture-templates
                '("qh" "Add Hifz Task" entry 
-                 (file+headline "~/org/quran.org" "Hifz")
+                 (file+headline "~/org/Quran.org" "Hifz")
                  "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1))
@@ -1605,7 +1605,7 @@ and day."
   ;; قالب المراجعة (qr)
   (add-to-list 'org-capture-templates
                '("qr" "Add Review Task" entry 
-                 (file+headline "~/org/quran.org" "Review")
+                 (file+headline "~/org/Quran.org" "Review")
                  "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1)))
