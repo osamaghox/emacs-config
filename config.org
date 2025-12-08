@@ -9,6 +9,7 @@
 
 
 * TODO New Edits
+- [ ] move markdown from editing module to essitnal module
 - [ ] add denote tags like fleeting and "literature"
 - [X] add (lexical-binding) to every el file of this config 
 - [X] remove the all mkdirp from org tangle except for first code in the module  
@@ -966,7 +967,15 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
+*** The =osama-emacs-editing.el= section for ~electric~
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
+(use-package electric
+  :ensure nil  ;; built-in
+  :config
+  (electric-pair-mode 1))
+
+#+end_src
 
 *** The =osama-emacs-editing.el= section for Markdown Basic Settings
 
