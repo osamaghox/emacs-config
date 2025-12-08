@@ -970,7 +970,7 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-editing.el= section for ~electric~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
-(use-package electric
+(use-package emacs
   :ensure nil  ;; built-in
   :config
   (electric-pair-mode 1))
