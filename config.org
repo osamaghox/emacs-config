@@ -524,6 +524,10 @@ Display Emacs startup time and garbage collection count
 (add-hook 'emacs-startup-hook #'osama-display-startup-time)
 #+end_src
 
+
+*** The =osama-emacs-essentials.el= section for Treemacs
+
+
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;; 1. إعداد Treemacs
 (use-package treemacs
