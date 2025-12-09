@@ -257,8 +257,6 @@ This module load basic configurations that apply to most facets of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
-  :bind
-  ("C-\\" . toggle-input-method)
   :init
   ;; Arabic input method
   (setq default-input-method "arabic"))
