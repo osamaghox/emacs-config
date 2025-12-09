@@ -10,6 +10,7 @@
 
 * TODO New Edits
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
+- [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم والاختصارات في prefix key SPC)
 - [ ] move markdown from editing module to essitnal module
 - [ ] add denote tags like fleeting and "literature"
 - [X] add (lexical-binding) to every el file of this config 
