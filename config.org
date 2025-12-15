@@ -1374,8 +1374,8 @@ on how I use Org.
          "DONE(d!)")))    ; أنجزت
 
 (setq org-refile-targets
-      `((,(expand-file-name "org/Archive.org"    osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)))
+      `((,(expand-file-name "org/archive.org"    osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/mylife.org"      osama-emacs-home-dir) :maxlevel . 1)))
 
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -1486,7 +1486,7 @@ on how I use Org.
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
-         (file+headline ,(expand-file-name "org/diet.org" osama-emacs-home-dir) "Daily Logs")
+         (file+headline ,(expand-file-name "org/self/diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
@@ -1542,6 +1542,57 @@ and day."
       (beginning-of-line)
       (forward-line -2))))
 #+end_src
+
+*** The =osama-emacs-org.el= section for Quran Memorization System
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
+(use-package org
+  :ensure nil
+  :defer t
+  :init
+  ;; -------------------------------------------------------
+  ;; 1. تعريف قائمة السور
+  ;; -------------------------------------------------------
+  (defvar osama-quran-surahs
+    '("الفاتحة" "البقرة" "آل عمران" "النساء" "المائدة" "الأنعام" "الأعراف" "الأنفال" "التوبة" "يونس"
+      "هود" "يوسف" "الرعد" "إبراهيم" "الحجر" "النحل" "الإسراء" "الكهف" "مريم" "طه"
+      "الأنبياء" "الحج" "المؤمنون" "النور" "الفرقان" "الشعراء" "النمل" "القصص" "العنكبوت" "الروم"
+      "لقمان" "السجدة" "الأحزاب" "سبأ" "فاطر" "يس" "الصافات" "ص" "الزمر" "غافر"
+      "فصلت" "الشورى" "الزخرف" "الدخان" "الجاثية" "الأحقاف" "محمد" "الفتح" "الحجرات" "ق"
+      "الذاريات" "الطور" "النجم" "القمر" "الرحمن" "الواقعة" "الحديد" "المجادلة" "الحشر" "الممتحنة"
+      "الصف" "الجمعة" "المنافقون" "التغابن" "الطلاق" "التحريم" "الملك" "القلم" "الحاقة" "المعارج"
+      "نوح" "الجن" "المزمل" "المدثر" "القيامة" "الإنسان" "المرسلات" "النبأ" "النازعات" "عبس"
+      "التكوير" "الإنفطار" "المطففين" "الإنشقاق" "البروج" "الطارق" "الأعلى" "الغاشية" "الفجر" "البلد"
+      "الشمس" "الليل" "الضحى" "الشرح" "التين" "العلق" "القدر" "البينة" "الزلزلة" "العاديات"
+      "القارعة" "التكاثر" "العصر" "الهمزة" "الفيل" "قريش" "الماعون" "الكوثر" "الكافرون" "النصر"
+      "المسد" "الإخلاص" "الفلق" "الناس"))
+
+  :config
+  ;; -------------------------------------------------------
+  ;; 2. إعدادات نظام القرآن (Capture Templates)
+  ;; -------------------------------------------------------
+  
+  ;; المجموعة الرئيسية (Q)
+  (add-to-list 'org-capture-templates
+               '("Q" "Quran System"))
+
+  (add-to-list 'org-capture-templates
+               `("Qh" "Add Hifz Task" entry 
+                 (file+headline ,(expand-file-name "org/self/quran.org" osama-emacs-home-dir) "Hifz")
+                 "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
+                 :prepend t
+                 :empty-lines 1))
+
+  (add-to-list 'org-capture-templates
+               `("Qr" "Add Review Task" entry 
+                 (file+headline ,(expand-file-name "org/self/quran.org" osama-emacs-home-dir) "Review")
+                 "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
+                 :prepend t
+                 :empty-lines 1)))
+#+end_src
+
+
+
 
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
 
