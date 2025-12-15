@@ -1375,8 +1375,7 @@ on how I use Org.
 
 (setq org-refile-targets
       `((,(expand-file-name "org/Archive.org"    osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Plans.org"      osama-emacs-home-dir) :maxlevel . 1)))
+        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)))
 
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -1460,7 +1459,7 @@ on how I use Org.
           ;; Tasks / Projects
           ;; ============================
           ("t" "Task" entry
-           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/mylife.org" osama-emacs-home-dir) "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i"
            :empty-lines 1
            :prepend t)
@@ -1469,55 +1468,10 @@ on how I use Org.
           ;; Quick Notes
           ;; ============================
           ("n" "Quick Notes" entry
-           (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/mylife.org" osama-emacs-home-dir) "Inbox")
            "* %U - %?\n  %i"
            :empty-lines 1
-           :prepend t)
-
-          ;; ============================
-          ;; Plans
-          ;; ============================
-          ("p" "Plans" entry
-           (file+olp ,(expand-file-name "org/Plans.org" osama-emacs-home-dir) "Inbox")
-           "* %^{Activity} %^g\n  %^T\n  %?"
-           :empty-lines 1)
-
-          ;; ============================
-          ;; Journal Entry
-          ;; ============================
-          ("j" "Journal" entry
-           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-           "* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
-
-          ;; ============================
-          ;; Fitness / Exercise Capture
-          ;; ============================
-          ("e" "New Exercise" entry
-           (file+olp ,(expand-file-name "org/self/Exercises.org" osama-emacs-home-dir) "Inbox")
-           (function
-            (lambda ()
-              (let* ((exercise (read-string "Exercise Name: "))
-                     (muscle (completing-read "Muscle Group: "
-                                              '("Empty" "Chest" "Back" "Legs" "Shoulders" "Arms" "Core")))
-                     (with-weight (y-or-n-p "هل التمرين بوزن؟ "))
-                     (table (if with-weight
-                                "| Date       | Weight | Reps | Notes           |
-|------------+--------+------+----------------|"
-                              "| Date       | Reps | Notes           |
-|------------+------+----------------|")))
-                (concat
-                 "* " exercise "\n"
-                 (unless (string= muscle "Empty")
-                   (format "** Muscle Group: %s\n" muscle))
-                 "\n%?\n"
-                 "** Log\n"
-                 table "\n"
-                 "** Notes\n- Enter your notes here\n"))))
-           :empty-lines 1
-           :prepend t)
-          )))
+           :prepend t))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for Diet Tracker
@@ -1532,7 +1486,7 @@ on how I use Org.
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
-         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         (file+headline ,(expand-file-name "org/diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
@@ -1589,74 +1543,7 @@ and day."
       (forward-line -2))))
 #+end_src
 
-*** The =osama-emacs-org.el= section for Quran Memorization System
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
-(use-package org
-  :ensure nil
-  :defer t
-  :init
-  ;; -------------------------------------------------------
-  ;; 1. تعريف قائمة السور
-  ;; -------------------------------------------------------
-  (defvar osama-quran-surahs
-    '("الفاتحة" "البقرة" "آل عمران" "النساء" "المائدة" "الأنعام" "الأعراف" "الأنفال" "التوبة" "يونس"
-      "هود" "يوسف" "الرعد" "إبراهيم" "الحجر" "النحل" "الإسراء" "الكهف" "مريم" "طه"
-      "الأنبياء" "الحج" "المؤمنون" "النور" "الفرقان" "الشعراء" "النمل" "القصص" "العنكبوت" "الروم"
-      "لقمان" "السجدة" "الأحزاب" "سبأ" "فاطر" "يس" "الصافات" "ص" "الزمر" "غافر"
-      "فصلت" "الشورى" "الزخرف" "الدخان" "الجاثية" "الأحقاف" "محمد" "الفتح" "الحجرات" "ق"
-      "الذاريات" "الطور" "النجم" "القمر" "الرحمن" "الواقعة" "الحديد" "المجادلة" "الحشر" "الممتحنة"
-      "الصف" "الجمعة" "المنافقون" "التغابن" "الطلاق" "التحريم" "الملك" "القلم" "الحاقة" "المعارج"
-      "نوح" "الجن" "المزمل" "المدثر" "القيامة" "الإنسان" "المرسلات" "النبأ" "النازعات" "عبس"
-      "التكوير" "الإنفطار" "المطففين" "الإنشقاق" "البروج" "الطارق" "الأعلى" "الغاشية" "الفجر" "البلد"
-      "الشمس" "الليل" "الضحى" "الشرح" "التين" "العلق" "القدر" "البينة" "الزلزلة" "العاديات"
-      "القارعة" "التكاثر" "العصر" "الهمزة" "الفيل" "قريش" "الماعون" "الكوثر" "الكافرون" "النصر"
-      "المسد" "الإخلاص" "الفلق" "الناس"))
-
-  :config
-  ;; -------------------------------------------------------
-  ;; 2. إعدادات نظام القرآن (Capture Templates)
-  ;; -------------------------------------------------------
-  
-  ;; المجموعة الرئيسية (Q)
-  (add-to-list 'org-capture-templates
-               '("Q" "Quran System"))
-
-  (add-to-list 'org-capture-templates
-               `("Qh" "Add Hifz Task" entry 
-                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Hifz")
-                 "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
-                 :prepend t
-                 :empty-lines 1))
-
-  (add-to-list 'org-capture-templates
-               `("Qr" "Add Review Task" entry 
-                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Review")
-                 "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
-                 :prepend t
-                 :empty-lines 1)))
-#+end_src
-
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
-
-These instructions are for **Windows 11**.
-
-You need to configure the paths according to your Obsidian Vault.  
-In my case:
-
-- **Vault path in Obsidian:**  
-  =C:/obsidian/draws=
-
-- **Local draws path (where Emacs stores your drawings):**  
-  =~/osama-vault/emacs/notes/draws=
-
-To make Obsidian recognize drawings stored outside the Vault, we create a **symlink**:
-
-#+BEGIN_SRC powershell :tangle no
-mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
-#+END_SRC
-
-This links the Emacs draws folder to a folder inside the Vault, so both Emacs and Obsidian can access the drawings seamlessly.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package emacs-obsidian-excalidraw
@@ -1673,13 +1560,6 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   ;; Export images as SVG instead of PNG
   (setq emacs-obsidian-excalidraw-image-format "svg"))
 #+end_src
-
-**Summary:**
-
-1. Emacs stores Excalidraw drawings in the local folder =~/osama-vault/emacs/notes/draws=.  
-2. Obsidian sees them via the symlink in the Vault =C:/obsidian/draws=.  
-3. All exported images are in **SVG** format.  
-4. Both Emacs and Obsidian can access the drawings seamlessly.
 
 ** The =osama-emacs-denote.el= module
 
