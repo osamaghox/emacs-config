@@ -1350,11 +1350,8 @@ on how I use Org.
   (setq org-log-into-drawer t)
   (setq org-deadline-warning-days 7)
 
-;; load all .org files from the org directory to agenda
-(setq org-agenda-files
-      (directory-files-recursively
-       (expand-file-name "org" osama-emacs-home-dir)
-       "\\.org$"))
+;; load mylife.org file from the org directory to agenda
+(setq org-agenda-files (list (expand-file-name "org/mylife.org" osama-emacs-home-dir)))
 
   ;; تفعيل org-habit
   (require 'org-habit)
