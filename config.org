@@ -8,6 +8,8 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+
+
 * TODO New Edits
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
@@ -19,6 +21,23 @@
 - [ ] yank pop ring save file in emacs home folder like clipboard
 - [ ] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
+
+* Installing Dependencies
+
+pacman -S \
+git \
+mingw-w64-x86_64-clang \
+mingw-w64-x86_64-clang-tools \
+mingw-w64-x86_64-nodejs \
+mingw-w64-x86_64-libvterm
+
+npm install -g \
+typescript \
+typescript-language-server \
+vscode-langservers-extracted \
+@tailwindcss/language-server
+
+
 
 
 * The early initialisation of Emacs (=early-init.el=)
