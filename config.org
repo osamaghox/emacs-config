@@ -1143,14 +1143,17 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
   (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~corfu~
+*** The =osama-emacs-completion.el= section for ~corfu~ and ~cape~
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
-  :init
-  (global-corfu-mode))
+      :init
+      (global-corfu-mode))
+
+(use-package cape
+    :after corfu)
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
@@ -1194,14 +1197,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           json-mode) . eglot-ensure))
 #+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package corfu
-  :init
-  (global-corfu-mode))
-
-(use-package cape
-  :after corfu)
-#+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 ;; Eldoc مع Eglot
