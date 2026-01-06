@@ -1160,7 +1160,20 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
       (global-corfu-mode))
 
 (use-package cape
-    :after corfu)
+  :ensure t
+  :init
+  ;; إضافة قدرات الإكمال لـ Emacs
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  :config
+  ;; ربط Eglot بـ Cape عند تشغيله
+  (defun osama-eglot-capf ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super
+                       #'eglot-completion-at-point
+                       #'cape-dabbrev
+                       #'cape-file))))
+  (add-hook 'eglot-managed-mode-hook #'osama-eglot-capf))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
@@ -1201,7 +1214,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           typescript-mode
           css-mode
           html-mode
-          json-mode) . eglot-ensure))
+          json-mode) . eglot-ensure)
+
+  :config
+  (add-to-list 'eglot-server-programs
+               `(html-mode . ("vscode-html-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               `(css-mode . ("vscode-css-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               `((js-mode rjsx-mode typescript-mode) . ("typescript-language-server" "--stdio"))))
 #+end_src
 
 
