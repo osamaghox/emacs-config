@@ -11,6 +11,7 @@
 
 
 * TODO New Edits
+- [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape
 - [ ] add headings to all dev sections 
 - [ ] installing and configuring Dependencies
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
@@ -1174,15 +1175,21 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   (setq tab-always-indent 'complete))
 
 (use-package cape
-  :ensure t
-  :init
-  (defun osama-setup-eglot-capfs ()
-    (setq-local completion-at-point-functions
-                (list (cape-capf-super
-                       #'eglot-completion-at-point ;; السيرفر أولاً
-                       #'cape-dabbrev              ;; الكلمات الحالية ثانياً
-                       #'cape-file))))             ;; الملفات ثالثاً
-  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs))
+  :ensure t
+  :bind
+  (("C-c f" . cape-file)      ;; إكمال الملفات
+   ("C-c d" . cape-dabbrev)  ;; كلمات من البفرات
+   ("C-c k" . cape-keyword)  ;; كلمات اللغة
+   ("C-c s" . cape-symbol))  ;; symbols
+  :init
+  (defun osama-setup-eglot-capfs ()
+    (setq-local completion-at-point-functions
+                (list
+                 (cape-capf-super
+                  #'eglot-completion-at-point
+                  #'cape-dabbrev
+                  #'cape-file))))
+  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
