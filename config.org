@@ -1155,57 +1155,34 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
-;;; --- osama-emacs-completion.el ---
-
 (use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode)
-  :custom
-  (corfu-auto t)                 ;; إكمال تلقائي فور الكتابة
-  (corfu-auto-delay 0.1)        ;; سرعة الاستجابة
-  (corfu-auto-prefix 1)         ;; يبدأ بعد أول حرف
-  (corfu-quit-at-boundary nil)  ;; مهم جداً لإكمال مسارات الملفات (لا يغلق عند السلاش)
-  (corfu-preview-current nil)   ;; تحسين الأداء في ويندوز
-  :config
-  ;; جعل مفتاح Tab يقوم بالإكمال إذا كان هناك اقتراح
-  (setq tab-always-indent 'complete)
-
-  ;; ربط مفاتيح التنقل داخل القائمة المنبثقة
-  (keymap-set corfu-map "TAB" #'corfu-next)
-  (keymap-set corfu-map "<tab>" #'corfu-next)
-  (keymap-set corfu-map "S-TAB" #'corfu-previous)
-  (keymap-set corfu-map "<backtab>" #'corfu-previous)
-  
-  ;; اختياري: جعل Enter لا يختار من القائمة إلا إذا ضغطت يدوياً (لتجنب الاختيارات الخاطئة)
-  ;; (setq corfu-return-complete nil)
-  )
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 1)
+  :config
+  ;; جعل التاب يكمل
+  (setq tab-always-indent 'complete)
+  
+  ;; ربط مفاتيح التنقل بالتاب
+  (keymap-set corfu-map "TAB" #'corfu-next)
+  (keymap-set corfu-map "<tab>" #'corfu-next)
+  (keymap-set corfu-map "S-TAB" #'corfu-previous)
+  (keymap-set corfu-map "<backtab>" #'corfu-previous))
 
 (use-package cape
-  :ensure t
-  :init
-  ;; وظيفة إعداد المصادر (Capfs) بترتيب ذكي
-  (defun osama-setup-eglot-capfs ()
-    (setq-local completion-at-point-functions
-                (list (cape-capf-super
-                       #'eglot-completion-at-point ;; السيرفر أولاً
-                       #'emmet-completion-at-point  ;; ثم Emmet (للأكواد المختصرة)
-                       #'cape-dabbrev)             ;; ثم الكلمات الموجودة في المستند
-                      #'cape-file                   ;; الملفات بشكل منفصل لضمان عملها عند السلاش
-                      #'cape-keyword)))             ;; الكلمات المفتاحية للغة
-
-  ;; تفعيل الإعداد فور تشغيل Eglot
-  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs)
-
-  ;; إضافة مصادر عامة لكل الأنماط (مثل إكمال الملفات في أي مكان)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
-
-;; إعدادات إضافية لضمان البحث عن الكلاسات في كل الملفات المفتوحة
-(setq dabbrev-check-all-buffers t)
-(setq dabbrev-check-other-buffers t)
-
-(provide 'osama-emacs-completion)
+  :ensure t
+  :init
+  (defun osama-setup-eglot-capfs ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super
+                       #'eglot-completion-at-point ;; السيرفر أولاً
+                       #'cape-dabbrev              ;; الكلمات الحالية ثانياً
+                       #'cape-file))))             ;; الملفات ثالثاً
+  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
