@@ -24,6 +24,7 @@
 
 * Installing Dependencies
 
+#+begin_src powershell :tangle no
 pacman -S \
 git \
 mingw-w64-x86_64-clang \
@@ -36,6 +37,7 @@ typescript \
 typescript-language-server \
 vscode-langservers-extracted \
 @tailwindcss/language-server
+#+end_src
 
 
 
@@ -73,21 +75,22 @@ This is the first file that Emacs reads when starting up. It should contain code
     ;; Set conversion style to nil for better Evil integration
     (setq overriding-text-conversion-style nil)))
 
-;; Windows settings
-(when (eq system-type 'windows-nt)
-  ;; Define tools directory using osama-emacs-home-dir variable
-  (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
-    ;; Add Git to exec-path and PATH
-    (add-to-list 'exec-path (concat tools-dir "git/cmd"))
-    (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
-                           path-sep
-                           (getenv "PATH")))
+;; ;; Windows settings
+;; (when (eq system-type 'windows-nt)
+;;   ;; Define tools directory using osama-emacs-home-dir variable
+;;   (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
+;;     ;; Add Git to exec-path and PATH
+;;     (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+;;     (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
+;;                            path-sep
+;;                            (getenv "PATH")))
+;;
+;;     ;; Add fd (file search tool) to exec-path
+;;     (add-to-list 'exec-path (concat tools-dir "fd/"))
+;;
+;;     ;; Add ripgrep to exec-path
+;;     (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 
-    ;; Add fd (file search tool) to exec-path
-    (add-to-list 'exec-path (concat tools-dir "fd/"))
-
-    ;; Add ripgrep to exec-path
-    (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 
 ;; Fix Arabic text search issues with fd and ripgrep on Windows
 (when (eq system-type 'windows-nt)
