@@ -1156,24 +1156,33 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
-      :init
-      (global-corfu-mode))
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 1)
+  :config
+  ;; جعل التاب يكمل
+  (setq tab-always-indent 'complete)
+  
+  ;; ربط مفاتيح التنقل بالتاب
+  (keymap-set corfu-map "TAB" #'corfu-next)
+  (keymap-set corfu-map "<tab>" #'corfu-next)
+  (keymap-set corfu-map "S-TAB" #'corfu-previous)
+  (keymap-set corfu-map "<backtab>" #'corfu-previous))
 
 (use-package cape
   :ensure t
   :init
-  ;; إضافة قدرات الإكمال لـ Emacs
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  :config
-  ;; ربط Eglot بـ Cape عند تشغيله
-  (defun osama-eglot-capf ()
+  (defun osama-setup-eglot-capfs ()
     (setq-local completion-at-point-functions
                 (list (cape-capf-super
-                       #'eglot-completion-at-point
-                       #'cape-dabbrev
-                       #'cape-file))))
-  (add-hook 'eglot-managed-mode-hook #'osama-eglot-capf))
+                       #'eglot-completion-at-point ;; السيرفر أولاً
+                       #'cape-dabbrev              ;; الكلمات الحالية ثانياً
+                       #'cape-file))))             ;; الملفات ثالثاً
+  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
