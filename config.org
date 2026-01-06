@@ -11,6 +11,8 @@
 
 
 * TODO New Edits
+- [ ] add headings to all dev sections 
+- [ ] installing and configuring Dependencies
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
 - [ ] move markdown from editing module to essitnal module
