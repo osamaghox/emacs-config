@@ -27,12 +27,15 @@
 * Installing Dependencies
 
 #+begin_src powershell :tangle no
-pacman -S \
+pacman -Syu --noconfirm
+
+pacman -S --noconfirm \
 git \
-mingw-w64-x86_64-clang \
-mingw-w64-x86_64-clang-tools \
-mingw-w64-x86_64-nodejs \
-mingw-w64-x86_64-libvterm
+mingw-w64-ucrt-x86_64-clang \
+mingw-w64-ucrt-x86_64-clang-tools-extra \
+mingw-w64-ucrt-x86_64-nodejs \
+mingw-w64-ucrt-x86_64-libvterm
+
 
 npm install -g \
 typescript \
