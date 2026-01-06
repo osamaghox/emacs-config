@@ -1156,22 +1156,22 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode)
-  :custom
-  (corfu-auto t)
-  (corfu-auto-delay 0.1)
-  (corfu-auto-prefix 1)
-  :config
-  ;; جعل التاب يكمل
-  (setq tab-always-indent 'complete)
-  
-  ;; ربط مفاتيح التنقل بالتاب
-  (keymap-set corfu-map "TAB" #'corfu-next)
-  (keymap-set corfu-map "<tab>" #'corfu-next)
-  (keymap-set corfu-map "S-TAB" #'corfu-previous)
-  (keymap-set corfu-map "<backtab>" #'corfu-previous))
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 1)
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ("<tab>" . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ("<backtab>" . corfu-previous))
+  :config
+  ;; جعل TAB يكمل عند عدم وجود Corfu
+  (setq tab-always-indent 'complete))
 
 (use-package cape
   :ensure t
