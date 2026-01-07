@@ -1279,41 +1279,34 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; React / JSX
-(use-package rjsx-mode
-  :mode "\\.jsx?\\'"
-  :hook (rjsx-mode . eglot-ensure))
-#+end_src
+;; Web Mode - للملفات المختلطة (HTML, JSX, TSX)
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.jsx?\\'"  . web-mode)
+         ("\\.tsx\\'"   . web-mode)
+         ("\\.json\\'"  . web-mode))
+  :hook (web-mode . eglot-ensure)
+  :config
+  (setq web-mode-markup-indent-offset 2) ; إزاحة HTML
+  (setq web-mode-code-indent-offset 2)   ; إزاحة JS/TS
+  (setq web-mode-css-indent-offset 2))   ; إزاحة CSS داخل الملف
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; TypeScript / TSX
+;; TypeScript Mode - للملفات البرمجية فقط (بدون UI)
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :hook (typescript-mode . eglot-ensure))
-#+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; Tailwind CSS (CSS mode)
+;; CSS Mode - للملفات المنفصلة
 (use-package css-mode
   :hook (css-mode . eglot-ensure))
-#+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; HTML
-(use-package html-mode
-  :hook (html-mode . eglot-ensure))
-#+end_src
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Emmet Mode - يعمل مع الجميع
 (use-package emmet-mode
   :ensure t
-  :hook ((html-mode css-mode rjsx-mode typescript-mode) . emmet-mode)
-  :bind
-  (:map emmet-mode-keymap
-        ("C-j" . emmet-expand-line))
+  :hook (web-mode css-mode typescript-mode)
   :config
-  (setq emmet-expand-at-point t)
-  (setq emmet-move-cursor-between-quotes t))
+  (setq emmet-expand-at-point t))
 #+end_src
 
 
