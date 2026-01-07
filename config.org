@@ -1181,20 +1181,31 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 (use-package cape
   :ensure t
-  :bind
-  (("C-c c f" . cape-file)      ;; إكمال الملفات
-   ("C-c c d" . cape-dabbrev)  ;; كلمات من البفرات
-   ("C-c c k" . cape-keyword)  ;; كلمات اللغة
-   ("C-c c s" . cape-symbol))  ;; symbols
+  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   :init
-  (defun osama-setup-eglot-capfs ()
-    (setq-local completion-at-point-functions
-                (list
-                 (cape-capf-super
-                  #'eglot-completion-at-point
-                  #'cape-dabbrev
-                  #'cape-file))))
-  (add-hook 'eglot-managed-mode-hook #'osama-setup-eglot-capfs))
+(defun my-eglot-mode-hook ()
+  ;; Combine eglot completion with other sources (like dabbrev-code)
+  ;; `cape-super-capf` allows mixing and matching different sources.
+  (add-hook 'completion-at-point-functions
+            (lambda ()
+              (interactive)
+              (cape-super-capf
+               ;; `eglot-completion-at-point` is Eglot's main completion function
+               'eglot-completion-at-point
+               ;; `cape-dabbrev-code` for context-aware dabbrev completion
+               'cape-dabbrev-code
+               ;; `cape-yasnippet` if you use yasnippet
+               ;; 'cape-yasnippet
+               )))
+
+  ;; Optional but recommended: Add `cape-capf-buster` to the eglot capf
+  ;; This helps prevent caching issues with some language servers.
+  ;; It ensures candidates are re-requested if the input changes.
+  (advice-add 'eglot-completion-at-point :around #'cape-capf-buster))
+
+;; Add the hook to eglot's major modes
+(add-hook 'eglot-hook 'my-eglot-mode-hook))
+
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
