@@ -1228,20 +1228,26 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 (use-package eglot
   :ensure t
   :hook ((c++-mode
-          js-mode
-          rjsx-mode
           typescript-mode
+          js-mode
           css-mode
-          html-mode
-          json-mode) . eglot-ensure)
-
+          json-mode
+          web-mode) . eglot-ensure)
   :config
+  ;; HTML / CSS / JSON
   (add-to-list 'eglot-server-programs
-               `(html-mode . ("vscode-html-language-server" "--stdio")))
+               '(web-mode . ("vscode-html-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs
-               `(css-mode . ("vscode-css-language-server" "--stdio")))
+               '(css-mode . ("vscode-css-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs
-               `((js-mode rjsx-mode typescript-mode) . ("typescript-language-server" "--stdio"))))
+               '(json-mode . ("vscode-json-language-server" "--stdio")))
+
+  ;; JS / TS
+  (add-to-list 'eglot-server-programs
+               '((js-mode typescript-mode web-mode)
+                 . ("typescript-language-server" "--stdio"))))
+#+end_src
+
 #+end_src
 
 
@@ -1279,27 +1285,23 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; Web Mode - للملفات المختلطة (HTML, JSX, TSX)
 (use-package web-mode
   :ensure t
   :mode (("\\.html?\\'" . web-mode)
          ("\\.jsx?\\'"  . web-mode)
          ("\\.tsx\\'"   . web-mode)
          ("\\.json\\'"  . web-mode))
-  :hook (web-mode . eglot-ensure)
   :config
-  (setq web-mode-markup-indent-offset 2) ; إزاحة HTML
-  (setq web-mode-code-indent-offset 2)   ; إزاحة JS/TS
-  (setq web-mode-css-indent-offset 2))   ; إزاحة CSS داخل الملف
+  (setq web-mode-markup-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-css-indent-offset 2))
 
-;; TypeScript Mode - للملفات البرمجية فقط (بدون UI)
 (use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook (typescript-mode . eglot-ensure))
+  :mode "\\.ts\\'")
 
-;; CSS Mode - للملفات المنفصلة
-(use-package css-mode
-  :hook (css-mode . eglot-ensure))
+(use-package css-mode)
+#+end_src
+
 
 ;; Emmet Mode - يعمل مع الجميع
 (use-package emmet-mode
