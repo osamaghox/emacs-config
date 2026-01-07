@@ -1242,6 +1242,9 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (lsp-mode-setup))
 #+end_src
 
+#+begin_src emacs-lisp :tangle no
+(use-package eglot)
+#+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package vterm
