@@ -1227,30 +1227,21 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package eglot
+(use-package lsp-mode
   :ensure t
-  :hook ((c++-mode
-          typescript-mode
-          js-mode
-          css-mode
-          json-mode
-          web-mode) . eglot-ensure)
+  :diminish "LSP"
+  :hook ((lsp-mode . lsp-diagnostics-mode) ; optional: displays errors/warnings
+         (lsp-mode . eldoc-mode)
+         (lsp-mode . lsp-enable-which-key-integration) ; optional: integration with which-key
+         (web-mode . lsp-deferred)) ; Hook lsp-mode into web-mode
+  :custom
+  (lsp-keymap-prefix "C-c l") ; Set a prefix for LSP commands
+  (lsp-completion-provider :none) ; Use another provider like 'corfu' for completion UI
+  (lsp-diagnostics-provider :flycheck) ; Use flycheck for diagnostics
   :config
-  ;; HTML / CSS / JSON
-  (add-to-list 'eglot-server-programs
-               '(web-mode . ("vscode-html-language-server" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '(css-mode . ("vscode-css-language-server" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '(json-mode . ("vscode-json-language-server" "--stdio")))
-
-  ;; JS / TS
-  (add-to-list 'eglot-server-programs
-               '((js-mode typescript-mode web-mode)
-                 . ("typescript-language-server" "--stdio"))))
+  (lsp-mode-setup))
 #+end_src
 
-#+end_src
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
@@ -1289,22 +1280,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package web-mode
   :ensure t
-  :mode (("\\.html?\\'" . web-mode)
-         ("\\.jsx?\\'"  . web-mode)
-         ("\\.tsx\\'"   . web-mode)
-         ("\\.json\\'"  . web-mode))
+  :mode ("\\.html?\\'" "\\.css\\'" "\\.js\\'" "\\.phtml\\'" "\\.ts\\'") ; Define file extensions for web-mode
   :config
+  ;; Customize indentation (optional)
   (setq web-mode-markup-indent-offset 2
-        web-mode-code-indent-offset 2
-        web-mode-css-indent-offset 2))
-
-(use-package typescript-mode
-  :mode "\\.ts\\'")
-
-(use-package css-mode)
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2))
 #+end_src
 
-
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 ;; Emmet Mode - يعمل مع الجميع
 (use-package emmet-mode
   :ensure t
