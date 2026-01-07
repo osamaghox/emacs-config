@@ -1313,12 +1313,23 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 *** The =osama-emacs-dev.el= section for ~cpp~ compiler
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(defun osama-cpp-compile ()
-  "Compile and run current C++ file, handling spaces in path."
+(defun osama-cpp-run-eshell ()
   (interactive)
-  (let* ((src (shell-quote-argument buffer-file-name))
-         (out (shell-quote-argument (file-name-sans-extension buffer-file-name))))
-    (compile (format "g++ -Wall %s -o %s && %s" src out out))))
+  (unless buffer-file-name
+    (error "الملف غير محفوظ"))
+  (let* ((buf (get-buffer-create "*eshell-cpp*"))
+         (file buffer-file-name)
+         (exe  (file-name-sans-extension file)))
+    (pop-to-buffer buf)
+    (unless (eq major-mode 'eshell-mode)
+      (eshell-mode))
+    (goto-char (point-max))
+    (insert
+     (format "g++ -Wall %s -o %s && ./%s"
+             (shell-quote-argument file)
+             (shell-quote-argument exe)
+             (shell-quote-argument exe)))
+    (eshell-send-input)))
 #+end_src
 
 
