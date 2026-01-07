@@ -143,6 +143,8 @@ by ~use-package~ when it needs it
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(setq package-check-signature nil)
 #+end_src
 
 ** The =init.el= entry point
