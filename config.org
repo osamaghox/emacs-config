@@ -181,9 +181,9 @@ by ~use-package~ when it needs it
 
 ;; Load Integrated Development Environment (IDE)
 (load (expand-file-name "osama-emacs-dev.el" osama-emacs-modules-dir))
+(load (expand-file-name "osama-emacs-completion.el" osama-emacs-modules-dir))
 
 ;; Load Features
-(load (expand-file-name "osama-emacs-completion.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-org.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-denote.el" osama-emacs-modules-dir))
 
