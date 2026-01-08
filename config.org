@@ -11,7 +11,9 @@
 
 
 * TODO New Edits
-- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell
+- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell with auto cursor placeholder
+
+
 - [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
 
 - [ ] add headings to all dev sections 
