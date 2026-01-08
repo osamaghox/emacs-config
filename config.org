@@ -1274,6 +1274,26 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ("C-c l e" . eldoc)))
 #+end_src
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package c++-mode
+  :ensure nil   ;; مدمج مع Emacs
+  :after eglot
+  :hook
+  (c++-mode . eglot-ensure)  ;; يشغل eldoc مع أي buffer تحت Eglot
+  :bind (:map c++-mode-map
+  ("C-c m v" . c-version)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html?\\'" "\\.css\\'" "\\.js\\'" "\\.phtml\\'" "\\.ts\\'") ; Define file extensions for web-mode
+  :config
+  ;; Customize indentation (optional)
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2))
+#+end_src
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
@@ -1297,21 +1317,9 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package web-mode
-  :ensure t
-  :mode ("\\.html?\\'" "\\.css\\'" "\\.js\\'" "\\.phtml\\'" "\\.ts\\'") ; Define file extensions for web-mode
-  :config
-  ;; Customize indentation (optional)
-  (setq web-mode-markup-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2))
-#+end_src
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package emmet-mode
   :ensure t
   :hook (web-mode mhtml-mode css-mode js-mode typescript-mode)
-
   :config
   (setq emmet-expand-at-point t)
   :bind (:map emmet-mode-keymap
