@@ -1194,30 +1194,22 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 (use-package cape
   :ensure t
-  ;; :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  :hook
+  (eglot-managed-mode . my-eglot-mode-setup)
   :init
-(defun my-eglot-mode-hook ()
-  ;; Combine eglot completion with other sources (like dabbrev-code)
-  ;; `cape-super-capf` allows mixing and matching different sources.
-  (add-hook 'completion-at-point-functions
-            (lambda ()
-              (interactive)
+  (defun my-eglot-mode-setup ()
+    ;; دمج eglot مع مصادر إكمال أخرى
+    (add-hook 'completion-at-point-functions
               (cape-super-capf
-               ;; `eglot-completion-at-point` is Eglot's main completion function
-               'eglot-completion-at-point
-               ;; `cape-dabbrev-code` for context-aware dabbrev completion
-               'cape-dabbrev-code
-               ;; `cape-yasnippet` if you use yasnippet
-               ;; 'cape-yasnippet
-               )))
+               #'eglot-completion-at-point
+               #'cape-dabbrev-code
+               ;; #'cape-yasnippet  ;; فعّلها إذا تستخدم yasnippet
+               )
+              nil 'local)
 
-  ;; Optional but recommended: Add `cape-capf-buster` to the eglot capf
-  ;; This helps prevent caching issues with some language servers.
-  ;; It ensures candidates are re-requested if the input changes.
-  (advice-add 'eglot-completion-at-point :around #'cape-capf-buster))
-
-;; Add the hook to eglot's major modes
-(add-hook 'eglot-hook 'my-eglot-mode-hook))
+    ;; حل مشاكل الكاش مع بعض LSP servers
+    (advice-add 'eglot-completion-at-point
+                :around #'cape-capf-buster)))
 
 #+end_src
 
@@ -1253,6 +1245,11 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package eglot
+  :hook
+          (c-mode   . eglot-ensure)
+          (c++-mode . eglot-ensure)
+          (web-mode . eglot-ensure)
+
   :bind (:map eglot-mode-map
           ;; الأوامر التي أضفتها أنت سابقاً
           ("C-c l a" . eglot-code-actions)
