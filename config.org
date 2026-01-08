@@ -1317,10 +1317,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind (:map emmet-mode-keymap
               ("C-c m e" . emmet-expand-line)
               ;; أمثلة لأوامر إضافية مستقبلية
-              ;; ("C-c m j" . emmet-next-edit-point)
-              ;; ("C-c m k" . emmet-prev-edit-point)
-              ;; ("C-c m w" . emmet-wrap-with-abbreviation)
-              ;; ("C-c m d" . emmet-toggle-expand-inline)))
+              ("C-c m j" . emmet-next-edit-point)
+              ("C-c m k" . emmet-prev-edit-point)
+              ("C-c m w" . emmet-wrap-with-abbreviation)
+              ("C-c m d" . emmet-toggle-expand-inline)))
 #+end_src
 
 
