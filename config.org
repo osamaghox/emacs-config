@@ -8,6 +8,9 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* Tips
+mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
+C-h b and c-h m to find keybindings defined by your modes.
 
 
 * TODO New Edits
