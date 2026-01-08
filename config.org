@@ -1238,6 +1238,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
+
 (use-package flymake
   :ensure nil             ;; مدمج، لا تنزله
   :hook (prog-mode . flymake-mode)  ;; تفعيل تلقائي في أي ملف برمجي
