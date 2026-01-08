@@ -1271,7 +1271,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           css-mode mhtml-mode js-mode web-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
-          ;; الأوامر التي أضفتها أنت سابقاً
           ("C-c l a" . eglot-code-actions)
           ("C-c l r" . eglot-rename)
           ("C-c l f" . eglot-format)
@@ -1289,7 +1288,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :hook
   (eglot-managed-mode . eldoc-mode)  ;; يشغل eldoc مع أي buffer تحت Eglot
   :bind (:map eglot-mode-map
-  ("C-c l e" . eldoc)))
+  ("C-c l h" . eldoc)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
