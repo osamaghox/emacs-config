@@ -192,6 +192,7 @@ by ~use-package~ when it needs it
 (load (expand-file-name "osama-emacs-core.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-essentials.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-editing.el" osama-emacs-modules-dir))
+(load (expand-file-name "osama-emacs-dev.el" osama-emacs-modules-dir))
 
 ;; Load UI Appearance
 (load (expand-file-name "osama-emacs-ui-appearance.el" osama-emacs-modules-dir))
