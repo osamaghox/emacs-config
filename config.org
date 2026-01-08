@@ -1192,7 +1192,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 (use-package cape
   :ensure t
-  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;; :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   :init
 (defun my-eglot-mode-hook ()
   ;; Combine eglot completion with other sources (like dabbrev-code)
@@ -1249,15 +1249,11 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package eglot)
-#+end_src
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package vterm
-  :ensure t
-  :config
-  ;; تأكد من مسار bash الخاص بـ MSYS2
-  (setq vterm-shell "C:/msys64/mingw64/bin/bash.exe"))
+(use-package eglot
+  :bind (:map eglot-mode-map
+          ("C-c l a" . eglot-code-actions)
+          ("C-c l r" . eglot-rename)
+          ("C-c l f" . eglot-format)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
