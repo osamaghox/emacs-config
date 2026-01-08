@@ -16,21 +16,6 @@ C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
 
-
-- [ ] change every keybind map to the new use-package version like this:
-
-(use-package eglot
-  :bind (:map eglot-mode-map
-         :prefix "C-c l"
-         :prefix-map eglot-command-map
-         ("a" . eglot-code-actions)
-         ("r" . eglot-rename)
-         ("f" . eglot-format)
-         ("d" . xref-find-definitions)
-         ("u" . xref-find-references)
-         ("b" . xref-go-back)))
-
-
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell with auto cursor placeholder
 
 https://pastebin.com/AD2rhMSc
