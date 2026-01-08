@@ -1278,10 +1278,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package c++-mode
-  :ensure nil   ;; مدمج مع Emacs
-  :after eglot
-  :hook
-  (c++-mode . eglot-ensure)  ;; يشغل eldoc مع أي buffer تحت Eglot
+  :ensure nil   ;; built-in
   :bind (:map c++-mode-map
   ("C-c m v" . c-version)))
 #+end_src
