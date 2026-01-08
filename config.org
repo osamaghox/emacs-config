@@ -1248,6 +1248,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 (use-package eglot
   :hook
           (c-mode   . eglot-ensure)
+          (cc-mode  . eglot-ensure)
           (c++-mode . eglot-ensure)
           (web-mode . eglot-ensure)
 
@@ -1262,6 +1263,18 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           ("C-c l b" . xref-go-back)))          ;; بديل M-, (Go Back)
 
 #+end_src
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package eldoc
+  :ensure nil   ;; مدمج مع Emacs
+  :after eglot
+  :hook
+  (eglot-managed-mode . eldoc-mode)  ;; يشغل eldoc مع أي buffer تحت Eglot
+  :bind (:map eglot-mode-map
+  ("C-c l e" . eldoc)))
+#+end_src
+
+
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package yasnippet
