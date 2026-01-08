@@ -16,6 +16,13 @@
 
 - [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
 
+SPC p - projects
+SPC m - major modes and each programming language compiler and debugger
+SPC g - magit
+SPC c - empty Dont put cape keybinds
+
+
+
 - [ ] add headings to all dev sections 
 - [ ] installing and configuring Dependencies
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
