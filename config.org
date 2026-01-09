@@ -1199,23 +1199,12 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   (setq tab-always-indent 'complete))
 
 (use-package cape
-  :ensure t
-  :hook
-  (eglot-managed-mode . my-eglot-mode-setup)
+  :demand t
   :init
-  (defun my-eglot-mode-setup ()
-    ;; دمج eglot مع مصادر إكمال أخرى
-    (add-hook 'completion-at-point-functions
-              (cape-super-capf
-               #'eglot-completion-at-point
-               #'cape-dabbrev-code
-               ;; #'cape-yasnippet  ;; فعّلها إذا تستخدم yasnippet
-               )
-              nil 'local)
-
-    ;; حل مشاكل الكاش مع بعض LSP servers
-    (advice-add 'eglot-completion-at-point
-                :around #'cape-capf-buster)))
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (setq-default completion-at-point-functions
+                (append (default-value 'completion-at-point-functions)
+                        (list #'cape-dabbrev #'cape-file #'cape-abbrev))))
 
 #+end_src
 
