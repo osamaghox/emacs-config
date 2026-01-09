@@ -1082,7 +1082,6 @@ The which-key package provides hints for keys that complete the currently incomp
 (add-to-list 'which-key-replacement-alist '(("C-c C-e" . nil) . t))
 (add-to-list 'which-key-replacement-alist '(("C-c ;"   . nil) . t))
 
-
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
     "C-c 1" "Tabs 1..9"
@@ -1253,7 +1252,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package eglot
   :hook ((c-mode c++-mode objc-mode
-          css-mode mhtml-mode js-mode web-mode) . eglot-ensure)
+          css-mode mhtml-mode js-mode js2-mode web-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
           ("C-c l a" . eglot-code-actions)
@@ -1284,18 +1283,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package web-mode
-  :ensure t
-  :mode ("\\.html?\\'" "\\.css\\'" "\\.js\\'" "\\.phtml\\'" "\\.ts\\'") ; Define file extensions for web-mode
-  :config
-  ;; Customize indentation (optional)
-  (setq web-mode-markup-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2))
-#+end_src
-
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package yasnippet
   :ensure t
   :config
@@ -1320,7 +1307,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package emmet-mode
   :ensure t
-  :hook (web-mode mhtml-mode css-mode js-mode typescript-mode)
+  :hook (web-mode mhtml-mode css-mode js-mode js2-mode typescript-mode)
   :config
   (setq emmet-expand-at-point t)
   :bind (:map emmet-mode-keymap
