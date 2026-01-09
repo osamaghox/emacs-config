@@ -49,9 +49,9 @@ SPC c - empty Dont put cape keybinds
 #+begin_src powershell :tangle no
 pacman -Syu --noconfirm
 
-pacman -S --noconfirm base-devel mingw-w64-ucrt-x86_64-toolchain
-
 pacman -S --noconfirm \
+base-devel \
+mingw-w64-ucrt-x86_64-toolchain \
 git \
 mingw-w64-ucrt-x86_64-fd \
 mingw-w64-ucrt-x86_64-ripgrep \
