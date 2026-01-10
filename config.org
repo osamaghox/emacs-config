@@ -542,7 +542,7 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-appearance.el= section for Windows
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
-(use-package emacs
+(use-package window
   :ensure nil
   :bind
   (("C-c w w" . other-window)                ;; next window
@@ -638,7 +638,7 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-appearance.el= section for ~tab-bar-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
-(use-package emacs
+(use-package tab-bar
   :ensure nil
   :init
   (tab-bar-mode 1)
