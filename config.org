@@ -573,69 +573,6 @@ Display Emacs startup time and garbage collection count
   (winner-mode 1))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= settings for ~dashboard~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
-(use-package dashboard
-  :config
-  ;; Disable default banner
-  (defun dashboard-insert-banner ()
-    "Do nothing, disable banner completely.")
-
-  (dashboard-setup-startup-hook)
-
-  ;; ASCII logo
-(setq dashboard-banner-logo-title
-"
-
- ______ ______ ______ ______ ______
-||O   |||S   |||A   |||M   |||A   ||
-||____|||____|||____|||____|||____||
-|/____\\|/____\\|/____\\|/____\\|/____\\|
- __________________________________
-||          Time is Money         ||
-||________________________________||
-|/________________________________\\|")
-
-  ;; Remove default items
-  (setq dashboard-items nil)
-
-  ;; General dashboard settings
-  (setq dashboard-set-init-info   t
-        dashboard-show-icons      t
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons  t)
-  ;; Footer messages: random inspirational quotes
-  (setq dashboard-footer-messages
-      '("Welcome back, Osama!"
-        "Focus on progress, not perfection."
-        "Every note is a step forward."
-        "Keep building your system."
-        "Consistency beats intensity."
-        "Small steps lead to big changes."
-        "Your notes are your second brain."
-        "Stay curious, stay organized."
-        "One task at a time."
-        "Knowledge compounds over time."))
-
-  ;; Custom commands section
-  (setq dashboard-init-info
-        (concat "\n"
-                "󰃭  Org Agenda ........... [SPC o a]\n"
-                "  Org Capture .......... [SPC o c]\n"
-                "󰎚  New Note ............. [SPC n n]\n"
-                "󰠮  Notes Folder ......... [SPC n d]\n"
-                "󰈞  Find File ............ [SPC f f]\n"
-                "  Recent Files ......... [SPC f r]\n"
-                "  Jump to Bookmarks .... [SPC f b]\n"
-                "  Dired ................ [SPC d d]\n"
-                "  Find Word ............ [SPC s r]\n"
-                "󰔎  Change Theme ......... [SPC t t]\n"
-                "󰈞  Open Config .......... [SPC e c]\n"
-                "󰈞  Quit ................. [SPC e q]")))
-#+end_src
-
-
 *** The =osama-emacs-ui-appearance.el= section for ~tab-bar-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
@@ -675,6 +612,69 @@ Display Emacs startup time and garbage collection count
    ("C-c t u" . tab-undo)))
 #+end_src
 
+*** The =osama-emacs-ui-appearance.el= settings for ~dashboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+(use-package dashboard
+  :custom
+  ;; ASCII logo
+  (dashboard-banner-logo-title
+"
+
+ ______ ______ ______ ______ ______
+||O   |||S   |||A   |||M   |||A   ||
+||____|||____|||____|||____|||____||
+|/____\\|/____\\|/____\\|/____\\|/____\\|
+ __________________________________
+||          Time is Money          ||
+||________________________________||
+|/________________________________\\|")
+
+  ;; Remove default items
+  (dashboard-items nil)
+
+  ;; General dashboard settings
+  (dashboard-set-init-info t)
+  (dashboard-show-icons t)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+
+  ;; Footer messages: random inspirational quotes
+  (dashboard-footer-messages
+   '("Welcome back, Osama!"
+     "Focus on progress, not perfection."
+     "Every note is a step forward."
+     "Keep building your system."
+     "Consistency beats intensity."
+     "Small steps lead to big changes."
+     "Your notes are your second brain."
+     "Stay curious, stay organized."
+     "One task at a time."
+     "Knowledge compounds over time."))
+
+  ;; Custom commands section
+  (dashboard-init-info
+   (concat "\n"
+           "󰃭  Org Agenda ........... [SPC o a]\n"
+           "  Org Capture .......... [SPC o c]\n"
+           "󰎚  New Note ............. [SPC n n]\n"
+           "󰠮  Notes Folder ......... [SPC n d]\n"
+           "󰈞  Find File ............ [SPC f f]\n"
+           "  Recent Files ......... [SPC f r]\n"
+           "  Jump to Bookmarks .... [SPC f b]\n"
+           "  Dired ................ [SPC d d]\n"
+           "  Find Word ............ [SPC s r]\n"
+           "󰔎  Change Theme ......... [SPC t t]\n"
+           "󰈞  Open Config .......... [SPC e c]\n"
+           "󰈞  Quit ................. [SPC e q]"))
+
+  :config
+  ;; Disable default banner
+  (defun dashboard-insert-banner ()
+    "Do nothing, disable banner completely.")
+
+  (dashboard-setup-startup-hook))
+#+end_src
 
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
