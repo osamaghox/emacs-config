@@ -639,7 +639,7 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui-appearance.el= section for ~tab-bar-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
-(use-package emacs
+(use-package tab-bar
   :ensure nil
   :init
   (tab-bar-mode 1)
