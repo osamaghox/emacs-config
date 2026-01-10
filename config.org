@@ -1269,10 +1269,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package cc-mode
   :ensure nil
-  :bind (:map cc-mode-map
-              ("C-c m c" . osama-ccc-run-and-compile))
+  :bind (:map c++-mode-map
+              ("C-c m c" . osama-c++-run-and-compile))
   :config
-  (defun osama-cc-run-and-compile ()
+  (defun osama-c++-run-and-compile ()
     "Compile C++, clear eshell, and prepare run command."
     (interactive)
     (let* ((src  (buffer-file-name))
