@@ -8,6 +8,25 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* Example of common ordering for ~use-package~ 
+
+#+begin_src emacs-lisp :tangle no
+(use-package <package-name>
+  :ensure t                 ;; Often placed first for visibility
+  :defer t                  ;; Or other loading condition
+  :bind
+  (("C-c a" . command-a)
+   ("C-c b" . command-b))
+  :hook
+  ((prog-mode . my-hook-function))
+  :custom
+  (variable-name value)    ;; Customizations often placed before config
+  :config
+  ;; Arbitrary Lisp code that runs after the package is loaded
+  (message "package loaded and configured!"))
+#+end_src
+
+
 
 * Tips
 mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
@@ -17,7 +36,7 @@ C-h b and c-h m to find keybindings defined by your modes.
 * TODO New Edits
 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
-- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell with auto cursor placeholder
+- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
 
 https://pastebin.com/AD2rhMSc
 كونفق جيد للغاية
