@@ -1347,6 +1347,17 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind ("C-c g s" . magit-status))
 #+end_src
 
+*** The =osama-emacs-dev.el= section for ~mhtml-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package mhtml-mode
+  :ensure nil
+  :bind (:map mhtml-mode-map
+              ("C-c m c" . sgml-close-tag)))
+#+end_src
+
+*** The =osama-emacs-dev.el= section for ~emmet-mode~
+
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package emmet-mode
   :ensure t
