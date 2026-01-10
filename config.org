@@ -1273,23 +1273,20 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
               ("C-c m c" . osama-c++-run-and-compile))
   :config
   (defun osama-c++-run-and-compile ()
-    "Compile C++, clean eshell on right, and prepare run command."
+    "Compile C++, clear/refresh eshell on right, and prepare run command."
     (interactive)
     (let* ((src  (buffer-file-name))
            (base (file-name-sans-extension src))
            (exe  (if (eq system-type 'windows-nt)
                      (concat base ".exe")
                    base))
-           (cmd  (format "g++ \"%s\" -o \"%s\"" src exe)))
+           (cmd  (format "g++ \"%s\" -o \"%s\"" src exe))
+           (eshell-buf-name "*cpp-eshell*"))
 
-      ;; 1. حفظ الملف
       (save-buffer)
-      
-      ;; 2. تنظيم النوافذ
       (delete-other-windows)
       (split-window-right)
 
-      ;; 3. إعداد نافذة الكومبايل بالأسفل (تختفي بـ q)
       (setq display-buffer-alist
             '(("\\*compilation\\*"
                (display-buffer-reuse-window display-buffer-at-bottom)
@@ -1297,25 +1294,34 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
       (compile cmd)
 
-      ;; 4. تنظيف الـ Eshell وتجهيز الأمر
+      ;; الانتقال لليمين وتجهيز Eshell
       (other-window 1)
-      (let ((eshell-buffer-name "*cpp-eshell*"))
-        (eshell)
-        ;; إنهاء أي عملية سابقة ومسح البافر
-        (let ((proc (get-buffer-process (current-buffer))))
-          (when proc (kill-process proc)))
-        (let ((inhibit-read-only t))
-          (erase-buffer))
-        
-        ;; إعادة تشغيل المود لضمان الـ prompt والكتابة فوقه
-        (eshell-mode) 
-        (goto-char (point-max))
-        (insert
-         (if (eq system-type 'windows-nt)
-             (file-name-nondirectory exe)
-           (concat "./" (file-name-nondirectory exe)))))
+      
+      ;; التعديل هنا: نضمن إنشاء البافر وتبديل النافذة إليه
+      (let ((buf (get-buffer-create eshell-buf-name)))
+        (set-window-buffer (selected-window) buf)
+        (with-current-buffer buf
+          ;; إذا لم تكن Eshell تعمل، قم بتشغيلها
+          (unless (derived-mode-p 'eshell-mode)
+            (eshell-mode))
+          
+          ;; إنهاء أي عملية قديمة
+          (let ((proc (get-buffer-process buf)))
+            (when proc (kill-process proc)))
+          
+          ;; مسح المحتوى بالكامل
+          (let ((inhibit-read-only t))
+            (erase-buffer))
+          
+          ;; توليد Prompt جديد وكتابة الأمر
+          (eshell-mode) 
+          (goto-char (point-max))
+          (insert
+           (if (eq system-type 'windows-nt)
+               (file-name-nondirectory exe)
+             (concat "./" (file-name-nondirectory exe))))))
 
-      ;; 5. العودة للكود
+      ;; العودة للكود
       (other-window -1))))
 #+end_src
 
