@@ -342,10 +342,6 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-** The =osama-emacs-core.el= module
-
-This module load basic configurations that apply to most facets of Emacs.
-
 *** The =osama-emacs-core.el= Section for Files
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
@@ -437,80 +433,6 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c b p" . previous-buffer)))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Windows
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package emacs
-  :ensure nil
-  :bind
-  (("C-c w w" . other-window)                ;; next window
-
-   ;; Split windows
-   ("C-c w s" . split-window-below)          ;; split below (horizontal)
-   ("C-c w v" . split-window-right)          ;; split right (vertical)
-
-   ;; Delete windows
-   ("C-c w d" . delete-window)               ;; delete current window
-   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
-   ("C-c w o" . delete-other-windows)        ;; keep only current window
-
-   ;; Resize windows
-   ("C-c w {" . shrink-window-horizontally)
-   ("C-c w }" . enlarge-window-horizontally)
-   ("C-c w ^" . enlarge-window)
-
-   ;; Move between windows with arrows
-   ("C-c w h" . windmove-left)
-   ("C-c w l" . windmove-right)
-   ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down))
-
-  :config
-  ;; Enable window undo/redo
-  (winner-mode 1))
-#+end_src
-
-*** The =osama-emacs-core.el= section for ~tab-bar-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package emacs
-  :ensure nil
-  :init
-  (tab-bar-mode 1)
-  (setq tab-bar-show t
-        tab-bar-new-tab-choice "*scratch*"
-        tab-bar-tab-name-truncated-max 20
-        tab-bar-tab-hints t
-        tab-bar-close-button-show nil
-        tab-bar-back-button-show nil)
-  
-  ;; Functions to jump to tab by number
-  (dotimes (i 9)
-    (let ((n (1+ i)))
-      (defalias (intern (format "tab-goto-%d" n))
-        `(lambda ()
-           (interactive)
-           (tab-bar-select-tab ,n)))))
-
-  ;; Keybindings C-c t 1 .. C-c t 9
-  :bind
-  (("C-c t 1" . tab-goto-1)
-   ("C-c t 2" . tab-goto-2)
-   ("C-c t 3" . tab-goto-3)
-   ("C-c t 4" . tab-goto-4)
-   ("C-c t 5" . tab-goto-5)
-   ("C-c t 6" . tab-goto-6)
-   ("C-c t 7" . tab-goto-7)
-   ("C-c t 8" . tab-goto-8)
-   ("C-c t 9" . tab-goto-9)
-
-   ("C-c t n" . tab-new)
-   ("C-c t c" . tab-close)
-   ("C-c t u" . tab-undo)))
-#+end_src
-
-
-
 *** The =osama-emacs-core.el= section for ~OpenWith~ package
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
@@ -522,69 +444,6 @@ This module load basic configurations that apply to most facets of Emacs.
   (openwith-associations
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
-
-*** The =osama-emacs-core.el= settings for ~dashboard~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package dashboard
-  :config
-  ;; Disable default banner
-  (defun dashboard-insert-banner ()
-    "Do nothing, disable banner completely.")
-
-  (dashboard-setup-startup-hook)
-
-  ;; ASCII logo
-(setq dashboard-banner-logo-title
-"
-
- ______ ______ ______ ______ ______
-||O   |||S   |||A   |||M   |||A   ||
-||____|||____|||____|||____|||____||
-|/____\\|/____\\|/____\\|/____\\|/____\\|
- __________________________________
-||          Time is Money         ||
-||________________________________||
-|/________________________________\\|")
-
-  ;; Remove default items
-  (setq dashboard-items nil)
-
-  ;; General dashboard settings
-  (setq dashboard-set-init-info   t
-        dashboard-show-icons      t
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons  t)
-  ;; Footer messages: random inspirational quotes
-  (setq dashboard-footer-messages
-      '("Welcome back, Osama!"
-        "Focus on progress, not perfection."
-        "Every note is a step forward."
-        "Keep building your system."
-        "Consistency beats intensity."
-        "Small steps lead to big changes."
-        "Your notes are your second brain."
-        "Stay curious, stay organized."
-        "One task at a time."
-        "Knowledge compounds over time."))
-
-  ;; Custom commands section
-  (setq dashboard-init-info
-        (concat "\n"
-                "󰃭  Org Agenda ........... [SPC o a]\n"
-                "  Org Capture .......... [SPC o c]\n"
-                "󰎚  New Note ............. [SPC n n]\n"
-                "󰠮  Notes Folder ......... [SPC n d]\n"
-                "󰈞  Find File ............ [SPC f f]\n"
-                "  Recent Files ......... [SPC f r]\n"
-                "  Jump to Bookmarks .... [SPC f b]\n"
-                "  Dired ................ [SPC d d]\n"
-                "  Find Word ............ [SPC s r]\n"
-                "󰔎  Change Theme ......... [SPC t t]\n"
-                "󰈞  Open Config .......... [SPC e c]\n"
-                "󰈞  Quit ................. [SPC e q]")))
-#+end_src
-
 
 *** The =osama-emacs-core.el= section for Startup Time
 
@@ -678,6 +537,144 @@ Display Emacs startup time and garbage collection count
   (when (display-graphic-p)
     (context-menu-mode 1)))
 #+end_src
+
+
+*** The =osama-emacs-appearance.el= section for Windows
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c w w" . other-window)                ;; next window
+
+   ;; Split windows
+   ("C-c w s" . split-window-below)          ;; split below (horizontal)
+   ("C-c w v" . split-window-right)          ;; split right (vertical)
+
+   ;; Delete windows
+   ("C-c w d" . delete-window)               ;; delete current window
+   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
+   ("C-c w o" . delete-other-windows)        ;; keep only current window
+
+   ;; Resize windows
+   ("C-c w {" . shrink-window-horizontally)
+   ("C-c w }" . enlarge-window-horizontally)
+   ("C-c w ^" . enlarge-window)
+
+   ;; Move between windows with arrows
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down))
+
+  :config
+  ;; Enable window undo/redo
+  (winner-mode 1))
+#+end_src
+
+*** The =osama-emacs-appearance.el= settings for ~dashboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
+(use-package dashboard
+  :config
+  ;; Disable default banner
+  (defun dashboard-insert-banner ()
+    "Do nothing, disable banner completely.")
+
+  (dashboard-setup-startup-hook)
+
+  ;; ASCII logo
+(setq dashboard-banner-logo-title
+"
+
+ ______ ______ ______ ______ ______
+||O   |||S   |||A   |||M   |||A   ||
+||____|||____|||____|||____|||____||
+|/____\\|/____\\|/____\\|/____\\|/____\\|
+ __________________________________
+||          Time is Money         ||
+||________________________________||
+|/________________________________\\|")
+
+  ;; Remove default items
+  (setq dashboard-items nil)
+
+  ;; General dashboard settings
+  (setq dashboard-set-init-info   t
+        dashboard-show-icons      t
+        dashboard-set-heading-icons t
+        dashboard-set-file-icons  t)
+  ;; Footer messages: random inspirational quotes
+  (setq dashboard-footer-messages
+      '("Welcome back, Osama!"
+        "Focus on progress, not perfection."
+        "Every note is a step forward."
+        "Keep building your system."
+        "Consistency beats intensity."
+        "Small steps lead to big changes."
+        "Your notes are your second brain."
+        "Stay curious, stay organized."
+        "One task at a time."
+        "Knowledge compounds over time."))
+
+  ;; Custom commands section
+  (setq dashboard-init-info
+        (concat "\n"
+                "󰃭  Org Agenda ........... [SPC o a]\n"
+                "  Org Capture .......... [SPC o c]\n"
+                "󰎚  New Note ............. [SPC n n]\n"
+                "󰠮  Notes Folder ......... [SPC n d]\n"
+                "󰈞  Find File ............ [SPC f f]\n"
+                "  Recent Files ......... [SPC f r]\n"
+                "  Jump to Bookmarks .... [SPC f b]\n"
+                "  Dired ................ [SPC d d]\n"
+                "  Find Word ............ [SPC s r]\n"
+                "󰔎  Change Theme ......... [SPC t t]\n"
+                "󰈞  Open Config .......... [SPC e c]\n"
+                "󰈞  Quit ................. [SPC e q]")))
+#+end_src
+
+
+*** The =osama-emacs-appearance.el= section for ~tab-bar-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
+(use-package emacs
+  :ensure nil
+  :init
+  (tab-bar-mode 1)
+  (setq tab-bar-show t
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-tab-name-truncated-max 20
+        tab-bar-tab-hints t
+        tab-bar-close-button-show nil
+        tab-bar-back-button-show nil)
+  
+  ;; Functions to jump to tab by number
+  (dotimes (i 9)
+    (let ((n (1+ i)))
+      (defalias (intern (format "tab-goto-%d" n))
+        `(lambda ()
+           (interactive)
+           (tab-bar-select-tab ,n)))))
+
+  ;; Keybindings C-c t 1 .. C-c t 9
+  :bind
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
+
+   ("C-c t n" . tab-new)
+   ("C-c t c" . tab-close)
+   ("C-c t u" . tab-undo)))
+#+end_src
+
+
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
 
