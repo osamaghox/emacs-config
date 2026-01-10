@@ -877,7 +877,6 @@ Display Emacs startup time and garbage collection count
   (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
 
 ;; Arabic Font
-;; Arabic Font
 (when (member "Vazirmatn" (font-family-list))
   (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
 
