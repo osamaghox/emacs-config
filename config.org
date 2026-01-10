@@ -347,7 +347,7 @@ This module load basic configurations that apply to most facets of Emacs.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
-(use-package files
+(use-package emacs
   :ensure nil
   :bind
   (("C-c f f" . find-file)
@@ -426,7 +426,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for Buffers
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package buffer
+(use-package emacs
   :ensure nil
   :bind
   (("C-c b k" . kill-buffer)
