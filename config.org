@@ -225,7 +225,12 @@ by ~use-package~ when it needs it
 
 In this module I define everything broadly related to the aesthetics of Emacs.
 
-*** The =osama-emacs-core.el= Section for Emacs Global Keybinds
+** The =osama-emacs-core.el= module
+
+This module load basic configurations that apply to most facets of Emacs.
+
+
+*** The =osama-emacs-core.el= Section for its ~global-keys~
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
@@ -268,9 +273,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 #+end_src
 
 
-** The =osama-emacs-core.el= module
-
-This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for Emacs Settings
 
@@ -383,11 +385,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-** The =osama-emacs-essentials.el= module
-
-This module load basic configurations that apply to most facets of Emacs.
-
-*** The =osama-emacs-essentials.el= section for Dired
+*** The =osama-emacs-core.el= section for Dired
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;;; -*- lexical-binding: t; -*-
@@ -452,9 +450,9 @@ This module load basic configurations that apply to most facets of Emacs.
           (message "Dired: showing details + extensions")))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Windows
+*** The =osama-emacs-core.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :config
@@ -462,9 +460,9 @@ This module load basic configurations that apply to most facets of Emacs.
   (winner-mode 1))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
+*** The =osama-emacs-core.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -502,9 +500,9 @@ This module load basic configurations that apply to most facets of Emacs.
 
 
 
-*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
+*** The =osama-emacs-core.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -514,9 +512,9 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= settings for ~dashboard~
+*** The =osama-emacs-core.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package dashboard
   :config
   ;; Disable default banner
@@ -577,11 +575,11 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
-*** The =osama-emacs-essentials.el= section for Startup Time
+*** The =osama-emacs-core.el= section for Startup Time
 
 Display Emacs startup time and garbage collection count
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (defun osama-display-startup-time ()
   "Display Emacs startup time and garbage collection count in the echo area."
   (message "Emacs loaded in %s with %d garbage collections."
@@ -592,10 +590,10 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-essentials.el= section for Treemacs
+*** The =osama-emacs-core.el= section for Treemacs
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 ;; 1. إعداد Treemacs
 (use-package treemacs
   :defer t
