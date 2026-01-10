@@ -35,7 +35,7 @@ C-h b and c-h m to find keybindings defined by your modes.
 * TODO New Edits
 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
-- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell with auto cursor placeholder
+- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
 
 https://pastebin.com/AD2rhMSc
 كونفق جيد للغاية
