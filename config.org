@@ -7,6 +7,24 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
+* Example of common ordering for ~use-package~ 
+
+#+begin_src emacs-lisp :tangle no
+(use-package <package-name>
+  :ensure t                 ;; Often placed first for visibility
+  :defer t                  ;; Or other loading condition
+  :bind
+  (("C-c a" . command-a)
+   ("C-c b" . command-b))
+  :hook
+  ((prog-mode . my-hook-function))
+  :custom
+  (variable-name value)    ;; Customizations often placed before config
+  :config
+  ;; Arbitrary Lisp code that runs after the package is loaded
+  (message "package loaded and configured!"))
+#+end_src
+
 
 
 * Tips
