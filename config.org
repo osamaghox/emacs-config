@@ -540,9 +540,9 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-appearance.el= section for Windows
+*** The =osama-emacs-ui-appearance.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package window
   :ensure nil
   :bind
@@ -573,9 +573,9 @@ Display Emacs startup time and garbage collection count
   (winner-mode 1))
 #+end_src
 
-*** The =osama-emacs-appearance.el= settings for ~dashboard~
+*** The =osama-emacs-ui-appearance.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
 (use-package dashboard
   :config
   ;; Disable default banner
@@ -636,10 +636,10 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-appearance.el= section for ~tab-bar-mode~
+*** The =osama-emacs-ui-appearance.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-appearance.el"
-(use-package tab-bar
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+(use-package emacs
   :ensure nil
   :init
   (tab-bar-mode 1)
