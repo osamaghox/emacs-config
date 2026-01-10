@@ -1264,17 +1264,16 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ("C-c l h" . eldoc)))
 #+end_src
 
-*** The =osama-emacs-dev.el= section for ~c++-mode~
+*** The =osama-emacs-dev.el= section for ~cc-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(use-package c++-mode
-  :ensure nil   ;; built-in
-  :bind (:map c++-mode-map
-          ("C-c m v" . osama-c++-run-and-compile))
+(use-package cc-mode
+  :ensure nil
+  :bind (:map cc-mode-map
+              ("C-c m c" . osama-ccc-run-and-compile))
   :config
-  ;; C++ Compiler G++
-  (defun osama-c++-run-and-compile ()
-    "Compile current C++ file, open eshell on the right, and a temporary compilation window at the bottom."
+  (defun osama-cc-run-and-compile ()
+    "Compile C++, clear eshell, and prepare run command."
     (interactive)
     (let* ((src  (buffer-file-name))
            (base (file-name-sans-extension src))
@@ -1283,36 +1282,38 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
                    base))
            (cmd  (format "g++ \"%s\" -o \"%s\"" src exe)))
 
-      ;; 1. حفظ الملف تلقائياً لتجنب رسائل التأكيد
       (save-buffer)
-
-      ;; 2. تنظيف الشاشة وتقسيمها لليمين من أجل Eshell
       (delete-other-windows)
       (split-window-right)
 
-      ;; 3. إعداد مكان ظهور نافذة الـ Compilation (في الأسفل وبحجم صغير)
-      ;; هذا الجزء يضمن أن النافذة ستحذف عند ضغط 'q'
       (setq display-buffer-alist
             '(("\\*compilation\\*"
                (display-buffer-reuse-window display-buffer-at-bottom)
                (window-height . 10))))
 
-      ;; 4. البدء بعملية الكومبايل
       (compile cmd)
 
-      ;; 5. الانتقال للنافذة اليمنى لفتح Eshell
       (other-window 1)
       (let ((eshell-buffer-name "*cpp-eshell*"))
         (eshell)
+        ;; 1. إنهاء أي عملية شغالة بقوة
+        (let ((proc (get-buffer-process (current-buffer))))
+          (when proc (kill-process proc)))
+        
+        ;; 2. مسح الشاشة بالكامل
+        (let ((inhibit-read-only t))
+          (erase-buffer))
+        
+        ;; 3. إعادة تهيئة Eshell لضمان ظهور الـ Prompt في البداية
+        (eshell-mode) 
+        
+        ;; 4. كتابة اسم الملف البرمجي (بدون الحاجة لـ send-input فارغ)
         (goto-char (point-max))
-        ;; مسح السطر الحالي إذا كان فيه نص قديم وكتابة الأمر الجديد
-        (delete-region (point-at-bol) (point))
         (insert
          (if (eq system-type 'windows-nt)
              (file-name-nondirectory exe)
            (concat "./" (file-name-nondirectory exe)))))
 
-      ;; 6. العودة لنافذة الكود (اليسار)
       (other-window -1))))
 #+end_src
 
