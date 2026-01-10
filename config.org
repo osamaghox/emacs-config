@@ -1264,12 +1264,56 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ("C-c l h" . eldoc)))
 #+end_src
 
+*** The =osama-emacs-dev.el= section for ~c++-mode~
+
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package c++-mode
   :ensure nil   ;; built-in
   :bind (:map c++-mode-map
-  ("C-c m v" . c-version)))
-#+end_src
+          ("C-c m v" . osama-c++-run-and-compile))
+  :config
+  ;; C++ Compiler G++
+  (defun osama-c++-run-and-compile ()
+    "Compile current C++ file, open eshell on the right, and a temporary compilation window at the bottom."
+    (interactive)
+    (let* ((src  (buffer-file-name))
+           (base (file-name-sans-extension src))
+           (exe  (if (eq system-type 'windows-nt)
+                     (concat base ".exe")
+                   base))
+           (cmd  (format "g++ \"%s\" -o \"%s\"" src exe)))
+
+      ;; 1. حفظ الملف تلقائياً لتجنب رسائل التأكيد
+      (save-buffer)
+
+      ;; 2. تنظيف الشاشة وتقسيمها لليمين من أجل Eshell
+      (delete-other-windows)
+      (split-window-right)
+
+      ;; 3. إعداد مكان ظهور نافذة الـ Compilation (في الأسفل وبحجم صغير)
+      ;; هذا الجزء يضمن أن النافذة ستحذف عند ضغط 'q'
+      (setq display-buffer-alist
+            '(("\\*compilation\\*"
+               (display-buffer-reuse-window display-buffer-at-bottom)
+               (window-height . 10))))
+
+      ;; 4. البدء بعملية الكومبايل
+      (compile cmd)
+
+      ;; 5. الانتقال للنافذة اليمنى لفتح Eshell
+      (other-window 1)
+      (let ((eshell-buffer-name "*cpp-eshell*"))
+        (eshell)
+        (goto-char (point-max))
+        ;; مسح السطر الحالي إذا كان فيه نص قديم وكتابة الأمر الجديد
+        (delete-region (point-at-bol) (point))
+        (insert
+         (if (eq system-type 'windows-nt)
+             (file-name-nondirectory exe)
+           (concat "./" (file-name-nondirectory exe)))))
+
+      ;; 6. العودة لنافذة الكود (اليسار)
+      (other-window -1))))
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package yasnippet
@@ -1308,27 +1352,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 
-*** The =osama-emacs-dev.el= section for ~cpp~ compiler
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-(defun osama-cpp-run-eshell ()
-  (interactive)
-  (unless buffer-file-name
-    (error "الملف غير محفوظ"))
-  (let* ((buf (get-buffer-create "*eshell-cpp*"))
-         (file buffer-file-name)
-         (exe  (file-name-sans-extension file)))
-    (pop-to-buffer buf)
-    (unless (eq major-mode 'eshell-mode)
-      (eshell-mode))
-    (goto-char (point-max))
-    (insert
-     (format "g++ -Wall %s -o %s && ./%s"
-             (shell-quote-argument file)
-             (shell-quote-argument exe)
-             (shell-quote-argument exe)))
-    (eshell-send-input)))
-#+end_src
 
 
 ** The =osama-emacs-org.el= module
