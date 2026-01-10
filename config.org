@@ -1314,6 +1314,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
       ;; 6. العودة لنافذة الكود (اليسار)
       (other-window -1))))
+#+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package yasnippet
