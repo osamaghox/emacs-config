@@ -7,6 +7,7 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
+
 * Example of common ordering for ~use-package~ 
 
 #+begin_src emacs-lisp :tangle no
@@ -229,62 +230,19 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 This module load basic configurations that apply to most facets of Emacs.
 
+*** The =osama-emacs-core.el= Section for Emacs Settings
 
-*** The =osama-emacs-core.el= Section for its ~global-keys~
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emacs
   :ensure nil
   :bind
-  (;; Files
-   ("C-c f f" . find-file)
-   ("C-c f s" . save-buffer)
-   ("C-c f R" . rename-file)
-   ("C-c f S" . write-file)
-
-   ;; Buffers
-   ("C-c b k" . kill-buffer)
-   ("C-c b n" . next-buffer)
-   ("C-c b p" . previous-buffer)
-
-   ;; Dired
-   ("C-c d d" . dired)
-   ("C-c d f" . find-file-other-window)
-   ("C-c d j" . dired-jump)
-
-   ;; Windows
-   ("C-c w w" . other-window)
-   ("C-c w s" . split-window-below)
-   ("C-c w v" . split-window-right)
-   ("C-c w d" . delete-window)
-   ("C-c w D" . kill-buffer-and-window)
-   ("C-c w o" . delete-other-windows)
-   ("C-c w {" . shrink-window-horizontally)
-   ("C-c w }" . enlarge-window-horizontally)
-   ("C-c w ^" . enlarge-window)
-   ("C-c w h" . windmove-left)
-   ("C-c w l" . windmove-right)
-   ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down)
-   ;; Coding
-   ("C-c c c" . comment-region)
-   ("C-c c u" . uncomment-region)))
-#+end_src
-
-
-
-*** The =osama-emacs-core.el= Section for Emacs Settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-(use-package emacs
-  :ensure nil
-  :bind
-   (("C-c e q" . osama-kill-emacs)
-   ("C-c e c" . osama-open-emacs-config))
+  (("C-c e q" . osama-kill-emacs)    ;; Quit Emacs with confirmation
+   ("C-c e c" . open-emacs-config))  ;; Open config file
   :config
   ;; Function to open your config file
-  (defun osama-open-emacs-config ()
+  (defun open-emacs-config ()
     "Open Emacs configuration file."
     (interactive)
     (find-file (expand-file-name "config.org" osama-emacs-home-dir)))
@@ -385,11 +343,26 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Dired
+** The =osama-emacs-essentials.el= module
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+This module load basic configurations that apply to most facets of Emacs.
+
+*** The =osama-emacs-essentials.el= Section for Files
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c f f" . find-file)
+   ("C-c f s" . save-buffer)
+   ("C-c f R" . rename-file)
+   ("C-c f S" . write-file)))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for Dired
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
     (use-package dired
       :ensure nil ;; built-in package
       :commands (dired dired-jump)
@@ -399,6 +372,10 @@ This module load basic configurations that apply to most facets of Emacs.
       (dired-recursive-copies 'always)
       (dired-recursive-deletes 'top)
       (dired-auto-revert-buffer t)    ;; auto refresh on changes
+      :bind
+      (("C-c d d" . dired)
+       ("C-c d f" . find-file-other-window)
+       ("C-c d j" . dired-jump)))
        
     (use-package dired-x
       :ensure nil
@@ -450,36 +427,55 @@ This module load basic configurations that apply to most facets of Emacs.
           (message "Dired: showing details + extensions")))))
 #+end_src
 
-*** The =osama-emacs-core.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+*** The =osama-emacs-essentials.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package emacs
   :ensure nil
+  :bind
+  (("C-c b k" . kill-buffer)
+   ("C-c b n" . next-buffer)
+   ("C-c b p" . previous-buffer)))
+#+end_src
+
+*** The =osama-emacs-essentials.el= section for Windows
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+(use-package emacs
+  :ensure nil
+  :bind
+  (("C-c w w" . other-window)                ;; next window
+
+   ;; Split windows
+   ("C-c w s" . split-window-below)          ;; split below (horizontal)
+   ("C-c w v" . split-window-right)          ;; split right (vertical)
+
+   ;; Delete windows
+   ("C-c w d" . delete-window)               ;; delete current window
+   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
+   ("C-c w o" . delete-other-windows)        ;; keep only current window
+
+   ;; Resize windows
+   ("C-c w {" . shrink-window-horizontally)
+   ("C-c w }" . enlarge-window-horizontally)
+   ("C-c w ^" . enlarge-window)
+
+   ;; Move between windows with arrows
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down))
+
   :config
   ;; Enable window undo/redo
   (winner-mode 1))
 #+end_src
 
-*** The =osama-emacs-core.el= section for ~tab-bar-mode~
+*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package emacs
   :ensure nil
-  :bind
-  (;; Tabs
-   ("C-c t 1" . tab-goto-1)
-   ("C-c t 2" . tab-goto-2)
-   ("C-c t 3" . tab-goto-3)
-   ("C-c t 4" . tab-goto-4)
-   ("C-c t 5" . tab-goto-5)
-   ("C-c t 6" . tab-goto-6)
-   ("C-c t 7" . tab-goto-7)
-   ("C-c t 8" . tab-goto-8)
-   ("C-c t 9" . tab-goto-9)
-   ("C-c t n" . tab-new)
-   ("C-c t c" . tab-close)
-   ("C-c t u" . tab-undo))
-
   :init
   (tab-bar-mode 1)
   (setq tab-bar-show t
@@ -495,14 +491,30 @@ This module load basic configurations that apply to most facets of Emacs.
       (defalias (intern (format "tab-goto-%d" n))
         `(lambda ()
            (interactive)
-           (tab-bar-select-tab ,n))))))
+           (tab-bar-select-tab ,n)))))
+
+  ;; Keybindings C-c t 1 .. C-c t 9
+  :bind
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
+
+   ("C-c t n" . tab-new)
+   ("C-c t c" . tab-close)
+   ("C-c t u" . tab-undo)))
 #+end_src
 
 
 
-*** The =osama-emacs-core.el= section for ~OpenWith~ package
+*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -512,9 +524,9 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-core.el= settings for ~dashboard~
+*** The =osama-emacs-essentials.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (use-package dashboard
   :config
   ;; Disable default banner
@@ -575,11 +587,11 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
-*** The =osama-emacs-core.el= section for Startup Time
+*** The =osama-emacs-essentials.el= section for Startup Time
 
 Display Emacs startup time and garbage collection count
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 (defun osama-display-startup-time ()
   "Display Emacs startup time and garbage collection count in the echo area."
   (message "Emacs loaded in %s with %d garbage collections."
@@ -590,10 +602,10 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-core.el= section for Treemacs
+*** The =osama-emacs-essentials.el= section for Treemacs
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
 ;; 1. إعداد Treemacs
 (use-package treemacs
   :defer t
