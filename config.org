@@ -165,23 +165,21 @@ by ~use-package~ when it needs it
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
-(require 'package)
-(setq package-archives
-      '(("melpa"  . "https://melpa.org/packages/")
-        ("org"    . "https://orgmode.org/elpa/")
-        ("elpa"   . "https://elpa.gnu.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-(package-initialize)
+(use-package package
+  :config
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/")
+                ("org"    . "https://orgmode.org/elpa/")
+                ("elpa"   . "https://elpa.gnu.org/packages/")
+                ("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+  (package-initialize))
 
-;; Install use-package if missing
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
-(setq package-check-signature nil)
+(use-package use-package
+  :custom
+  (use-package-always-ensure t)
+  (package-native-compile t)
+  (package-check-signature nil)
+  (warning-minimum-level :emergency))
 #+end_src
 
 ** The =init.el= entry point
