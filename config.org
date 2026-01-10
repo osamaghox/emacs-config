@@ -1273,7 +1273,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
               ("C-c m c" . osama-c++-run-and-compile))
   :config
   (defun osama-c++-run-and-compile ()
-    "Compile C++, clear eshell, and prepare run command."
+    "Compile C++, clean eshell on right, and prepare run command."
     (interactive)
     (let* ((src  (buffer-file-name))
            (base (file-name-sans-extension src))
@@ -1282,10 +1282,14 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
                    base))
            (cmd  (format "g++ \"%s\" -o \"%s\"" src exe)))
 
+      ;; 1. حفظ الملف
       (save-buffer)
+      
+      ;; 2. تنظيم النوافذ
       (delete-other-windows)
       (split-window-right)
 
+      ;; 3. إعداد نافذة الكومبايل بالأسفل (تختفي بـ q)
       (setq display-buffer-alist
             '(("\\*compilation\\*"
                (display-buffer-reuse-window display-buffer-at-bottom)
@@ -1293,27 +1297,25 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
       (compile cmd)
 
+      ;; 4. تنظيف الـ Eshell وتجهيز الأمر
       (other-window 1)
       (let ((eshell-buffer-name "*cpp-eshell*"))
         (eshell)
-        ;; 1. إنهاء أي عملية شغالة بقوة
+        ;; إنهاء أي عملية سابقة ومسح البافر
         (let ((proc (get-buffer-process (current-buffer))))
           (when proc (kill-process proc)))
-        
-        ;; 2. مسح الشاشة بالكامل
         (let ((inhibit-read-only t))
           (erase-buffer))
         
-        ;; 3. إعادة تهيئة Eshell لضمان ظهور الـ Prompt في البداية
+        ;; إعادة تشغيل المود لضمان الـ prompt والكتابة فوقه
         (eshell-mode) 
-        
-        ;; 4. كتابة اسم الملف البرمجي (بدون الحاجة لـ send-input فارغ)
         (goto-char (point-max))
         (insert
          (if (eq system-type 'windows-nt)
              (file-name-nondirectory exe)
            (concat "./" (file-name-nondirectory exe)))))
 
+      ;; 5. العودة للكود
       (other-window -1))))
 #+end_src
 
