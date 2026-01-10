@@ -1391,10 +1391,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
               ("C-c m d" . emmet-toggle-expand-inline)))
 #+end_src
 
-
-
-
-
 ** The =osama-emacs-org.el= module
 
 At its core, Org is a plain text markup language. By "markup
