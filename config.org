@@ -261,7 +261,10 @@ In this module I define everything broadly related to the aesthetics of Emacs.
    ("C-c w h" . windmove-left)
    ("C-c w l" . windmove-right)
    ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down)))
+   ("C-c w j" . windmove-down)
+   ;; Coding
+   ("C-c c c" . comment-region)
+   ("C-c c u" . uncomment-region)))
 #+end_src
 
 
