@@ -1070,9 +1070,11 @@ The which-key package provides hints for keys that complete the currently incomp
   :init
   (which-key-mode)
   :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1)
+  :custom
+  (which-key-idle-delay 1)
+  (which-key-min-display-lines 2)
 
+  :config
 ;; Hide tab-switching keybindings from which-key
 (add-to-list 'which-key-replacement-alist 
                '(("C-c t [2-9]" . nil) . t))
