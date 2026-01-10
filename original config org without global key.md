@@ -8,7 +8,32 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+
+* Tips
+mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
+C-h b and c-h m to find keybindings defined by your modes.
+
+
 * TODO New Edits
+
+- [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
+- [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0) and make for example (<cc) to write compiler command in eshell with auto cursor placeholder
+
+https://pastebin.com/AD2rhMSc
+كونفق جيد للغاية
+
+- [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
+
+SPC l - lsp DONT USE LETTER E cause if you changed the eglot to newer lsp mode then you will get confused
+SPC p - projects
+SPC m - major modes and each programming language compiler and debugger
+SPC g - magit
+SPC c - empty Dont put cape keybinds
+
+
+
+- [ ] add headings to all dev sections 
+- [ ] installing and configuring Dependencies
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
 - [ ] move markdown from editing module to essitnal module
@@ -19,6 +44,36 @@
 - [ ] yank pop ring save file in emacs home folder like clipboard
 - [ ] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
+
+* MSYS2 - UCRT64 Installing Dependencies
+
+#+begin_src powershell :tangle no
+pacman -Syu --noconfirm
+
+pacman -S --noconfirm \
+base-devel \
+mingw-w64-ucrt-x86_64-toolchain \
+git \
+mingw-w64-ucrt-x86_64-fd \
+mingw-w64-ucrt-x86_64-ripgrep \
+mingw-w64-ucrt-x86_64-clang \
+mingw-w64-ucrt-x86_64-clang-tools-extra \
+mingw-w64-ucrt-x86_64-cmake \
+mingw-w64-ucrt-x86_64-tree-sitter \
+mingw-w64-ucrt-x86_64-libtree-sitter \
+mingw-w64-ucrt-x86_64-make \
+mingw-w64-ucrt-x86_64-gcc \
+mingw-w64-ucrt-x86_64-libtool \
+mingw-w64-ucrt-x86_64-libvterm \
+mingw-w64-ucrt-x86_64-nodejs
+
+
+npm install -g \
+typescript \
+typescript-language-server \
+vscode-langservers-extracted \
+@tailwindcss/language-server
+#+end_src
 
 
 * The early initialisation of Emacs (=early-init.el=)
@@ -54,21 +109,22 @@ This is the first file that Emacs reads when starting up. It should contain code
     ;; Set conversion style to nil for better Evil integration
     (setq overriding-text-conversion-style nil)))
 
-;; Windows settings
-(when (eq system-type 'windows-nt)
-  ;; Define tools directory using osama-emacs-home-dir variable
-  (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
-    ;; Add Git to exec-path and PATH
-    (add-to-list 'exec-path (concat tools-dir "git/cmd"))
-    (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
-                           path-sep
-                           (getenv "PATH")))
+;; ;; Windows settings
+;; (when (eq system-type 'windows-nt)
+;;   ;; Define tools directory using osama-emacs-home-dir variable
+;;   (let ((tools-dir (expand-file-name "data/tools/" osama-emacs-home-dir)))
+;;     ;; Add Git to exec-path and PATH
+;;     (add-to-list 'exec-path (concat tools-dir "git/cmd"))
+;;     (setenv "PATH" (concat (expand-file-name (concat tools-dir "git/cmd/"))
+;;                            path-sep
+;;                            (getenv "PATH")))
+;;
+;;     ;; Add fd (file search tool) to exec-path
+;;     (add-to-list 'exec-path (concat tools-dir "fd/"))
+;;
+;;     ;; Add ripgrep to exec-path
+;;     (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 
-    ;; Add fd (file search tool) to exec-path
-    (add-to-list 'exec-path (concat tools-dir "fd/"))
-
-    ;; Add ripgrep to exec-path
-    (add-to-list 'exec-path (concat tools-dir "ripgrep/"))))
 
 ;; Fix Arabic text search issues with fd and ripgrep on Windows
 (when (eq system-type 'windows-nt)
@@ -105,6 +161,8 @@ by ~use-package~ when it needs it
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(setq package-check-signature nil)
 #+end_src
 
 ** The =init.el= entry point
@@ -122,8 +180,11 @@ by ~use-package~ when it needs it
 ;; Load UI Appearance
 (load (expand-file-name "osama-emacs-ui-appearance.el" osama-emacs-modules-dir))
 
-;; Load Features
+;; Load Integrated Development Environment (IDE)
+(load (expand-file-name "osama-emacs-dev.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-completion.el" osama-emacs-modules-dir))
+
+;; Load Features
 (load (expand-file-name "osama-emacs-org.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-denote.el" osama-emacs-modules-dir))
 
@@ -413,18 +474,18 @@ This module load basic configurations that apply to most facets of Emacs.
            (interactive)
            (tab-bar-select-tab ,n)))))
 
-  ;; Keybindings C-c 1 .. C-c 9
+  ;; Keybindings C-c t 1 .. C-c t 9
   :bind
-  (("C-c 1" . tab-goto-1)
-   ("C-c 2" . tab-goto-2)
-   ("C-c 3" . tab-goto-3)
-   ("C-c 4" . tab-goto-4)
-   ("C-c 5" . tab-goto-5)
-   ("C-c 6" . tab-goto-6)
-   ("C-c 7" . tab-goto-7)
-   ("C-c 8" . tab-goto-8)
-   ("C-c 9" . tab-goto-9)
-   ;; Optional: new / close / next / prev
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
+
    ("C-c t n" . tab-new)
    ("C-c t c" . tab-close)
    ("C-c t u" . tab-undo)))
@@ -1010,22 +1071,23 @@ The which-key package provides hints for keys that complete the currently incomp
   :init
   (which-key-mode)
   :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1)
+  :custom
+  (which-key-idle-delay 1)
+  (which-key-min-display-lines 2)
 
+  :config
 ;; Hide tab-switching keybindings from which-key
 (add-to-list 'which-key-replacement-alist 
-               '(("C-c [2-9]" . nil) . t))
+               '(("C-c t [2-9]" . nil) . t))
 
 ;; Hide specific commands from which-key
 (add-to-list 'which-key-replacement-alist '(("C-c C-b" . nil) . t))
 (add-to-list 'which-key-replacement-alist '(("C-c C-e" . nil) . t))
 (add-to-list 'which-key-replacement-alist '(("C-c ;"   . nil) . t))
 
-
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
-    "C-c 1" "Tabs 1..9"
+    "C-c t 1" "Tabs 1..9"
     "C-c H" "Help"
     "C-c x" "Text"
     "C-c s" "Search"
@@ -1088,7 +1150,6 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c h o" . consult-outline)
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
-   ("C-c m l" . consult-minor-mode)
    ("C-c t t" . consult-theme)
    ("C-c y"   . consult-yank-pop)))
 #+end_src
@@ -1116,14 +1177,37 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
   (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~corfu~
+*** The =osama-emacs-completion.el= section for ~corfu~ and ~cape~
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
+  :ensure t
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 1)
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ("<tab>" . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ("<backtab>" . corfu-previous))
+  :config
+  ;; جعل TAB يكمل عند عدم وجود Corfu
+  (setq tab-always-indent 'complete))
+
+(use-package cape
+  :demand t
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (setq-default completion-at-point-functions
+                (append (default-value 'completion-at-point-functions)
+                        (list #'cape-dabbrev #'cape-file #'cape-abbrev))))
+
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
@@ -1145,6 +1229,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
+
 (use-package flymake
   :ensure nil             ;; مدمج، لا تنزله
   :hook (prog-mode . flymake-mode)  ;; تفعيل تلقائي في أي ملف برمجي
@@ -1153,6 +1238,144 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         ("M-n" . flymake-goto-next-error)  ;; Alt+n للذهاب للخطأ التالي
         ("M-p" . flymake-goto-prev-error))) ;; Alt+p للذهاب للخطأ السابق
 #+end_src
+
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package eglot
+  :hook ((c-mode c++-mode objc-mode
+          css-mode mhtml-mode js-mode js2-mode web-mode) . eglot-ensure)
+
+  :bind (:map eglot-mode-map
+          ("C-c l a" . eglot-code-actions)
+          ("C-c l r" . eglot-rename)
+          ("C-c l f" . eglot-format)
+          
+          ("C-c l d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
+          ("C-c l u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
+          ("C-c l b" . xref-go-back)))          ;; بديل M-, (Go Back)
+
+#+end_src
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package eldoc
+  :ensure nil   ;; مدمج مع Emacs
+  :after eglot
+  :hook
+  (eglot-managed-mode . eldoc-mode)  ;; يشغل eldoc مع أي buffer تحت Eglot
+  :bind (:map eglot-mode-map
+  ("C-c l h" . eldoc)))
+#+end_src
+
+*** The =osama-emacs-dev.el= section for ~cc-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package cc-mode
+  :ensure nil
+  :bind (:map c++-mode-map
+              ("C-c m c" . osama-c++-run-and-compile))
+  :config
+  (defun osama-c++-run-and-compile ()
+    "Compile C++, clear/refresh eshell on right, and prepare run command."
+    (interactive)
+    (let* ((src  (buffer-file-name))
+           (base (file-name-sans-extension src))
+           (exe  (if (eq system-type 'windows-nt)
+                     (concat base ".exe")
+                   base))
+           (cmd  (format "g++ \"%s\" -o \"%s\"" src exe))
+           (eshell-buf-name "*cpp-eshell*"))
+
+      (save-buffer)
+      (delete-other-windows)
+      (split-window-right)
+
+      (setq display-buffer-alist
+            '(("\\*compilation\\*"
+               (display-buffer-reuse-window display-buffer-at-bottom)
+               (window-height . 10))))
+
+      (compile cmd)
+
+      ;; الانتقال لليمين وتجهيز Eshell
+      (other-window 1)
+      
+      ;; التعديل هنا: نضمن إنشاء البافر وتبديل النافذة إليه
+      (let ((buf (get-buffer-create eshell-buf-name)))
+        (set-window-buffer (selected-window) buf)
+        (with-current-buffer buf
+          ;; إذا لم تكن Eshell تعمل، قم بتشغيلها
+          (unless (derived-mode-p 'eshell-mode)
+            (eshell-mode))
+          
+          ;; إنهاء أي عملية قديمة
+          (let ((proc (get-buffer-process buf)))
+            (when proc (kill-process proc)))
+          
+          ;; مسح المحتوى بالكامل
+          (let ((inhibit-read-only t))
+            (erase-buffer))
+          
+          ;; توليد Prompt جديد وكتابة الأمر
+          (eshell-mode) 
+          (goto-char (point-max))
+          (insert
+           (if (eq system-type 'windows-nt)
+               (file-name-nondirectory exe)
+             (concat "./" (file-name-nondirectory exe))))))
+
+      ;; العودة للكود
+      (other-window -1))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package yasnippet
+  :ensure t
+  :config
+  (add-to-list 'yas-snippet-dirs
+               (expand-file-name "data/snippets/" osama-emacs-home-dir))
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet) ;; يضمن عدم تحميل المكتبة إلا بعد تحميل المحرك
+#+end_src
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; -----------------------------
+;; Magit (Git)
+;; -----------------------------
+(use-package magit
+  :ensure t
+  :bind ("C-c g s" . magit-status))
+#+end_src
+
+*** The =osama-emacs-dev.el= section for ~mhtml-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package mhtml-mode
+  :ensure nil
+  :bind (:map mhtml-mode-map
+              ("C-c m c" . sgml-close-tag)))
+#+end_src
+
+*** The =osama-emacs-dev.el= section for ~emmet-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package emmet-mode
+  :ensure t
+  :hook (web-mode mhtml-mode css-mode js-mode js2-mode typescript-mode)
+  :config
+  (setq emmet-expand-at-point t)
+  :bind (:map emmet-mode-keymap
+              ("C-c m e" . emmet-expand-line)
+              ("C-c m j" . emmet-next-edit-point)
+              ("C-c m k" . emmet-prev-edit-point)
+              ("C-c m w" . emmet-wrap-with-abbreviation)
+              ("C-c m d" . emmet-toggle-expand-inline)))
+#+end_src
+
+
+
 
 
 ** The =osama-emacs-org.el= module
@@ -1350,11 +1573,8 @@ on how I use Org.
   (setq org-log-into-drawer t)
   (setq org-deadline-warning-days 7)
 
-;; load all .org files from the org directory to agenda
-(setq org-agenda-files
-      (directory-files-recursively
-       (expand-file-name "org" osama-emacs-home-dir)
-       "\\.org$"))
+;; load mylife.org file from the org directory to agenda
+(setq org-agenda-files (list (expand-file-name "org/mylife.org" osama-emacs-home-dir)))
 
   ;; تفعيل org-habit
   (require 'org-habit)
@@ -1374,9 +1594,8 @@ on how I use Org.
          "DONE(d!)")))    ; أنجزت
 
 (setq org-refile-targets
-      `((,(expand-file-name "org/Archive.org"    osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Tasks.org"      osama-emacs-home-dir) :maxlevel . 1)
-        (,(expand-file-name "org/Plans.org"      osama-emacs-home-dir) :maxlevel . 1)))
+      `((,(expand-file-name "org/archive.org"    osama-emacs-home-dir) :maxlevel . 1)
+        (,(expand-file-name "org/mylife.org"      osama-emacs-home-dir) :maxlevel . 1)))
 
 ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -1460,7 +1679,7 @@ on how I use Org.
           ;; Tasks / Projects
           ;; ============================
           ("t" "Task" entry
-           (file+olp ,(expand-file-name "org/Tasks.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/mylife.org" osama-emacs-home-dir) "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i"
            :empty-lines 1
            :prepend t)
@@ -1469,55 +1688,10 @@ on how I use Org.
           ;; Quick Notes
           ;; ============================
           ("n" "Quick Notes" entry
-           (file+olp ,(expand-file-name "org/Notes.org" osama-emacs-home-dir) "Inbox")
+           (file+olp ,(expand-file-name "org/mylife.org" osama-emacs-home-dir) "Inbox")
            "* %U - %?\n  %i"
            :empty-lines 1
-           :prepend t)
-
-          ;; ============================
-          ;; Plans
-          ;; ============================
-          ("p" "Plans" entry
-           (file+olp ,(expand-file-name "org/Plans.org" osama-emacs-home-dir) "Inbox")
-           "* %^{Activity} %^g\n  %^T\n  %?"
-           :empty-lines 1)
-
-          ;; ============================
-          ;; Journal Entry
-          ;; ============================
-          ("j" "Journal" entry
-           (file+olp+datetree ,(expand-file-name "org/Journal.org" osama-emacs-home-dir))
-           "* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
-
-          ;; ============================
-          ;; Fitness / Exercise Capture
-          ;; ============================
-          ("e" "New Exercise" entry
-           (file+olp ,(expand-file-name "org/self/Exercises.org" osama-emacs-home-dir) "Inbox")
-           (function
-            (lambda ()
-              (let* ((exercise (read-string "Exercise Name: "))
-                     (muscle (completing-read "Muscle Group: "
-                                              '("Empty" "Chest" "Back" "Legs" "Shoulders" "Arms" "Core")))
-                     (with-weight (y-or-n-p "هل التمرين بوزن؟ "))
-                     (table (if with-weight
-                                "| Date       | Weight | Reps | Notes           |
-|------------+--------+------+----------------|"
-                              "| Date       | Reps | Notes           |
-|------------+------+----------------|")))
-                (concat
-                 "* " exercise "\n"
-                 (unless (string= muscle "Empty")
-                   (format "** Muscle Group: %s\n" muscle))
-                 "\n%?\n"
-                 "** Log\n"
-                 table "\n"
-                 "** Notes\n- Enter your notes here\n"))))
-           :empty-lines 1
-           :prepend t)
-          )))
+           :prepend t))))
 #+end_src
 
 *** The =osama-emacs-org.el= section for Diet Tracker
@@ -1532,7 +1706,7 @@ on how I use Org.
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
-         (file+headline ,(expand-file-name "org/self/Diet.org" osama-emacs-home-dir) "Daily Logs")
+         (file+headline ,(expand-file-name "org/self/diet.org" osama-emacs-home-dir) "Daily Logs")
          "* CAL-IN Diet for day %t
 %^{Weight}p
 | Timestamp | Food | Calories | Carbs | Fats | Protein | Quantity | Total Calories | Total Carbs | Total Fats | Total Protein |
@@ -1624,39 +1798,23 @@ and day."
 
   (add-to-list 'org-capture-templates
                `("Qh" "Add Hifz Task" entry 
-                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Hifz")
+                 (file+headline ,(expand-file-name "org/self/quran.org" osama-emacs-home-dir) "Hifz")
                  "* TODO Memorize Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1))
 
   (add-to-list 'org-capture-templates
                `("Qr" "Add Review Task" entry 
-                 (file+headline ,(expand-file-name "org/self/Quran.org" osama-emacs-home-dir) "Review")
+                 (file+headline ,(expand-file-name "org/self/quran.org" osama-emacs-home-dir) "Review")
                  "* TODO Review Surah %(completing-read \"Select Surah: \" osama-quran-surahs) (Ayah %^{From} to %^{To}) \n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n  %?"
                  :prepend t
                  :empty-lines 1)))
 #+end_src
 
+
+
+
 *** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
-
-These instructions are for **Windows 11**.
-
-You need to configure the paths according to your Obsidian Vault.  
-In my case:
-
-- **Vault path in Obsidian:**  
-  =C:/obsidian/draws=
-
-- **Local draws path (where Emacs stores your drawings):**  
-  =~/osama-vault/emacs/notes/draws=
-
-To make Obsidian recognize drawings stored outside the Vault, we create a **symlink**:
-
-#+BEGIN_SRC powershell :tangle no
-mklink /D "C:\obsidian\draws" "%USERPROFILE%\osama-vault\emacs\notes\draws"
-#+END_SRC
-
-This links the Emacs draws folder to a folder inside the Vault, so both Emacs and Obsidian can access the drawings seamlessly.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package emacs-obsidian-excalidraw
@@ -1673,13 +1831,6 @@ This links the Emacs draws folder to a folder inside the Vault, so both Emacs an
   ;; Export images as SVG instead of PNG
   (setq emacs-obsidian-excalidraw-image-format "svg"))
 #+end_src
-
-**Summary:**
-
-1. Emacs stores Excalidraw drawings in the local folder =~/osama-vault/emacs/notes/draws=.  
-2. Obsidian sees them via the symlink in the Vault =C:/obsidian/draws=.  
-3. All exported images are in **SVG** format.  
-4. Both Emacs and Obsidian can access the drawings seamlessly.
 
 ** The =osama-emacs-denote.el= module
 
@@ -1812,5 +1963,6 @@ Opens i-search if it's closed, closes it if it's open."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 #+end_src
+
 
 
