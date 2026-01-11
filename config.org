@@ -1253,7 +1253,7 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c n" "Notes"
     "C-c n r" "Denote Rename"
     "C-c n s" "Denote Sequence"
-    "C-c m" "Consult-Modes"
+    "C-c m" "Major-Modes Commands"
     "C-c y" "Yank"
     "C-c u" "Undos"
     "C-c ." "Embark"
@@ -1402,13 +1402,13 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           css-mode mhtml-mode js-mode js2-mode web-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
-          ("C-c l a" . eglot-code-actions)
-          ("C-c l r" . eglot-rename)
-          ("C-c l f" . eglot-format)
+          ("C-c c a" . eglot-code-actions)
+          ("C-c c r" . eglot-rename)
+          ("C-c c f" . eglot-format)
           
-          ("C-c l d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
-          ("C-c l u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
-          ("C-c l b" . xref-go-back)))          ;; بديل M-, (Go Back)
+          ("C-c c d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
+          ("C-c c u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
+          ("C-c c b" . xref-go-back)))          ;; بديل M-, (Go Back)
 
 #+end_src
 
@@ -1419,7 +1419,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :hook
   (eglot-managed-mode . eldoc-mode)  ;; يشغل eldoc مع أي buffer تحت Eglot
   :bind (:map eglot-mode-map
-  ("C-c l h" . eldoc)))
+  ("C-c c h" . eldoc)))
 #+end_src
 
 *** The =osama-emacs-dev.el= section for ~cc-mode~
@@ -1523,7 +1523,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure nil
   :bind (:map mhtml-mode-map
               ("C-c m c" . sgml-close-tag)
-              ;; أضفت لك اختصارات السيرفر هنا لتكون تحت نفس البادئة
               ("C-c m s" . httpd-start)     
               ("C-c m i" . impatient-mode)  
               ("C-c m o" . (lambda () (interactive) (browse-url "http://localhost:8080/imp/")))))
