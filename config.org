@@ -64,11 +64,28 @@ SPC c - empty Dont put cape keybinds
 - [ ] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
-* MSYS2 - UCRT64 Installing Dependencies
+* MSYS2 - UCRT64 Settings & Installing Dependencies
+
+
+** Step 1 - Install core development tools
+
+In this step, we install essential development tools using =pacman= (MSYS2 package manager)
+and =npm=. These tools are required for compiling code, running language servers,
+and enabling advanced features in Emacs such as code completion, formatting,
+and project management.
+
+*** Update the package database
 
 #+begin_src powershell :tangle no
 pacman -Syu --noconfirm
+#+end_src
 
+This command updates the MSYS2 package database and upgrades all installed packages
+to their latest versions. It ensures compatibility and prevents dependency issues.
+
+*** Install compilers, tools, and utilities
+
+#+begin_src powershell :tangle no
 pacman -S --noconfirm \
 base-devel \
 mingw-w64-ucrt-x86_64-toolchain \
@@ -85,14 +102,114 @@ mingw-w64-ucrt-x86_64-gcc \
 mingw-w64-ucrt-x86_64-libtool \
 mingw-w64-ucrt-x86_64-libvterm \
 mingw-w64-ucrt-x86_64-nodejs
+#+end_src
 
+Explanation of the installed packages:
 
+- =base-devel=  
+  A collection of essential build tools required for compiling software.
+
+- =mingw-w64-ucrt-x86_64-toolchain=  
+  The main compiler toolchain (GCC, binutils, runtime) for building native Windows programs.
+
+- =git=  
+  Version control system used for managing source code and Emacs packages.
+
+- =fd=  
+  A fast and user-friendly alternative to =find=, heavily used by Emacs for file searching.
+
+- =ripgrep=  
+  Extremely fast text search tool, used by Emacs packages like =consult= and =deadgrep=.
+
+- =clang= and =clang-tools-extra=  
+  Provides the Clang compiler and tools such as =clangd= (C/C++ language server).
+
+- =cmake=  
+  Build system generator used by many modern C and C++ projects.
+
+- =tree-sitter= and =libtree-sitter=  
+  Used for fast and accurate syntax parsing, enabling better highlighting and code navigation.
+
+- =make=  
+  Classic build automation tool.
+
+- =gcc=  
+  GNU Compiler Collection for compiling C and C++ projects.
+
+- =libtool=  
+  Helps manage the creation of shared libraries.
+
+- =libvterm=  
+  Required for Emacs terminal emulators such as =vterm=.
+
+- =nodejs=  
+  Required to run JavaScript-based language servers and development tools.
+
+*** Install language servers via npm
+
+#+begin_src powershell :tangle no
 npm install -g \
 typescript \
 typescript-language-server \
 vscode-langservers-extracted \
 @tailwindcss/language-server
 #+end_src
+
+These packages provide language server support for web development:
+
+- =typescript=  
+  The TypeScript compiler, also required by many JavaScript tooling systems.
+
+- =typescript-language-server=  
+  Language server for JavaScript and TypeScript, used by Emacs via =eglot= or =lsp-mode=.
+
+- =vscode-langservers-extracted=  
+  A collection of language servers for HTML, CSS, JSON, and ESLint.
+
+- =@tailwindcss/language-server=  
+  Language server for Tailwind CSS, enabling class name completion and validation.
+
+
+** Step 2 -  We Need to Edit System Environment Variables
+
+When installing tools such as =fd=, =ripgrep=, language servers, compilers, or =Git=,
+Emacs needs to be able to find them regardless of where they are
+installed on the system.
+
+By adding their installation directories to the system environment variable =PATH=,
+we make these tools accessible from any terminal or program without having to type
+their full paths every time.
+
+This step is essential for features such as:
+- Fast file searching (=fd=, =ripgrep=)
+- Code intelligence (language servers)
+- Building and compiling projects (compilers)
+- Version control (=Git=)
+
+*** Steps
+
+1. Open:
+   =Control Panel → User Accounts → Change my environment variables=
+
+2. Under *User variables*, click *New*:
+   - Variable name: =HOME=
+   - Variable value: =C:\Users\USERNAME=
+   Then click *OK*.
+
+3. Select the =Path= variable and click *Edit*.
+   Add the following directory:
+   - =C:\msys64\ucrt64\bin=
+
+   This directory typically contains:
+   - Compilers (GCC, Clang)
+   - Language servers
+   - Git
+   - Utilities such as =fd= and =ripgrep=
+
+4. Remove any old or duplicate =msys64= directories from the *System variables*
+   to avoid conflicts.
+
+5. Click *OK* on all dialogs to apply the changes.
 
 
 * The early initialisation of Emacs (=early-init.el=)
