@@ -1399,7 +1399,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package eglot
   :hook ((c-mode c++-mode objc-mode
-          css-mode mhtml-mode js-mode js2-mode web-mode json-mode typescript-mode) . eglot-ensure)
+          css-mode js-mode js2-mode json-mode typescript-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
           ("C-c c a" . eglot-code-actions)
@@ -1526,11 +1526,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 
-
-
-
-
-
 *** The =osama-emacs-dev.el= section for ~js2-mode~
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package js2-mode
@@ -1572,19 +1567,13 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package web-mode
   :ensure t
-  :mode ("\\.html\\'" "\\.htm\\'")
+  :mode ("\\.html\\'" "\\.htm\\'" "\\.jsx\\'" "\\.tsx\\'")
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
   (web-mode-enable-auto-pairing t)
-  (web-mode-enable-auto-closing t)
-  :config
-  (with-eval-after-load 'eglot
-    ;; HTML
-    (add-to-list 'eglot-server-programs
-                 '((web-mode :language-id "html")
-                   . ("vscode-html-language-server" "--stdio")))))
+  (web-mode-enable-auto-closing t))
 
 (use-package css-mode
   :mode "\\.css\\'"
