@@ -1389,6 +1389,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (:map flymake-mode-map
         ("M-n" . flymake-goto-next-error)  ;; Alt+n للذهاب للخطأ التالي
         ("M-p" . flymake-goto-prev-error))) ;; Alt+p للذهاب للخطأ السابق
+  :custom
+  (flymake-no-changes-timeout 0.5)
+  (flymake-start-on-flymake-mode t)
+  (flymake-start-on-save-buffer t))
 #+end_src
 
 
@@ -1404,7 +1408,25 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           
           ("C-c c d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
           ("C-c c u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
-          ("C-c c b" . xref-go-back)))          ;; بديل M-, (Go Back)
+          ("C-c c b" . xref-go-back))          ;; بديل M-, (Go Back)
+  :config
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq-local eldoc-documentation-functions
+                          (cons #'flymake-eldoc-function
+                                (remove #'flymake-eldoc-function
+                                        eldoc-documentation-functions)))
+              (setq-local eldoc-documentation-strategy
+                          #'eldoc-documentation-compose-eagerly)))
+  (fset #'jsonrpc--log-event #'ignore))
+
+(use-package eglot-booster
+  :vc (:url "https://github.com/jdtsmith/eglot-booster")
+  :after eglot
+  :custom
+  (eglot-booster-io-only t)
+  :config
+  (eglot-booster-mode))
 
 #+end_src
 
