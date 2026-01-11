@@ -8,6 +8,14 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* SPC Leader Key Prefixes
+Prefix 	Category	Description
+SPC c	(Code/LSP)	Commands for coding assistance, such as linting, formatting, navigation (go to definition), refactoring, and general LSP mode interactions.
+SPC m	(Major Mode)	Commands relevant to the specific file type you are editing (e.g., Python mode, Git mode, Org mode).
+
+
+
+
 * Example of common ordering for ~use-package~ 
 
 #+begin_src emacs-lisp :tangle no
@@ -28,27 +36,35 @@
 
 
 
+
+
+
+
+
+
+
+
+
 * Tips
 mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
 
 * TODO New Edits
-
+- [ ] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
+- [ ] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
+- [ ] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
 
 https://pastebin.com/AD2rhMSc
 كونفق جيد للغاية
 
-- [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
+- [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion and code-related commands and global movments like comment and uncomment), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
 
-SPC l - lsp DONT USE LETTER E cause if you changed the eglot to newer lsp mode then you will get confused
 SPC p - projects
 SPC m - major modes and each programming language compiler and debugger
 SPC g - magit
-SPC c - empty Dont put cape keybinds
-
 
 
 - [ ] add headings to all dev sections 
@@ -64,11 +80,28 @@ SPC c - empty Dont put cape keybinds
 - [ ] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
-* MSYS2 - UCRT64 Installing Dependencies
+* MSYS2 - UCRT64 Settings & Installing Dependencies
+
+
+** Step 1 - Install core development tools
+
+In this step, we install essential development tools using =pacman= (MSYS2 package manager)
+and =npm=. These tools are required for compiling code, running language servers,
+and enabling advanced features in Emacs such as code completion, formatting,
+and project management.
+
+*** Update the package database
 
 #+begin_src powershell :tangle no
 pacman -Syu --noconfirm
+#+end_src
 
+This command updates the MSYS2 package database and upgrades all installed packages
+to their latest versions. It ensures compatibility and prevents dependency issues.
+
+*** Install compilers, tools, and utilities
+
+#+begin_src powershell :tangle no
 pacman -S --noconfirm \
 base-devel \
 mingw-w64-ucrt-x86_64-toolchain \
@@ -85,14 +118,114 @@ mingw-w64-ucrt-x86_64-gcc \
 mingw-w64-ucrt-x86_64-libtool \
 mingw-w64-ucrt-x86_64-libvterm \
 mingw-w64-ucrt-x86_64-nodejs
+#+end_src
 
+Explanation of the installed packages:
 
+- =base-devel=  
+  A collection of essential build tools required for compiling software.
+
+- =mingw-w64-ucrt-x86_64-toolchain=  
+  The main compiler toolchain (GCC, binutils, runtime) for building native Windows programs.
+
+- =git=  
+  Version control system used for managing source code and Emacs packages.
+
+- =fd=  
+  A fast and user-friendly alternative to =find=, heavily used by Emacs for file searching.
+
+- =ripgrep=  
+  Extremely fast text search tool, used by Emacs packages like =consult= and =deadgrep=.
+
+- =clang= and =clang-tools-extra=  
+  Provides the Clang compiler and tools such as =clangd= (C/C++ language server).
+
+- =cmake=  
+  Build system generator used by many modern C and C++ projects.
+
+- =tree-sitter= and =libtree-sitter=  
+  Used for fast and accurate syntax parsing, enabling better highlighting and code navigation.
+
+- =make=  
+  Classic build automation tool.
+
+- =gcc=  
+  GNU Compiler Collection for compiling C and C++ projects.
+
+- =libtool=  
+  Helps manage the creation of shared libraries.
+
+- =libvterm=  
+  Required for Emacs terminal emulators such as =vterm=.
+
+- =nodejs=  
+  Required to run JavaScript-based language servers and development tools.
+
+*** Install language servers via npm
+
+#+begin_src powershell :tangle no
 npm install -g \
 typescript \
 typescript-language-server \
 vscode-langservers-extracted \
 @tailwindcss/language-server
 #+end_src
+
+These packages provide language server support for web development:
+
+- =typescript=  
+  The TypeScript compiler, also required by many JavaScript tooling systems.
+
+- =typescript-language-server=  
+  Language server for JavaScript and TypeScript, used by Emacs via =eglot= or =lsp-mode=.
+
+- =vscode-langservers-extracted=  
+  A collection of language servers for HTML, CSS, JSON, and ESLint.
+
+- =@tailwindcss/language-server=  
+  Language server for Tailwind CSS, enabling class name completion and validation.
+
+
+** Step 2 -  We Need to Edit System Environment Variables
+
+When installing tools such as =fd=, =ripgrep=, language servers, compilers, or =Git=,
+Emacs needs to be able to find them regardless of where they are
+installed on the system.
+
+By adding their installation directories to the system environment variable =PATH=,
+we make these tools accessible from any terminal or program without having to type
+their full paths every time.
+
+This step is essential for features such as:
+- Fast file searching (=fd=, =ripgrep=)
+- Code intelligence (language servers)
+- Building and compiling projects (compilers)
+- Version control (=Git=)
+
+*** Steps
+
+1. Open:
+   =Control Panel → User Accounts → Change my environment variables=
+
+2. Under *User variables*, click *New*:
+   - Variable name: =HOME=
+   - Variable value: =C:\Users\USERNAME=
+   Then click *OK*.
+
+3. Select the =Path= variable and click *Edit*.
+   Add the following directory:
+   - =C:\msys64\ucrt64\bin=
+
+   This directory typically contains:
+   - Compilers (GCC, Clang)
+   - Language servers
+   - Git
+   - Utilities such as =fd= and =ripgrep=
+
+4. Remove any old or duplicate =msys64= directories from the *System variables*
+   to avoid conflicts.
+
+5. Click *OK* on all dialogs to apply the changes.
 
 
 * The early initialisation of Emacs (=early-init.el=)
@@ -165,23 +298,22 @@ by ~use-package~ when it needs it
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
-(require 'package)
-(setq package-archives
-      '(("melpa"  . "https://melpa.org/packages/")
-        ("org"    . "https://orgmode.org/elpa/")
-        ("elpa"   . "https://elpa.gnu.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-(package-initialize)
+(use-package package
+  :ensure nil
+  :config
+  (setq package-archives
+        '(("melpa"  . "https://melpa.org/packages/")
+          ("org"    . "https://orgmode.org/elpa/")
+          ("elpa"   . "https://elpa.gnu.org/packages/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  (package-initialize))
 
-;; Install use-package if missing
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
-(setq package-check-signature nil)
+(use-package use-package
+  :custom
+  (use-package-always-ensure t)
+  (package-native-compile t)
+  (package-check-signature nil)
+  (warning-minimum-level :emergency))
 #+end_src
 
 ** The =init.el= entry point
@@ -193,7 +325,6 @@ by ~use-package~ when it needs it
 
 ;; Load Core Essentials first
 (load (expand-file-name "osama-emacs-core.el" osama-emacs-modules-dir))
-(load (expand-file-name "osama-emacs-essentials.el" osama-emacs-modules-dir))
 (load (expand-file-name "osama-emacs-editing.el" osama-emacs-modules-dir))
 
 ;; Load UI Appearance
@@ -343,12 +474,9 @@ This module load basic configurations that apply to most facets of Emacs.
   (setq default-input-method "arabic"))
 #+end_src
 
-** The =osama-emacs-essentials.el= module
+*** The =osama-emacs-core.el= Section for Files
 
-This module load basic configurations that apply to most facets of Emacs.
-
-*** The =osama-emacs-essentials.el= Section for Files
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emacs
@@ -360,9 +488,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c f S" . write-file)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Dired
+*** The =osama-emacs-core.el= section for Dired
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
     (use-package dired
       :ensure nil ;; built-in package
       :commands (dired dired-jump)
@@ -388,9 +516,9 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
-  *** The =osama-emacs-essentials.el= section for ~dired-hide-details-mode~
+  *** The =osama-emacs-core.el= section for ~dired-hide-details-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
   (use-package dired
     :ensure nil
     :bind (:map dired-mode-map
@@ -428,8 +556,8 @@ This module load basic configurations that apply to most facets of Emacs.
 #+end_src
 
 
-*** The =osama-emacs-essentials.el= Section for Buffers
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+*** The =osama-emacs-core.el= Section for Buffers
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -438,83 +566,9 @@ This module load basic configurations that apply to most facets of Emacs.
    ("C-c b p" . previous-buffer)))
 #+end_src
 
-*** The =osama-emacs-essentials.el= section for Windows
+*** The =osama-emacs-core.el= section for ~OpenWith~ package
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
-(use-package emacs
-  :ensure nil
-  :bind
-  (("C-c w w" . other-window)                ;; next window
-
-   ;; Split windows
-   ("C-c w s" . split-window-below)          ;; split below (horizontal)
-   ("C-c w v" . split-window-right)          ;; split right (vertical)
-
-   ;; Delete windows
-   ("C-c w d" . delete-window)               ;; delete current window
-   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
-   ("C-c w o" . delete-other-windows)        ;; keep only current window
-
-   ;; Resize windows
-   ("C-c w {" . shrink-window-horizontally)
-   ("C-c w }" . enlarge-window-horizontally)
-   ("C-c w ^" . enlarge-window)
-
-   ;; Move between windows with arrows
-   ("C-c w h" . windmove-left)
-   ("C-c w l" . windmove-right)
-   ("C-c w k" . windmove-up)
-   ("C-c w j" . windmove-down))
-
-  :config
-  ;; Enable window undo/redo
-  (winner-mode 1))
-#+end_src
-
-*** The =osama-emacs-essentials.el= section for ~tab-bar-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
-(use-package emacs
-  :ensure nil
-  :init
-  (tab-bar-mode 1)
-  (setq tab-bar-show t
-        tab-bar-new-tab-choice "*scratch*"
-        tab-bar-tab-name-truncated-max 20
-        tab-bar-tab-hints t
-        tab-bar-close-button-show nil
-        tab-bar-back-button-show nil)
-  
-  ;; Functions to jump to tab by number
-  (dotimes (i 9)
-    (let ((n (1+ i)))
-      (defalias (intern (format "tab-goto-%d" n))
-        `(lambda ()
-           (interactive)
-           (tab-bar-select-tab ,n)))))
-
-  ;; Keybindings C-c t 1 .. C-c t 9
-  :bind
-  (("C-c t 1" . tab-goto-1)
-   ("C-c t 2" . tab-goto-2)
-   ("C-c t 3" . tab-goto-3)
-   ("C-c t 4" . tab-goto-4)
-   ("C-c t 5" . tab-goto-5)
-   ("C-c t 6" . tab-goto-6)
-   ("C-c t 7" . tab-goto-7)
-   ("C-c t 8" . tab-goto-8)
-   ("C-c t 9" . tab-goto-9)
-
-   ("C-c t n" . tab-new)
-   ("C-c t c" . tab-close)
-   ("C-c t u" . tab-undo)))
-#+end_src
-
-
-
-*** The =osama-emacs-essentials.el= section for ~OpenWith~ package
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 ;; Open files with external applications
 (use-package openwith
   :config
@@ -524,74 +578,11 @@ This module load basic configurations that apply to most facets of Emacs.
    '(("\\.\\(?:mp4\\|mkv\\|avi\\)$" "vlc" (file)))))
 #+end_src
 
-*** The =osama-emacs-essentials.el= settings for ~dashboard~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
-(use-package dashboard
-  :config
-  ;; Disable default banner
-  (defun dashboard-insert-banner ()
-    "Do nothing, disable banner completely.")
-
-  (dashboard-setup-startup-hook)
-
-  ;; ASCII logo
-(setq dashboard-banner-logo-title
-"
-
- ______ ______ ______ ______ ______
-||O   |||S   |||A   |||M   |||A   ||
-||____|||____|||____|||____|||____||
-|/____\\|/____\\|/____\\|/____\\|/____\\|
- __________________________________
-||          Time is Money         ||
-||________________________________||
-|/________________________________\\|")
-
-  ;; Remove default items
-  (setq dashboard-items nil)
-
-  ;; General dashboard settings
-  (setq dashboard-set-init-info   t
-        dashboard-show-icons      t
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons  t)
-  ;; Footer messages: random inspirational quotes
-  (setq dashboard-footer-messages
-      '("Welcome back, Osama!"
-        "Focus on progress, not perfection."
-        "Every note is a step forward."
-        "Keep building your system."
-        "Consistency beats intensity."
-        "Small steps lead to big changes."
-        "Your notes are your second brain."
-        "Stay curious, stay organized."
-        "One task at a time."
-        "Knowledge compounds over time."))
-
-  ;; Custom commands section
-  (setq dashboard-init-info
-        (concat "\n"
-                "󰃭  Org Agenda ........... [SPC o a]\n"
-                "  Org Capture .......... [SPC o c]\n"
-                "󰎚  New Note ............. [SPC n n]\n"
-                "󰠮  Notes Folder ......... [SPC n d]\n"
-                "󰈞  Find File ............ [SPC f f]\n"
-                "  Recent Files ......... [SPC f r]\n"
-                "  Jump to Bookmarks .... [SPC f b]\n"
-                "  Dired ................ [SPC d d]\n"
-                "  Find Word ............ [SPC s r]\n"
-                "󰔎  Change Theme ......... [SPC t t]\n"
-                "󰈞  Open Config .......... [SPC e c]\n"
-                "󰈞  Quit ................. [SPC e q]")))
-#+end_src
-
-
-*** The =osama-emacs-essentials.el= section for Startup Time
+*** The =osama-emacs-core.el= section for Startup Time
 
 Display Emacs startup time and garbage collection count
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (defun osama-display-startup-time ()
   "Display Emacs startup time and garbage collection count in the echo area."
   (message "Emacs loaded in %s with %d garbage collections."
@@ -602,10 +593,10 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-essentials.el= section for Treemacs
+*** The =osama-emacs-core.el= section for Treemacs
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-essentials.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 ;; 1. إعداد Treemacs
 (use-package treemacs
   :defer t
@@ -679,6 +670,144 @@ Display Emacs startup time and garbage collection count
   (when (display-graphic-p)
     (context-menu-mode 1)))
 #+end_src
+
+
+*** The =osama-emacs-ui-appearance.el= section for Windows
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+(use-package window
+  :ensure nil
+  :bind
+  (("C-c w w" . other-window)                ;; next window
+
+   ;; Split windows
+   ("C-c w s" . split-window-below)          ;; split below (horizontal)
+   ("C-c w v" . split-window-right)          ;; split right (vertical)
+
+   ;; Delete windows
+   ("C-c w d" . delete-window)               ;; delete current window
+   ("C-c w D" . kill-buffer-and-window)      ;; delete window + buffer
+   ("C-c w o" . delete-other-windows)        ;; keep only current window
+
+   ;; Resize windows
+   ("C-c w {" . shrink-window-horizontally)
+   ("C-c w }" . enlarge-window-horizontally)
+   ("C-c w ^" . enlarge-window)
+
+   ;; Move between windows with arrows
+   ("C-c w h" . windmove-left)
+   ("C-c w l" . windmove-right)
+   ("C-c w k" . windmove-up)
+   ("C-c w j" . windmove-down))
+
+  :config
+  ;; Enable window undo/redo
+  (winner-mode 1))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= section for ~tab-bar-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+(use-package tab-bar
+  :ensure nil
+  :init
+  (tab-bar-mode 1)
+  (setq tab-bar-show t
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-tab-name-truncated-max 20
+        tab-bar-tab-hints t
+        tab-bar-close-button-show nil
+        tab-bar-back-button-show nil)
+  
+  ;; Functions to jump to tab by number
+  (dotimes (i 9)
+    (let ((n (1+ i)))
+      (defalias (intern (format "tab-goto-%d" n))
+        `(lambda ()
+           (interactive)
+           (tab-bar-select-tab ,n)))))
+
+  ;; Keybindings C-c t 1 .. C-c t 9
+  :bind
+  (("C-c t 1" . tab-goto-1)
+   ("C-c t 2" . tab-goto-2)
+   ("C-c t 3" . tab-goto-3)
+   ("C-c t 4" . tab-goto-4)
+   ("C-c t 5" . tab-goto-5)
+   ("C-c t 6" . tab-goto-6)
+   ("C-c t 7" . tab-goto-7)
+   ("C-c t 8" . tab-goto-8)
+   ("C-c t 9" . tab-goto-9)
+
+   ("C-c t n" . tab-new)
+   ("C-c t c" . tab-close)
+   ("C-c t u" . tab-undo)))
+#+end_src
+
+*** The =osama-emacs-ui-appearance.el= settings for ~dashboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+(use-package dashboard
+  :custom
+  ;; ASCII logo
+  (dashboard-banner-logo-title
+"
+
+ ______ ______ ______ ______ ______
+||O   |||S   |||A   |||M   |||A   ||
+||____|||____|||____|||____|||____||
+|/____\\|/____\\|/____\\|/____\\|/____\\|
+ __________________________________
+||          Time is Money          ||
+||________________________________||
+|/________________________________\\|")
+
+  ;; Remove default items
+  (dashboard-items nil)
+
+  ;; General dashboard settings
+  (dashboard-set-init-info t)
+  (dashboard-show-icons t)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+
+  ;; Footer messages: random inspirational quotes
+  (dashboard-footer-messages
+   '("Welcome back, Osama!"
+     "Focus on progress, not perfection."
+     "Every note is a step forward."
+     "Keep building your system."
+     "Consistency beats intensity."
+     "Small steps lead to big changes."
+     "Your notes are your second brain."
+     "Stay curious, stay organized."
+     "One task at a time."
+     "Knowledge compounds over time."))
+
+  ;; Custom commands section
+  (dashboard-init-info
+   (concat "\n"
+           "󰃭  Org Agenda ........... [SPC o a]\n"
+           "  Org Capture .......... [SPC o c]\n"
+           "󰎚  New Note ............. [SPC n n]\n"
+           "󰠮  Notes Folder ......... [SPC n d]\n"
+           "󰈞  Find File ............ [SPC f f]\n"
+           "  Recent Files ......... [SPC f r]\n"
+           "  Jump to Bookmarks .... [SPC f b]\n"
+           "  Dired ................ [SPC d d]\n"
+           "  Find Word ............ [SPC s r]\n"
+           "󰔎  Change Theme ......... [SPC t t]\n"
+           "󰈞  Open Config .......... [SPC e c]\n"
+           "󰈞  Quit ................. [SPC e q]"))
+
+  :config
+  ;; Disable default banner
+  (defun dashboard-insert-banner ()
+    "Do nothing, disable banner completely.")
+
+  (dashboard-setup-startup-hook))
+#+end_src
+
 
 *** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
 
@@ -920,11 +1049,9 @@ Display Emacs startup time and garbage collection count
   :bind
   ("C-c t s" . solaire-mode)
   
-  :config  ;; <--- تمت إضافة هذا السطر المهم
-  ;; 1. تفعيل إعادة تلوين الـ Fringe (يوضع كمتغير)
+  :config 
   (setq solaire-mode-remap-fringe t)
 
-  ;; 2. الحل الجذري لمشكلة أرقام الأسطر (جعل الخلفية شفافة)
   (set-face-attribute 'line-number nil :background nil)
   (set-face-attribute 'line-number-current-line nil :background nil))
 #+end_src
@@ -1018,7 +1145,7 @@ Display Emacs startup time and garbage collection count
              (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
     (recenter))
   :bind
-  ("C-c r" . osama-toggle-text-direction))
+  ("C-c t r" . osama-toggle-text-direction))
 #+end_src
 
 
@@ -1055,7 +1182,16 @@ Display Emacs startup time and garbage collection count
   :ensure nil  ;; built-in
   :config
   (electric-pair-mode 1))
+#+end_src
 
+
+*** The =osama-emacs-editing.el= section for comment text and uncomment it 
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
+(use-package emacs
+  :ensure nil  ;; built-in
+  :bind
+  ("C-c c /"   . comment-or-uncomment-region))
 #+end_src
 
 *** The =osama-emacs-editing.el= section for Markdown Basic Settings
@@ -1067,8 +1203,6 @@ Display Emacs startup time and garbage collection count
   :bind (:map markdown-mode-map
          ("C-c C-e" . markdown-do)))
 #+end_src
-
-
 
 
 ** The =osama-emacs-completion.el= module
@@ -1106,7 +1240,7 @@ The which-key package provides hints for keys that complete the currently incomp
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
     "C-c t 1" "Tabs 1..9"
-    "C-c H" "Help"
+    "C-c h" "Help"
     "C-c x" "Text"
     "C-c s" "Search"
     "C-c w" "Windows"
@@ -1115,7 +1249,7 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c n" "Notes"
     "C-c n r" "Denote Rename"
     "C-c n s" "Denote Sequence"
-    "C-c m" "Consult-Modes"
+    "C-c m" "Major-Modes Commands"
     "C-c y" "Yank"
     "C-c u" "Undos"
     "C-c ." "Embark"
@@ -1255,6 +1389,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (:map flymake-mode-map
         ("M-n" . flymake-goto-next-error)  ;; Alt+n للذهاب للخطأ التالي
         ("M-p" . flymake-goto-prev-error))) ;; Alt+p للذهاب للخطأ السابق
+  :custom
+  (flymake-no-changes-timeout 0.5)
+  (flymake-start-on-flymake-mode t)
+  (flymake-start-on-save-buffer t))
 #+end_src
 
 
@@ -1264,13 +1402,31 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
           css-mode mhtml-mode js-mode js2-mode web-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
-          ("C-c l a" . eglot-code-actions)
-          ("C-c l r" . eglot-rename)
-          ("C-c l f" . eglot-format)
+          ("C-c c a" . eglot-code-actions)
+          ("C-c c r" . eglot-rename)
+          ("C-c c f" . eglot-format)
           
-          ("C-c l d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
-          ("C-c l u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
-          ("C-c l b" . xref-go-back)))          ;; بديل M-, (Go Back)
+          ("C-c c d" . xref-find-definitions)   ;; بديل M-. (Go to Definition)
+          ("C-c c u" . xref-find-references)    ;; بديل M-? (Find Usages/References)
+          ("C-c c b" . xref-go-back))          ;; بديل M-, (Go Back)
+  :config
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq-local eldoc-documentation-functions
+                          (cons #'flymake-eldoc-function
+                                (remove #'flymake-eldoc-function
+                                        eldoc-documentation-functions)))
+              (setq-local eldoc-documentation-strategy
+                          #'eldoc-documentation-compose-eagerly)))
+  (fset #'jsonrpc--log-event #'ignore))
+
+(use-package eglot-booster
+  :vc (:url "https://github.com/jdtsmith/eglot-booster")
+  :after eglot
+  :custom
+  (eglot-booster-io-only t)
+  :config
+  (eglot-booster-mode))
 
 #+end_src
 
@@ -1281,7 +1437,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :hook
   (eglot-managed-mode . eldoc-mode)  ;; يشغل eldoc مع أي buffer تحت Eglot
   :bind (:map eglot-mode-map
-  ("C-c l h" . eldoc)))
+  ("C-c c h" . eldoc)))
 #+end_src
 
 *** The =osama-emacs-dev.el= section for ~cc-mode~
@@ -1367,18 +1523,16 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind ("C-c g s" . magit-status))
 #+end_src
 
-*** The =osama-emacs-dev.el= section for ~mhtml-mode~
+*** The =osama-emacs-dev.el= section for HTML & CSS mode
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; HTML Mode
 (use-package mhtml-mode
   :ensure nil
   :bind (:map mhtml-mode-map
               ("C-c m c" . sgml-close-tag)))
-#+end_src
 
-*** The =osama-emacs-dev.el= section for ~emmet-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Emmet Mode (Fast Snippets)
 (use-package emmet-mode
   :ensure t
   :hook (web-mode mhtml-mode css-mode js-mode js2-mode typescript-mode)
@@ -1393,6 +1547,60 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 
+*** The =osama-emacs-dev.el= section Web Live Preview
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Localhost Server Configuration
+(use-package simple-httpd
+  :ensure t
+  :config
+  (setq httpd-port 8080))
+
+;; Live Preview Configuration
+(use-package impatient-mode
+  :ensure t)
+
+(use-package transient
+  :after mhtml-mode
+  :bind (:map mhtml-mode-map
+              ("C-c m w" . osama-web-dispatch))
+  :config
+  (transient-define-prefix osama-web-dispatch ()
+    "قائمة تحكم في خادم الويب والمعاينة الحية"
+
+    ["Web Server"
+     ;; :transient t تجعل القائمة تبقى بعد الضغط
+     ("s" "Start Server"
+      (lambda ()
+        (interactive)
+        (httpd-start)
+        (message "🚀 Server Started")) :transient t)
+
+     ("k" "Stop Server"
+      (lambda ()
+        (interactive)
+        (httpd-stop)
+        (message "🛑 Server Stopped")) :transient t)
+
+     ("p" "Port Settings"
+      (lambda ()
+        (interactive)
+        (customize-variable 'httpd-port)
+        (message "⚙️ Adjusting httpd-port")) :transient t)]
+
+    ["Live Preview"
+     ("i" "Impatient Mode"
+      (lambda ()
+        (interactive)
+        (impatient-mode)
+        (message "👀 Impatient Mode toggled")) :transient t)
+
+     ("o" "Open Browser"
+      (lambda ()
+        (interactive)
+        (browse-url (format "http://localhost:%d/imp/" httpd-port))
+        (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
+#+end_src
 
 
 
