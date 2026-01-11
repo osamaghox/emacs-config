@@ -51,6 +51,7 @@ C-h b and c-h m to find keybindings defined by your modes.
 
 
 * TODO New Edits
+- [ ] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
 - [ ] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
@@ -60,12 +61,9 @@ https://pastebin.com/AD2rhMSc
 
 - [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion and code-related commands and global movments like comment and uncomment), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
 
-SPC l - lsp DONT USE LETTER E cause if you changed the eglot to newer lsp mode then you will get confused
 SPC p - projects
 SPC m - major modes and each programming language compiler and debugger
 SPC g - magit
-SPC c - empty Dont put cape keybinds
-
 
 
 - [ ] add headings to all dev sections 
