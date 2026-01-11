@@ -1050,11 +1050,9 @@ Display Emacs startup time and garbage collection count
   :bind
   ("C-c t s" . solaire-mode)
   
-  :config  ;; <--- تمت إضافة هذا السطر المهم
-  ;; 1. تفعيل إعادة تلوين الـ Fringe (يوضع كمتغير)
+  :config 
   (setq solaire-mode-remap-fringe t)
 
-  ;; 2. الحل الجذري لمشكلة أرقام الأسطر (جعل الخلفية شفافة)
   (set-face-attribute 'line-number nil :background nil)
   (set-face-attribute 'line-number-current-line nil :background nil))
 #+end_src
@@ -1148,7 +1146,7 @@ Display Emacs startup time and garbage collection count
              (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
     (recenter))
   :bind
-  ("C-c r" . osama-toggle-text-direction))
+  ("C-c t r" . osama-toggle-text-direction))
 #+end_src
 
 
@@ -1194,8 +1192,7 @@ Display Emacs startup time and garbage collection count
 (use-package emacs
   :ensure nil  ;; built-in
   :bind
-  (("C-c c l"   . comment-line)
-   ("C-c c u"   . uncomment-region)))
+  ("C-c c /"   . comment-or-uncomment-region))
 #+end_src
 
 *** The =osama-emacs-editing.el= section for Markdown Basic Settings
@@ -1244,7 +1241,7 @@ The which-key package provides hints for keys that complete the currently incomp
   ;; مجموعات which-key
   (which-key-add-key-based-replacements
     "C-c t 1" "Tabs 1..9"
-    "C-c H" "Help"
+    "C-c h" "Help"
     "C-c x" "Text"
     "C-c s" "Search"
     "C-c w" "Windows"
