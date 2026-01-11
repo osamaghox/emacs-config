@@ -1480,18 +1480,30 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind ("C-c g s" . magit-status))
 #+end_src
 
-*** The =osama-emacs-dev.el= section for ~mhtml-mode~
+*** The =osama-emacs-dev.el= section for Web Development
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Localhost Server Configuration
+(use-package simple-httpd
+  :ensure t
+  :config
+  (setq httpd-port 8080))
+
+;; Live Preview Configuration
+(use-package impatient-mode
+  :ensure t)
+
+;; HTML Mode & Keybindings
 (use-package mhtml-mode
   :ensure nil
   :bind (:map mhtml-mode-map
-              ("C-c m c" . sgml-close-tag)))
-#+end_src
+              ("C-c m c" . sgml-close-tag)
+              ;; أضفت لك اختصارات السيرفر هنا لتكون تحت نفس البادئة
+              ("C-c m s" . httpd-start)     
+              ("C-c m i" . impatient-mode)  
+              ("C-c m o" . (lambda () (interactive) (browse-url "http://localhost:8080/imp/")))))
 
-*** The =osama-emacs-dev.el= section for ~emmet-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Emmet Mode (Fast Snippets)
 (use-package emmet-mode
   :ensure t
   :hook (web-mode mhtml-mode css-mode js-mode js2-mode typescript-mode)
@@ -1504,6 +1516,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
               ("C-c m w" . emmet-wrap-with-abbreviation)
               ("C-c m d" . emmet-toggle-expand-inline)))
 #+end_src
+
 
 ** The =osama-emacs-org.el= module
 
