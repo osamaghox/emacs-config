@@ -1168,7 +1168,17 @@ Display Emacs startup time and garbage collection count
   :ensure nil  ;; built-in
   :config
   (electric-pair-mode 1))
+#+end_src
 
+
+*** The =osama-emacs-editing.el= section for comment text and uncomment it 
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
+(use-package emacs
+  :ensure nil  ;; built-in
+  :bind
+  (("C-c c l"   . comment-line)
+   ("C-c c u"   . uncomment-region)))
 #+end_src
 
 *** The =osama-emacs-editing.el= section for Markdown Basic Settings
@@ -1180,8 +1190,6 @@ Display Emacs startup time and garbage collection count
   :bind (:map markdown-mode-map
          ("C-c C-e" . markdown-do)))
 #+end_src
-
-
 
 
 ** The =osama-emacs-completion.el= module
