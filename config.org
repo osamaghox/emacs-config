@@ -283,12 +283,13 @@ by ~use-package~ when it needs it
 ;;; -*- lexical-binding: t; -*-
 
 (use-package package
+  :ensure nil
   :config
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/")
-                ("org"    . "https://orgmode.org/elpa/")
-                ("elpa"   . "https://elpa.gnu.org/packages/")
-                ("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+  (setq package-archives
+        '(("melpa"  . "https://melpa.org/packages/")
+          ("org"    . "https://orgmode.org/elpa/")
+          ("elpa"   . "https://elpa.gnu.org/packages/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize))
 
 (use-package use-package
