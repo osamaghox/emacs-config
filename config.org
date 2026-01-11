@@ -1580,17 +1580,11 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (web-mode-enable-auto-pairing t)
   (web-mode-enable-auto-closing t)
   :config
-  ;; ربط web-mode مع Eglot حسب language-id
   (with-eval-after-load 'eglot
     ;; HTML
     (add-to-list 'eglot-server-programs
                  '((web-mode :language-id "html")
-                   . ("vscode-html-language-server" "--stdio")))
-
-    ;; CSS
-    (add-to-list 'eglot-server-programs
-                 '((web-mode :language-id "css")
-                   . ("vscode-css-language-server" "--stdio")))))
+                   . ("vscode-html-language-server" "--stdio")))))
 
 (use-package css-mode
   :mode "\\.css\\'"
