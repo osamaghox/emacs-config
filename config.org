@@ -1388,7 +1388,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind
   (:map flymake-mode-map
         ("M-n" . flymake-goto-next-error)  ;; Alt+n للذهاب للخطأ التالي
-        ("M-p" . flymake-goto-prev-error))) ;; Alt+p للذهاب للخطأ السابق
+        ("M-p" . flymake-goto-prev-error)) ;; Alt+p للذهاب للخطأ السابق
   :custom
   (flymake-no-changes-timeout 0.5)
   (flymake-start-on-flymake-mode t)
@@ -1572,13 +1572,25 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package web-mode
   :ensure t
-  :mode ("\\.html\\'" "\\.htm\\'" "\\.jsx\\'" "\\.tsx\\'")
+  :mode ("\\.html\\'" "\\.htm\\'")
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
   (web-mode-enable-auto-pairing t)
-  (web-mode-enable-auto-closing t))
+  (web-mode-enable-auto-closing t)
+  :config
+  ;; ربط web-mode مع Eglot حسب language-id
+  (with-eval-after-load 'eglot
+    ;; HTML
+    (add-to-list 'eglot-server-programs
+                 '((web-mode :language-id "html")
+                   . ("vscode-html-language-server" "--stdio")))
+
+    ;; CSS
+    (add-to-list 'eglot-server-programs
+                 '((web-mode :language-id "css")
+                   . ("vscode-css-language-server" "--stdio")))))
 
 (use-package css-mode
   :mode "\\.css\\'"
