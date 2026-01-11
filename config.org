@@ -1500,27 +1500,14 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind ("C-c g s" . magit-status))
 #+end_src
 
-*** The =osama-emacs-dev.el= section for Web Development
+*** The =osama-emacs-dev.el= section for HTML & CSS mode
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; Localhost Server Configuration
-(use-package simple-httpd
-  :ensure t
-  :config
-  (setq httpd-port 8080))
-
-;; Live Preview Configuration
-(use-package impatient-mode
-  :ensure t)
-
-;; HTML Mode & Keybindings
+;; HTML Mode
 (use-package mhtml-mode
   :ensure nil
   :bind (:map mhtml-mode-map
-              ("C-c m c" . sgml-close-tag)
-              ("C-c m s" . httpd-start)     
-              ("C-c m i" . impatient-mode)  
-              ("C-c m o" . (lambda () (interactive) (browse-url "http://localhost:8080/imp/")))))
+              ("C-c m c" . sgml-close-tag)))
 
 ;; Emmet Mode (Fast Snippets)
 (use-package emmet-mode
@@ -1535,6 +1522,63 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
               ("C-c m w" . emmet-wrap-with-abbreviation)
               ("C-c m d" . emmet-toggle-expand-inline)))
 #+end_src
+
+
+*** The =osama-emacs-dev.el= section Web Live Preview
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+;; Localhost Server Configuration
+(use-package simple-httpd
+  :ensure t
+  :config
+  (setq httpd-port 8080))
+
+;; Live Preview Configuration
+(use-package impatient-mode
+  :ensure t)
+
+(use-package transient
+  :after mhtml-mode
+  :bind (:map mhtml-mode-map
+              ("C-c m w" . osama-web-dispatch))
+  :config
+  (transient-define-prefix osama-web-dispatch ()
+    "قائمة تحكم في خادم الويب والمعاينة الحية"
+
+    ["Web Server"
+     ;; :transient t تجعل القائمة تبقى بعد الضغط
+     ("s" "Start Server"
+      (lambda ()
+        (interactive)
+        (httpd-start)
+        (message "🚀 Server Started")) :transient t)
+
+     ("k" "Stop Server"
+      (lambda ()
+        (interactive)
+        (httpd-stop)
+        (message "🛑 Server Stopped")) :transient t)
+
+     ("p" "Port Settings"
+      (lambda ()
+        (interactive)
+        (customize-variable 'httpd-port)
+        (message "⚙️ Adjusting httpd-port")) :transient t)]
+
+    ["Live Preview"
+     ("i" "Impatient Mode"
+      (lambda ()
+        (interactive)
+        (impatient-mode)
+        (message "👀 Impatient Mode toggled")) :transient t)
+
+     ("o" "Open Browser"
+      (lambda ()
+        (interactive)
+        (browse-url (format "http://localhost:%d/imp/" httpd-port))
+        (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
+#+end_src
+
 
 
 ** The =osama-emacs-org.el= module
