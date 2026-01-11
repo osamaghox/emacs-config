@@ -8,6 +8,14 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* SPC Leader Key Prefixes
+Prefix 	Category	Description
+SPC c	(Code/LSP)	Commands for coding assistance, such as linting, formatting, navigation (go to definition), refactoring, and general LSP mode interactions.
+SPC m	(Major Mode)	Commands relevant to the specific file type you are editing (e.g., Python mode, Git mode, Org mode).
+
+
+
+
 * Example of common ordering for ~use-package~ 
 
 #+begin_src emacs-lisp :tangle no
@@ -25,6 +33,15 @@
   ;; Arbitrary Lisp code that runs after the package is loaded
   (message "package loaded and configured!"))
 #+end_src
+
+
+
+
+
+
+
+
+
 
 
 
