@@ -1399,7 +1399,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 (use-package eglot
   :hook ((c-mode c++-mode objc-mode
-          css-mode mhtml-mode js-mode js2-mode web-mode) . eglot-ensure)
+          css-mode mhtml-mode js-mode js2-mode web-mode json-mode typescript-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
           ("C-c c a" . eglot-code-actions)
@@ -1523,29 +1523,97 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :bind ("C-c g s" . magit-status))
 #+end_src
 
+
+
+
+
+
+
+
+
+*** The =osama-emacs-dev.el= section for ~js2-mode~
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js\\'" "\\.mjs\\'")
+  :hook (js2-mode . lsp-deferred)  ; Change to eglot-ensure if using mod-eglot
+  :custom
+  (js2-basic-offset 2)
+  (js2-bounce-indent-p nil)
+  (js2-mode-show-parse-errors nil)
+  (js2-mode-show-strict-warnings nil))
+#+end_src
+
+
+
+*** The =osama-emacs-dev.el= section for ~typscript~
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package typescript-mode
+  :ensure t
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  :hook (typescript-mode . lsp-deferred)  ; Change to eglot-ensure if using mod-eglot
+  :custom
+  (typescript-indent-level 2))
+#+end_src
+
+*** The =osama-emacs-dev.el= section for ~json-mode~
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package json-mode
+  :ensure t
+  :mode ("\\.json\\'" "\\.jsonc\\'")
+  :hook (json-mode . lsp-deferred)  ; Change to eglot-ensure if using mod-eglot
+  :custom
+  (js-indent-level 2))
+#+end_src
+
+
 *** The =osama-emacs-dev.el= section for HTML & CSS mode
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;; HTML Mode
-(use-package mhtml-mode
-  :ensure nil
-  :bind (:map mhtml-mode-map
-              ("C-c m c" . sgml-close-tag)))
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'" "\\.htm\\'" "\\.jsx\\'" "\\.tsx\\'")
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  (web-mode-enable-auto-pairing t)
+  (web-mode-enable-auto-closing t))
+
+(use-package css-mode
+  :mode "\\.css\\'"
+  :custom
+  (css-indent-offset 2))
 
 ;; Emmet Mode (Fast Snippets)
 (use-package emmet-mode
-  :ensure t
-  :hook (web-mode mhtml-mode css-mode js-mode js2-mode typescript-mode)
-  :config
-  (setq emmet-expand-at-point t)
+  :hook (web-mode mhtml-mode html-mode css-mode)
+  :custom
+  (emmet-indentation 2)
+  (emmet-indent-after-insert nil)
   :bind (:map emmet-mode-keymap
-              ("C-c m e" . emmet-expand-line)
-              ("C-c m j" . emmet-next-edit-point)
-              ("C-c m k" . emmet-prev-edit-point)
-              ("C-c m w" . emmet-wrap-with-abbreviation)
-              ("C-c m d" . emmet-toggle-expand-inline)))
+              ([tab] . emmet-expand-line)
+              ("TAB" . emmet-expand-line)))
 #+end_src
 
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(use-package prettier
+  :ensure t
+  :hook ((css-mode
+          js2-mode
+          json-mode
+          typescript-mode
+          web-mode) . prettier-mode)
+  :custom
+  (prettier-enabled-parsers '(babel
+                              babel-flow
+                              babel-ts
+                              typescript
+                              css
+                              html
+                              json)))
+#+end_src
 
 *** The =osama-emacs-dev.el= section Web Live Preview
 
@@ -1561,15 +1629,14 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure t)
 
 (use-package transient
-  :after mhtml-mode
-  :bind (:map mhtml-mode-map
+  :after web-mode
+  :bind (:map web-mode-map
               ("C-c m w" . osama-web-dispatch))
   :config
   (transient-define-prefix osama-web-dispatch ()
-    "قائمة تحكم في خادم الويب والمعاينة الحية"
+    "Web server and live preview control panel"
 
     ["Web Server"
-     ;; :transient t تجعل القائمة تبقى بعد الضغط
      ("s" "Start Server"
       (lambda ()
         (interactive)
@@ -1601,8 +1668,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         (browse-url (format "http://localhost:%d/imp/" httpd-port))
         (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
 #+end_src
-
-
 
 ** The =osama-emacs-org.el= module
 
