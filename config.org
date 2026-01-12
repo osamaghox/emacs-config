@@ -69,10 +69,10 @@ SPC g - magit
 
 * Windows Setup
 
-** Step 1 - Installing Emacs
+** Step 1: Installing Emacs
 Download the latest Emacs from the official website and install it to the default path.
 
-** Step 2 - MSYS2 (UCRT64) Settings & Installing Dependencies
+** Step 2: MSYS2 (UCRT64) Settings & Installing Dependencies
 
 In this step, we install essential development tools using =pacman= (MSYS2 package manager)
 and =npm=. These tools are required for compiling code, running language servers,
@@ -175,7 +175,7 @@ These packages provide language server support for web development:
   Language server for Tailwind CSS, enabling class name completion and validation.
 
 
-** Step 3 - Edit System Environment Variables
+** Step 3: Edit System Environment Variables
 
 When installing tools such as =fd=, =ripgrep=, language servers, compilers, or =Git=,
 Emacs needs to be able to find them regardless of where they are
@@ -225,6 +225,93 @@ This step is essential for features such as:
         1. Open Emacs directly from its installation folder (e.g., =.../emacs/bin/runemacs.exe=).
         2. If it still doesn't work, *completely exit* the =Everything= app from the System Tray and restart it.
         3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
+
+
+
+* Emacs and Termux Setup on Android
+
+** Step 1: Removing Old Apps
+- Uninstall any previous versions of =Emacs=.
+- Uninstall the standard =Termux= app if you installed it from F-Droid or GitHub.
+
+** Step 2: Installing Correct Versions in Order
+1. First, install the modified version of =Termux= from:
+   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/termux/][Termux SourceForge]]
+2. Open the =Termux= app once (this is very important).
+3. Next, install =Emacs GUI= from:
+   [[https://sourceforge.net/projects/android-ports-for-gnu-emacs/files/][Emacs GUI SourceForge]]
+4. After installation, open the =Emacs= app.
+
+** Step 3: Granting Full Permissions
+Go to Android System Settings and follow these steps:
+- Settings > Apps > Emacs & Termux > Enable all the following permissions:
+  - Full access to all files (for Android 11+): =Special app access > All files access=
+  - Access to installed apps.
+  - Background execution and notification permissions, and any others as needed.
+
+** Step 4: Stop VPN Before Updating Termux
+Before executing the following command, ensure that any =VPN= is completely turned off:
+
+#+BEGIN_EXAMPLE
+pkg update
+#+END_EXAMPLE
+
+** Step 5: Opening Terminal Inside Emacs
+After opening Emacs, run the following command:
+
+#+BEGIN_EXAMPLE
+M-x shell
+#+END_EXAMPLE
+
+The terminal is now linked to the Termux environment, and you can execute commands such as:
+
+#+BEGIN_EXAMPLE
+pkg install git
+#+END_EXAMPLE
+
+** Step 6: Clean Symbolic Links from The Home Directory Before Creating New Ones
+Before running `mkdir` and `ln -s` commands, it is best to ensure that the `~` directory does not contain unnecessary symbolic links that might cause conflicts later.
+
+1. List all symbolic links only within the Home directory (~):
+
+#+BEGIN_EXAMPLE
+find ~ -maxdepth 1 -type l
+#+END_EXAMPLE
+
+2. Delete all symbolic links inside ~ only (this will not delete the contents of the original folders):
+
+#+BEGIN_EXAMPLE
+find ~ -maxdepth 1 -type l -exec rm -v {} \;
+#+END_EXAMPLE
+
+** Step 7: Linking Android Folders Inside Emacs
+From the terminal inside Emacs, execute the following symbolic link commands:
+
+#+BEGIN_EXAMPLE
+# Create the destination directory if it doesn't exist
+mkdir -p /data/data/org.gnu.emacs/files
+
+# Create source directories on sdcard if they don't exist
+mkdir -p /sdcard/.emacs.d
+mkdir -p /sdcard/osama-vault
+mkdir -p /sdcard/osama-vault/emacs/data/fonts
+
+# Link sdcard/.emacs.d
+rm -rf /data/data/org.gnu.emacs/files/.emacs.d
+ln -s /sdcard/.emacs.d /data/data/org.gnu.emacs/files/.emacs.d
+
+# Link sdcard/osama-vault
+rm -rf /data/data/org.gnu.emacs/files/osama-vault
+ln -s /sdcard/osama-vault /data/data/org.gnu.emacs/files/osama-vault
+
+# Create fonts directory before linking
+mkdir -p /data/data/org.gnu.emacs/files/fonts
+
+# Link the fonts directory
+rm -rf /data/data/org.gnu.emacs/files/fonts
+ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
+#+END_EXAMPLE
+
 
 * The early initialisation of Emacs (=early-init.el=)
 
