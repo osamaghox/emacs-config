@@ -176,7 +176,7 @@ These packages provide language server support for web development:
   Language server for Tailwind CSS, enabling class name completion and validation.
 
 
-** Edit System Environment Variables
+** Step 3 - Edit System Environment Variables
 
 When installing tools such as =fd=, =ripgrep=, language servers, compilers, or =Git=,
 Emacs needs to be able to find them regardless of where they are
