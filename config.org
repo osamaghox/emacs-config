@@ -1440,7 +1440,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 *** The =osama-emacs-completion.el= Ends Here
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (provide 'osama-emacs-completion)
 ;;; osama-emacs-completion.el ends here
 #+end_src
@@ -2179,7 +2179,7 @@ and day."
 - الصور والملفات ما يحتاج يكونين بنفس المجلد صح تستخدم تسمية الملفات نفس بس ما بنحتاج فيديو مثلًا كبير كملاحظة
 ولكن بنستخدم الصور والpdfs نخليهن في نفس مجلد المذكرات
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el"
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
   :bind
@@ -2327,14 +2327,14 @@ Opens i-search if it's closed, closes it if it's open."
 #+end_src
 
 
-*** The =osama-emacs-windows.el= Footer Section
+*** The =osama-emacs-windows.el= section for ..
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
 
 #+end_src
 
 
-*** The =osama-emacs-windows.el= Footer Section
+*** The =osama-emacs-windows.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
 (provide 'osama-emacs-windows)
