@@ -1999,6 +1999,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         ("C-c m p" . org-set-property)
         ("C-c m L" . org-toggle-link-display)
         ("C-c m ." . org-timestamp)
+        ("C-c m b" . org-babel-tangle)
         ("C-c m !" . org-timestamp-inactive)))
 
   ;; Show emphasis markers only while editing
@@ -2214,7 +2215,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 (use-package org
   :ensure nil
   :bind (:map org-mode-map
-              ("C-c m t" . osama-org-copy-entry))
+              ("C-c m c" . osama-org-copy-entry))
   :config
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
