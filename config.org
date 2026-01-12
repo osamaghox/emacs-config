@@ -8,6 +8,13 @@
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
 
+* What is Next ?
+
+- learn project.el
+- learn magit.el
+- learn dired.el
+- learn treemacs.el
+
 * SPC Leader Key Prefixes
 Prefix 	Category	Description
 SPC c	(Code/LSP)	Commands for coding assistance, such as linting, formatting, navigation (go to definition), refactoring, and general LSP mode interactions.
