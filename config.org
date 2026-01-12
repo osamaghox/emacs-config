@@ -312,6 +312,90 @@ ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 #+END_EXAMPLE
 
 
+* Systems Custom Settings
+
+** The =osama-emacs-android.el= custom settings
+
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
+;;; osama-emacs-android.el --- Emacs Android Custom Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+#+end_src
+
+*** The =osama-emacs-android.el= section for ~toggle-keyboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
+(use-package emacs
+  :ensure nil  ;; مجرد placeholder، Emacs built-in
+  :bind
+  (("<volume-up>" . osama-toggle-keyboard)
+   ("<volume-down>" . osama-toggle-keyboard))
+  :custom
+  (osama-keyboard-toggle-state nil
+    "Current toggle state of the Android keyboard using isearch.")
+
+  :config
+  (defun osama-toggle-keyboard ()
+    "Automatically toggle the Android keyboard using isearch.
+Opens i-search if it's closed, closes it if it's open."
+    (interactive)
+    (if (and (boundp 'isearch-mode) isearch-mode)
+        ;; If i-search is open, close it immediately
+        (progn
+          (isearch-abort)
+          (setq osama-keyboard-toggle-state nil))
+      ;; If i-search is closed, open it immediately
+      (isearch-forward nil 1)
+      ;; Close it after a short delay if the goal is just to show the keyboard
+      (run-at-time "0.3 sec" nil
+                   (lambda ()
+                     (when (and (boundp 'isearch-mode) isearch-mode)
+                       (isearch-abort))))
+      (setq osama-keyboard-toggle-state t))))
+#+end_src
+
+*** The =osama-emacs-android.el= Ends Here
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
+(provide 'osama-emacs-android)
+;;; osama-emacs-android.el ends here
+#+end_src
+
+
+
+
+
+** The =osama-emacs-windows.el= custom settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
+;;; osama-emacs-windows.el --- Emacs Windows Custom Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+#+end_src
+
+
+*** The =osama-emacs-windows.el= section for ..
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+
+#+end_src
+
+
+*** The =osama-emacs-windows.el= Ends Here
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+(provide 'osama-emacs-windows)
+;;; osama-emacs-windows.el ends here
+#+end_src
+
+
 * The early initialisation of Emacs (=early-init.el=)
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
@@ -2354,90 +2438,6 @@ and day."
 #+end_src
 
 
-
-
-* Systems Custom Settings
-
-** The =osama-emacs-android.el= custom settings
-
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
-;;; osama-emacs-android.el --- Emacs Android Custom Settings -*- lexical-binding: t; -*-
-
-;;; Commentary:
-
-;;; Code:
-
-#+end_src
-
-*** The =osama-emacs-android.el= section for ~toggle-keyboard~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
-(use-package emacs
-  :ensure nil  ;; مجرد placeholder، Emacs built-in
-  :bind
-  (("<volume-up>" . osama-toggle-keyboard)
-   ("<volume-down>" . osama-toggle-keyboard))
-  :custom
-  (osama-keyboard-toggle-state nil
-    "Current toggle state of the Android keyboard using isearch.")
-
-  :config
-  (defun osama-toggle-keyboard ()
-    "Automatically toggle the Android keyboard using isearch.
-Opens i-search if it's closed, closes it if it's open."
-    (interactive)
-    (if (and (boundp 'isearch-mode) isearch-mode)
-        ;; If i-search is open, close it immediately
-        (progn
-          (isearch-abort)
-          (setq osama-keyboard-toggle-state nil))
-      ;; If i-search is closed, open it immediately
-      (isearch-forward nil 1)
-      ;; Close it after a short delay if the goal is just to show the keyboard
-      (run-at-time "0.3 sec" nil
-                   (lambda ()
-                     (when (and (boundp 'isearch-mode) isearch-mode)
-                       (isearch-abort))))
-      (setq osama-keyboard-toggle-state t))))
-#+end_src
-
-*** The =osama-emacs-android.el= Ends Here
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
-(provide 'osama-emacs-android)
-;;; osama-emacs-android.el ends here
-#+end_src
-
-
-
-
-
-** The =osama-emacs-windows.el= custom settings
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
-;;; osama-emacs-windows.el --- Emacs Windows Custom Settings -*- lexical-binding: t; -*-
-
-;;; Commentary:
-
-;;; Code:
-
-#+end_src
-
-
-*** The =osama-emacs-windows.el= section for ..
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
-
-#+end_src
-
-
-*** The =osama-emacs-windows.el= Ends Here
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
-(provide 'osama-emacs-windows)
-;;; osama-emacs-windows.el ends here
-#+end_src
 
 
 * Custom Functions (lisp) folder
