@@ -1319,7 +1319,7 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
   (setq embark-prompter 'embark-completing-read-prompter))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~corfu~ and ~cape~
+*** The =osama-emacs-completion.el= section for ~corfu~, ~kind-icons~ and ~cape~ 
 
 Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart of the Vertico minibuffer UI.
 
@@ -1328,19 +1328,30 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   :ensure t
   :init
   (global-corfu-mode)
+  (corfu-indexed-mode)
   :custom
   (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-auto-prefix 2)
   (corfu-auto-delay 0.1)
-  (corfu-auto-prefix 1)
+  (corfu-preselect 'first)
+  (corfu-popupinfo-delay '(0.5 . 0.2))
+  (corfu-quit-no-match 'separator)
   :bind
   (:map corfu-map
-        ("TAB" . corfu-next)
-        ("<tab>" . corfu-next)
-        ("S-TAB" . corfu-previous)
-        ("<backtab>" . corfu-previous))
+        ("TAB" . corfu-insert)
+        ([tab] . corfu-insert)
+        ("C-g" . corfu-quit)
+        ("M-<f12>" . corfu-popupinfo-toggle)))
+
+(use-package kind-icon
+  :ensure t
+  :after corfu
+  :custom
+  (kind-icon-use-icons nil)
+  (kind-icon-default-face 'corfu-default)
   :config
-  ;; جعل TAB يكمل عند عدم وجود Corfu
-  (setq tab-always-indent 'complete))
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 (use-package cape
   :demand t
