@@ -264,7 +264,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 *** The =early-init.el= Ends Here
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
 ;;; early-init.el ends here
 #+end_src
 
@@ -475,9 +475,7 @@ This module load basic configurations that apply to most facets of Emacs.
 
 *** The =osama-emacs-core.el= Section for Files
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
-
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -629,7 +627,7 @@ Display Emacs startup time and garbage collection count
 
 
 *** The =osama-emacs-core.el= Footer Section
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (provide 'osama-emacs-core)
 ;;; osama-emacs-core.el ends here
 #+end_src
@@ -1069,7 +1067,7 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-ui.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (provide 'osama-emacs-ui)
 ;;; osama-emacs-ui.el ends here
 #+end_src
@@ -1454,7 +1452,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package eglot
   :hook ((c-mode c++-mode objc-mode
           css-mode js-mode js2-mode json-mode typescript-mode) . eglot-ensure)
@@ -1488,7 +1486,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package eldoc
   :ensure nil   ;; مدمج مع Emacs
   :after eglot
@@ -1500,7 +1498,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 *** The =osama-emacs-dev.el= section for ~cc-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package cc-mode
   :ensure nil
   :bind (:map c++-mode-map
@@ -1559,7 +1557,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
       (other-window -1))))
 #+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package yasnippet
   :ensure t
   :config
@@ -1572,7 +1570,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :after yasnippet) ;; يضمن عدم تحميل المكتبة إلا بعد تحميل المحرك
 #+end_src
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 ;; -----------------------------
 ;; Magit (Git)
 ;; -----------------------------
@@ -1585,7 +1583,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 *** The =osama-emacs-dev.el= section for ~js2-mode~
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package js2-mode
   :ensure t
   :mode ("\\.js\\'" "\\.mjs\\'")
@@ -1600,7 +1598,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 *** The =osama-emacs-dev.el= section for ~typscript~
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package typescript-mode
   :ensure t
   :mode ("\\.ts\\'" "\\.tsx\\'")
@@ -1610,7 +1608,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 *** The =osama-emacs-dev.el= section for ~json-mode~
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package json-mode
   :ensure t
   :mode ("\\.json\\'" "\\.jsonc\\'")
@@ -1622,7 +1620,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 *** The =osama-emacs-dev.el= section for HTML & CSS mode
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package web-mode
   :ensure t
   :mode ("\\.html\\'" "\\.htm\\'" "\\.jsx\\'" "\\.tsx\\'")
@@ -1650,7 +1648,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package prettier
   :ensure t
   :hook ((css-mode
@@ -1670,7 +1668,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 *** The =osama-emacs-dev.el= section Web Live Preview
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 ;; Localhost Server Configuration
 (use-package simple-httpd
   :ensure t
@@ -1724,7 +1722,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 *** The =osama-emacs-dev.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (provide 'osama-emacs-dev)
 ;;; osama-emacs-dev.el ends here
 #+end_src
@@ -2189,7 +2187,7 @@ and day."
 
 *** The =osama-emacs-org.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (provide 'osama-emacs-org)
 ;;; osama-emacs-org.el ends here
 #+end_src
@@ -2292,7 +2290,7 @@ and day."
 
 *** The =osama-emacs-denote.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el"
 (provide 'osama-emacs-denote)
 ;;; osama-emacs-denote.el ends here
 #+end_src
@@ -2344,7 +2342,7 @@ Opens i-search if it's closed, closes it if it's open."
 
 *** The =osama-emacs-android.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
 (provide 'osama-emacs-android)
 ;;; osama-emacs-android.el ends here
 #+end_src
@@ -2366,7 +2364,7 @@ Opens i-search if it's closed, closes it if it's open."
 
 *** The =osama-emacs-windows.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
 (provide 'osama-emacs-windows)
 ;;; osama-emacs-windows.el ends here
 #+end_src
