@@ -351,7 +351,7 @@ by ~use-package~ when it needs it
 
 *** The =init.el= Ends Here
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/init.el.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/init.el"
 ;;; init.el ends here
 #+end_src
 
