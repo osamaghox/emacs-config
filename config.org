@@ -70,10 +70,10 @@ SPC g - magit
 - [X] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
-* MSYS2 - UCRT64 Settings & Installing Dependencies
+* Windows Setup
 
 
-** Step 1 - Install core development tools
+** Step 1 -  MSYS2 - UCRT64 Settings & Installing Dependencies
 
 In this step, we install essential development tools using =pacman= (MSYS2 package manager)
 and =npm=. These tools are required for compiling code, running language servers,
