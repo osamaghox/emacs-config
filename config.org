@@ -264,6 +264,21 @@ ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 
 #+end_src
 
+** The =osama-emacs-android.el= section to set PATH and system tools
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
+;; Android (Termux) settings
+(when (string-equal system-type "android")
+  ;; Add Termux binaries to the PATH environment
+  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
+    ;; Prepend termuxpath to PATH to override busybox grep
+    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
+    (setq exec-path (cons termuxpath exec-path))
+    ;; Set conversion style to nil for better Evil integration
+    (setq overriding-text-conversion-style nil)))
+#+end_src
+
+
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
@@ -375,21 +390,6 @@ This is the first file that Emacs reads when starting up. It should contain code
 ;; Always open Emacs in the osama-emacs-home-dir folder
 (cd osama-emacs-home-dir)
 #+end_src
-
-** The =early-init.el= section to set PATH and system tools
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
-;; Android (Termux) settings
-(when (string-equal system-type "android")
-  ;; Add Termux binaries to the PATH environment
-  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
-    ;; Prepend termuxpath to PATH to override busybox grep
-    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
-    (setq exec-path (cons termuxpath exec-path))
-    ;; Set conversion style to nil for better Evil integration
-    (setq overriding-text-conversion-style nil)))
-#+end_src
-
 
 *** The =early-init.el= Ends Here
 
