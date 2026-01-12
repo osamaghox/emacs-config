@@ -768,42 +768,6 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-core.el= section for Treemacs
-
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-;; 1. إعداد Treemacs
-(use-package treemacs
-  :defer t
-  :init
-  ;; جعل النافذة تظهر دائماً في الجهة اليسرى
-  (setq treemacs-position 'left)
-  
-  :bind
-  ("C-c t T" . treemacs)
-
-  :hook
-  ;; إخفاء أرقام الأسطر عند فتح Treemacs
-  (treemacs-mode . (lambda () (display-line-numbers-mode -1)))
-
-  :config
-  (setq treemacs-width 40)
-
-  ;; تم إزالة كود إضافة المشروع التلقائي لتجنب الخطأ
-  ;; Treemacs سيحفظ مشاريعك تلقائياً بعد إضافتها يدوياً لأول مرة
-  
-  ;; جعل المؤشر يتبع الملف المفتوح
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t))
-
-;; 2. إعداد إخفاء الـ Modeline داخل Treemacs
-(use-package hide-mode-line
-  :hook
-  ;; تفعيل الإخفاء عند فتح Treemacs
-  (treemacs-mode . hide-mode-line-mode))
-#+end_src
-
-
 *** The =osama-emacs-core.el= Ends Here
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (provide 'osama-emacs-core)
@@ -1625,6 +1589,42 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 ;;; Code:
 
 #+end_src
+
+*** The =osama-emacs-dev.el= section for Treemacs
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
+;; 1. إعداد Treemacs
+(use-package treemacs
+  :defer t
+  :init
+  ;; جعل النافذة تظهر دائماً في الجهة اليسرى
+  (setq treemacs-position 'left)
+  
+  :bind
+  ("C-c t T" . treemacs)
+
+  :hook
+  ;; إخفاء أرقام الأسطر عند فتح Treemacs
+  (treemacs-mode . (lambda () (display-line-numbers-mode -1)))
+
+  :config
+  (setq treemacs-width 40)
+
+  ;; تم إزالة كود إضافة المشروع التلقائي لتجنب الخطأ
+  ;; Treemacs سيحفظ مشاريعك تلقائياً بعد إضافتها يدوياً لأول مرة
+  
+  ;; جعل المؤشر يتبع الملف المفتوح
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
+
+;; 2. إعداد إخفاء الـ Modeline داخل Treemacs
+(use-package hide-mode-line
+  :hook
+  ;; تفعيل الإخفاء عند فتح Treemacs
+  (treemacs-mode . hide-mode-line-mode))
+#+end_src
+
+
 
 *** The =osama-emacs-dev.el= section for ~flymake~
 
