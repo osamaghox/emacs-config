@@ -32,40 +32,33 @@ SPC m	(Major Mode)	Commands relevant to the specific file type you are editing (
   (message "package loaded and configured!"))
 #+end_src
 
-
 * Tips
 mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
-- [ ] add tutorial for installing miktex in windows 11
-- [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
-- [X] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
+- [ ] make your folders clean from emacs backups (https://www.youtube.com/watch?v=XZjyJG-sFZI)
 - [ ] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
+- [ ] add headings to all dev sections 
+- [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
+- [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
+- [ ] yank pop ring save file in emacs home folder like clipboard
+- [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
 https://pastebin.com/AD2rhMSc
 كونفق جيد للغاية
 
-- [ ] manage keybind prefix with new dev.el secion and compleion like corfu and cape ( SPC C (Completion and code-related commands and global movments like comment and uncomment), SPC G (Magit),SPC m (Major mode for every language or mode that you dont want to reach it from other modes like org you need to open it globally so org will be (o prefix))
-
-SPC p - projects
-SPC m - major modes and each programming language compiler and debugger
-SPC g - magit
-
-
-- [ ] add headings to all dev sections 
+- [X] add tutorial for installing miktex in windows 11
+- [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
+- [X] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
 - [X] installing and configuring Dependencies
-- [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
-- [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
 - [X] move markdown from editing module to essitnal module
 - [X] add (lexical-binding) to every el file of this config 
 - [X] remove the all mkdirp from org tangle except for first code in the module  
-- [ ] put windows and android tutorials inside each one of them moudle
-- [ ] yank pop ring save file in emacs home folder like clipboard
+- [X] put windows and android tutorials inside each one of them moudle
 - [X] quran memorize with org mode todo tasks (capture-template)
-- [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
 * Windows Setup
 
