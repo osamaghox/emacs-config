@@ -7,7 +7,6 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
-
 * Windows Setup
 
 ** Step 1: Installing Emacs
@@ -2385,11 +2384,16 @@ and day."
 
 
 
+* When (and when not) to use-package for custom functions and definitions
 
+** Package-specific functions
+- If a defun is specific to a package and only used by that package:
+  - Include it inside the use-package declaration.
+  - This way, if the package is removed, the defun is no longer needed.
 
-
-
-
+** General-purpose functions
+- If a defun is general-purpose and not tied to any specific package:
+  - Define it normally outside of use-package.
 
 * What is Next ?
 
