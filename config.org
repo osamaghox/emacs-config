@@ -328,7 +328,7 @@ by ~use-package~ when it needs it
 (load (expand-file-name "osama-emacs-editing.el" osama-emacs-modules-dir))
 
 ;; Load UI Appearance
-(load (expand-file-name "osama-emacs-ui-appearance.el" osama-emacs-modules-dir))
+(load (expand-file-name "osama-emacs-ui.el" osama-emacs-modules-dir))
 
 ;; Load Integrated Development Environment (IDE)
 (load (expand-file-name "osama-emacs-dev.el" osama-emacs-modules-dir))
@@ -628,11 +628,11 @@ Display Emacs startup time and garbage collection count
   (treemacs-mode . hide-mode-line-mode))
 #+end_src
 
-** The =osama-emacs-ui-appearance.el= module
+** The =osama-emacs-ui.el= module
 
-*** The =osama-emacs-ui-appearance.el= Section for UI Basics
+*** The =osama-emacs-ui.el= Section for UI Basics
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emacs
@@ -672,9 +672,9 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-ui-appearance.el= section for Windows
+*** The =osama-emacs-ui.el= section for Windows
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package window
   :ensure nil
   :bind
@@ -705,9 +705,9 @@ Display Emacs startup time and garbage collection count
   (winner-mode 1))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~tab-bar-mode~
+*** The =osama-emacs-ui.el= section for ~tab-bar-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package tab-bar
   :ensure nil
   :init
@@ -744,9 +744,9 @@ Display Emacs startup time and garbage collection count
    ("C-c t u" . tab-undo)))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= settings for ~dashboard~
+*** The =osama-emacs-ui.el= settings for ~dashboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package dashboard
   :custom
   ;; ASCII logo
@@ -809,9 +809,9 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-ui-appearance.el= Section for ~Spacious padding~
+*** The =osama-emacs-ui.el= Section for ~Spacious padding~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package spacious-padding
   :ensure t
   :if (display-graphic-p) ; تعمل فقط في الواجهة الرسومية
@@ -833,9 +833,9 @@ Display Emacs startup time and garbage collection count
   (add-hook 'after-load-theme-hook #'spacious-padding-mode))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= Section for ~Toggle Transparency~
+*** The =osama-emacs-ui.el= Section for ~Toggle Transparency~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package emacs
   :ensure nil
   :init
@@ -861,9 +861,9 @@ Display Emacs startup time and garbage collection count
   (("C-c t o" . osama-toggle-transparency)))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= Section for Toggle Title Bar & Decorations
+*** The =osama-emacs-ui.el= Section for Toggle Title Bar & Decorations
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package emacs
   :ensure nil
   :init
@@ -885,17 +885,17 @@ Display Emacs startup time and garbage collection count
   (("C-c t f" . osama-frame-toggle-decoration)))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~custom-themes~
+*** The =osama-emacs-ui.el= section for ~custom-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 ;; Include the "themes" folder in Emacs' theme search path
 (add-to-list 'custom-theme-load-path
              (expand-file-name "data/themes/" osama-emacs-home-dir))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~doom-themes~
+*** The =osama-emacs-ui.el= section for ~doom-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package doom-themes
   :ensure t
   :config
@@ -916,9 +916,9 @@ Display Emacs startup time and garbage collection count
   (doom-themes-org-config))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~doom-two-tone-themes~
+*** The =osama-emacs-ui.el= section for ~doom-two-tone-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package doom-two-tone-themes
   :vc (:url "https://github.com/eliraz-refael/doom-two-tone-themes.git"
             :rev :newest)
@@ -928,16 +928,16 @@ Display Emacs startup time and garbage collection count
                "~/.emacs.d/elpa/doom-two-tone-themes/themes"))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~ef-themes~
+*** The =osama-emacs-ui.el= section for ~ef-themes~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package ef-themes
   :defer t)
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~doom-modeline~
+*** The =osama-emacs-ui.el= section for ~doom-modeline~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
@@ -951,9 +951,9 @@ Display Emacs startup time and garbage collection count
   (doom-modeline-indent-info t))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~nerd-icons~ fonts
+*** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 ;; Define the folder to save fonts directly inside osama-emacs-home-dir
 (defvar osama-icons-dir
   (expand-file-name "data/fonts/" osama-emacs-home-dir)
@@ -992,9 +992,9 @@ Display Emacs startup time and garbage collection count
     (osama-download-font-if-missing (car font) (cdr font))))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el=: Section for Font Customization
+*** The =osama-emacs-ui.el=: Section for Font Customization
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package emacs
   :ensure nil
   :bind (("C-c t F" . set-frame-font))
@@ -1041,9 +1041,9 @@ Display Emacs startup time and garbage collection count
   (make-directory osama-fonts-dir t)))))
 #+end_src
 
-*** The =osama-emacs-ui-appearance.el= section for ~solaire-mode~
+*** The =osama-emacs-ui.el= section for ~solaire-mode~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui-appearance.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package solaire-mode
   :defer t
   :bind
