@@ -312,34 +312,35 @@ by ~use-package~ when it needs it
   (expand-file-name "modules" user-emacs-directory)
   "This directory houses all of the built-in Osama Emacs modules.")
 
-;; Load Core Essentials first
-(load (expand-file-name "osama-emacs-core.el" osama-emacs-modules-dir))
-(load (expand-file-name "osama-emacs-editing.el" osama-emacs-modules-dir))
-
-;; Load UI Appearance
-(load (expand-file-name "osama-emacs-ui.el" osama-emacs-modules-dir))
-
-;; Load Integrated Development Environment (IDE)
-(load (expand-file-name "osama-emacs-dev.el" osama-emacs-modules-dir))
-(load (expand-file-name "osama-emacs-completion.el" osama-emacs-modules-dir))
-
-;; Load Features
-(load (expand-file-name "osama-emacs-org.el" osama-emacs-modules-dir))
-(load (expand-file-name "osama-emacs-denote.el" osama-emacs-modules-dir))
-
-;; Add lisp directory to load path
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
 (defvar osama-emacs-lisp-dir
   (expand-file-name "lisp" user-emacs-directory)
   "Directory that contains Osama Emacs additional Lisp files.")
 
-;; Load system-specific settings (from osama-emacs-lisp-dir)
+;; Add both modules and lisp directories to load-path
+(add-to-list 'load-path osama-emacs-modules-dir)
+(add-to-list 'load-path osama-emacs-lisp-dir)
+
+;; Core Essentials
+(require 'osama-emacs-core)
+(require 'osama-emacs-editing)
+
+;; UI Appearance
+(require 'osama-emacs-ui)
+
+;; Integrated Development Environment (IDE)
+(require 'osama-emacs-dev)
+(require 'osama-emacs-completion)
+
+;; Features
+(require 'osama-emacs-org)
+(require 'osama-emacs-denote)
+
+;; Load system-specific settings
 (cond
  ((eq system-type 'android)
-  (load (expand-file-name "osama-emacs-android.el" osama-emacs-lisp-dir)))
+  (require 'osama-emacs-android))
  ((eq system-type 'windows-nt)
-  (load (expand-file-name "osama-emacs-windows.el" osama-emacs-lisp-dir))))
+  (require 'osama-emacs-windows)))
 #+end_src
 
 * The modules of my Emacs configuration
