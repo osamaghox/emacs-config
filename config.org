@@ -319,9 +319,6 @@ Opens i-search if it's closed, closes it if it's open."
 #+end_src
 
 
-
-
-
 ** The =osama-emacs-windows.el= custom settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
@@ -389,6 +386,21 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ;; Always open Emacs in the osama-emacs-home-dir folder
 (cd osama-emacs-home-dir)
+#+end_src
+
+** The =early-init.el= section for Early Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
+;; Disable the default package system initialization to use an alternative
+(setq package-enable-at-startup nil)
+
+;; Disable the GUI elements for a cleaner, faster startup
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; Set garbage collection threshold for potentially better performance during startup
+(setq gc-cons-threshold (* 100 1024 1024))
 #+end_src
 
 *** The =early-init.el= Ends Here
@@ -574,18 +586,6 @@ This module load basic configurations that apply to most facets of Emacs.
 (setq create-lockfiles nil)
 #+end_src
 
-*** The =osama-emacs-core.el= Settings for Better Performance
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Increase GC threshold during startup to speed up launch
-  (setq gc-cons-threshold (* 50 1000 1000))
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
-#+end_src
-
 *** The =osama-emacs-core.el= Section for for UTF-8 Defaults
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
@@ -752,11 +752,8 @@ Display Emacs startup time and garbage collection count
   :ensure nil
   :init
   ;; Hide UI elements
-  (scroll-bar-mode -1)   ;; Disable visible scrollbar
-  (tool-bar-mode -1)     ;; Disable the toolbar
   (tooltip-mode -1)      ;; Disable tooltips
   (set-fringe-mode 10)   ;; Give some breathing room
-  (menu-bar-mode -1)     ;; Disable the menu bar
 
   ;; Visible bell instead of audible bell
   (setq visible-bell t)
