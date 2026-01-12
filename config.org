@@ -353,7 +353,11 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-core.el= Section for Emacs Settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-core.el --- Emacs Core Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package emacs
   :ensure nil
@@ -617,12 +621,24 @@ Display Emacs startup time and garbage collection count
   (treemacs-mode . hide-mode-line-mode))
 #+end_src
 
+
+*** The =osama-emacs-core.el= Footer Section
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
+(provide 'osama-emacs-core)
+;;; osama-emacs-core.el ends here
+#+end_src
+
+
 ** The =osama-emacs-ui.el= module
 
 *** The =osama-emacs-ui.el= Section for UI Basics
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-ui.el --- Emacs Ui Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package emacs
   :ensure nil
@@ -1045,11 +1061,23 @@ Display Emacs startup time and garbage collection count
   (set-face-attribute 'line-number-current-line nil :background nil))
 #+end_src
 
+*** The =osama-emacs-ui.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el" :mkdirp yes
+(provide 'osama-emacs-ui)
+;;; osama-emacs-ui.el ends here
+#+end_src
+
 ** The =osama-emacs-editing.el= module
+
 *** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-editing.el --- Emacs Editing Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 ;;; Evil-mode setup
 (use-package evil
@@ -1193,7 +1221,12 @@ Display Emacs startup time and garbage collection count
          ("C-c C-e" . markdown-do)))
 #+end_src
 
+*** The =osama-emacs-editing.el= Footer Section
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+(provide 'osama-emacs-editing)
+;;; osama-emacs-editing.el ends here
+#+end_src
 ** The =osama-emacs-completion.el= module
 
 The term “completion” describes a process where user input is assisted by pattern matching algorithms to type out incomplete terms. The most basic way of this model of interaction is what we get in a command-line prompt, where we can hit TAB to expand the word before point to something the program already knows about (e.g ema followed by TAB may complete to emacs).
@@ -1205,7 +1238,11 @@ In Emacs, completion encompasses user interfaces that show the available candida
 The which-key package provides hints for keys that complete the currently incomplete sequence.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-completion.el --- Emacs Completion Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package which-key
   :ensure nil
@@ -1375,12 +1412,27 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
    ("C-c h k" . helpful-key)))      ;; Describe key
 #+end_src
 
+
+*** The =osama-emacs-completion.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
+(provide 'osama-emacs-completion)
+;;; osama-emacs-completion.el ends here
+#+end_src
+
+
+
 ** The =osama-emacs-dev.el= module
 
 *** The =osama-emacs-dev.el= section for ~flymake~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-dev.el --- Emacs Development Environment Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
 
 (use-package flymake
   :ensure nil             ;; مدمج، لا تنزله
@@ -1664,6 +1716,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
 #+end_src
 
+*** The =osama-emacs-dev.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
+(provide 'osama-emacs-dev)
+;;; osama-emacs-dev.el ends here
+#+end_src
+
+
+
 ** The =osama-emacs-org.el= module
 
 At its core, Org is a plain text markup language. By "markup
@@ -1737,7 +1798,11 @@ any configuration. The following sections contain further commentary
 on how I use Org.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-org.el --- Emacs Org Mode Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package org
   :ensure nil ;; org built-in
@@ -2116,6 +2181,12 @@ and day."
 #+end_src
 
 
+*** The =osama-emacs-org.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
+(provide 'osama-emacs-org)
+;;; osama-emacs-org.el ends here
+#+end_src
 
 ** The =osama-emacs-denote.el= module
 
@@ -2139,7 +2210,11 @@ and day."
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-ui.el --- Emacs Denote Package -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
@@ -2207,6 +2282,18 @@ and day."
   (consult-denote-mode 1))
 #+end_src
 
+
+
+*** The =osama-emacs-denote.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+(provide 'osama-emacs-denote)
+;;; osama-emacs-denote.el ends here
+#+end_src
+
+
+
+
 * Custom Functions (lisp) folder
 
 ** The =osama-emacs-android.el= custom settings
@@ -2214,7 +2301,11 @@ and day."
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
+;;; osama-emacs-android.el --- Emacs Android Custom Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package emacs
   :ensure nil  ;; مجرد placeholder، Emacs built-in
@@ -2245,12 +2336,32 @@ Opens i-search if it's closed, closes it if it's open."
       (setq osama-keyboard-toggle-state t))))
 #+end_src
 
-** The =osama-emacs-windows.el= custom settings
+*** The =osama-emacs-android.el= Footer Section
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
-;;; -*- lexical-binding: t; -*-
-
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
+(provide 'osama-emacs-android)
+;;; osama-emacs-android.el ends here
 #+end_src
 
 
+
+
+
+** The =osama-emacs-windows.el= custom settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
+;;; osama-emacs-windows.el --- Emacs Windows Custom Settings -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+#+end_src
+
+*** The =osama-emacs-windows.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
+(provide 'osama-emacs-windows)
+;;; osama-emacs-windows.el ends here
+#+end_src
 
