@@ -41,8 +41,8 @@ C-h b and c-h m to find keybindings defined by your modes.
 
 
 * TODO New Edits
-- [ ] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
-- [ ] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
+- [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
+- [X] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
 - [ ] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
@@ -58,16 +58,15 @@ SPC g - magit
 
 
 - [ ] add headings to all dev sections 
-- [ ] installing and configuring Dependencies
+- [X] installing and configuring Dependencies
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
-- [ ] move markdown from editing module to essitnal module
-- [ ] add denote tags like fleeting and "literature"
-- [X] add (lexical-binding) to every el file of this config 
-- [X] remove the all mkdirp from org tangle except for first code in the module  
+- [X] move markdown from editing module to essitnal module
+- [ ] add (lexical-binding) to every el file of this config 
+- [ ] remove the all mkdirp from org tangle except for first code in the module  
 - [ ] put windows and android tutorials inside each one of them moudle
 - [ ] yank pop ring save file in emacs home folder like clipboard
-- [ ] quran memorize with org mode todo tasks (capture-template)
+- [X] quran memorize with org mode todo tasks (capture-template)
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
 * MSYS2 - UCRT64 Settings & Installing Dependencies
