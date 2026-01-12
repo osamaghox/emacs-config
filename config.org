@@ -342,7 +342,7 @@ by ~use-package~ when it needs it
 #+end_src
 
 
-*** The =init.el= Footer Section
+*** The =init.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/init.el.el"
 ;;; init.el ends here
@@ -626,7 +626,7 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-core.el= Footer Section
+*** The =osama-emacs-core.el= Ends Here
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (provide 'osama-emacs-core)
 ;;; osama-emacs-core.el ends here
@@ -1065,7 +1065,7 @@ Display Emacs startup time and garbage collection count
   (set-face-attribute 'line-number-current-line nil :background nil))
 #+end_src
 
-*** The =osama-emacs-ui.el= Footer Section
+*** The =osama-emacs-ui.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (provide 'osama-emacs-ui)
@@ -1225,7 +1225,7 @@ Display Emacs startup time and garbage collection count
          ("C-c C-e" . markdown-do)))
 #+end_src
 
-*** The =osama-emacs-editing.el= Footer Section
+*** The =osama-emacs-editing.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 (provide 'osama-emacs-editing)
@@ -1417,7 +1417,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 #+end_src
 
 
-*** The =osama-emacs-completion.el= Footer Section
+*** The =osama-emacs-completion.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 (provide 'osama-emacs-completion)
@@ -1720,7 +1720,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
 #+end_src
 
-*** The =osama-emacs-dev.el= Footer Section
+*** The =osama-emacs-dev.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (provide 'osama-emacs-dev)
@@ -2185,7 +2185,7 @@ and day."
 #+end_src
 
 
-*** The =osama-emacs-org.el= Footer Section
+*** The =osama-emacs-org.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (provide 'osama-emacs-org)
@@ -2288,7 +2288,7 @@ and day."
 
 
 
-*** The =osama-emacs-denote.el= Footer Section
+*** The =osama-emacs-denote.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el"
 (provide 'osama-emacs-denote)
@@ -2340,7 +2340,7 @@ Opens i-search if it's closed, closes it if it's open."
       (setq osama-keyboard-toggle-state t))))
 #+end_src
 
-*** The =osama-emacs-android.el= Footer Section
+*** The =osama-emacs-android.el= Ends Here
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
 (provide 'osama-emacs-android)
