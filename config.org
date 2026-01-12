@@ -1096,50 +1096,52 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-(use-package emacs
-  :ensure nil
-  :bind (("C-c t F" . set-frame-font))
-  :hook (after-init . (lambda ()
-                        ;; Default font
-                        (set-face-attribute 'default nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
+;; تنفيذ إعدادات الخطوط بعد بدء Emacs
+(add-hook 'after-init-hook
+          (lambda ()
+            ;; Default font
+            (set-face-attribute 'default nil
+                                :family "Iosevka Fixed"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-                        ;; Fixed-pitch (مثل الكود)
-                        (set-face-attribute 'fixed-pitch nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
+            ;; Fixed-pitch (مثل الكود)
+            (set-face-attribute 'fixed-pitch nil
+                                :family "Iosevka Fixed"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-                        ;; Variable-pitch (مثل Org Mode)
-                        (set-face-attribute 'variable-pitch nil
-                                            :family "Iosevka Aile"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
-                                            
-;; Nerd Font
-(when (member "Symbols Nerd Font Mono" (font-family-list))
-  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
+            ;; Variable-pitch (مثل Org Mode)
+            (set-face-attribute 'variable-pitch nil
+                                :family "Iosevka Aile"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-;; Arabic Font
-(when (member "Vazirmatn" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
+            ;; Nerd Font
+            (when (member "Symbols Nerd Font Mono" (font-family-list))
+              (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
 
-;; Emoji Font
-(when (member "Noto Color Emoji" (font-family-list))
-  (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
+            ;; Arabic Font
+            (when (member "Vazirmatn" (font-family-list))
+              (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
 
-;; Create fonts directory if it doesn't exist
-(defvar osama-fonts-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
-  "Directory to store fonts for Emacs.")
+            ;; Emoji Font
+            (when (member "Noto Color Emoji" (font-family-list))
+              (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
 
-(unless (file-directory-p osama-fonts-dir)
-  (make-directory osama-fonts-dir t)))))
+            ;; إنشاء مجلد الخطوط إذا لم يكن موجود
+            (defvar osama-fonts-dir
+              (expand-file-name "data/fonts/" osama-emacs-home-dir)
+              "Directory to store fonts for Emacs.")
+
+            (unless (file-directory-p osama-fonts-dir)
+              (make-directory osama-fonts-dir t)))))
+
+;; ربط set-frame-font بمفتاح اختصار
+(global-set-key (kbd "C-c t F") 'set-frame-font)
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~solaire-mode~
