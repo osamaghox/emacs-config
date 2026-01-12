@@ -495,14 +495,14 @@ by ~use-package~ when it needs it
 
 ;; Core Essentials
 (require 'osama-emacs-core)
-(require 'osama-emacs-editing)
 
 ;; UI Appearance
 (require 'osama-emacs-ui)
 
 ;; Integrated Development Environment (IDE)
-(require 'osama-emacs-dev)
+(require 'osama-emacs-editing)
 (require 'osama-emacs-completion)
+(require 'osama-emacs-dev)
 
 ;; Features
 (require 'osama-emacs-org)
