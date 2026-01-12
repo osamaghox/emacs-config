@@ -318,10 +318,29 @@ Opens i-search if it's closed, closes it if it's open."
 
 #+end_src
 
-*** The =osama-emacs-windows.el= section for ..
+*** The =osama-emacs-windows.el= section for PATH separators
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+;; Detect system type and set appropriate PATH separators
+(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
+#+end_src
 
+
+*** The =osama-emacs-windows.el= section for fixing search issues with fd and ripgrep
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+;; Fix Arabic text search issues with fd and ripgrep on Windows
+(dolist (prog '("[rR][gG]" "[fF][dD]"))
+  (add-to-list 'process-coding-system-alist
+               `(,prog . (utf-8 . windows-1256))))
+#+end_src
+
+*** The =osama-emacs-windows.el= section for MSYS2 (UCRT64)
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+(let ((msys-path "C:/msys64"))
+  (unless (file-directory-p msys-path)
+    (error "Emacs requires MSYS2 UCRT64. Path not found: %s" msys-path)))
 #+end_src
 
 
@@ -360,9 +379,6 @@ This is the first file that Emacs reads when starting up. It should contain code
 ** The =early-init.el= section to set PATH and system tools
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
-;; Detect system type and set appropriate PATH separators
-(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
-
 ;; Android (Termux) settings
 (when (string-equal system-type "android")
   ;; Add Termux binaries to the PATH environment
@@ -372,12 +388,6 @@ This is the first file that Emacs reads when starting up. It should contain code
     (setq exec-path (cons termuxpath exec-path))
     ;; Set conversion style to nil for better Evil integration
     (setq overriding-text-conversion-style nil)))
-
-;; Fix Arabic text search issues with fd and ripgrep on Windows
-(when (eq system-type 'windows-nt)
-  (dolist (prog '("[rR][gG]" "[fF][dD]"))
-    (add-to-list 'process-coding-system-alist
-                 `(,prog . (utf-8 . windows-1256)))))
 #+end_src
 
 
