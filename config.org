@@ -37,7 +37,6 @@ SPC m	(Major Mode)	Commands relevant to the specific file type you are editing (
 mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
-
 * TODO New Edits
 - [ ] add tutorial for installing miktex in windows 11
 - [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
