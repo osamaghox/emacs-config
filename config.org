@@ -219,13 +219,13 @@ This step is essential for features such as:
 
 5. Click *OK* on all dialogs to apply the changes.
 
-** CRITICAL NOTE: Avoid Launching Emacs via "Everything"
-- *The Issue:* If you use tools like =Everything= (Voidtools) to search and launch Emacs, it may use a *cached* version of the environment variables from when the tool was first started.
-- *The Symptoms:* Emacs will not see the newly added =Path= entries (like MiKTeX or MSYS2).
-- *The Solution:* 1. Open Emacs directly from its installation folder (e.g., =.../emacs/bin/runemacs.exe=).
-  2. If it still doesn't work, *completely exit* the =Everything= app from the System Tray and restart it.
-  3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
-
+6. CRITICAL NOTE: Avoid Launching Emacs via "Everything"
+    - *The Issue:* If you use tools like =Everything= (Voidtools) to search and launch Emacs, it may use a *cached* version of the environment variables from when the tool was first started.
+    - *The Symptoms:* Emacs will not see the newly added =Path= entries (like MiKTeX or MSYS2).
+    - *The Solution:*
+        1. Open Emacs directly from its installation folder (e.g., =.../emacs/bin/runemacs.exe=).
+        2. If it still doesn't work, *completely exit* the =Everything= app from the System Tray and restart it.
+        3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
 
 * The early initialisation of Emacs (=early-init.el=)
 
