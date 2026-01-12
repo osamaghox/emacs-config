@@ -11,9 +11,8 @@
 * What is Next ?
 
 - learn project.el (https://www.youtube.com/watch?v=O6hMwJfaXV8)
-- learn magit.el
-- learn dired.el
-- learn treemacs.el
+- learn magit.el (https://youtube.com/playlist?list=PLEoMzSkcN8oMc34dTjyFmTUWbXTKrNfZA&si=CcnWNzoonhHRpQwb)
+- learn dired.el (https://www.youtube.com/watch?v=PMWwM8QJAtU),(https://www.youtube.com/watch?v=L_4pLN0gXGI)
 
 * SPC Leader Key Prefixes
 Prefix 	Category	Description
