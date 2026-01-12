@@ -2261,7 +2261,7 @@ and day."
 
 
 
-* Custom Functions (lisp) folder
+* Systems Custom Settings
 
 ** The =osama-emacs-android.el= custom settings
 
@@ -2343,4 +2343,7 @@ Opens i-search if it's closed, closes it if it's open."
 (provide 'osama-emacs-windows)
 ;;; osama-emacs-windows.el ends here
 #+end_src
+
+
+* Custom Functions (lisp) folder
 
