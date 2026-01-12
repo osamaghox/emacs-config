@@ -97,6 +97,7 @@ mingw-w64-ucrt-x86_64-toolchain \
 git \
 mingw-w64-ucrt-x86_64-fd \
 mingw-w64-ucrt-x86_64-ripgrep \
+mingw-w64-ucrt-x86_64-texlive-latex-recommended \
 mingw-w64-ucrt-x86_64-clang \
 mingw-w64-ucrt-x86_64-clang-tools-extra \
 mingw-w64-ucrt-x86_64-cmake \
