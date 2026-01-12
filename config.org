@@ -2263,7 +2263,7 @@ and day."
 ** The =osama-emacs-android.el= custom settings
 
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el" :mkdirp yes
 ;;; osama-emacs-android.el --- Emacs Android Custom Settings -*- lexical-binding: t; -*-
 
 ;;; Commentary:
@@ -2274,7 +2274,7 @@ and day."
 
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el"
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
 (use-package emacs
   :ensure nil  ;; مجرد placeholder، Emacs built-in
   :bind
@@ -2317,7 +2317,7 @@ Opens i-search if it's closed, closes it if it's open."
 
 ** The =osama-emacs-windows.el= custom settings
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el" :mkdirp yes
 ;;; osama-emacs-windows.el --- Emacs Windows Custom Settings -*- lexical-binding: t; -*-
 
 ;;; Commentary:
