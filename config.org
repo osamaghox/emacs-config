@@ -227,7 +227,7 @@ This step is essential for features such as:
         3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
 
 
-*  Android Setup
+* Android Setup
 
 ** Step 1: Removing Old Apps
 - Uninstall any previous versions of =Emacs=.
