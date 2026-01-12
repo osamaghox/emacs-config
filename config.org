@@ -221,8 +221,6 @@ This step is essential for features such as:
 
 This is the first file that Emacs reads when starting up. It should contain code that does not depend on any package or the proportions of the Emacs frame. In general, this early initialisation file is meant to set up a few basic things before Emacs produces the initial frame by delegating to the init.el
 
-** The =early-init.el= section we define the =osama-vault= folder variable
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el" :mkdirp yes
 ;;; early-init.el --- Emacs Early Settings -*- lexical-binding: t; -*-
 
@@ -230,6 +228,11 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 ;;; Code:
 
+#+end_src
+
+** The =early-init.el= section we define the =osama-vault= folder variable
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
 ;; Base directory for all Emacs files
 (defvar osama-emacs-home-dir "~/osama-vault/emacs/"
   "Base directory for all my Emacs files.")
@@ -272,12 +275,6 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 This is where I define the Lisp macros used in my setup and load all the invidiual modules.
 
-** The =init.el= settings for packages (=package.el=)
-
-The =package.el= is built into Emacs and is perfectly fine for my
-use-case. We do not need to load it explicitly, as it will be called
-by ~use-package~ when it needs it
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el" :mkdirp yes
 ;;; init.el --- Emacs Init Settings -*- lexical-binding: t; -*-
 
@@ -285,6 +282,16 @@ by ~use-package~ when it needs it
 
 ;;; Code:
 
+#+end_src
+
+
+** The =init.el= settings for packages (=package.el=)
+
+The =package.el= is built into Emacs and is perfectly fine for my
+use-case. We do not need to load it explicitly, as it will be called
+by ~use-package~ when it needs it
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el"
 (use-package package
   :ensure nil
   :config
@@ -356,8 +363,6 @@ In this module I define everything broadly related to the aesthetics of Emacs.
 
 This module load basic configurations that apply to most facets of Emacs.
 
-*** The =osama-emacs-core.el= Section for Emacs Settings
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el" :mkdirp yes
 ;;; osama-emacs-core.el --- Emacs Core Settings -*- lexical-binding: t; -*-
 
@@ -365,6 +370,11 @@ This module load basic configurations that apply to most facets of Emacs.
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-core.el= Section for Emacs Settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package emacs
   :ensure nil
   :bind
@@ -635,7 +645,6 @@ Display Emacs startup time and garbage collection count
 
 ** The =osama-emacs-ui.el= module
 
-*** The =osama-emacs-ui.el= Section for UI Basics
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el" :mkdirp yes
 ;;; osama-emacs-ui.el --- Emacs Ui Settings -*- lexical-binding: t; -*-
@@ -644,6 +653,11 @@ Display Emacs startup time and garbage collection count
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-ui.el= Section for UI Basics
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package emacs
   :ensure nil
   :init
@@ -1074,8 +1088,6 @@ Display Emacs startup time and garbage collection count
 
 ** The =osama-emacs-editing.el= module
 
-*** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
 ;;; osama-emacs-editing.el --- Emacs Editing Settings -*- lexical-binding: t; -*-
 
@@ -1083,6 +1095,11 @@ Display Emacs startup time and garbage collection count
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-editing.el= section for =evil-mode= & =evil-collection=
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 ;;; Evil-mode setup
 (use-package evil
   :init
@@ -1227,19 +1244,16 @@ Display Emacs startup time and garbage collection count
 
 *** The =osama-emacs-editing.el= Ends Here
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el" :mkdirp yes
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (provide 'osama-emacs-editing)
 ;;; osama-emacs-editing.el ends here
 #+end_src
+
 ** The =osama-emacs-completion.el= module
 
 The term “completion” describes a process where user input is assisted by pattern matching algorithms to type out incomplete terms. The most basic way of this model of interaction is what we get in a command-line prompt, where we can hit TAB to expand the word before point to something the program already knows about (e.g ema followed by TAB may complete to emacs).
 
 In Emacs, completion encompasses user interfaces that show the available candidates (the likely options) right away, as well as provide more advanced capabilities for storing the history of previous inputs, displaying helpful annotations next to each candidate, and “completion styles” to control how user input is matched to candidates. Because we use the minibuffer for most common interactions, completion is an integral part of any setup.
-
-*** The =osama-emacs-completion.el= section for ~which-key~
-
-The which-key package provides hints for keys that complete the currently incomplete sequence.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el" :mkdirp yes
 ;;; osama-emacs-completion.el --- Emacs Completion Settings -*- lexical-binding: t; -*-
@@ -1248,6 +1262,13 @@ The which-key package provides hints for keys that complete the currently incomp
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~which-key~
+
+The which-key package provides hints for keys that complete the currently incomplete sequence.
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package which-key
   :ensure nil
   :init
@@ -1428,8 +1449,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 ** The =osama-emacs-dev.el= module
 
-*** The =osama-emacs-dev.el= section for ~flymake~
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el" :mkdirp yes
 ;;; osama-emacs-dev.el --- Emacs Development Environment Settings -*- lexical-binding: t; -*-
 
@@ -1437,7 +1456,11 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 ;;; Code:
 
+#+end_src
 
+*** The =osama-emacs-dev.el= section for ~flymake~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
 (use-package flymake
   :ensure nil             ;; مدمج، لا تنزله
   :hook (prog-mode . flymake-mode)  ;; تفعيل تلقائي في أي ملف برمجي
@@ -1731,76 +1754,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 ** The =osama-emacs-org.el= module
 
-At its core, Org is a plain text markup language. By "markup
-language", we refer to the use of common characters to apply styling,
-such as how a word wrapped in asterisks acquires strong emphasis.
-Check the video I link to above on the basics of Org mode.
-
-Though what makes Org powerful is not the markup per se, but the fact
-that it has a rich corpus of Emacs Lisp code that does a lot with this
-otherwise plain text notation. Some of the headline features:
-
-- Cycle the visibility of any heading and its subheadings. This lets
-  you quickly fold a section you do not need to see (or reveal the one
-  you care about).
-- Mix prose with code in a single document to either make the whole
-  thing an actual program or to evaluate/demonstrate some snippets.
-- Convert ("export") an Org file to a variety of formats, including
-  HTML and PDF.
-- Use LaTeX inside of Org files to produce a scientific paper without
-  all the markup of LaTeX.
-- Manage TODO lists and implement a concomitant methodology of
-  labelling task states.
-- Quickly shift a "thing" (heading, list item, paragraph, ...) further
-  up or down in the file.
-- Use tables with formulas as a lightweight alternative to spreadsheet
-  software.
-- Capture data or fleeting thoughts efficiently using templates.
-- Maintain an agenda for all your date-bound activities.
-- Clock in and out of tasks, to eventually track how you are spending
-  your time.
-- Link to files regardless of file type. This includes special links
-  such as to an Info manual or an email.
-
-In other words, Org is highly capable and widely considered one of the
-killer apps of Emacs.
-
-This section covers the relevant configurations. You will notice that
-it is not limited to Org, as some other built-in features are also
-relevant here.
-
-*** The =osama-emacs-org.el= section with basic Org settings
-
-Org, also known as "Org mode", is one of the potentially most useful
-feature sets available to every Emacs user. At its core, Org is a
-lightweight markup language: you can have headings and paragraphs,
-mark a portion of text with emphasis, produce bullet lists, include
-code blocks, and the like. Though what really sets Org apart from
-other markup languages is the rich corpus of Emacs Lisp written around
-it to do all sorts of tasks with this otherwise plain text format.
-
-With Org you can write technical documents (e.g. the manuals of all my
-Emacs packages), maintain a simple or highly sophisticated system for
-task management, organise your life using the agenda, write tables
-that can evaluate formulas to have spreadsheet functionality, have
-embedded LaTeX, evaluate code blocks in a wide range of programming
-languages and reuse their results for literate programming, include
-the contents of other files into a singular file, use one file to
-generate other files/directories with all their contents, and export
-the Org document to a variety of formats like =.pdf= and =.odt=.
-Furthermore, Org can be used as a lightweight, plain text database, as
-each heading can have its own metadata. This has practical
-applications in most of the aforementioned.
-
-In short, if something can be done with plain text, Org probably does
-it already or has all the elements for piecing it together.
-
-This being Emacs, everything is customisable and Org is a good example
-of this. There are a lot of user options for us to tweak things to our
-liking. I do as much, though know that Org is perfectly usable without
-any configuration. The following sections contain further commentary
-on how I use Org.
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 ;;; osama-emacs-org.el --- Emacs Org Mode Settings -*- lexical-binding: t; -*-
 
@@ -1808,6 +1761,11 @@ on how I use Org.
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-org.el= section with basic Org settings
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el" :mkdirp yes
 (use-package org
   :ensure nil ;; org built-in
 
@@ -2194,6 +2152,15 @@ and day."
 
 ** The =osama-emacs-denote.el= module
 
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
+;;; osama-emacs-ui.el --- Emacs Denote Package -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+#+end_src
+
 *** The =osama-emacs-denote.el= section for basic settings
 
 لماذا استخدمنا denote
@@ -2212,14 +2179,7 @@ and day."
 - الصور والملفات ما يحتاج يكونين بنفس المجلد صح تستخدم تسمية الملفات نفس بس ما بنحتاج فيديو مثلًا كبير كملاحظة
 ولكن بنستخدم الصور والpdfs نخليهن في نفس مجلد المذكرات
 
-
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-denote.el" :mkdirp yes
-;;; osama-emacs-ui.el --- Emacs Denote Package -*- lexical-binding: t; -*-
-
-;;; Commentary:
-
-;;; Code:
-
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
   :bind
@@ -2302,7 +2262,6 @@ and day."
 
 ** The =osama-emacs-android.el= custom settings
 
-*** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
 ;;; osama-emacs-android.el --- Emacs Android Custom Settings -*- lexical-binding: t; -*-
@@ -2311,6 +2270,11 @@ and day."
 
 ;;; Code:
 
+#+end_src
+
+*** The =osama-emacs-android.el= section for ~toggle-keyboard~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el"
 (use-package emacs
   :ensure nil  ;; مجرد placeholder، Emacs built-in
   :bind
@@ -2361,6 +2325,14 @@ Opens i-search if it's closed, closes it if it's open."
 ;;; Code:
 
 #+end_src
+
+
+*** The =osama-emacs-windows.el= Footer Section
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+
+#+end_src
+
 
 *** The =osama-emacs-windows.el= Footer Section
 
