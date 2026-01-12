@@ -14,8 +14,6 @@ SPC c	(Code/LSP)	Commands for coding assistance, such as linting, formatting, na
 SPC m	(Major Mode)	Commands relevant to the specific file type you are editing (e.g., Python mode, Git mode, Org mode).
 
 
-
-
 * Example of common ordering for ~use-package~ 
 
 #+begin_src emacs-lisp :tangle no
