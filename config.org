@@ -1859,33 +1859,36 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 ;; Font setup for org headings and bullets
 (use-package org
-  :init
-  ;; Change document title size using custom-set-faces, which is fine here
-  (custom-set-faces
-   '(org-document-title ((t (:height 2.0 :underline nil)))))
-
+  :ensure nil
+  :hook (org-mode . osama-org-font-setup)
   :config
-  ;; Replace dashes with bullets using font-lock-add-keywords
-  (font-lock-add-keywords 'org-mode
-    '(("^ *\\([-]\\) "
-       (0 (prog1 ()
-            (compose-region (match-beginning 1)
-                            (match-end 1) "•"))))))
-
-  ;; Set heading sizes
-  (let ((family (face-attribute 'default :family)))
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.0)
-                    (org-level-6 . 1.0)
-                    (org-level-7 . 1.0)
-                    (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil
-                          :family family
-                          :weight 'bold
-                          :height (cdr face)))))
+  ;; Font setup for org headings and bullets
+  (defun osama-org-font-setup ()
+    "Set up fonts and bullets for org headings."
+    ;; Replace dashes with bullets
+    (font-lock-add-keywords 'org-mode
+      '(("^ *\\([-]\\) "
+         (0 (prog1 ()
+              (compose-region (match-beginning 1)
+                              (match-end 1) "•"))))))
+    ;; Set heading sizes
+    (let ((family (face-attribute 'default :family)))
+      (dolist (face '((org-level-1 . 1.2)
+                      (org-level-2 . 1.1)
+                      (org-level-3 . 1.05)
+                      (org-level-4 . 1.0)
+                      (org-level-5 . 1.0)
+                      (org-level-6 . 1.0)
+                      (org-level-7 . 1.0)
+                      (org-level-8 . 1.0)))
+        (set-face-attribute (car face) nil
+                            :family family
+                            :weight 'bold
+                            :height (cdr face)))))
+    ;; Change document title size
+    (set-face-attribute 'org-document-title nil
+                        :height 2.0
+                        :underline nil))
 #+end_src
 
 
