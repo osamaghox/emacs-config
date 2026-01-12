@@ -1742,69 +1742,87 @@ on how I use Org.
 
 (use-package org
   :ensure nil ;; org built-in
-  :init
-  ;; Org files directory
-  (setq org-directory (expand-file-name "org/" osama-emacs-home-dir))
-  ;; Depth for imenu
-  (setq org-imenu-depth 5)
-  ;; RET follows links
-  (setq org-return-follows-link t)
-  ;; Folding without empty line
-  (setq org-cycle-separator-lines 0)
-  ;; Respect content when inserting heading
-  (setq org-insert-heading-respect-content t)
-  ;; Ellipsis for folded sections
-  (setq org-ellipsis "...")
-  ;; Hide emphasis markers globally
-  (setq org-hide-emphasis-markers t)
-  ;; Hide extra stars in headings
-  (setq org-hide-leading-stars t)
-  ;; Highlight quote and verse blocks
-  (setq org-fontify-quote-and-verse-blocks t)
-  ;; Make M-RET insert a new item without splitting the current line
-  (setq org-M-RET-may-split-line '((default . nil)))
-  ;; Color the entire block delimiter line
-  (setq org-fontify-whole-block-delimiter-line t)
-  ;; Enable Text Selection with the Shift Key
-  (setq org-support-shift-select t)
 
+  :custom
+  ;; Org files directory
+  (org-directory (expand-file-name "org/" osama-emacs-home-dir))
+
+  ;; Depth for imenu
+  (org-imenu-depth 5)
+
+  ;; RET follows links
+  (org-return-follows-link t)
+
+  ;; Folding without empty line
+  (org-cycle-separator-lines 0)
+
+  ;; Respect content when inserting heading
+  (org-insert-heading-respect-content t)
+
+  ;; Ellipsis for folded sections
+  (org-ellipsis "...")
+
+  ;; Hide emphasis markers globally
+  (org-hide-emphasis-markers t)
+
+  ;; Hide extra stars in headings
+  (org-hide-leading-stars t)
+
+  ;; Highlight quote and verse blocks
+  (org-fontify-quote-and-verse-blocks t)
+
+  ;; Make M-RET insert a new item without splitting the current line
+  (org-M-RET-may-split-line '((default . nil)))
+
+  ;; Color the entire block delimiter line
+  (org-fontify-whole-block-delimiter-line t)
+
+  ;; Enable Text Selection with the Shift Key
+  (org-support-shift-select t)
+
+  ;; Global bindings
   :bind
   (("C-c o l" . org-store-link)
-   ("C-c o e" . org-export-dispatch)
-   ("C-c o s" . org-schedule)
-   ("C-c o d" . org-deadline)
-   ("C-c o p" . org-set-property)
-   ("C-c o L" . org-toggle-link-display)
-   ("C-c o <" . org-date-from-calendar)
-   ("C-c o ." . org-timestamp)
-   ("C-c o !" . org-timestamp-inactive)
-   ("C-c o o" . org-open-at-point-global)))
+   ("C-c o o" . org-open-at-point-global))
+
+  ;; Org major mode bindings
+  :bind
+  (:map org-mode-map
+        ("C-c m e" . org-export-dispatch)
+        ("C-c m s" . org-schedule)
+        ("C-c m d" . org-deadline)
+        ("C-c m p" . org-set-property)
+        ("C-c m L" . org-toggle-link-display)
+        ("C-c m ." . org-timestamp)
+        ("C-c m !" . org-timestamp-inactive)))
 
   ;; Show emphasis markers only while editing
   (use-package org-appear
     :hook (org-mode . org-appear-mode)
-    :config
-    (setq org-appear-autolinks t))
+    :custom
+    (org-appear-autolinks t))
+
 
   ;; Modern appearance
-  (use-package org-modern
-    :hook (org-mode . org-modern-mode)
-    :custom
-    (org-modern-star nil)
-    (org-modern-table nil)
-    (org-modern-keyword t)
-    (org-modern-timestamp t)
-    (org-modern-priority t)
-    (org-modern-checkbox nil)
-    (org-modern-tag nil)
-    (org-modern-block-name nil)
-    (org-modern-footnote nil)
-    (org-modern-internal-target nil)
-    (org-modern-radio-target nil)
-    (org-modern-statistics nil)
-    (org-modern-progress t)
-    :bind
-     ("C-c o m" . org-modern-mode))
+(use-package org-modern
+  :hook (org-mode . org-modern-mode)
+  :custom
+  (org-modern-star nil)
+  (org-modern-table nil)
+  (org-modern-keyword t)
+  (org-modern-timestamp t)
+  (org-modern-priority t)
+  (org-modern-checkbox nil)
+  (org-modern-tag nil)
+  (org-modern-block-name nil)
+  (org-modern-footnote nil)
+  (org-modern-internal-target nil)
+  (org-modern-radio-target nil)
+  (org-modern-statistics nil)
+  (org-modern-progress t)
+  :bind
+  (:map org-mode-map
+        ("C-c o m" . org-modern-mode)))
 
   ;; Superstar bullets
   (use-package org-superstar
@@ -1814,13 +1832,20 @@ on how I use Org.
     (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◎" "◆" "▶")))
 
 ;; Font setup for org headings and bullets
-(defun osama-org-font-setup ()
-  ;; Replace dashes with bullets
+(use-package org
+  :init
+  ;; Change document title size using custom-set-faces, which is fine here
+  (custom-set-faces
+   '(org-document-title ((t (:height 2.0 :underline nil)))))
+
+  :config
+  ;; Replace dashes with bullets using font-lock-add-keywords
   (font-lock-add-keywords 'org-mode
     '(("^ *\\([-]\\) "
        (0 (prog1 ()
             (compose-region (match-beginning 1)
                             (match-end 1) "•"))))))
+
   ;; Set heading sizes
   (let ((family (face-attribute 'default :family)))
     (dolist (face '((org-level-1 . 1.2)
@@ -1835,12 +1860,6 @@ on how I use Org.
                           :family family
                           :weight 'bold
                           :height (cdr face)))))
-;; Change document title size
-(custom-set-faces
- '(org-document-title ((t (:height 2.0 :underline nil)))))
-
-;; Hook font setup into org-mode
-(add-hook 'org-mode-hook #'osama-org-font-setup)
 #+end_src
 
 
@@ -1850,15 +1869,15 @@ on how I use Org.
 (use-package org
   :ensure nil
   :bind
-  (("C-c o a" . org-agenda)
-   ("C-c o t" . org-todo)
-   ("C-c o r" . org-refile)
-   ("C-c o i" . org-insert-structure-template)
-   ("C-c o q" . org-set-tags-command))
-  :config
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-  (setq org-deadline-warning-days 7)
+  ;; Global bindings
+  (("C-c o a" . org-agenda))
+
+  ;; Major mode bindings
+  (:map org-mode-map
+        ("C-c m t" . org-todo)
+        ("C-c m r" . org-refile)
+        ("C-c m i" . org-insert-structure-template)
+        ("C-c m q" . org-set-tags-command))
 
 ;; load mylife.org file from the org directory to agenda
 (setq org-agenda-files (list (expand-file-name "org/mylife.org" osama-emacs-home-dir)))
@@ -1986,10 +2005,9 @@ on how I use Org.
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
 (use-package org
   :ensure nil
-  :bind
-  (("C-c o C" . osama-org-copy-entry))
+  :bind (:map org-mode-map
+              ("C-c m t" . osama-org-copy-entry))
   :config
-
   ;; Capture template للوزن
   (add-to-list 'org-capture-templates
       `("w" "Weigh-in" entry
@@ -2100,25 +2118,6 @@ and day."
 
 
 
-
-*** The =osama-emacs-org.el= section for ~emacs-obsidian-excalidraw~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-org.el"
-(use-package emacs-obsidian-excalidraw
-  :vc (:url "https://github.com/hsingko/emacs-obsidian-excalidraw.git"
-       :rev :newest)
-  :config
-  ;; Vault name (can be any name, here we match the folder name)
-  (setq emacs-obsidian-excalidraw-vault "draws")
-
-  ;; Vault directory path in Windows
-  (setq emacs-obsidian-excalidraw-vault-dir
-        "C:/obsidian/draws")
-
-  ;; Export images as SVG instead of PNG
-  (setq emacs-obsidian-excalidraw-image-format "svg"))
-#+end_src
-
 ** The =osama-emacs-denote.el= module
 
 *** The =osama-emacs-denote.el= section for basic settings
@@ -2155,7 +2154,7 @@ and day."
    ("C-c n r d" . denote-rename-file-date)
    ("C-c n r f" . denote-rename-file-using-front-matter)
    ("C-c n r t" . denote-rename-file-title)
-   ("C-c n r s" . denote-rename-file-signature))
+   ("C-c n r s" . denote-rename-file-signature)))
   :config
   ;; (setq denote-prompts '(title file-type keywords))
   (setq denote-directory (expand-file-name "notes/" osama-emacs-home-dir))
@@ -2218,37 +2217,40 @@ and day."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-android.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
 
-(defvar osama-keyboard-toggle-state nil
-  "Current toggle state of the Android keyboard using isearch.")
+(use-package emacs
+  :ensure nil  ;; مجرد placeholder، Emacs built-in
+  :bind
+  (("<volume-up>" . osama-toggle-keyboard)
+   ("<volume-down>" . osama-toggle-keyboard))
+  :custom
+  (osama-keyboard-toggle-state nil
+    "Current toggle state of the Android keyboard using isearch.")
 
-(defun osama-toggle-keyboard ()
-  "Automatically toggle the Android keyboard using isearch.
+  :config
+  (defun osama-toggle-keyboard ()
+    "Automatically toggle the Android keyboard using isearch.
 Opens i-search if it's closed, closes it if it's open."
-  (interactive)
-  (if (and (boundp 'isearch-mode) isearch-mode)
-      ;; If i-search is open, close it immediately
-      (progn
-        (isearch-abort)
-        (setq osama-keyboard-toggle-state nil))
-    ;; If i-search is closed, open it immediately
-    (isearch-forward nil 1)
-    ;; As soon as it opens, close it after a short delay 
-    ;; if the goal is just to show the keyboard
-    (run-at-time "0.3 sec" nil
-                 (lambda ()
-                   (when (and (boundp 'isearch-mode) isearch-mode)
-                     (isearch-abort))))
-    (setq osama-keyboard-toggle-state t)))
-
-;; Bind volume buttons
-(global-set-key (kbd "<volume-up>") #'osama-toggle-keyboard)
-(global-set-key (kbd "<volume-down>") #'osama-toggle-keyboard)
+    (interactive)
+    (if (and (boundp 'isearch-mode) isearch-mode)
+        ;; If i-search is open, close it immediately
+        (progn
+          (isearch-abort)
+          (setq osama-keyboard-toggle-state nil))
+      ;; If i-search is closed, open it immediately
+      (isearch-forward nil 1)
+      ;; Close it after a short delay if the goal is just to show the keyboard
+      (run-at-time "0.3 sec" nil
+                   (lambda ()
+                     (when (and (boundp 'isearch-mode) isearch-mode)
+                       (isearch-abort))))
+      (setq osama-keyboard-toggle-state t))))
 #+end_src
 
 ** The =osama-emacs-windows.el= custom settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/lisp/osama-emacs-windows.el" :mkdirp yes
 ;;; -*- lexical-binding: t; -*-
+
 #+end_src
 
 
