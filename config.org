@@ -70,8 +70,10 @@ SPC g - magit
 
 * Windows Setup
 
+** Step 1 - Installing Emacs
+Download the latest Emacs from the official website and install it to the default path.
 
-** Step 1 -  MSYS2 - UCRT64 Settings & Installing Dependencies
+** Step 2 -  MSYS2 - UCRT64 Settings & Installing Dependencies
 
 In this step, we install essential development tools using =pacman= (MSYS2 package manager)
 and =npm=. These tools are required for compiling code, running language servers,
