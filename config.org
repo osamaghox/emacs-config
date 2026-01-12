@@ -62,8 +62,8 @@ SPC g - magit
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
 - [X] move markdown from editing module to essitnal module
-- [ ] add (lexical-binding) to every el file of this config 
-- [ ] remove the all mkdirp from org tangle except for first code in the module  
+- [X] add (lexical-binding) to every el file of this config 
+- [X] remove the all mkdirp from org tangle except for first code in the module  
 - [ ] put windows and android tutorials inside each one of them moudle
 - [ ] yank pop ring save file in emacs home folder like clipboard
 - [X] quran memorize with org mode todo tasks (capture-template)
