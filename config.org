@@ -41,6 +41,7 @@ C-h b and c-h m to find keybindings defined by your modes.
 
 
 * TODO New Edits
+- [ ] add tutorial for installing miktex in windows 11
 - [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
 - [X] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
 - [ ] wrap every confing with use-package macro 
@@ -175,7 +176,7 @@ These packages provide language server support for web development:
   Language server for Tailwind CSS, enabling class name completion and validation.
 
 
-** Step 2 -  We Need to Edit System Environment Variables
+** Edit System Environment Variables
 
 When installing tools such as =fd=, =ripgrep=, language servers, compilers, or =Git=,
 Emacs needs to be able to find them regardless of where they are
@@ -204,17 +205,26 @@ This step is essential for features such as:
 3. Select the =Path= variable and click *Edit*.
    Add the following directory:
    - =C:\msys64\ucrt64\bin=
+   - =C:\Program Files\MiKTeX\miktex\bin\x64\=
 
    This directory typically contains:
    - Compilers (GCC, Clang)
    - Language servers
    - Git
    - Utilities such as =fd= and =ripgrep=
+   - MiKTeX
 
 4. Remove any old or duplicate =msys64= directories from the *System variables*
    to avoid conflicts.
 
 5. Click *OK* on all dialogs to apply the changes.
+
+** CRITICAL NOTE: Avoid Launching Emacs via "Everything"
+- *The Issue:* If you use tools like =Everything= (Voidtools) to search and launch Emacs, it may use a *cached* version of the environment variables from when the tool was first started.
+- *The Symptoms:* Emacs will not see the newly added =Path= entries (like MiKTeX or MSYS2).
+- *The Solution:* 1. Open Emacs directly from its installation folder (e.g., =.../emacs/bin/runemacs.exe=).
+  2. If it still doesn't work, *completely exit* the =Everything= app from the System Tray and restart it.
+  3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
 
 
 * The early initialisation of Emacs (=early-init.el=)
