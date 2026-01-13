@@ -1425,7 +1425,7 @@ The which-key package provides hints for keys that complete the currently incomp
     "C-c n r" "Denote Rename"
     "C-c n s" "Denote Sequence"
     "C-c m" "Major-Modes Commands"
-    "C-c y" "Yank"
+    "C-c y" "Yank Pop"
     "C-c u" "Undos"
     "C-c ." "Embark"
     "C-c o" "Org"
