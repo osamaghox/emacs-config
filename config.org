@@ -2030,6 +2030,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
         ("C-c m i" . org-insert-structure-template)
         ("C-c m q" . org-set-tags-command))
 
+  :config
 ;; load mylife.org file from the org directory to agenda
 (setq org-agenda-files (list (expand-file-name "org/mylife.org" osama-emacs-home-dir)))
 
