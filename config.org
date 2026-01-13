@@ -2024,7 +2024,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (("C-c o a" . org-agenda))
 
   ;; Major mode bindings
-  (:map org-mode-map
+  :bind (:map org-mode-map
         ("C-c m t" . org-todo)
         ("C-c m r" . org-refile)
         ("C-c m i" . org-insert-structure-template)
