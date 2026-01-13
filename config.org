@@ -1065,22 +1065,26 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-;; Define the folder to save fonts directly inside osama-emacs-home-dir
-(defvar osama-icons-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
-  "Custom directory to store icon fonts.")
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Define the folder to save fonts directly inside osama-emacs-home-dir
+  (defvar osama-icons-dir
+    (expand-file-name "data/fonts/" osama-emacs-home-dir)
+    "Custom directory to store icon fonts.")
 
-;; Create the folder if it doesn't exist
-(unless (file-directory-p osama-icons-dir)
-  (make-directory osama-icons-dir t))
+  ;; Create the folder if it doesn't exist
+  (unless (file-directory-p osama-icons-dir)
+    (make-directory osama-icons-dir t))
 
-;; Helper function to download a font if missing
-(defun osama-download-font-if-missing (font-name url)
-  "Download FONT-NAME from URL to `osama-icons-dir` if missing."
-  (let ((target (expand-file-name font-name osama-icons-dir)))
-    (unless (file-exists-p target)
-      (url-copy-file url target t)
-      (message "Downloaded: %s" font-name))))
+  :config
+  ;; Helper function to download a font if missing
+  (defun osama-download-font-if-missing (font-name url)
+    "Download FONT-NAME from URL to `osama-icons-dir` if missing."
+    (let ((target (expand-file-name font-name osama-icons-dir)))
+      (unless (file-exists-p target)
+        (url-copy-file url target t)
+        (message "Downloaded: %s" font-name)))))
 
 ;; Download all-the-icons fonts
 (use-package all-the-icons
@@ -2392,19 +2396,6 @@ and day."
 
 * Custom Functions (lisp) folder
 
-
-
-
-* When (and when not) to use-package for custom functions and definitions
-
-** Package-specific functions
-- If a defun is specific to a package and only used by that package:
-  - Include it inside the use-package declaration.
-  - This way, if the package is removed, the defun is no longer needed.
-
-** General-purpose functions
-- If a defun is general-purpose and not tied to any specific package:
-  - Define it normally outside of use-package.
 
 * What is Next ?
 
