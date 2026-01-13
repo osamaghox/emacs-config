@@ -7,7 +7,6 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
-
 * Windows Setup
 
 ** Step 1: Installing Emacs
@@ -47,6 +46,7 @@ mingw-w64-ucrt-x86_64-make \
 mingw-w64-ucrt-x86_64-gcc \
 mingw-w64-ucrt-x86_64-libtool \
 mingw-w64-ucrt-x86_64-libvterm \
+mingw-w64-ucrt-x86_64-python \
 mingw-w64-ucrt-x86_64-nodejs
 #+end_src
 
@@ -97,6 +97,7 @@ Explanation of the installed packages:
 npm install -g \
 typescript \
 typescript-language-server \
+prettier \
 vscode-langservers-extracted \
 @tailwindcss/language-server
 #+end_src
@@ -264,36 +265,50 @@ ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 
 #+end_src
 
+** The =osama-emacs-android.el= section to set PATH and system tools
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
+;; Android (Termux) settings
+(when (string-equal system-type "android")
+  ;; Add Termux binaries to the PATH environment
+  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
+    ;; Prepend termuxpath to PATH to override busybox grep
+    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
+    (setq exec-path (cons termuxpath exec-path))
+    ;; Set conversion style to nil for better Evil integration
+    (setq overriding-text-conversion-style nil)))
+#+end_src
+
+
 *** The =osama-emacs-android.el= section for ~toggle-keyboard~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
-(use-package emacs
-  :ensure nil  ;; مجرد placeholder، Emacs built-in
-  :bind
-  (("<volume-up>" . osama-toggle-keyboard)
-   ("<volume-down>" . osama-toggle-keyboard))
-  :custom
-  (osama-keyboard-toggle-state nil
-    "Current toggle state of the Android keyboard using isearch.")
+;; متغير لتخزين حالة التبديل
+(defvar osama-keyboard-toggle-state nil
+  "Current toggle state of the Android keyboard using isearch.")
 
-  :config
-  (defun osama-toggle-keyboard ()
-    "Automatically toggle the Android keyboard using isearch.
+;; الدالة المسؤولة عن التبديل
+(defun osama-toggle-keyboard ()
+  "Automatically toggle the Android keyboard using isearch.
 Opens i-search if it's closed, closes it if it's open."
-    (interactive)
-    (if (and (boundp 'isearch-mode) isearch-mode)
-        ;; If i-search is open, close it immediately
-        (progn
-          (isearch-abort)
-          (setq osama-keyboard-toggle-state nil))
-      ;; If i-search is closed, open it immediately
-      (isearch-forward nil 1)
-      ;; Close it after a short delay if the goal is just to show the keyboard
-      (run-at-time "0.3 sec" nil
-                   (lambda ()
-                     (when (and (boundp 'isearch-mode) isearch-mode)
-                       (isearch-abort))))
-      (setq osama-keyboard-toggle-state t))))
+  (interactive)
+  (if (and (boundp 'isearch-mode) isearch-mode)
+      ;; إذا كانت i-search مفتوحة، أغلقها فورًا
+      (progn
+        (isearch-abort)
+        (setq osama-keyboard-toggle-state nil))
+    ;; إذا كانت i-search مغلقة، افتحها فورًا
+    (isearch-forward nil 1)
+    ;; أغلقها بعد فترة قصيرة إذا كان الهدف مجرد إظهار الكيبورد
+    (run-at-time "0.3 sec" nil
+                 (lambda ()
+                   (when (and (boundp 'isearch-mode) isearch-mode)
+                     (isearch-abort))))
+    (setq osama-keyboard-toggle-state t)))
+
+;; ربط مفاتيح الوسائط بالدالة مباشرة
+(global-set-key (kbd "<volume-up>") 'osama-toggle-keyboard)
+(global-set-key (kbd "<volume-down>") 'osama-toggle-keyboard)
 #+end_src
 
 *** The =osama-emacs-android.el= Ends Here
@@ -302,9 +317,6 @@ Opens i-search if it's closed, closes it if it's open."
 (provide 'osama-emacs-android)
 ;;; osama-emacs-android.el ends here
 #+end_src
-
-
-
 
 
 ** The =osama-emacs-windows.el= custom settings
@@ -318,10 +330,29 @@ Opens i-search if it's closed, closes it if it's open."
 
 #+end_src
 
-*** The =osama-emacs-windows.el= section for ..
+*** The =osama-emacs-windows.el= section for PATH separators
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+;; Detect system type and set appropriate PATH separators
+(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
+#+end_src
 
+
+*** The =osama-emacs-windows.el= section for fixing search issues with fd and ripgrep
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+;; Fix Arabic text search issues with fd and ripgrep on Windows
+(dolist (prog '("[rR][gG]" "[fF][dD]"))
+  (add-to-list 'process-coding-system-alist
+               `(,prog . (utf-8 . windows-1256))))
+#+end_src
+
+*** The =osama-emacs-windows.el= section for MSYS2 (UCRT64)
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
+(let ((msys-path "C:/msys64"))
+  (unless (file-directory-p msys-path)
+    (error "Emacs requires MSYS2 UCRT64. Path not found: %s" msys-path)))
 #+end_src
 
 
@@ -357,33 +388,20 @@ This is the first file that Emacs reads when starting up. It should contain code
 (cd osama-emacs-home-dir)
 #+end_src
 
-** The =early-init.el= section to set PATH and system tools
+** The =early-init.el= section for Early Settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
-;; Detect system type and set appropriate PATH separators
-(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
+;; Disable the default package system initialization to use an alternative
+(setq package-enable-at-startup nil)
 
-;; Android (Termux) settings
-(when (string-equal system-type "android")
-  ;; Add Termux binaries to the PATH environment
-  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
-    ;; Prepend termuxpath to PATH to override busybox grep
-    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
-    (setq exec-path (cons termuxpath exec-path))
-    ;; Set conversion style to nil for better Evil integration
-    (setq overriding-text-conversion-style nil)))
+;; Disable the GUI elements for a cleaner, faster startup
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-;; Fix Arabic text search issues with fd and ripgrep on Windows
-(when (eq system-type 'windows-nt)
-  (dolist (prog '("[rR][gG]" "[fF][dD]"))
-    (add-to-list 'process-coding-system-alist
-                 `(,prog . (utf-8 . windows-1256)))))
-
-(let ((msys-path "C:/msys64/ucrt64"))
-  (unless (file-directory-p msys-path)
-    (error "Emacs Writing Studio requires MSYS2 UCRT64. Path not found: %s" msys-path)))
+;; Set garbage collection threshold for potentially better performance during startup
+(setq gc-cons-threshold (* 100 1024 1024))
 #+end_src
-
 
 *** The =early-init.el= Ends Here
 
@@ -495,24 +513,22 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-core.el= Section for Emacs Settings
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package emacs
-  :ensure nil
-  :bind
-  (("C-c e q" . osama-kill-emacs)    ;; Quit Emacs with confirmation
-   ("C-c e c" . open-emacs-config))  ;; Open config file
-  :config
-  ;; Function to open your config file
-  (defun open-emacs-config ()
-    "Open Emacs configuration file."
-    (interactive)
-    (find-file (expand-file-name "config.org" osama-emacs-home-dir)))
+;; دالة لفتح ملف الإعدادات
+(defun open-emacs-config ()
+  "Open Emacs configuration file."
+  (interactive)
+  (find-file (expand-file-name "config.org" osama-emacs-home-dir)))
 
-  ;; Function to quit Emacs with explicit confirmation
-  (defun osama-kill-emacs ()
-    "Ask for confirmation before exiting Emacs."
-    (interactive)
-    (if (y-or-n-p "Are you sure you want to quit Emacs? ")
-        (kill-emacs))))
+;; دالة للخروج من Emacs مع تأكيد
+(defun osama-kill-emacs ()
+  "Ask for confirmation before exiting Emacs."
+  (interactive)
+  (when (y-or-n-p "Are you sure you want to quit Emacs? ")
+    (kill-emacs)))
+
+;; ربط المفاتيح بالدوال مباشرة
+(global-set-key (kbd "C-c e q") 'osama-kill-emacs)   ;; Quit Emacs with confirmation
+(global-set-key (kbd "C-c e c") 'open-emacs-config)  ;; Open config file
 #+end_src
 
 *** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
@@ -566,18 +582,6 @@ This module load basic configurations that apply to most facets of Emacs.
 
 ;; Optional: disable lockfiles
 (setq create-lockfiles nil)
-#+end_src
-
-*** The =osama-emacs-core.el= Settings for Better Performance
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Increase GC threshold during startup to speed up launch
-  (setq gc-cons-threshold (* 50 1000 1000))
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold (* 2 1000 1000)))))
 #+end_src
 
 *** The =osama-emacs-core.el= Section for for UTF-8 Defaults
@@ -646,40 +650,41 @@ This module load basic configurations that apply to most facets of Emacs.
   *** The =osama-emacs-core.el= section for ~dired-hide-details-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-  (use-package dired
-    :ensure nil
-    :bind (:map dired-mode-map
-                ("C-c d h" . osama-dired-hide-details-mode))
-    :config
-    (defvar-local osama-dired-hide-details-enabled nil
-      "Non-nil if details and extensions are hidden in this Dired buffer.")
+;; متغير محلي لكل buffer لتتبع حالة إخفاء التفاصيل والامتدادات
+(defvar-local osama-dired-hide-details-enabled nil
+  "Non-nil if details and extensions are hidden in this Dired buffer.")
 
-    (defun osama-dired-hide-details-apply-extensions (hide)
-      "Apply or remove hiding of ALL file extensions in current buffer.
-  If HIDE is non-nil, hide extensions; otherwise show them."
-      (let ((inhibit-read-only t)
-            (regex "\\.[^.]+$"))
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward regex nil t)
-            (if hide
-                (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
-              (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
+;; دالة لإخفاء أو إظهار كل امتدادات الملفات في الـ Dired الحالي
+(defun osama-dired-hide-details-apply-extensions (hide)
+  "Apply or remove hiding of ALL file extensions in current buffer.
+If HIDE is non-nil, hide extensions; otherwise show them."
+  (let ((inhibit-read-only t)
+        (regex "\\.[^.]+$"))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward regex nil t)
+        (if hide
+            (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))
+          (remove-list-of-text-properties (match-beginning 0) (match-end 0) '(invisible)))))))
 
-    (defun osama-dired-hide-details-mode ()
-      "Toggle hiding of details + ALL file extensions in current Dired buffer."
-      (interactive)
-      (setq osama-dired-hide-details-enabled
-            (not osama-dired-hide-details-enabled))
-      (if osama-dired-hide-details-enabled
-          (progn
-            (dired-hide-details-mode 1)
-            (osama-dired-hide-details-apply-extensions t)
-            (message "Dired: hiding details + extensions"))
-        (progn
-          (dired-hide-details-mode 0)
-          (osama-dired-hide-details-apply-extensions nil)
-          (message "Dired: showing details + extensions")))))
+;; دالة لتبديل وضع إخفاء التفاصيل والامتدادات في Dired
+(defun osama-dired-hide-details-mode ()
+  "Toggle hiding of details + ALL file extensions in current Dired buffer."
+  (interactive)
+  (setq osama-dired-hide-details-enabled
+        (not osama-dired-hide-details-enabled))
+  (if osama-dired-hide-details-enabled
+      (progn
+        (dired-hide-details-mode 1)
+        (osama-dired-hide-details-apply-extensions t)
+        (message "Dired: hiding details + extensions"))
+    (progn
+      (dired-hide-details-mode 0)
+      (osama-dired-hide-details-apply-extensions nil)
+      (message "Dired: showing details + extensions"))))
+
+;; ربط المفتاح بالدالة مباشرة في Dired mode
+(define-key dired-mode-map (kbd "C-c d h") 'osama-dired-hide-details-mode)
 #+end_src
 
 
@@ -746,11 +751,8 @@ Display Emacs startup time and garbage collection count
   :ensure nil
   :init
   ;; Hide UI elements
-  (scroll-bar-mode -1)   ;; Disable visible scrollbar
-  (tool-bar-mode -1)     ;; Disable the toolbar
   (tooltip-mode -1)      ;; Disable tooltips
   (set-fringe-mode 10)   ;; Give some breathing room
-  (menu-bar-mode -1)     ;; Disable the menu bar
 
   ;; Visible bell instead of audible bell
   (setq visible-bell t)
@@ -865,7 +867,7 @@ Display Emacs startup time and garbage collection count
 ||____|||____|||____|||____|||____||
 |/____\\|/____\\|/____\\|/____\\|/____\\|
  __________________________________
-||          Time is Money          ||
+||          Time is Money         ||
 ||________________________________||
 |/________________________________\\|")
 
@@ -943,53 +945,46 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el= Section for ~Toggle Transparency~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Ensure initial frame is fully opaque
-  (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+;; ضبط الشفافية الأولية للإطار عند بدء Emacs
+(add-to-list 'default-frame-alist '(alpha . (100 . 100)))
 
-  ;; Function to toggle transparency
-  (defun osama-toggle-transparency ()
-    (interactive)
-    (let ((alpha (frame-parameter nil 'alpha)))
-      (set-frame-parameter
-       nil 'alpha
-       (if (or (eql (cond ((numberp alpha) alpha)
-                          ((numberp (cdr alpha)) (cdr alpha))
-                          ((numberp (cadr alpha)) (cadr alpha)))
-                100)
-               (null alpha))  ;; if alpha is not set previously
-           '(95 . 90)
-         '(100 . 100)))))
+;; دالة لتبديل الشفافية
+(defun osama-toggle-transparency ()
+  "Toggle frame transparency between fully opaque and semi-transparent."
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha)))
+    (set-frame-parameter
+     nil 'alpha
+     (if (or (eql (cond ((numberp alpha) alpha)
+                        ((numberp (cdr alpha)) (cdr alpha))
+                        ((numberp (cadr alpha)) (cadr alpha)))
+              100)
+             (null alpha))  ;; إذا لم يكن alpha مضبوط مسبقًا
+         '(95 . 90)
+       '(100 . 100)))))
 
-  ;; Bind the function to a shortcut
-  :bind
-  (("C-c t o" . osama-toggle-transparency)))
+;; ربط الدالة بمفتاح اختصار مباشر
+(global-set-key (kbd "C-c t o") 'osama-toggle-transparency)
 #+end_src
 
 *** The =osama-emacs-ui.el= Section for Toggle Title Bar & Decorations
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Default frame settings
-  (add-to-list 'default-frame-alist '(undecorated . nil))
-  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
-  (add-to-list 'default-frame-alist '(internal-border-width . 10))
+;; إعدادات الإطار الافتراضية عند بدء Emacs
+(add-to-list 'default-frame-alist '(undecorated . nil))
+(add-to-list 'default-frame-alist '(drag-internal-border . 1))
+(add-to-list 'default-frame-alist '(internal-border-width . 10))
 
-  ;; Function to toggle title bar
-  (defun osama-frame-toggle-decoration ()
-    "Toggle the frame title bar visibility (undecorated)."
-    (interactive)
-    (let* ((current (frame-parameter nil 'undecorated))
-           (new (not current)))
-      (set-frame-parameter nil 'undecorated new)))
+;; دالة لتبديل ظهور شريط العنوان (title bar)
+(defun osama-frame-toggle-decoration ()
+  "Toggle the frame title bar visibility (undecorated)."
+  (interactive)
+  (let* ((current (frame-parameter nil 'undecorated))
+         (new (not current)))
+    (set-frame-parameter nil 'undecorated new)))
 
-  ;; Bind the toggle function to a shortcut
-  :bind
-  (("C-c t f" . osama-frame-toggle-decoration)))
+;; ربط الدالة بمفتاح اختصار مباشر
+(global-set-key (kbd "C-c t f") 'osama-frame-toggle-decoration)
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~custom-themes~
@@ -1102,50 +1097,52 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el=: Section for Font Customization
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-(use-package emacs
-  :ensure nil
-  :bind (("C-c t F" . set-frame-font))
-  :hook (after-init . (lambda ()
-                        ;; Default font
-                        (set-face-attribute 'default nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
+;; تنفيذ إعدادات الخطوط بعد بدء Emacs
+(add-hook 'after-init-hook
+          (lambda ()
+            ;; Default font
+            (set-face-attribute 'default nil
+                                :family "Iosevka Fixed"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-                        ;; Fixed-pitch (مثل الكود)
-                        (set-face-attribute 'fixed-pitch nil
-                                            :family "Iosevka Fixed"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
+            ;; Fixed-pitch (مثل الكود)
+            (set-face-attribute 'fixed-pitch nil
+                                :family "Iosevka Fixed"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-                        ;; Variable-pitch (مثل Org Mode)
-                        (set-face-attribute 'variable-pitch nil
-                                            :family "Iosevka Aile"
-                                            :height 120
-                                            :weight 'light
-                                            :slant 'normal)
-                                            
-;; Nerd Font
-(when (member "Symbols Nerd Font Mono" (font-family-list))
-  (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
+            ;; Variable-pitch (مثل Org Mode)
+            (set-face-attribute 'variable-pitch nil
+                                :family "Iosevka Aile"
+                                :height 120
+                                :weight 'light
+                                :slant 'normal)
 
-;; Arabic Font
-(when (member "Vazirmatn" (font-family-list))
-  (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
+            ;; Nerd Font
+            (when (member "Symbols Nerd Font Mono" (font-family-list))
+              (set-fontset-font t 'unicode "Symbols Nerd Font Mono"))
 
-;; Emoji Font
-(when (member "Noto Color Emoji" (font-family-list))
-  (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
+            ;; Arabic Font
+            (when (member "Vazirmatn" (font-family-list))
+              (set-fontset-font t 'arabic (font-spec :family "Vazirmatn")))
 
-;; Create fonts directory if it doesn't exist
-(defvar osama-fonts-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
-  "Directory to store fonts for Emacs.")
+            ;; Emoji Font
+            (when (member "Noto Color Emoji" (font-family-list))
+              (set-fontset-font t 'emoji "Noto Color Emoji" nil 'append))
 
-(unless (file-directory-p osama-fonts-dir)
-  (make-directory osama-fonts-dir t)))))
+            ;; إنشاء مجلد الخطوط إذا لم يكن موجود
+            (defvar osama-fonts-dir
+              (expand-file-name "data/fonts/" osama-emacs-home-dir)
+              "Directory to store fonts for Emacs.")
+
+            (unless (file-directory-p osama-fonts-dir)
+              (make-directory osama-fonts-dir t)))))
+
+;; ربط set-frame-font بمفتاح اختصار
+(global-set-key (kbd "C-c t F") 'set-frame-font)
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~solaire-mode~
@@ -1286,24 +1283,24 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-editing.el= Section for Paragraph Text Direction
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
-(use-package emacs
-  :ensure nil
-  :init
-  (setq-default bidi-display-reordering t
-                bidi-paragraph-direction 'left-to-right)
-  :config
-  (defun osama-toggle-text-direction ()
-    "Toggle paragraph direction between LTR and RTL in any Emacs mode."
-    (interactive)
-    (setq bidi-paragraph-direction
-          (if (eq bidi-paragraph-direction 'left-to-right)
-              'right-to-left
-            'left-to-right))
-    (message "Paragraph direction now: %s"
-             (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
-    (recenter))
-  :bind
-  ("C-c t r" . osama-toggle-text-direction))
+;; إعدادات اتجاه النصوص عند بدء Emacs
+(setq-default bidi-display-reordering t
+              bidi-paragraph-direction 'left-to-right)
+
+;; دالة لتبديل اتجاه الفقرة بين LTR و RTL
+(defun osama-toggle-text-direction ()
+  "Toggle paragraph direction between LTR and RTL in any Emacs mode."
+  (interactive)
+  (setq bidi-paragraph-direction
+        (if (eq bidi-paragraph-direction 'left-to-right)
+            'right-to-left
+          'left-to-right))
+  (message "Paragraph direction now: %s"
+           (if (eq bidi-paragraph-direction 'left-to-right) "LTR" "RTL"))
+  (recenter))
+
+;; ربط الدالة بمفتاح اختصار مباشر
+(global-set-key (kbd "C-c t r") 'osama-toggle-text-direction)
 #+end_src
 
 
@@ -1642,62 +1639,64 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 *** The =osama-emacs-dev.el= section for ~cc-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
-(use-package cc-mode
-  :ensure nil
-  :bind (:map c++-mode-map
-              ("C-c m c" . osama-c++-run-and-compile))
-  :config
-  (defun osama-c++-run-and-compile ()
-    "Compile C++, clear/refresh eshell on right, and prepare run command."
-    (interactive)
-    (let* ((src  (buffer-file-name))
-           (base (file-name-sans-extension src))
-           (exe  (if (eq system-type 'windows-nt)
-                     (concat base ".exe")
-                   base))
-           (cmd  (format "g++ \"%s\" -o \"%s\"" src exe))
-           (eshell-buf-name "*cpp-eshell*"))
+;; دالة لتجميع وتشغيل كود C++ مع Eshell على الجانب الأيمن
+(defun osama-c++-run-and-compile ()
+  "Compile C++, clear/refresh eshell on right, and prepare run command."
+  (interactive)
+  (let* ((src  (buffer-file-name))
+         (base (file-name-sans-extension src))
+         (exe  (if (eq system-type 'windows-nt)
+                   (concat base ".exe")
+                 base))
+         (cmd  (format "g++ \"%s\" -o \"%s\"" src exe))
+         (eshell-buf-name "*cpp-eshell*"))
+    
+    ;; حفظ الملف الحالي
+    (save-buffer)
+    
+    ;; تقسيم النافذة
+    (delete-other-windows)
+    (split-window-right)
+    
+    ;; ضبط طريقة عرض نافذة الـ compilation
+    (setq display-buffer-alist
+          '(("\\*compilation\\*"
+             (display-buffer-reuse-window display-buffer-at-bottom)
+             (window-height . 10))))
+    
+    ;; تشغيل compile
+    (compile cmd)
+    
+    ;; الانتقال للنافذة اليمنى وتجهيز Eshell
+    (other-window 1)
+    (let ((buf (get-buffer-create eshell-buf-name)))
+      (set-window-buffer (selected-window) buf)
+      (with-current-buffer buf
+        ;; تشغيل Eshell إذا لم تكن تعمل
+        (unless (derived-mode-p 'eshell-mode)
+          (eshell-mode))
+        
+        ;; إنهاء أي عملية قديمة
+        (let ((proc (get-buffer-process buf)))
+          (when proc (kill-process proc)))
+        
+        ;; مسح المحتوى
+        (let ((inhibit-read-only t))
+          (erase-buffer))
+        
+        ;; توليد Prompt جديد وكتابة أمر التشغيل
+        (eshell-mode)
+        (goto-char (point-max))
+        (insert
+         (if (eq system-type 'windows-nt)
+             (file-name-nondirectory exe)
+           (concat "./" (file-name-nondirectory exe))))))
+    
+    ;; العودة للنافذة الأصلية
+    (other-window -1)))
 
-      (save-buffer)
-      (delete-other-windows)
-      (split-window-right)
-
-      (setq display-buffer-alist
-            '(("\\*compilation\\*"
-               (display-buffer-reuse-window display-buffer-at-bottom)
-               (window-height . 10))))
-
-      (compile cmd)
-
-      ;; الانتقال لليمين وتجهيز Eshell
-      (other-window 1)
-      
-      ;; التعديل هنا: نضمن إنشاء البافر وتبديل النافذة إليه
-      (let ((buf (get-buffer-create eshell-buf-name)))
-        (set-window-buffer (selected-window) buf)
-        (with-current-buffer buf
-          ;; إذا لم تكن Eshell تعمل، قم بتشغيلها
-          (unless (derived-mode-p 'eshell-mode)
-            (eshell-mode))
-          
-          ;; إنهاء أي عملية قديمة
-          (let ((proc (get-buffer-process buf)))
-            (when proc (kill-process proc)))
-          
-          ;; مسح المحتوى بالكامل
-          (let ((inhibit-read-only t))
-            (erase-buffer))
-          
-          ;; توليد Prompt جديد وكتابة الأمر
-          (eshell-mode) 
-          (goto-char (point-max))
-          (insert
-           (if (eq system-type 'windows-nt)
-               (file-name-nondirectory exe)
-             (concat "./" (file-name-nondirectory exe))))))
-
-      ;; العودة للكود
-      (other-window -1))))
+;; ربط الدالة بمفتاح اختصار في c++-mode مباشرة
+(define-key c++-mode-map (kbd "C-c m c") 'osama-c++-run-and-compile)
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
@@ -1792,21 +1791,23 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
-(use-package prettier
+(use-package apheleia
   :ensure t
-  :hook ((css-mode
-          js2-mode
-          json-mode
-          typescript-mode
-          web-mode) . prettier-mode)
-  :custom
-  (prettier-enabled-parsers '(babel
-                              babel-flow
-                              babel-ts
-                              typescript
-                              css
-                              html
-                              json)))
+  :config
+  ;; تفعيل Apheleia عالميًا
+  (apheleia-global-mode +1)
+
+  ;; تعريف formatter Prettier
+  (setq apheleia-formatters
+        '((prettier . ("prettier" "--stdin-filepath" filepath))))
+
+  ;; ربط Major Modes بالformatter
+  (setq apheleia-mode-alist
+        '((css-mode        . prettier)
+          (js2-mode        . prettier)
+          (json-mode       . prettier)
+          (typescript-mode . prettier)
+          (web-mode        . prettier))))
 #+end_src
 
 *** The =osama-emacs-dev.el= section Web Live Preview
@@ -2387,11 +2388,16 @@ and day."
 
 
 
+* When (and when not) to use-package for custom functions and definitions
 
+** Package-specific functions
+- If a defun is specific to a package and only used by that package:
+  - Include it inside the use-package declaration.
+  - This way, if the package is removed, the defun is no longer needed.
 
-
-
-
+** General-purpose functions
+- If a defun is general-purpose and not tied to any specific package:
+  - Define it normally outside of use-package.
 
 * What is Next ?
 
