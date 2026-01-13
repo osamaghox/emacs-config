@@ -684,7 +684,9 @@ If HIDE is non-nil, hide extensions; otherwise show them."
       (message "Dired: showing details + extensions"))))
 
 ;; ربط المفتاح بالدالة مباشرة في Dired mode
-(define-key dired-mode-map (kbd "C-c d h") 'osama-dired-hide-details-mode)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-c d h")
+              #'osama-dired-hide-details-mode))
 #+end_src
 
 
@@ -1139,7 +1141,7 @@ Display Emacs startup time and garbage collection count
               "Directory to store fonts for Emacs.")
 
             (unless (file-directory-p osama-fonts-dir)
-              (make-directory osama-fonts-dir t)))))
+              (make-directory osama-fonts-dir t))))
 
 ;; ربط set-frame-font بمفتاح اختصار
 (global-set-key (kbd "C-c t F") 'set-frame-font)
@@ -1696,7 +1698,9 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
     (other-window -1)))
 
 ;; ربط الدالة بمفتاح اختصار في c++-mode مباشرة
-(define-key c++-mode-map (kbd "C-c m c") 'osama-c++-run-and-compile)
+(with-eval-after-load 'cc-mode
+  (define-key c++-mode-map (kbd "C-c m c")
+              #'osama-c++-run-and-compile))
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
