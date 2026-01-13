@@ -1791,21 +1791,23 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-dev.el"
-(use-package prettier
+(use-package apheleia
   :ensure t
-  :hook ((css-mode
-          js2-mode
-          json-mode
-          typescript-mode
-          web-mode) . prettier-mode)
-  :custom
-  (prettier-enabled-parsers '(babel
-                              babel-flow
-                              babel-ts
-                              typescript
-                              css
-                              html
-                              json)))
+  :config
+  ;; تفعيل Apheleia عالميًا
+  (apheleia-global-mode +1)
+
+  ;; تعريف formatter Prettier
+  (setq apheleia-formatters
+        '((prettier . ("prettier" "--stdin-filepath" filepath))))
+
+  ;; ربط Major Modes بالformatter
+  (setq apheleia-mode-alist
+        '((css-mode        . prettier)
+          (js2-mode        . prettier)
+          (json-mode       . prettier)
+          (typescript-mode . prettier)
+          (web-mode        . prettier))))
 #+end_src
 
 *** The =osama-emacs-dev.el= section Web Live Preview
