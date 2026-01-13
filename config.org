@@ -46,6 +46,7 @@ mingw-w64-ucrt-x86_64-make \
 mingw-w64-ucrt-x86_64-gcc \
 mingw-w64-ucrt-x86_64-libtool \
 mingw-w64-ucrt-x86_64-libvterm \
+mingw-w64-ucrt-x86_64-python \
 mingw-w64-ucrt-x86_64-nodejs
 #+end_src
 
@@ -96,6 +97,7 @@ Explanation of the installed packages:
 npm install -g \
 typescript \
 typescript-language-server \
+prettier \
 vscode-langservers-extracted \
 @tailwindcss/language-server
 #+end_src
