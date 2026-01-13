@@ -1595,7 +1595,8 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :custom
   (flymake-no-changes-timeout 0.5)
   (flymake-start-on-flymake-mode t)
-  (flymake-start-on-save-buffer t))
+  (flymake-start-on-save-buffer t)
+  (elisp-flymake-byte-compile-load-path 'inherit))
 #+end_src
 
 
