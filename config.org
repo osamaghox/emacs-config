@@ -333,18 +333,23 @@ Opens i-search if it's closed, closes it if it's open."
 *** The =osama-emacs-windows.el= section for PATH separators
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
-;; Detect system type and set appropriate PATH separators
-(defvar path-sep (if (eq system-type 'windows-nt) ";" ":"))
+(use-package emacs
+  :init
+  ;; Detect system type and set appropriate PATH separators
+  (defvar path-sep (if (eq system-type 'windows-nt) ";" ":")))
 #+end_src
 
 
 *** The =osama-emacs-windows.el= section for fixing search issues with fd and ripgrep
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
-;; Fix Arabic text search issues with fd and ripgrep on Windows
-(dolist (prog '("[rR][gG]" "[fF][dD]"))
-  (add-to-list 'process-coding-system-alist
-               `(,prog . (utf-8 . windows-1256))))
+(use-package emacs
+  :init
+  ;; Fix Arabic text search issues with fd and ripgrep on Windows
+  (when (eq system-type 'windows-nt)
+    (dolist (prog '("[rR][gG]" "[fF][dD]"))
+      (add-to-list 'process-coding-system-alist
+                   `(,prog . (utf-8 . windows-1256))))))
 #+end_src
 
 *** The =osama-emacs-windows.el= section for MSYS2 (UCRT64)
@@ -457,39 +462,54 @@ by ~use-package~ when it needs it
 ** The =init.el= entry point
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/init.el"
-(defvar osama-emacs-modules-dir
-  (expand-file-name "modules" user-emacs-directory)
-  "This directory houses all of the built-in Osama Emacs modules.")
+(use-package emacs
+  :init
+  ;; ----------------------------
+  ;; Directories
+  ;; ----------------------------
+  (defvar osama-emacs-modules-dir
+    (expand-file-name "modules" user-emacs-directory)
+    "This directory houses all of the built-in Osama Emacs modules.")
 
-(defvar osama-emacs-lisp-dir
-  (expand-file-name "lisp" user-emacs-directory)
-  "Directory that contains Osama Emacs additional Lisp files.")
+  (defvar osama-emacs-lisp-dir
+    (expand-file-name "lisp" user-emacs-directory)
+    "Directory that contains Osama Emacs additional Lisp files.")
 
-;; Add both modules and lisp directories to load-path
-(add-to-list 'load-path osama-emacs-modules-dir)
-(add-to-list 'load-path osama-emacs-lisp-dir)
+  ;; Add both directories to load-path
+  (add-to-list 'load-path osama-emacs-modules-dir)
+  (add-to-list 'load-path osama-emacs-lisp-dir)
 
-;; Core Essentials
-(require 'osama-emacs-core)
+  ;; ----------------------------
+  ;; Core Essentials
+  ;; ----------------------------
+  (require 'osama-emacs-core)
 
-;; UI Appearance
-(require 'osama-emacs-ui)
+  ;; ----------------------------
+  ;; UI Appearance
+  ;; ----------------------------
+  (require 'osama-emacs-ui)
 
-;; Integrated Development Environment (IDE)
-(require 'osama-emacs-editing)
-(require 'osama-emacs-completion)
-(require 'osama-emacs-dev)
+  ;; ----------------------------
+  ;; IDE
+  ;; ----------------------------
+  (require 'osama-emacs-editing)
+  (require 'osama-emacs-completion)
+  (require 'osama-emacs-dev)
 
-;; Features
-(require 'osama-emacs-org)
-(require 'osama-emacs-denote)
+  ;; ----------------------------
+  ;; Features
+  ;; ----------------------------
+  (require 'osama-emacs-org)
+  (require 'osama-emacs-denote)
 
-;; Load system-specific settings
-(cond
- ((eq system-type 'android)
-  (require 'osama-emacs-android))
- ((eq system-type 'windows-nt)
-  (require 'osama-emacs-windows)))
+  ;; ----------------------------
+  ;; System-specific settings
+  ;; ----------------------------
+  (cond
+   ((eq system-type 'android)
+    (require 'osama-emacs-android))
+   ((eq system-type 'windows-nt)
+    (require 'osama-emacs-windows))))
 #+end_src
 
 
@@ -542,54 +562,67 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-;; Ensure cache subdirectories exist
-(dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
-  (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
-    (unless (file-directory-p dir)
-      (make-directory dir t))))
+(use-package emacs
+  :init
+  ;; ----------------------------
+  ;; Ensure cache subdirectories exist
+  ;; ----------------------------
+  (dolist (sub '("savehist" "recentf" "desktop" "backups" "autosaves"))
+    (let ((dir (expand-file-name (concat "cache/" sub "/") user-emacs-directory)))
+      (unless (file-directory-p dir)
+        (make-directory dir t))))
 
-;; Savehist: command history
-;; 1. تحديد مكان الملف ليبقى المجلد نظيفاً (من الكود الطويل)
-(setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
+  ;; ----------------------------
+  ;; Savehist: command history
+  ;; ----------------------------
+  ;; 1. تحديد مكان الملف
+  (setq savehist-file (expand-file-name "cache/savehist/savehist" user-emacs-directory))
+  ;; 2. تحديد ماذا نحفظ (ضروري لـ consult-yank-pop)
+  (setq savehist-additional-variables
+        '(kill-ring search-ring regexp-search-ring))
+  ;; 3. طول التاريخ
+  (setq history-length 25)
+  ;; 4. تشغيل savehist-mode
+  (savehist-mode 1)
 
-;; 2. تحديد ماذا نحفظ: النصوص المنسوخة وتاريخ البحث (من الكود الجديد)
-;; هذا السطر ضروري جداً لـ consult-yank-pop
-(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  ;; ----------------------------
+  ;; Recentf: recent files list
+  ;; ----------------------------
+  (setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
+  (recentf-mode 1)
 
-;; 3. تحديد طول التاريخ (اختياري، 25 جيد)
-(setq history-length 25)
+  ;; ----------------------------
+  ;; Desktop: full session restore
+  ;; ----------------------------
+  (setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
+        desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
+        desktop-base-file-name "emacs-desktop")
+  (desktop-save-mode 1)
 
-;; 4. تشغيل الوضع أخيراً
-(savehist-mode 1)
+  ;; ----------------------------
+  ;; Backups: store ~ files in backups/
+  ;; ----------------------------
+  (setq backup-directory-alist
+        `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
+        backup-by-copying t
+        version-control t
+        delete-old-versions t
+        kept-new-versions 5
+        kept-old-versions 2)
 
-;; Recentf: recent files list
-(setq recentf-save-file (expand-file-name "cache/recentf/recentf" user-emacs-directory))
-(recentf-mode 1)
+  ;; ----------------------------
+  ;; Auto-saves: store #files# in autosaves/
+  ;; ----------------------------
+  (setq auto-save-file-name-transforms
+        `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
+        auto-save-default t
+        auto-save-timeout 20
+        auto-save-interval 200)
 
-;; Desktop: full session restore
-(setq desktop-path    (list (expand-file-name "cache/desktop/" user-emacs-directory))
-      desktop-dirname (expand-file-name "cache/desktop/" user-emacs-directory)
-      desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
-
-;; Backups: store ~ files in backups/
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "cache/backups/" user-emacs-directory)))
-      backup-by-copying t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 5
-      kept-old-versions 2)
-
-;; Auto-saves: store #files# in autosaves/
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "cache/autosaves/" user-emacs-directory) t))
-      auto-save-default t
-      auto-save-timeout 20
-      auto-save-interval 200)
-
-;; Optional: disable lockfiles
-(setq create-lockfiles nil)
+  ;; ----------------------------
+  ;; Optional: disable lockfiles
+  ;; ----------------------------
+  (setq create-lockfiles nil))
 #+end_src
 
 *** The =osama-emacs-core.el= Section for for UTF-8 Defaults
@@ -722,13 +755,19 @@ This module load basic configurations that apply to most facets of Emacs.
 Display Emacs startup time and garbage collection count
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-(defun osama-display-startup-time ()
-  "Display Emacs startup time and garbage collection count in the echo area."
-  (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds" (float-time (time-subtract after-init-time before-init-time)))
-           gcs-done))
+(use-package emacs
+  :init
+  ;; ----------------------------
+  ;; Display startup time and garbage collection
+  ;; ----------------------------
+  (defun osama-display-startup-time ()
+    "Display Emacs startup time and garbage collection count in the echo area."
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time (time-subtract after-init-time before-init-time)))
+             gcs-done))
 
-(add-hook 'emacs-startup-hook #'osama-display-startup-time)
+  (add-hook 'emacs-startup-hook #'osama-display-startup-time))
 #+end_src
 
 
