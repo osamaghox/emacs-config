@@ -465,6 +465,12 @@ by ~use-package~ when it needs it
 (use-package emacs
   :init
   ;; ----------------------------
+  ;; Custom file
+  ;; ----------------------------
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file 'noerror)
+
+  ;; ----------------------------
   ;; Directories
   ;; ----------------------------
   (defvar osama-emacs-modules-dir
