@@ -353,7 +353,7 @@ Opens i-search if it's closed, closes it if it's open."
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-windows.el"
 (let ((msys-path "C:/msys64"))
   (unless (file-directory-p msys-path)
-    (error "Emacs requires MSYS2 UCRT64. Path not found: %s" msys-path)))
+    (message "Emacs requires MSYS2 UCRT64. Path not found: %s" msys-path)))
 #+end_src
 
 
