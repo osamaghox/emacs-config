@@ -1604,7 +1604,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   (setq cape-dabbrev-buffer-function #'buffer-list)
 
   ;; Define the function inline to handle Eglot's specific local configuration
-  (defun my/eglot-cape-completion-setup ()
+  (defun osama-eglot-capf ()
     (setq-local completion-at-point-functions
                 (list (cape-capf-super #'eglot-completion-at-point
                                        #'cape-dabbrev
@@ -1613,7 +1613,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
   ;; Use :hook to attach the setup function directly to Eglot's managed mode.
   ;; This automatically handles the 'with-eval-after-load eglot' logic.
-  :hook (eglot-managed-mode . my/eglot-cape-completion-setup))
+  :hook (eglot-managed-mode . osama-eglot-capf))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
