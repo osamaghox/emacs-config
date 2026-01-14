@@ -1598,7 +1598,10 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (setq-default completion-at-point-functions
                 (append (default-value 'completion-at-point-functions)
-                        (list #'cape-dabbrev #'cape-file #'cape-abbrev))))
+                        (list #'cape-dabbrev #'cape-file #'cape-abbrev)))
+
+  ;; Make cape-dabbrev search all buffers
+  (setq cape-dabbrev-buffer-function #'buffer-list))
 
 #+end_src
 
