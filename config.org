@@ -268,15 +268,14 @@ ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 ** The =osama-emacs-android.el= section to set PATH and system tools
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
-;; Android (Termux) settings
-(when (string-equal system-type "android")
-  ;; Add Termux binaries to the PATH environment
-  (let ((termuxpath "/data/data/com.termux/files/usr/bin"))
-    ;; Prepend termuxpath to PATH to override busybox grep
-    (setenv "PATH" (concat termuxpath ":" (getenv "PATH")))
-    (setq exec-path (cons termuxpath exec-path))
-    ;; Set conversion style to nil for better Evil integration
-    (setq overriding-text-conversion-style nil)))
+(use-package emacs
+  :init
+  ;; Add Termux binaries to the PATH
+  (let ((termux-path "/data/data/com.termux/files/usr/bin"))
+    (setenv "PATH" (concat termux-path ":" (getenv "PATH")))
+    (setq exec-path (cons termux-path exec-path)))
+  ;; For Evil integration
+  (setq overriding-text-conversion-style nil))
 #+end_src
 
 
