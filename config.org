@@ -35,6 +35,7 @@ pacman -S --noconfirm \
 base-devel \
 mingw-w64-ucrt-x86_64-toolchain \
 git \
+unzip \
 mingw-w64-ucrt-x86_64-fd \
 mingw-w64-ucrt-x86_64-ripgrep \
 mingw-w64-ucrt-x86_64-clang \
@@ -144,13 +145,15 @@ This step is essential for features such as:
    Then click *OK*.
 
 3. Select the =Path= variable and click *Edit*.
-   Add the following directory:
+   Add the following directories:
    - =C:\msys64\ucrt64\bin=
+   - =C:\msys64\usr\bin=
 
-   This directory typically contains:
+   These directories typically contain:
    - Compilers (GCC, Clang)
    - Language servers
    - Git
+   - unzip
    - Utilities such as =fd= and =ripgrep=
 
 4. Remove any old or duplicate =msys64= directories from the *System variables*
