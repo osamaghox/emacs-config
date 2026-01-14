@@ -2483,7 +2483,7 @@ C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
 - [ ] make your folders clean from emacs backups (https://www.youtube.com/watch?v=XZjyJG-sFZI)
-- [ ] wrap every confing with use-package macro 
+- [X] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
 - [ ] add headings to all dev sections 
