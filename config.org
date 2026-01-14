@@ -1595,14 +1595,25 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 (use-package cape
   :demand t
   :init
-  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  ;; Configure global defaults outside of Eglot managed buffers
   (setq-default completion-at-point-functions
                 (append (default-value 'completion-at-point-functions)
                         (list #'cape-dabbrev #'cape-file #'cape-abbrev)))
 
   ;; Make cape-dabbrev search all buffers
-  (setq cape-dabbrev-buffer-function #'buffer-list))
+  (setq cape-dabbrev-buffer-function #'buffer-list)
 
+  ;; Define the function inline to handle Eglot's specific local configuration
+  (defun my/eglot-cape-completion-setup ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super #'eglot-completion-at-point
+                                       #'cape-dabbrev
+                                       #'cape-file
+                                       #'cape-abbrev))))
+
+  ;; Use :hook to attach the setup function directly to Eglot's managed mode.
+  ;; This automatically handles the 'with-eval-after-load eglot' logic.
+  :hook (eglot-managed-mode . my/eglot-cape-completion-setup))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
