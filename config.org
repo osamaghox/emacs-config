@@ -664,6 +664,7 @@ This module load basic configurations that apply to most facets of Emacs.
   :ensure nil
   :bind
   (("C-c f f" . find-file)
+   ("C-c d F" . find-file-other-window)
    ("C-c f s" . save-buffer)
    ("C-c f R" . rename-file)
    ("C-c f S" . write-file)))
@@ -672,19 +673,44 @@ This module load basic configurations that apply to most facets of Emacs.
 *** The =osama-emacs-core.el= section for Dired
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
-    (use-package dired
-      :ensure nil ;; built-in package
-      :commands (dired dired-jump)
-      :custom
-      (dired-listing-switches "-alh") ;; human-readable sizes
-      (dired-dwim-target t)           ;; smart target when copying/moving
-      (dired-recursive-copies 'always)
-      (dired-recursive-deletes 'top)
-      (dired-auto-revert-buffer t)    ;; auto refresh on changes
-      :bind
-      (("C-c d d" . dired)
-       ("C-c d f" . find-file-other-window)
-       ("C-c d j" . dired-jump)))
+(use-package dired
+  :ensure nil ;; built-in
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-alh")
+  (dired-dwim-target t)
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'top)
+  (dired-auto-revert-buffer t)
+  :bind
+  (("C-c d d" . dired)
+   ("C-c d j" . dired-jump)
+
+   ;; navigation / view
+   ("C-c d r" . revert-buffer)
+   ("C-c d f" . dired-find-file-other-window)
+
+   ;; file operations
+   ("C-c d c" . dired-do-copy)
+   ("C-c d m" . dired-do-rename)   ;; move / rename
+   ("C-c d D" . dired-do-delete)
+   ("C-c d n" . dired-create-empty-file)
+   ("C-c d k" . dired-create-directory)
+
+   ;; marking
+   ("C-c d a" . dired-mark-files-regexp)
+   ("C-c d u" . dired-unmark)
+   ("C-c d U" . dired-unmark-all-marks)
+   ("C-c d t" . dired-toggle-marks)
+
+   ;; execute
+   ("C-c d x" . dired-do-flagged-delete)
+
+   ;; permissions / misc
+   ("C-c d p" . dired-do-chmod)
+   ("C-c d g" . dired-do-chgrp)
+   ("C-c d z" . dired-do-compress)
+   ("C-c d e" . wdired-change-to-wdired-mode)))
        
     (use-package dired-x
       :ensure nil
