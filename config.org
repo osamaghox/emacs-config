@@ -1635,23 +1635,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
                 (list (cape-capf-super #'eglot-completion-at-point
                                        #'cape-dabbrev
                                        #'cape-file
-                                       #'cape-abbrev))))
-
-;; Smart function to filter classes and IDs between HTML and CSS
-  (defun my-css-smart-dabbrev-capf ()
-    "دالة إكمال مخصصة لـ CSS تفرق بين الـ Class والـ ID."
-    (when (derived-mode-p 'css-mode 'scss-mode)
-      (let* ((end (point))
-             (beg (save-excursion (skip-chars-backward "A-Za-z0-9_-") (point)))
-             (char-before (char-before beg)))
-        ;; التحقق من السياق: هل نحن بعد . أو #
-        (when (member char-before '(?\. ?#))
-          (let ((result (cape-dabbrev-keywords)))
-            (list beg end result
-                  :exclusive 'no
-                  :company-kind (lambda (_) (if (eq char-before ?#) 'variable 'value))
-                  :annotation-function (lambda (_) 
-                                         (if (eq char-before ?#) " [ID]" " [Class]")))))))))
+                                       #'cape-abbrev)))))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
