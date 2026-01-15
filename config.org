@@ -674,17 +674,13 @@ This module load basic configurations that apply to most facets of Emacs.
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (use-package dired
-  :ensure nil ;; built-in
-  :commands (dired dired-jump)
-  :custom
-  (dired-listing-switches "-alh")
-  (dired-dwim-target t)
-  (dired-recursive-copies 'always)
-  (dired-recursive-deletes 'top)
-  (dired-auto-revert-buffer t)
+  :ensure nil
   :bind
   (("C-c d d" . dired)
-   ("C-c d j" . dired-jump)
+   ("C-c d j" . dired-jump))
+
+  :bind
+  (:map dired-mode-map
 
    ;; navigation / view
    ("C-c d r" . revert-buffer)
