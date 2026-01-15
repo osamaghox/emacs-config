@@ -1649,7 +1649,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package cape
   :config
-  ;; دالة البحث في ملفات web-mode فقط
+  ;; 1. دالة البحث في ملفات web-mode (كما هي)
   (defun my-css-get-filtered-tokens (type)
     (let ((tokens '())
           (regexp (if (eq type ?.) "class=[\"']\\([^\"']+\\)[\"']" "id=[\"']\\([^\"']+\\)[\"']")))
@@ -1665,19 +1665,24 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
                       (unless (string-empty-p item) (push item tokens))))))))))
       (delete-dups tokens)))
 
-  ;; الدالة الذكية التي تظهر عند كتابة . أو #
+  ;; 2. الدالة الذكية (تم تعديلها للإظهار الفوري بمجرد كتابة الرمز)
   (defun my-css-smart-capf ()
     (when (and (derived-mode-p 'css-mode 'scss-mode) (not (bobp)))
       (let* ((end (point))
-             (beg (save-excursion (skip-chars-backward "A-Za-z0-9_-") (point)))
+             ;; نبحث عن الرمز مباشرة خلف المؤشر أو خلف الكلمة الحالية
+             (beg (save-excursion 
+                    (skip-chars-backward "A-Za-z0-9_-") 
+                    (point)))
              (char-before (char-before beg)))
         (when (member char-before '(?\. ?#))
           (list beg end (my-css-get-filtered-tokens char-before)
                 :exclusive 'no
+                ;; جعل القائمة تظهر فوراً حتى لو لم نكتب أي حرف بعد الرمز
+                :company-prefix-length t 
                 :company-kind (lambda (_) (if (eq char-before ?#) 'variable 'value))
                 :annotation-function (lambda (_) (if (eq char-before ?#) " [ID]" " [Class]")))))))
 
-  ;; "حقن" الدالة الذكية في بداية قائمة الإكمال لـ Eglot
+  ;; 3. حقن الدالة (كما هي)
   (advice-add 'osama-eglot-capf :after
               (lambda ()
                 (when (derived-mode-p 'css-mode 'scss-mode)
