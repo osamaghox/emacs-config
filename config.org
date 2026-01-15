@@ -1619,6 +1619,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 (use-package cape
   :demand t
+  :hook (eglot-managed-mode . osama-eglot-capf)
   :init
   ;; Configure global defaults outside of Eglot managed buffers
   (setq-default completion-at-point-functions
@@ -1636,9 +1637,21 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
                                        #'cape-file
                                        #'cape-abbrev))))
 
-  ;; Use :hook to attach the setup function directly to Eglot's managed mode.
-  ;; This automatically handles the 'with-eval-after-load eglot' logic.
-  :hook (eglot-managed-mode . osama-eglot-capf))
+;; Smart function to filter classes and IDs between HTML and CSS
+  (defun my-css-smart-dabbrev-capf ()
+    "دالة إكمال مخصصة لـ CSS تفرق بين الـ Class والـ ID."
+    (when (derived-mode-p 'css-mode 'scss-mode)
+      (let* ((end (point))
+             (beg (save-excursion (skip-chars-backward "A-Za-z0-9_-") (point)))
+             (char-before (char-before beg)))
+        ;; التحقق من السياق: هل نحن بعد . أو #
+        (when (member char-before '(?\. ?#))
+          (let ((result (cape-dabbrev-keywords)))
+            (list beg end result
+                  :exclusive 'no
+                  :company-kind (lambda (_) (if (eq char-before ?#) 'variable 'value))
+                  :annotation-function (lambda (_) 
+                                         (if (eq char-before ?#) " [ID]" " [Class]")))))))))
 #+end_src
 
 *** The =osama-emacs-completion.el= section for ~helpful~
