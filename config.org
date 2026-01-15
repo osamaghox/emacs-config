@@ -1644,7 +1644,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   :hook (eglot-managed-mode . osama-eglot-capf))
 #+end_src
 
-*** The =osama-emacs-completion.el= section for ~cape~ html and css config 
+*** The =osama-emacs-completion.el= section for ~cape~ html (web-mode) and css smart completion 
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package cape
