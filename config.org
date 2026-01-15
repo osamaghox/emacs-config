@@ -664,7 +664,7 @@ This module load basic configurations that apply to most facets of Emacs.
   :ensure nil
   :bind
   (("C-c f f" . find-file)
-   ("C-c d F" . find-file-other-window)
+   ("C-c f F" . find-file-other-window)
    ("C-c f s" . save-buffer)
    ("C-c f R" . rename-file)
    ("C-c f S" . write-file)))
