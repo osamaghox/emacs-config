@@ -1623,54 +1623,66 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package cape
-  :ensure t
   :demand t
   :init
-  ;; 1. الإعداد العالمي (Global) - ليعمل cape في كل مكان
+  ;; 1. الإعداد العالمي (خارج Eglot)
   (setq-default completion-at-point-functions
                 (append (default-value 'completion-at-point-functions)
                         (list #'cape-dabbrev #'cape-file #'cape-abbrev)))
 
-  ;; 2. دالة جمع الكلمات يدوياً من الـ Buffers
-  (defun my-css-get-all-tokens ()
-    (let ((tokens '()))
+  ;; 2. جعل dabbrev يبحث في كل الملفات
+  (setq cape-dabbrev-buffer-function #'buffer-list)
+
+  ;; 3. دالة Eglot الأصلية الخاصة بك
+  (defun osama-eglot-capf ()
+    (setq-local completion-at-point-functions
+                (list (cape-capf-super #'eglot-completion-at-point
+                                       #'cape-dabbrev
+                                       #'cape-file
+                                       #'cape-abbrev))))
+
+  :hook (eglot-managed-mode . osama-eglot-capf))
+#+end_src
+
+*** The =osama-emacs-completion.el= section for ~cape~ html and css config 
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
+(use-package cape
+  :config
+  ;; دالة البحث في ملفات web-mode فقط
+  (defun my-css-get-filtered-tokens (type)
+    (let ((tokens '())
+          (regexp (if (eq type ?.) "class=[\"']\\([^\"']+\\)[\"']" "id=[\"']\\([^\"']+\\)[\"']")))
       (save-excursion
         (dolist (buf (buffer-list))
           (with-current-buffer buf
-            ;; لا نبحث في ملفات CSS لتجنب التكرار
-            (unless (derived-mode-p 'css-mode)
+            (when (derived-mode-p 'web-mode)
               (save-excursion
                 (goto-char (point-min))
-                (while (re-search-forward "[A-Za-z0-9_-]+" nil t)
-                  (push (match-string-no-properties 0) tokens)))))))
+                (while (re-search-forward regexp nil t)
+                  (let ((match (match-string-no-properties 1)))
+                    (dolist (item (split-string match " "))
+                      (unless (string-empty-p item) (push item tokens))))))))))
       (delete-dups tokens)))
 
-  ;; 3. الدالة الذكية لـ CSS (التي تستخدم البيانات المجمعة)
+  ;; الدالة الذكية التي تظهر عند كتابة . أو #
   (defun my-css-smart-capf ()
     (when (and (derived-mode-p 'css-mode 'scss-mode) (not (bobp)))
       (let* ((end (point))
              (beg (save-excursion (skip-chars-backward "A-Za-z0-9_-") (point)))
              (char-before (char-before beg)))
         (when (member char-before '(?\. ?#))
-          (list beg end (my-css-get-all-tokens)
+          (list beg end (my-css-get-filtered-tokens char-before)
                 :exclusive 'no
                 :company-kind (lambda (_) (if (eq char-before ?#) 'variable 'value))
                 :annotation-function (lambda (_) (if (eq char-before ?#) " [ID]" " [Class]")))))))
 
-  ;; 4. دالة الربط مع Eglot
-  (defun osama-eglot-capf ()
-    (setq-local completion-at-point-functions
-                (list 
-                 #'my-css-smart-capf
-                 (cape-capf-super
-                  #'eglot-completion-at-point
-                  #'cape-dabbrev
-                  #'cape-file))))
-
-  ;; 5. إعداد خيارات dabbrev
-  (setq cape-dabbrev-buffer-function #'buffer-list)
-
-  :hook (eglot-managed-mode . osama-eglot-capf))
+  ;; "حقن" الدالة الذكية في بداية قائمة الإكمال لـ Eglot
+  (advice-add 'osama-eglot-capf :after
+              (lambda ()
+                (when (derived-mode-p 'css-mode 'scss-mode)
+                  (setq-local completion-at-point-functions
+                              (cons #'my-css-smart-capf completion-at-point-functions))))))
 #+end_src
 
 
