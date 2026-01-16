@@ -2021,47 +2021,21 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure t)
 
 (use-package transient
-  :bind
-  ("C-c m w" . osama-web-dispatch)
+  :after web-mode
+  :bind ("C-c c w" . osama-web-dispatch)
   :config
-  ;; تعريف الـ transient
   (transient-define-prefix osama-web-dispatch ()
     "Web server and live preview control panel"
-
+    
     ["Web Server"
-     ("s" "Start Server (choose directory)"
-      (lambda ()
-        (interactive)
-        ;; اختر المجلد الذي تريد عرضه
-        (let ((dir (read-directory-name "Select directory to serve: ")))
-          (setq httpd-root dir)
-          (httpd-serve-directory dir)
-          (message "🚀 Serving %s at http://localhost:%d" dir httpd-port))) :transient t)
-
-     ("k" "Stop Server"
-      (lambda ()
-        (interactive)
-        (httpd-stop)
-        (message "🛑 Server Stopped")) :transient t)
-
-     ("p" "Port Settings"
-      (lambda ()
-        (interactive)
-        (customize-variable 'httpd-port)
-        (message "⚙️ Adjusting httpd-port")) :transient t)]
-
+     ("s" "Serve Directory" (lambda () (interactive) (call-interactively 'httpd-serve-directory) (message "🚀 Serving Directory")) :transient t)
+     ("k" "Stop Server"     (lambda () (interactive) (httpd-stop) (message "🛑 Server Stopped")) :transient t)
+     ("p" "Port Settings"   (lambda () (interactive) (customize-variable 'httpd-port) (message "⚙️ Adjusting httpd-port")) :transient t)]
+    
     ["Live Preview"
-     ("i" "Impatient Mode"
-      (lambda ()
-        (interactive)
-        (impatient-mode)
-        (message "👀 Impatient Mode toggled")) :transient t)
-
-     ("o" "Open Browser"
-      (lambda ()
-        (interactive)
-        (browse-url (format "http://localhost:%d/imp/" httpd-port))
-        (message "🌐 Browser opened at http://localhost:%d/imp/" httpd-port)) :transient t)]))
+     ("i" "Impatient Mode"  (lambda () (interactive) (impatient-mode) (message "👀 Impatient Mode toggled")) :transient t)
+     ("o" "Open Browser"    (lambda () (interactive) (browse-url (format "http://localhost:%d/imp/" httpd-port)) 
+                                      (message "🌐 Browser opened")) :transient t)]))
 #+end_src
 
 *** The =osama-emacs-dev.el= Ends Here
