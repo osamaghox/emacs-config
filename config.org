@@ -286,32 +286,35 @@ ln -s /sdcard/osama-vault/emacs/data/fonts /data/data/org.gnu.emacs/files/fonts
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
 (use-package emacs
-  :ensure nil  ;; مجرد placeholder، Emacs built-in
+  :ensure nil
   :bind
-  (("<volume-up>" . osama-toggle-keyboard)
+  (("<volume-up>"   . osama-toggle-keyboard)
    ("<volume-down>" . osama-toggle-keyboard))
-  :custom
-  (osama-keyboard-toggle-state nil
-    "Current toggle state of the Android keyboard using isearch.")
+
+  :init
+  (defvar osama-keyboard-toggle-state nil
+    "Non-nil means Android keyboard is considered open.")
 
   :config
   (defun osama-toggle-keyboard ()
-    "Automatically toggle the Android keyboard using isearch.
-Opens i-search if it's closed, closes it if it's open."
+    "Toggle Android keyboard using isearch as a trigger."
     (interactive)
-    (if (and (boundp 'isearch-mode) isearch-mode)
-        ;; If i-search is open, close it immediately
+    (if osama-keyboard-toggle-state
+        ;; OFF
         (progn
-          (isearch-abort)
+          (when (and (boundp 'isearch-mode) isearch-mode)
+            (isearch-abort))
           (setq osama-keyboard-toggle-state nil))
-      ;; If i-search is closed, open it immediately
-      (isearch-forward nil 1)
-      ;; Close it after a short delay if the goal is just to show the keyboard
-      (run-at-time "0.3 sec" nil
-                   (lambda ()
-                     (when (and (boundp 'isearch-mode) isearch-mode)
-                       (isearch-abort))))
-      (setq osama-keyboard-toggle-state t))))
+      ;; ON
+      (progn
+        (isearch-forward)
+        ;; نتركه مفتوح لحظة حتى يطلع الكيبورد
+        (run-at-time
+         0.4 nil
+         (lambda ()
+           (when (and (boundp 'isearch-mode) isearch-mode)
+             (isearch-abort))))
+        (setq osama-keyboard-toggle-state t)))))
 #+end_src
 
 *** The =osama-emacs-android.el= Ends Here
