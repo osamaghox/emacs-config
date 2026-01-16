@@ -2571,6 +2571,7 @@ mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
+- [ ] add apheleia SPC C for globally
 - [ ] make your folders clean from emacs backups (https://www.youtube.com/watch?v=XZjyJG-sFZI)
 - [X] wrap every confing with use-package macro 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
