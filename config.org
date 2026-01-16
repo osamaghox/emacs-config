@@ -2021,7 +2021,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure t)
 
 (use-package transient
-  :after web-mode
   :bind ("C-c c w" . osama-web-dispatch)
   :config
   (transient-define-prefix osama-web-dispatch ()
