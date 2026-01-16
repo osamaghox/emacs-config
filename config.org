@@ -1815,12 +1815,14 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (fset #'jsonrpc--log-event #'ignore))
 
 (use-package eglot-booster
+  :if (not (eq system-type 'android)) ;; لن يتم تحميلها نهائياً في الموبايل
   :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :after eglot
   :custom
   (eglot-booster-io-only t)
   :config
   (eglot-booster-mode))
+
 
 #+end_src
 
