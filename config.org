@@ -512,8 +512,7 @@ by ~use-package~ when it needs it
   ;; Features
   ;; ----------------------------
   (require 'osama-emacs-org)
-  (require 'osama-emacs-denote)) ;; macro ends here
-
+  (require 'osama-emacs-denote)
 
   ;; ----------------------------
   ;; System-specific settings
@@ -522,7 +521,7 @@ by ~use-package~ when it needs it
    ((eq system-type 'android)
     (require 'osama-emacs-android))
    ((eq system-type 'windows-nt)
-    (require 'osama-emacs-windows)))
+    (require 'osama-emacs-windows))))
 #+end_src
 
 
