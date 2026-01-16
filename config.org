@@ -2022,19 +2022,22 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure t)
 
 (use-package transient
-  :after web-mode
-  :bind (:map web-mode-map
-              ("C-c m w" . osama-web-dispatch))
+  :bind
+  ("C-c m w" . osama-web-dispatch)
   :config
+  ;; تعريف الـ transient
   (transient-define-prefix osama-web-dispatch ()
     "Web server and live preview control panel"
 
     ["Web Server"
-     ("s" "Start Server"
+     ("s" "Start Server (choose directory)"
       (lambda ()
         (interactive)
-        (httpd-start)
-        (message "🚀 Server Started")) :transient t)
+        ;; اختر المجلد الذي تريد عرضه
+        (let ((dir (read-directory-name "Select directory to serve: ")))
+          (setq httpd-root dir)
+          (httpd-serve-directory dir)
+          (message "🚀 Serving %s at http://localhost:%d" dir httpd-port))) :transient t)
 
      ("k" "Stop Server"
       (lambda ()
