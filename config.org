@@ -1333,6 +1333,50 @@ Display Emacs startup time and garbage collection count
   (evil-collection-init))
 #+end_src
 
+*** The =osama-emacs-editing.el= section for =evil-mode= stoping arrow keys [Temporary]
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
+(use-package evil
+  :init
+  (defvar osama-disable-arrows-enabled t
+    "Toggle state for disabling arrow keys.")
+
+  (defun osama--disable-arrows ()
+    (dolist (state '(normal insert visual motion))
+      (evil-define-key state 'global
+        (kbd "<up>")    #'ignore
+        (kbd "<down>")  #'ignore
+        (kbd "<left>")  #'ignore
+        (kbd "<right>") #'ignore)))
+
+  (defun osama--enable-arrows ()
+    (dolist (state '(normal insert visual motion))
+      (evil-define-key state 'global
+        (kbd "<up>")    nil
+        (kbd "<down>")  nil
+        (kbd "<left>")  nil
+        (kbd "<right>") nil)))
+
+  ;; شغل التعطيل افتراضيًا عند Init
+  (osama--disable-arrows)
+
+  (defun osama-toggle-arrow-keys ()
+    "Toggle arrow keys on/off in Evil mode."
+    (interactive)
+    (if osama-disable-arrows-enabled
+        (progn
+          (osama--enable-arrows)
+          (setq osama-disable-arrows-enabled nil)
+          (message "Arrow keys ENABLED"))
+      (osama--disable-arrows)
+      (setq osama-disable-arrows-enabled t)
+      (message "Arrow keys DISABLED")))
+
+  :bind
+  ("C-c t a" . osama-toggle-arrow-keys))
+#+end_src
+
+
 *** The =osama-emacs-editing.el= section for general leader key
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
