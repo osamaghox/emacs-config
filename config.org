@@ -1328,17 +1328,20 @@ Display Emacs startup time and garbage collection count
   (setq evil-mode-line-format nil)       ;; ✅ بعد تحميل الحزمة
   (evil-mode 1)
 
-  ;; Global keybindings
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-
   ;; Motion keys: move by visual lines
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
   ;; Set initial state for specific modes
   (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
+  (evil-set-initial-state 'dashboard-mode 'normal)
+
+  ;; Global and state-specific keybindings
+  :bind
+  (("<escape>" . keyboard-escape-quit)
+   :map evil-insert-state-map
+   ("C-g" . evil-normal-state)))
+
 
 ;;; Evil-collection setup (integrates evil with other Emacs modes)
 (use-package evil-collection
