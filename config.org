@@ -2037,45 +2037,49 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 (use-package transient
   :bind ("C-c c w" . osama-web-dispatch)
   :config
+
+  ;; 1. وظائف مساعدة (Helper Functions) لجعل الكود أنظف
+  (defun osama-httpd-start-and-message ()
+    "بدء تشغيل السيرفر وعرض رسالة"
+    (interactive)
+    (call-interactively 'httpd-serve-directory)
+    (message "🚀 Serving Directory: %s" httpd-root))
+
+  (defun osama-httpd-stop-and-message ()
+    "إيقاف السيرفر وعرض رسالة"
+    (interactive)
+    (httpd-stop)
+    (message "🛑 Server Stopped"))
+
+  (defun osama-enable-impatient-for-web-buffers ()
+    "تفعيل Impatient Mode لجميع ملفات الويب المفتوحة حالياً"
+    (interactive)
+    (let ((count 0))
+      (dolist (buf (buffer-list))
+        (with-current-buffer buf
+          (when (derived-mode-p 'web-mode 'html-mode 'css-mode 'js-mode 'mhtml-mode)
+            (impatient-mode 1)
+            (setq count (1+ count)))))
+      (message "👀 Impatient Mode enabled for %d buffers" count)))
+
+  (defun osama-open-live-browser ()
+    "فتح المتصفح على صفحة البث الحي"
+    (interactive)
+    (browse-url (format "http://localhost:%d/imp/" httpd-port))
+    (message "🌐 Browser opened at /imp/"))
+
+  ;; 2. تعريف لوحة التحكم (Transient Menu)
   (transient-define-prefix osama-web-dispatch ()
     "Web server and live preview control panel"
 
     ["Web Server"
-     ("s" "Serve Directory"
-      (lambda ()
-        (interactive)
-        (call-interactively 'httpd-serve-directory)
-        (message "🚀 Serving Directory"))
-      :transient t)
-
-     ("k" "Stop Server"
-      (lambda ()
-        (interactive)
-        (httpd-stop)
-        (message "🛑 Server Stopped"))
-      :transient t)
-
-     ("p" "Port Settings"
-      (lambda ()
-        (interactive)
-        (customize-variable 'httpd-port)
-        (message "⚙️ Adjusting httpd-port"))
-      :transient t)]
+     ("s" "Serve Directory" osama-httpd-start-and-message :transient t)
+     ("k" "Stop Server"    osama-httpd-stop-and-message  :transient t)
+     ("p" "Port Settings"  (lambda () (interactive) (customize-variable 'httpd-port)) :transient t)]
 
     ["Live Preview"
-     ("i" "Impatient Mode"
-      (lambda ()
-        (interactive)
-        (impatient-mode)
-        (message "👀 Impatient Mode toggled"))
-      :transient t)
-
-     ("o" "Open Browser"
-      (lambda ()
-        (interactive)
-        (browse-url (format "http://localhost:%d/imp/" httpd-port))
-        (message "🌐 Browser opened"))
-      :transient t)]
+     ("i" "Enable Impatient (All Buffers)" osama-enable-impatient-for-web-buffers :transient t)
+     ("o" "Open Browser"                   osama-open-live-browser               :transient t)]
 
     ["Exit"
      ("q" "Quit" transient-quit-one)]))
