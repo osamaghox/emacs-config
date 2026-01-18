@@ -169,6 +169,18 @@ This step is essential for features such as:
         2. If it still doesn't work, *completely exit* the =Everything= app from the System Tray and restart it.
         3. If all else fails, **Restart your PC** to force Windows to broadcast the new environment variables to all background services.
 
+* Fix Keyboard Layout
+
+  -  Enable "Let me use a different input method for each app window" 
+        Windows 11 often changes the keyboard layout when switching focus to Emacs 
+        if you have multiple languages installed.
+        - Open Settings > Time & language > Typing
+        - Click on Advanced keyboard settings
+        - check "Let me use a different input method for each app window"
+
+  -  Override default input method 
+        - Select "Use language list (recommended)" option  
+
 * Android Setup
 
 ** Step 1: Removing Old Apps
