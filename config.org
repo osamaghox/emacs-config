@@ -2595,20 +2595,19 @@ mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
-- [ ] add apheleia SPC C for globally
-- [ ] make your folders clean from emacs backups (https://www.youtube.com/watch?v=XZjyJG-sFZI)
-- [X] wrap every confing with use-package macro 
+- [ ] add headings to all dev sections 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
-- [ ] add headings to all dev sections 
 - [ ] editing all use-package macros for making it right syntix like (:config,:init,:custom,:dever t,...etc)
 - [ ] https://gitlab.com/s_witcher/witcharch/-/tree/main/dotfiles/emacs?ref_type=heads (اقرا هذا اذا بتقدر تخرج منه اشياء رهيبة مثل الخطوط والثيم)
-- [ ] yank pop ring save file in emacs home folder like clipboard
 - [ ] rewrite every single explain texts to make my config more readable without even looking at the code
 
 https://pastebin.com/AD2rhMSc
 كونفق جيد للغاية
 
+- [X] yank pop ring save file in emacs home folder like clipboard
+- [X] wrap every confing with use-package macro 
+- [X] make your folders clean from emacs backups (https://www.youtube.com/watch?v=XZjyJG-sFZI)
 - [X] add tutorial for installing miktex in windows 11
 - [X] copy this web.el to my config https://github.com/gchape/.emacs.d/blob/main/modules/mod-web.el
 - [X] convert org mode keybinds to org-mode-map to not show org commands if you are not in org buffer 
