@@ -1652,6 +1652,7 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-completion.el"
 (use-package corfu
   :ensure t
+  :hook (corfu-mode . corfu-popupinfo-mode)
   :init
   (global-corfu-mode)
   (corfu-indexed-mode)
@@ -1662,6 +1663,8 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   (corfu-auto-delay 0.05)
   (corfu-preselect 'first)
   (corfu-popupinfo-delay '(0.5 . 0.2))
+  (corfu-popupinfo-max-width 90)
+  (corfu-popupinfo-max-height 24)
   (corfu-quit-no-match 'separator)
   :bind (:map corfu-map
               ("M-SPC"   . corfu-insert-separator)
