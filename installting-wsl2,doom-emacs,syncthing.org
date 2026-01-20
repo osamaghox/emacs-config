@@ -1,3 +1,4 @@
+https://ethanaa.com/blog/switching-to-doom-emacs/#doom-emacs
 * Installing WSL2 in Windows 11
 
 ** Step 1 - Enable the Windows Subsystem for Linux
