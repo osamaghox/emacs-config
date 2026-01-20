@@ -473,7 +473,6 @@ by ~use-package~ when it needs it
   (use-package-always-ensure t)
   (package-native-compile t)
   (package-check-signature nil)
-  (warning-minimum-level :emergency)
   (use-package-compute-statistics t))
 #+end_src
 
