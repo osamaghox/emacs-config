@@ -1355,7 +1355,7 @@ Display Emacs startup time and garbage collection count
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-editing.el"
 (use-package evil
-  :init
+  :config
   (defvar osama-disable-arrows-enabled t
     "Toggle state for disabling arrow keys.")
 
