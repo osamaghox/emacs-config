@@ -1,3 +1,4 @@
+https://ethanaa.com/blog/switching-to-doom-emacs/#doom-emacs
 * Doom Emacs Native in Windows
 
 ** Step 1 - Installing Important tools
