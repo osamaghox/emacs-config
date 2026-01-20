@@ -1658,8 +1658,8 @@ Corfu enhances in-buffer completion with a small completion popup. The current c
   :custom
   (corfu-auto t)
   (corfu-cycle t)
-  (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 1)
+  (corfu-auto-delay 0.05)
   (corfu-preselect 'first)
   (corfu-popupinfo-delay '(0.5 . 0.2))
   (corfu-quit-no-match 'separator)
