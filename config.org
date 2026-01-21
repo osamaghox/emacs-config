@@ -32,6 +32,7 @@ to their latest versions. It ensures compatibility and prevents dependency issue
 
 #+begin_src powershell :tangle no
 pacman -S --noconfirm \
+mingw-w64-ucrt-x86_64-emacs \
 base-devel \
 mingw-w64-ucrt-x86_64-toolchain \
 git \
