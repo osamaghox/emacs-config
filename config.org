@@ -1614,12 +1614,13 @@ The ~marginalia~ package, co-authored by Daniel Mendler and Omar Antolín Camare
    ("C-c s f" . consult-fd)
    ("C-c s l" . consult-line-multi)
    ("C-c f r" . consult-recent-file)
-   ("C-c f m" . consult-file-externally)
    ("C-c b b" . consult-buffer)
    ("C-c h o" . consult-outline)
+   ("C-c h i" . consult-info)
    ("C-c o h" . consult-org-heading)
    ("C-c m m" . consult-mode-command)
    ("C-c t t" . consult-theme)
+   ("C-c c f" . consult-flymake)
    ("C-c y"   . consult-yank-pop)))
 #+end_src
 
