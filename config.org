@@ -1540,7 +1540,7 @@ The which-key package provides hints for keys that complete the currently incomp
   (which-key-mode)
   :diminish which-key-mode
   :custom
-  (which-key-idle-delay 1)
+  (which-key-idle-delay 0)
   (which-key-separator " → ")
   (which-key-min-display-lines 2)
 
