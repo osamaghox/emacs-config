@@ -1136,9 +1136,9 @@ Display Emacs startup time and garbage collection count
   :defer t)
 #+end_src
 
-*** The =osama-emacs-ui.el= section for ~doom-modeline~
+*** The =osama-emacs-ui.el= section for ~doom-modeline~ [Disabled]
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
+#+begin_src emacs-lisp :tangle no
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1)
@@ -1150,6 +1150,39 @@ Display Emacs startup time and garbage collection count
   (doom-modeline-enable-word-count t)
   (doom-modeline-height 30)
   (doom-modeline-indent-info t))
+#+end_src
+
+
+*** The =osama-emacs-ui.el= section for ~modeline~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
+  (use-package moody
+  :custom
+  (x-underline-at-descent-line t)
+  :config
+  (moody-replace-mode-line-front-space)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode)
+
+  ;; 1. حذف مؤشرات التشفير (U:---) وإضافة وضع Evil مكانها
+  (setq-default mode-line-format
+                '("%e"
+                  mode-line-front-space
+                  ;; هنا نضع وضع Evil بشكل أنيق
+                  (:propertize (" " (:eval (upcase (symbol-name evil-state))) " ")
+                               face moody-strong)
+                  moody-mode-line-buffer-identification
+                  "  "
+                  mode-line-position
+                  (vc-mode moody-vc-mode)
+                  mode-line-modes
+                  mode-line-misc-info
+                  mode-line-end-spaces)))
+#+end_src
+
+*** The =osama-emacs-ui.el= section for ~nyan-mode~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
