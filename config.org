@@ -826,6 +826,16 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
+*** The =osama-emacs-core.el= section for smoother scrolling
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+(use-package emacs
+  :init
+  (setq scroll-conservatively 10
+        scroll-margin 15))
+#+end_src
+
+
 *** The =osama-emacs-core.el= Ends Here
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
 (provide 'osama-emacs-core)
