@@ -1193,13 +1193,11 @@ Display Emacs startup time and garbage collection count
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 (use-package nyan-mode
   :defer 20
-  :if (and (display-graphic-p) 
-           (not (eq system-type 'android)))
+  :if (display-graphic-p)
   :custom
   (nyan-bar-length 10)
   :config
   (nyan-mode +1))
-
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
