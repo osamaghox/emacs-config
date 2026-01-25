@@ -1153,7 +1153,7 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
-*** The =osama-emacs-ui.el= section for ~modeline~
+*** The =osama-emacs-ui.el= section for ~moody~ modeline and ~minions~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
   (use-package moody
@@ -1178,6 +1178,14 @@ Display Emacs startup time and garbage collection count
                   mode-line-modes
                   mode-line-misc-info
                   mode-line-end-spaces)))
+
+(use-package minions
+    :custom
+    (minions-mode-line-lighter "…")
+    (minions-mode-line-delimiters '("" . ""))
+    :config
+    (minions-mode +1))
+
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~nyan-mode~
