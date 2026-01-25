@@ -1159,7 +1159,6 @@ Display Emacs startup time and garbage collection count
 (use-package moody
   :custom
   (x-underline-at-descent-line t)
-  :config
   (moody-replace-mode-line-front-space)
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode)
@@ -1185,8 +1184,26 @@ Display Emacs startup time and garbage collection count
     (minions-mode-line-delimiters '("" . ""))
     :config
     (minions-mode +1))
-
 #+end_src
+
+
+*** The =osama-emacs-ui.el= section for hiding ~modeline~ border
+
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
+(use-package emacs
+  :init
+  (defun osama-fix-modeline-box (&rest _)
+    (set-face-attribute 'mode-line nil :box nil)
+    (set-face-attribute 'mode-line-inactive nil :box nil))
+
+  ;; بعد load-theme
+  (advice-add 'load-theme :after #'osama-fix-modeline-box)
+
+  ;; بعد enable-theme (consult-themes وغيره)
+  (add-hook 'enable-theme-functions #'osama-fix-modeline-box))
+#+end_src
+
 
 *** The =osama-emacs-ui.el= section for ~nyan-mode~
 
