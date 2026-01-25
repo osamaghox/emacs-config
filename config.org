@@ -1195,7 +1195,7 @@ Display Emacs startup time and garbage collection count
   :ensure t
   :defer 20
   :if (display-graphic-p)
-  :validate-custom
+  :custom
   (nyan-bar-length 10)
   :config
   (nyan-mode +1))
