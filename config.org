@@ -816,6 +816,15 @@ Display Emacs startup time and garbage collection count
   (add-hook 'emacs-startup-hook #'osama-display-startup-time))
 #+end_src
 
+*** The =osama-emacs-core.el= section for stopping mouse wheel button
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+(use-package emacs
+  :init
+  (dolist (key '("<mouse-2>" "<down-mouse-2>" "<drag-mouse-2>"))
+    (global-unset-key (kbd key))))
+#+end_src
+
 
 *** The =osama-emacs-core.el= Ends Here
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
