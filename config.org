@@ -1101,7 +1101,7 @@ Display Emacs startup time and garbage collection count
   :ensure t
   :config
   ;; 1. تحميل الثيم
-  (load-theme 'doom-city-lights t)
+  (load-theme 'doom-material-dark t)
 
   (setq doom-themes-enable-bold t    ; تمكين الخط العريض
         doom-themes-enable-italic t) ; تمكين الخط المائل
