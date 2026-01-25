@@ -1156,7 +1156,7 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el= section for ~moody~ modeline and ~minions~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-  (use-package moody
+(use-package moody
   :custom
   (x-underline-at-descent-line t)
   :config
@@ -1164,13 +1164,13 @@ Display Emacs startup time and garbage collection count
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode)
 
-  ;; 1. حذف مؤشرات التشفير (U:---) وإضافة وضع Evil مكانها
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
-                  ;; هنا نضع وضع Evil بشكل أنيق
-                  (:propertize (" " (:eval (upcase (symbol-name evil-state))) " ")
-                               face moody-strong)
+                  ;; إظهار وضع Evil كنص عادي بدون Face مسبب للمشاكل
+                  (:eval
+                   (when (bound-and-true-p evil-mode)
+                     (format " %s " (upcase (symbol-name evil-state)))))
                   moody-mode-line-buffer-identification
                   "  "
                   mode-line-position
