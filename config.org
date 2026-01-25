@@ -1183,6 +1183,14 @@ Display Emacs startup time and garbage collection count
 *** The =osama-emacs-ui.el= section for ~nyan-mode~
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
+(use-package nyan-mode
+  :ensure t
+  :defer 20
+  :if (display-graphic-p)
+  :validate-custom
+  (nyan-bar-length 10)
+  :config
+  (nyan-mode +1))
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
@@ -2675,6 +2683,7 @@ mhtml-mode =>  It closes any tag at any point with <C-c C-e>.
 C-h b and c-h m to find keybindings defined by your modes.
 
 * TODO New Edits
+- [ ] good syntex use package config https://github.com/xenodium/dotsies/blob/main/emacs/features/fe-ui.el
 - [ ] add headings to all dev sections 
 - [ ] take the dired tab subtree and recrusive copy and trashed package and other packages https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
 - [ ] edit yasnippt (https://www.youtube.com/watch?v=W-bRZlseNm0)
