@@ -583,6 +583,15 @@ This module load basic configurations that apply to most facets of Emacs.
         (kill-emacs))))
 #+end_src
 
+
+*** The =osama-emacs-core.el= Section for Commands Menu
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
+(use-package emacs
+  :bind ("C-c :" . execute-extended-command))
+#+end_src
+
+
 *** The =osama-emacs-core.el= Section for Session, Auto-Save & Backup Management
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-core.el"
