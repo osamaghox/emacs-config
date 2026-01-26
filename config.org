@@ -1183,13 +1183,35 @@ Display Emacs startup time and garbage collection count
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode)
 
+  ;; إجبار ظهور خانة الـ input method في الـ modeline
+  (setcar (nth 1 mode-line-mule-info) t)
+
+  (defun osama-update-input-method-indicator (&rest _)
+    (setq current-input-method-title
+          (cond
+           ;; إذا كان الإدخال عربي
+           ((and current-input-method
+                 (string-match-p "arabic" current-input-method))
+            " AR ")
+           ;; أي حالة أخرى (إنجليزي / nil)
+           (t
+            " EN "))))
+
+  ;; بعد أي تغيير لطريقة الإدخال
+  (advice-add 'toggle-input-method :after #'osama-update-input-method-indicator)
+  (advice-add 'set-input-method    :after #'osama-update-input-method-indicator)
+
+  ;; لضمان التحديث دائمًا
+  (add-hook 'post-command-hook #'osama-update-input-method-indicator)
+
   (setq-default mode-line-format
                 '("%e"
                   mode-line-front-space
                   ;; إظهار وضع Evil كنص عادي بدون Face مسبب للمشاكل
                   (:eval
                    (when (bound-and-true-p evil-mode)
-                     (format " %s " (upcase (symbol-name evil-state)))))
+                     (format " %s "
+                             (upcase (symbol-name evil-state)))))
                   moody-mode-line-buffer-identification
                   "  "
                   mode-line-position
