@@ -707,7 +707,6 @@ This module load basic configurations that apply to most facets of Emacs.
   (:map dired-mode-map
 
    ;; navigation / view
-   ("C-c d r" . revert-buffer)
    ("C-c d f" . dired-find-file-other-window)
 
    ;; file operations
@@ -790,6 +789,8 @@ This module load basic configurations that apply to most facets of Emacs.
   :bind
   (("C-c b k" . kill-buffer)
    ("C-c b n" . next-buffer)
+   ("C-c b r" . revert-buffer)
+   ("C-c b e" . eval-buffer)
    ("C-c b p" . previous-buffer)))
 #+end_src
 
