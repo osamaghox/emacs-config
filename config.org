@@ -1442,11 +1442,9 @@ Display Emacs startup time and garbage collection count
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal)
 
-  ;; Global and state-specific keybindings
   :bind
-  (("<escape>" . keyboard-escape-quit)
-   :map evil-insert-state-map
-   ("C-g" . evil-normal-state)))
+  ("<escape>" . keyboard-escape-quit))
+
 
 
 ;;; Evil-collection setup (integrates evil with other Emacs modes)
