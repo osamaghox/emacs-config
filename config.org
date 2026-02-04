@@ -1245,18 +1245,6 @@ Display Emacs startup time and garbage collection count
   (add-hook 'enable-theme-functions #'osama-fix-modeline-box))
 #+end_src
 
-
-*** The =osama-emacs-ui.el= section for ~nyan-mode~
-
-#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
-(use-package nyan-mode
-  :if (display-graphic-p)
-  :custom
-  (nyan-bar-length 10)
-  :config
-  (nyan-mode +1))
-#+end_src
-
 *** The =osama-emacs-ui.el= section for ~nerd-icons~ fonts
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
