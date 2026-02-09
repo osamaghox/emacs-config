@@ -1389,6 +1389,14 @@ Display Emacs startup time and garbage collection count
 #+end_src
 
 
+*** The =osama-emacs-ui.el= setction for ~pulsar~
+
+#+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
+(use-package pulsar
+  :config
+  (pulsar-global-mode 1))
+#+end_src
+
 
 *** The =osama-emacs-ui.el= Ends Here
 
