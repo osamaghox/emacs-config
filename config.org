@@ -410,7 +410,7 @@ This is the first file that Emacs reads when starting up. It should contain code
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/early-init.el"
 ;; Base directory for all Emacs files
-(defvar osama-emacs-home-dir "~/osama-vault/emacs/"
+(defvar osama-emacs-home-dir "~/osama-vault/"
   "Base directory for all my Emacs files.")
 
 ;; Always open Emacs in the osama-emacs-home-dir folder
@@ -573,7 +573,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (defun open-emacs-config ()
     "Open Emacs configuration file."
     (interactive)
-    (find-file (expand-file-name "config.org" osama-emacs-home-dir)))
+    (find-file (expand-file-name "emacs/config.org" osama-emacs-home-dir)))
 
   ;; Function to quit Emacs with explicit confirmation
   (defun osama-kill-emacs ()
@@ -1120,7 +1120,7 @@ Display Emacs startup time and garbage collection count
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-ui.el"
 ;; Include the "themes" folder in Emacs' theme search path
 (add-to-list 'custom-theme-load-path
-             (expand-file-name "data/themes/" osama-emacs-home-dir))
+             (expand-file-name "emacs/themes/" osama-emacs-home-dir))
 #+end_src
 
 *** The =osama-emacs-ui.el= section for ~doom-themes~
@@ -1253,7 +1253,7 @@ Display Emacs startup time and garbage collection count
   :init
   ;; Define the folder to save fonts directly inside osama-emacs-home-dir
   (defvar osama-icons-dir
-    (expand-file-name "data/fonts/" osama-emacs-home-dir)
+    (expand-file-name "fonts/" osama-emacs-home-dir)
     "Custom directory to store icon fonts.")
 
   ;; Create the folder if it doesn't exist
@@ -1332,7 +1332,7 @@ Display Emacs startup time and garbage collection count
 
 ;; Create fonts directory if it doesn't exist
 (defvar osama-fonts-dir
-  (expand-file-name "data/fonts/" osama-emacs-home-dir)
+  (expand-file-name "fonts/" osama-emacs-home-dir)
   "Directory to store fonts for Emacs.")
 
 (unless (file-directory-p osama-fonts-dir)
@@ -2025,7 +2025,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :ensure t
   :config
   (add-to-list 'yas-snippet-dirs
-               (expand-file-name "data/snippets/" osama-emacs-home-dir))
+               (expand-file-name "emacs/snippets/" osama-emacs-home-dir))
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets
