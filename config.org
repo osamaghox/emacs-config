@@ -1916,7 +1916,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :custom
   (eglot-events-buffer-size 0)
   :hook ((c-mode c++-mode objc-mode
-          css-mode js-mode js2-mode json-mode typescript-mode) . eglot-ensure)
+          css-mode js-mode js2-mode json-mode typescript-mode nix-mode) . eglot-ensure)
 
   :bind (:map eglot-mode-map
           ("C-c c a" . eglot-code-actions)
