@@ -573,7 +573,7 @@ This module load basic configurations that apply to most facets of Emacs.
   (defun open-emacs-config ()
     "Open Emacs configuration file."
     (interactive)
-    (find-file (expand-file-name "emacs/config.org" osama-emacs-home-dir)))
+    (find-file (expand-file-name "emacs/emacs-config.org" osama-emacs-home-dir)))
 
   ;; Function to quit Emacs with explicit confirmation
   (defun osama-kill-emacs ()
