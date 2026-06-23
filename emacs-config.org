@@ -281,7 +281,7 @@ ln -s /sdcard/osama-vault/fonts /data/data/org.gnu.emacs/files/fonts
 
 #+end_src
 
-** The =osama-emacs-android.el= section to set PATH and system tools
+*** The =osama-emacs-android.el= section to set PATH and system tools
 
 #+begin_src emacs-lisp :tangle "~/.emacs.d/modules/osama-emacs-android.el"
 (use-package emacs
